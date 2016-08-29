@@ -38,7 +38,6 @@ var player = new Vue({
                 _this.video_ids.push(elt.id);
             });
             this.createIframe();
-            //document.getElementById('playlist').style.display = 'none';
         },
         loadPlaylist: function loadPlaylist() {
             var record_collection = document.getElementsByClassName('record');
@@ -99,7 +98,6 @@ var player = new Vue({
                     // format date here:
                     var date = new Date(this.current.created_utc * 1000);
                     this.current.date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-                    console.log(this.current.youtube);
                 }
             }
         },
