@@ -8,6 +8,7 @@ var player = new Vue({
         bbox: null,
         current: null,
         records: new Map(),
+        sort_order: 'new',
         video_ids: [],
         youtube: null
     },
@@ -25,6 +26,23 @@ var player = new Vue({
             var first = document.getElementsByTagName('script')[0];
             first.parentNode.insertBefore(tag, first);
         },
+        genre: (function (_genre) {
+            function genre(_x) {
+                return _genre.apply(this, arguments);
+            }
+
+            genre.toString = function () {
+                return _genre.toString();
+            };
+
+            return genre;
+        })(function (genre) {
+            this.$http({
+                url: 'https://www.reddit.com/r/' + genre + '/search.json',
+                method: 'GET',
+                params: { q: 'url:youtube.com/watch', sort: this.sort_order, restrict_sr: 'on', t: 'all' }
+            }).then(this.procResponse);
+        }),
         hideRecords: function hideRecords() {
             this.current = null;
             Array.from(document.getElementsByClassName('record'), function (elt) {
@@ -41,49 +59,50 @@ var player = new Vue({
         },
         loadPlaylist: function loadPlaylist() {
             var record_collection = document.getElementsByClassName('record');
-            if (record_collection.length) this.local(record_collection);else if (genre) this.remote(genre);
+            if (record_collection.length) this.local(record_collection);else if (genre) this.genre(genre);else if (document.location.search) {
+                this.search(parseQuery(document.location).q);
+            }
         },
-        remote: function remote(genre) {
-            var _this2 = this;
+        procResponse: function procResponse(response) {
+            this.records.clear();
+            var response_data = JSON.parse(response.body).data;
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
 
-            this.$http({
-                url: 'https://www.reddit.com/r/' + genre + '/search.json',
-                method: 'GET',
-                params: { q: 'url:youtube.com/watch', sort: 'new', restrict_sr: 'on', t: 'all' }
-            }).then(function (response) {
-                _this2.records.clear();
-                var response_data = JSON.parse(response.body).data;
-                var _iteratorNormalCompletion = true;
-                var _didIteratorError = false;
-                var _iteratorError = undefined;
+            try {
+                for (var _iterator = response_data.children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var child = _step.value;
 
-                try {
-                    for (var _iterator = response_data.children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                        var child = _step.value;
-
-                        var query = parseQuery(parseUrl(child.data.url));
-                        if (query.v) {
-                            _this2.video_ids.push(query.v);
-                            _this2.records.set(query.v, child.data);
-                        }
-                    }
-                } catch (err) {
-                    _didIteratorError = true;
-                    _iteratorError = err;
-                } finally {
-                    try {
-                        if (!_iteratorNormalCompletion && _iterator['return']) {
-                            _iterator['return']();
-                        }
-                    } finally {
-                        if (_didIteratorError) {
-                            throw _iteratorError;
-                        }
+                    var query = parseQuery(parseUrl(child.data.url));
+                    if (query.v) {
+                        this.video_ids.push(query.v);
+                        this.records.set(query.v, child.data);
                     }
                 }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator['return']) {
+                        _iterator['return']();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
 
-                player.createIframe();
-            });
+            player.createIframe();
+        },
+        search: function search(text) {
+            this.$http({
+                url: 'https://www.reddit.com/search.json',
+                method: 'GET',
+                params: { q: text + ' url:youtube.com/watch', sort: this.sort_order, t: 'all' }
+            }).then(this.procResponse);
         },
         stateChange: function stateChange(event) {
             if (event.data == YT.PlayerState.PLAYING) {
