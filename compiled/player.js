@@ -107,6 +107,7 @@ var player = new Vue({
         stateChange: function stateChange(event) {
             if (event.data == YT.PlayerState.PLAYING) {
                 var video = this.youtube.getVideoData();
+                document.location.hash = video.video_id;
                 document.title = video.title + ' - now playing on punknroll.net';
 
                 this.hideRecords();
