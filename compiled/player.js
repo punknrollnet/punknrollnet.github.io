@@ -9,10 +9,14 @@ var player = new Vue({
         current: null,
         records: new Map(),
         sort_order: 'new',
+        start_video: null,
         video_ids: [],
         youtube: null
     },
     ready: function ready() {
+        // YouTube video IDs are 11 characters + the #
+        if (document.location.hash && document.location.hash.length == 12) this.start_video = document.location.hash.replace('#', '');
+
         // Set height before loading data from reddit and youtube.
         this.bbox = this.$el.getBoundingClientRect();
         document.getElementById('video').style.height = this.bbox.width * SCALE_HEIGHT + 'px';
@@ -56,6 +60,12 @@ var player = new Vue({
                 _this.video_ids.push(elt.id);
             });
             this.createIframe();
+        },
+        loaded: function loaded() {
+            var index = 0;
+            if (this.start_video && this.video_ids.includes(this.start_video)) index = this.video_ids.indexOf(this.start_video);
+
+            this.youtube.cuePlaylist(this.video_ids, index);
         },
         loadPlaylist: function loadPlaylist() {
             var record_collection = document.getElementsByClassName('record');
@@ -133,12 +143,11 @@ function onYouTubeIframeAPIReady() {
     player.youtube = new YT.Player('video', {
         height: player.bbox.width * SCALE_HEIGHT,
         events: {
-            'onReady': player.ready,
+            'onReady': player.loaded,
             'onStateChange': player.stateChange
         },
         playerVars: {
             autoplay: 0,
-            playlist: player.video_ids.join(','),
             wmode: 'transparent'
         },
         width: player.bbox.width
