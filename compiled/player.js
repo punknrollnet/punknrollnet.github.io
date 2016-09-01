@@ -7,6 +7,7 @@ var player = new Vue({
     data: {
         bbox: null,
         current: null,
+        index: 0,
         records: new Map(),
         sort_order: 'new',
         start_video: null,
@@ -20,8 +21,9 @@ var player = new Vue({
         // Set height before loading data from reddit and youtube.
         this.bbox = this.$el.getBoundingClientRect();
         document.getElementById('video').style.height = this.bbox.width * SCALE_HEIGHT + 'px';
+
         this.hideRecords();
-        this.loadPlaylist();
+        this.createIframe();
     },
     methods: {
         createIframe: function createIframe() {
@@ -59,15 +61,13 @@ var player = new Vue({
             Array.from(record_collection).forEach(function (elt) {
                 _this.video_ids.push(elt.id);
             });
-            this.createIframe();
-        },
-        loaded: function loaded() {
-            var index = 0;
-            if (this.start_video && this.video_ids.includes(this.start_video)) index = this.video_ids.indexOf(this.start_video);
-
-            this.youtube.cuePlaylist(this.video_ids, index);
+            this.loadPlaylist();
         },
         loadPlaylist: function loadPlaylist() {
+            if (this.start_video && this.video_ids.includes(this.start_video)) this.index = this.video_ids.indexOf(this.start_video);
+            this.youtube.cuePlaylist(this.video_ids, this.index);
+        },
+        loadRecords: function loadRecords() {
             var record_collection = document.getElementsByClassName('record');
             if (record_collection.length) this.local(record_collection);else if (genre) this.genre(genre);else if (document.location.search) {
                 this.search(parseQuery(document.location).q);
@@ -105,7 +105,16 @@ var player = new Vue({
                 }
             }
 
-            player.createIframe();
+            this.loadPlaylist();
+        },
+        reload: function reload(order) {
+            this.sort_order = order;
+            // Start the newly loaded list from its beginning.
+            this.start_video = null;
+            // Hack to play from 1st video of new playlist because playlist of
+            // youtube object cannot be cleared or otherwise changed.
+            this.index = this.video_ids.length;
+            this.loadRecords();
         },
         search: function search(text) {
             this.$http({
@@ -143,7 +152,7 @@ function onYouTubeIframeAPIReady() {
     player.youtube = new YT.Player('video', {
         height: player.bbox.width * SCALE_HEIGHT,
         events: {
-            'onReady': player.loaded,
+            'onReady': player.loadRecords,
             'onStateChange': player.stateChange
         },
         playerVars: {
