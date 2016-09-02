@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Budgie - Whiskey River</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/">Budgie - Whiskey River [UK - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/3ji0cq">Budgie - Whiskey River [UK - 1972]</a>
 <br>
                         submitted <span class="muted">2015-09-03 15:42</span> by <a href="https://www.reddit.com/user/dsallen7">/u/dsallen7</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Music Machine - Talk Talk</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/">The Music Machine - Talk Talk [US-1966]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/3kwp98">The Music Machine - Talk Talk [US-1966]</a>
 <br>
                         submitted <span class="muted">2015-09-14 13:33</span> by <a href="https://www.reddit.com/user/zawri">/u/zawri</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">THE SACRED MUSHROOM - Catatonic Lover (1969)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">The Sacred Mushroom - "Catatonic Lover" [USA - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/3l2xyx">The Sacred Mushroom - "Catatonic Lover" [USA - 1969]</a>
 <br>
                         submitted <span class="muted">2015-09-15 19:49</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">[Ballad Of] The Hip Death Goddess - from "Ultimate Spinach"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Ultimate Spinach - [Ballad Of] The Hip Death Goddess (Bosstown - 1968)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/3l706u">Ultimate Spinach - [Ballad Of] The Hip Death Goddess (Bosstown - 1968)</a>
 <br>
                         submitted <span class="muted">2015-09-16 17:17</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Q65 Troubles</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Q65 - Troubles [Netherlands - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/3m7v16">Q65 - Troubles [Netherlands - 1972]</a>
 <br>
                         submitted <span class="muted">2015-09-24 16:43</span> by <a href="https://www.reddit.com/user/dsallen7">/u/dsallen7</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">T - Rex - Buick Mackane</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">T - Rex - Buick MacKane [UK - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3lj2ep">T - Rex - Buick MacKane [UK - 1972]</a>
 <br>
                         submitted <span class="muted">2015-09-19 06:28</span> by <a href="https://www.reddit.com/user/DeusFerreus">/u/DeusFerreus</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Triton Warrior 1972- Satins Train</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Triton Warrior - Satan's Train [Canada - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/3je1lh">Triton Warrior - Satan's Train [Canada - 1972]</a>
 <br>
                         submitted <span class="muted">2015-09-02 18:33</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Sensation - Black Eyed Woman</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">The Sensation - Black Eyed Woman [UK - 1973]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/3m4d9k">The Sensation - Black Eyed Woman [UK - 1973]</a>
 <br>
                         submitted <span class="muted">2015-09-23 21:50</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Living For Myself-Buttocks-Charlies(1970)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Living For Myself-Charlies Buttocks 1970</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3j8v25">Living For Myself-Charlies Buttocks 1970</a>
 <br>
                         submitted <span class="muted">2015-09-01 17:47</span> by <a href="https://www.reddit.com/user/Cosmonaut_of_three">/u/Cosmonaut_of_three</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Space Cadets - Nothing'll Stand In My Way</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">The Space Cadets - "Nothing'll Stand In My Way" [USA - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3jjbox">The Space Cadets - "Nothing'll Stand In My Way" [USA - 1972]</a>
 <br>
                         submitted <span class="muted">2015-09-03 21:06</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Jiří Schelinger - Metro, dobrý den</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Jiří Schelinger - Metro, dobrý den [Czech Republic - 1975]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3kgiz3">Jiří Schelinger - Metro, dobrý den [Czech Republic - 1975]</a>
 <br>
                         submitted <span class="muted">2015-09-10 21:15</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Berthe - Comment passer a la tele</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Berthe -- Comment passer a la tele [France - 1966]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3lk7lp">Berthe -- Comment passer a la tele [France - 1966]</a>
 <br>
                         submitted <span class="muted">2015-09-19 14:41</span> by <a href="https://www.reddit.com/user/rounding_error">/u/rounding_error</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Beau Gents - Big Black Machine</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Beau Gents - Big Black Machine [US - 1967]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3jwos6">Beau Gents - Big Black Machine [US - 1967]</a>
 <br>
                         submitted <span class="muted">2015-09-06 23:01</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kevin Coughlin ‎-- I Gotta Be Me(1969)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Kevin Coughlin - I Gotta Be Me [US - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3l7991">Kevin Coughlin - I Gotta Be Me [US - 1969]</a>
 <br>
                         submitted <span class="muted">2015-09-16 18:18</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Don Malena And The Dry Ice - Land Of  Summertime</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Don Malena And The Dry Ice - Land Of Summertime [US - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3mn4fb">Don Malena And The Dry Ice - Land Of Summertime [US - 1969]</a>
 <br>
                         submitted <span class="muted">2015-09-28 00:53</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Harbinger Complex - I Think I'm Down (1966)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Harbinger Complex - I Think I'm Down [US - 1966]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3jonym">Harbinger Complex - I Think I'm Down [US - 1966]</a>
 <br>
                         submitted <span class="muted">2015-09-04 23:55</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">WILLIAM PENN FYVE-SWAMI</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">William Penn Fyve - Swami [US - 1966]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3km1s9">William Penn Fyve - Swami [US - 1966]</a>
 <br>
                         submitted <span class="muted">2015-09-12 00:34</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Londons - Old Man (A Thing of Age) (1968)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">The Londons - Old Man (A Thing of Age) [US - 1968]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3kqvgu">The Londons - Old Man (A Thing of Age) [US - 1968]</a>
 <br>
                         submitted <span class="muted">2015-09-13 04:03</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bram Rigg Set - I Can Only Give You Everything</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Bram Rigg Set - I Can Only Give You Everything [US - 1967]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3kxxnc">Bram Rigg Set - I Can Only Give You Everything [US - 1967]</a>
 <br>
                         submitted <span class="muted">2015-09-14 18:41</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mayroc - Lovin' Fire (1973 UK)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Mayroc - Lovin' Fire [UK - 1973]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3lhwr0">Mayroc - Lovin' Fire [UK - 1973]</a>
 <br>
                         submitted <span class="muted">2015-09-18 23:46</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Pineapple - The Letter (1971 Netherlands)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Pineapple - The Letter [Netherlands - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3lqzit">Pineapple - The Letter [Netherlands - 1971]</a>
 <br>
                         submitted <span class="muted">2015-09-21 01:37</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Zakary Thaks - Face To Face</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Zakary Thaks - Face to Face [US - 1967]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3lmk76">Zakary Thaks - Face to Face [US - 1967]</a>
 <br>
                         submitted <span class="muted">2015-09-20 01:12</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Loyce & Os Gnomos - Era uma nota de 50 cruzeiros (1969)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Loyce &amp; Os Gnomos - Era uma nota de 50 cruzeiros [BR - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3lndqu">Loyce &amp; Os Gnomos - Era uma nota de 50 cruzeiros [BR - 1969]</a>
 <br>
                         submitted <span class="muted">2015-09-20 06:01</span> by <a href="https://www.reddit.com/user/heraclesuss">/u/heraclesuss</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Light- Back Up (fantastic California psych 45)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">The Light - Back Up [US - 1967]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3lvzq8">The Light - Back Up [US - 1967]</a>
 <br>
                         submitted <span class="muted">2015-09-22 02:35</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Barrier - spot the lights</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">The Barrier - Spot The Lights [UK - 1968]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3mdx9f">The Barrier - Spot The Lights [UK - 1968]</a>
 <br>
                         submitted <span class="muted">2015-09-25 21:24</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Butlers - Shop Around</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">The Butlers - Shop Around [US - 1967]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3n04ye">The Butlers - Shop Around [US - 1967]</a>
 <br>
                         submitted <span class="muted">2015-09-30 19:10</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">October Country - My Girlfriend Is A Witch (1968)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">October Country - My Girlfriend Is A Witch [US - 1968]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3ka0po">October Country - My Girlfriend Is A Witch [US - 1968]</a>
 <br>
                         submitted <span class="muted">2015-09-09 18:37</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Os Baobás - Pintada de Preto (Paint It Black)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Os Baobás - Pintada de Preto (Paint it Black) [BR - 1966]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3ln8sx">Os Baobás - Pintada de Preto (Paint it Black) [BR - 1966]</a>
 <br>
                         submitted <span class="muted">2015-09-20 05:03</span> by <a href="https://www.reddit.com/user/heraclesuss">/u/heraclesuss</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Let's Get Together</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Shawn Sleeps Naked - Let's Get Together [USA - 2015]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/3jgxwr">Shawn Sleeps Naked - Let's Get Together [USA - 2015]</a>
 <br>
                         submitted <span class="muted">2015-09-03 09:48</span> by <a href="https://www.reddit.com/user/carlwdaniel">/u/carlwdaniel</a>
 .</p>
@@ -475,7 +483,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Os Haxixins - Depois de um LSD -Mtv Brasil</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Garage psych by brazilians Haxixins</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/3jtzwz">Garage psych by brazilians Haxixins</a>
 <br>
                         submitted <span class="muted">2015-09-06 06:42</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>

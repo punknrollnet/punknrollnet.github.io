@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Temple of the dog - Reach down</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Temple of the Dog - Reach Down. The best idea for a "super group" ever in my opinion.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/g9swf">Temple of the Dog - Reach Down. The best idea for a "super group" ever in my opinion.</a>
 <br>
                         submitted <span class="muted">2011-03-23 16:30</span> by <a href="https://www.reddit.com/user/Decman">/u/Decman</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tad - 3-D Witch Hunt</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">A band I should really listen to a lot more...TAD "3-D Witch Hunt."</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/g8dpr">A band I should really listen to a lot more...TAD "3-D Witch Hunt."</a>
 <br>
                         submitted <span class="muted">2011-03-21 19:00</span> by <a href="https://www.reddit.com/user/Decman">/u/Decman</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dinosaur Pile-Up - My Rock N Roll</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">If you like the fuzzed out sound check out Dinosaur Pile Up</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/gf0e2">If you like the fuzzed out sound check out Dinosaur Pile Up</a>
 <br>
                         submitted <span class="muted">2011-03-30 21:23</span> by <a href="https://www.reddit.com/user/shilly80">/u/shilly80</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Melvins: A History of Bad Men.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Get some dirt in ye...Melvins A History of Bad Men.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/g3sn0">Get some dirt in ye...Melvins A History of Bad Men.</a>
 <br>
                         submitted <span class="muted">2011-03-14 17:35</span> by <a href="https://www.reddit.com/user/Decman">/u/Decman</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dinosaur Jr. - Just Like Heaven</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">My Favourite version of "Just like heaven" by the most awesome Dinosaur Jr.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/g8dvp">My Favourite version of "Just like heaven" by the most awesome Dinosaur Jr.</a>
 <br>
                         submitted <span class="muted">2011-03-21 19:07</span> by <a href="https://www.reddit.com/user/Decman">/u/Decman</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Jerry Cantrell-My Song</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">For those who think Jerry Cantrell was just a member of AIC...(I'm sure no one thinks this)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/g2tkn">For those who think Jerry Cantrell was just a member of AIC...(I'm sure no one thinks this)</a>
 <br>
                         submitted <span class="muted">2011-03-12 23:36</span> by <a href="https://www.reddit.com/user/Decman">/u/Decman</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Stone Temple Pilots - Trippin' On A Hole In A Paper Heart (Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Love this tune, yeah I heard it before guitar hero :P. STP Tripping a hole.....</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/g9b83">Love this tune, yeah I heard it before guitar hero :P. STP Tripping a hole.....</a>
 <br>
                         submitted <span class="muted">2011-03-22 23:57</span> by <a href="https://www.reddit.com/user/Decman">/u/Decman</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Earth - Tallahassee video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Earth - Tallahassee</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/g2v3w">Earth - Tallahassee</a>
 <br>
                         submitted <span class="muted">2011-03-13 01:15</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>

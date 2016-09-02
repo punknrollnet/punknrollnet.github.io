@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">ISIS & Aereogramme - Stolen</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Isis &amp; Aerogramme - Stolen [Post/Experimental Metal] (Off of In the Fishtank 14)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/p4rbk">Isis &amp; Aerogramme - Stolen [Post/Experimental Metal] (Off of In the Fishtank 14)</a>
 <br>
                         submitted <span class="muted">2012-01-31 17:22</span> by <a href="https://www.reddit.com/user/dasFisch">/u/dasFisch</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Jesu - Silver</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Jesu - Silver [post/doom]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/ov097">Jesu - Silver [post/doom]</a>
 <br>
                         submitted <span class="muted">2012-01-24 21:25</span> by <a href="https://www.reddit.com/user/Ravenloft">/u/Ravenloft</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Indukti-Sansara</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">[post/prog] Got no love at r/metal last month. Try this out: Indukti - Sansara ... HEAVY</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/p18l9">[post/prog] Got no love at r/metal last month. Try this out: Indukti - Sansara ... HEAVY</a>
 <br>
                         submitted <span class="muted">2012-01-29 02:39</span> by <a href="https://www.reddit.com/user/gorgonzoloft">/u/gorgonzoloft</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Year Of No Light - Perséphone (Coré)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Year Of No Light - Persephone II</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/o8r2v">Year Of No Light - Persephone II</a>
 <br>
                         submitted <span class="muted">2012-01-09 02:50</span> by <a href="https://www.reddit.com/user/13143">/u/13143</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Alkerdeel 'Hessepikn'</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Alkerdeel - Hessepik'n</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/oft3k">Alkerdeel - Hessepik'n</a>
 <br>
                         submitted <span class="muted">2012-01-13 19:31</span> by <a href="https://www.reddit.com/user/MKeirsbi">/u/MKeirsbi</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Latitudes - Braille</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Latitudes - Braille</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/otdh9">Latitudes - Braille</a>
 <br>
                         submitted <span class="muted">2012-01-23 21:03</span> by <a href="https://www.reddit.com/user/SilarMC">/u/SilarMC</a>
 .</p>

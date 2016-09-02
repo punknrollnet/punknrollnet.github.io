@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Faustcoven - Under The Pagan Hammer</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Faustcoven - Under The Pagan Hammer</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/psczp">Faustcoven - Under The Pagan Hammer</a>
 <br>
                         submitted <span class="muted">2012-02-16 15:09</span> by <a href="https://www.reddit.com/user/Grullok">/u/Grullok</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Eucharist - The Religion of the Blood-Red Velvet</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Eucharist- The Religion of the Blood-Red Velvet</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/q1qrv">Eucharist- The Religion of the Blood-Red Velvet</a>
 <br>
                         submitted <span class="muted">2012-02-23 00:43</span> by <a href="https://www.reddit.com/user/SonoftheMorning">/u/SonoftheMorning</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nyogthaeblisz - The Abysmal Wargoat</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Nyogthaeblisz - The Abysmal Wargoat</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/pdihj">Nyogthaeblisz - The Abysmal Wargoat</a>
 <br>
                         submitted <span class="muted">2012-02-06 19:18</span> by <a href="https://www.reddit.com/user/BukkRogerrs">/u/BukkRogerrs</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rhinocervs - Devour All the Living Things</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Unknown Artist - Devour All the Living Things [RH-11]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/pftkz">Unknown Artist - Devour All the Living Things [RH-11]</a>
 <br>
                         submitted <span class="muted">2012-02-08 04:49</span> by <a href="https://www.reddit.com/user/SPna15">/u/SPna15</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mace - Drilling for Brains</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Mace - Drilling for Brains</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/p7nkm">Mace - Drilling for Brains</a>
 <br>
                         submitted <span class="muted">2012-02-02 13:38</span> by <a href="https://www.reddit.com/user/Spockhammer">/u/Spockhammer</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">HOD - Demoralizer</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Hod - Demoralizer [First post, felt like promoting a local band]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/pmkw0">Hod - Demoralizer [First post, felt like promoting a local band]</a>
 <br>
                         submitted <span class="muted">2012-02-12 22:41</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cauldron Born - Crusader</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Cauldron Born - Crusader [USPM]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/plhrj">Cauldron Born - Crusader [USPM]</a>
 <br>
                         submitted <span class="muted">2012-02-12 01:46</span> by <a href="https://www.reddit.com/user/speedeceiver">/u/speedeceiver</a>
 .</p>

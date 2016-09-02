@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Klabautamann  - Unter Bäumen</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Klabautamann - Unter Bäumen [Atmospheric Progressive Black Metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/fc0x7">Klabautamann - Unter Bäumen [Atmospheric Progressive Black Metal]</a>
 <br>
                         submitted <span class="muted">2011-01-30 22:59</span> by <a href="https://www.reddit.com/user/kodine">/u/kodine</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Crypt of Kerberos - The Canticle</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Crypt of Kerberos - The Canticle [Old School Swedish Death Metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/fc5s0">Crypt of Kerberos - The Canticle [Old School Swedish Death Metal]</a>
 <br>
                         submitted <span class="muted">2011-01-31 04:08</span> by <a href="https://www.reddit.com/user/kodine">/u/kodine</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Horna Kuoleva Lupaus</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Horna - Kuoleva Lupaus [Raw Melodic Black Metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/fc5w6">Horna - Kuoleva Lupaus [Raw Melodic Black Metal]</a>
 <br>
                         submitted <span class="muted">2011-01-31 04:13</span> by <a href="https://www.reddit.com/user/kodine">/u/kodine</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Children of Technology - No Fuel, No Hope!!!</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Children of Technology - No Fuel, No Hope!!! [Crossover Thrash]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/fc0uv">Children of Technology - No Fuel, No Hope!!! [Crossover Thrash]</a>
 <br>
                         submitted <span class="muted">2011-01-30 22:55</span> by <a href="https://www.reddit.com/user/kodine">/u/kodine</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tiamat- Ancient Entity</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Tiamat- Ancient Entity [Old School Swedish Death Metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/fc1cn">Tiamat- Ancient Entity [Old School Swedish Death Metal]</a>
 <br>
                         submitted <span class="muted">2011-01-30 23:24</span> by <a href="https://www.reddit.com/user/kodine">/u/kodine</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Solerrain- "the Curse" (メロディの死の金属)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Solerrain- The Curse [Melodic Death Metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/fc1k8">Solerrain- The Curse [Melodic Death Metal]</a>
 <br>
                         submitted <span class="muted">2011-01-30 23:37</span> by <a href="https://www.reddit.com/user/kodine">/u/kodine</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Arido - Siervos</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Arido - Siervos [Chilean Melodic Death Metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/fc1qa">Arido - Siervos [Chilean Melodic Death Metal]</a>
 <br>
                         submitted <span class="muted">2011-01-30 23:48</span> by <a href="https://www.reddit.com/user/kodine">/u/kodine</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">catamenia - Dreams Of Winterland</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Catamenia - Dreams Of Winterland [Symphonic Black Metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/fc1nf">Catamenia - Dreams Of Winterland [Symphonic Black Metal]</a>
 <br>
                         submitted <span class="muted">2011-01-30 23:43</span> by <a href="https://www.reddit.com/user/kodine">/u/kodine</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nickelback - How You Remind Me</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Nickelback - How You Remind Me (heavy metal)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/f5wzl">Nickelback - How You Remind Me (heavy metal)</a>
 <br>
                         submitted <span class="muted">2011-01-20 17:41</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kid Rock - So Hott [OFFICIAL VIDEO]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Kid Rock - So Hott (dm)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/f6uvf">Kid Rock - So Hott (dm)</a>
 <br>
                         submitted <span class="muted">2011-01-22 03:00</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Poison - Talk Dirty To Me</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Poison - Talk Dirty to Me (glam)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/f7a0q">Poison - Talk Dirty to Me (glam)</a>
 <br>
                         submitted <span class="muted">2011-01-23 00:15</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Children of Technology - Postnuclear Quarantine</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Children of Technology - Postnuclear Quarantine [Thrash/Crossover]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/fblhk">Children of Technology - Postnuclear Quarantine [Thrash/Crossover]</a>
 <br>
                         submitted <span class="muted">2011-01-30 01:40</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Scarab - War to End</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Scarab - War to End. An extremely good Egyptian Death Metal Band.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/fc4s7">Scarab - War to End. An extremely good Egyptian Death Metal Band.</a>
 <br>
                         submitted <span class="muted">2011-01-31 03:01</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>

@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Heathen Horde - Ensiferum (HD with LYRICS)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">51</span> - <a href="https://www.reddit.com/">Ensiferum - Heathen Horde (New song)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">51</span> - <a href="https://www.reddit.com/2unjyx">Ensiferum - Heathen Horde (New song)</a>
 <br>
                         submitted <span class="muted">2015-02-03 17:15</span> by <a href="https://www.reddit.com/user/sbnufc">/u/sbnufc</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Wintersun - Land of snow and sorrow - Live rehearsal @ Sonic Pump Studios</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">34</span> - <a href="https://www.reddit.com/">Wintersun - Land of snow and sorrow - Live rehearsal [8:11]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">34</span> - <a href="https://www.reddit.com/2usmms">Wintersun - Land of snow and sorrow - Live rehearsal [8:11]</a>
 <br>
                         submitted <span class="muted">2015-02-04 20:57</span> by <a href="https://www.reddit.com/user/mapguy">/u/mapguy</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Warrior Without A War - Ensiferum (with LYRICS)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">32</span> - <a href="https://www.reddit.com/">Ensiferum - Warrior Without A War</a>
+                    <p><strong>Score:</strong> <span class="rd-score">32</span> - <a href="https://www.reddit.com/2vxg0o">Ensiferum - Warrior Without A War</a>
 <br>
                         submitted <span class="muted">2015-02-15 01:11</span> by <a href="https://www.reddit.com/user/sbnufc">/u/sbnufc</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Аркона - Славься, Русь!  - видеоклип</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">28</span> - <a href="https://www.reddit.com/">Аркона - Славься, Русь!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">28</span> - <a href="https://www.reddit.com/2vjlhj">Аркона - Славься, Русь!</a>
 <br>
                         submitted <span class="muted">2015-02-11 15:40</span> by <a href="https://www.reddit.com/user/AnnaLemma">/u/AnnaLemma</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Northland - Where The Heroes Die</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Northland - Where The Heroes Die</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/2urwd6">Northland - Where The Heroes Die</a>
 <br>
                         submitted <span class="muted">2015-02-04 17:41</span> by <a href="https://www.reddit.com/user/HalfdanStrongbow">/u/HalfdanStrongbow</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Furor Gallico - La Caccia Morta (lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Furor Gallico - La Caccia Morta (At 1:52 sh*t gets real!)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/2wfdsi">Furor Gallico - La Caccia Morta (At 1:52 sh*t gets real!)</a>
 <br>
                         submitted <span class="muted">2015-02-19 13:30</span> by <a href="https://www.reddit.com/user/Tripsix_Swe">/u/Tripsix_Swe</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Triddana - Men of Clay</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Tridanna - Men of Clay</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/2vfkb9">Tridanna - Men of Clay</a>
 <br>
                         submitted <span class="muted">2015-02-10 16:51</span> by <a href="https://www.reddit.com/user/mrtrentster">/u/mrtrentster</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Skyclad - Another Drinking Song</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Skyclad - Anotherdrinkingsong</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/2x93tu">Skyclad - Anotherdrinkingsong</a>
 <br>
                         submitted <span class="muted">2015-02-26 17:36</span> by <a href="https://www.reddit.com/user/EternalTyranny">/u/EternalTyranny</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kivimetsän Druidi- Tuoppien Nostelulaulu</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Kivimetsän Druidi - Tuoppien'Nostelulaulu</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/2wnkxk">Kivimetsän Druidi - Tuoppien'Nostelulaulu</a>
 <br>
                         submitted <span class="muted">2015-02-21 13:46</span> by <a href="https://www.reddit.com/user/Tripsix_Swe">/u/Tripsix_Swe</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">EQUILIBRIUM - ON THE ROAD - 70000 TONS OF METAL 2015</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">Equilibrium: On The Road - 70,000 Tons Of Metal (2015)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/2wbk5u">Equilibrium: On The Road - 70,000 Tons Of Metal (2015)</a>
 <br>
                         submitted <span class="muted">2015-02-18 15:53</span> by <a href="https://www.reddit.com/user/heartman74">/u/heartman74</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dalriada - Hunyadi és Kapisztrán Nándorfehérvári Diadaláról</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">Dalriada- Hunyadi és Kapisztrán Nándorfehérvári Diadaláról</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/2utm47">Dalriada- Hunyadi és Kapisztrán Nándorfehérvári Diadaláról</a>
 <br>
                         submitted <span class="muted">2015-02-05 01:33</span> by <a href="https://www.reddit.com/user/thequietone710">/u/thequietone710</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Skyclad - The Disenchanted Forest</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Skyclad - The Disenchanted Forest</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/2ug6jf">Skyclad - The Disenchanted Forest</a>
 <br>
                         submitted <span class="muted">2015-02-01 21:58</span> by <a href="https://www.reddit.com/user/Taur-e-Ndaedelos">/u/Taur-e-Ndaedelos</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Månegarm - Forged in Fire.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Manegarm- Forged in fire (get to the chorus before you judge)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/2vd6j1">Manegarm- Forged in fire (get to the chorus before you judge)</a>
 <br>
                         submitted <span class="muted">2015-02-10 01:10</span> by <a href="https://www.reddit.com/user/DAD_FISTER">/u/DAD_FISTER</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bifröst - ...um frei zu sein</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Bifröst - ...um frei zu sein</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/2wjxvs">Bifröst - ...um frei zu sein</a>
 <br>
                         submitted <span class="muted">2015-02-20 15:18</span> by <a href="https://www.reddit.com/user/Tripsix_Swe">/u/Tripsix_Swe</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Serdce Kamen - Put' Bogatirya ( Сердце-Камень - Путь богатыря )</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">[Slavic] Сердце-Камень/Serdce Kamen - Путь богатыря (Path of the Hero) - [4:01]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/2xepcp">[Slavic] Сердце-Камень/Serdce Kamen - Путь богатыря (Path of the Hero) - [4:01]</a>
 <br>
                         submitted <span class="muted">2015-02-27 23:31</span> by <a href="https://www.reddit.com/user/Galton666">/u/Galton666</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">My Ancestors' Blood - Ensiferum (with LYRICS)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Ensiferum - My Ancestors' Blood</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/2w8vu3">Ensiferum - My Ancestors' Blood</a>
 <br>
                         submitted <span class="muted">2015-02-17 22:54</span> by <a href="https://www.reddit.com/user/sbnufc">/u/sbnufc</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Radogost - Not for war</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Radogost - Not for war</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/2wqzsg">Radogost - Not for war</a>
 <br>
                         submitted <span class="muted">2015-02-22 10:10</span> by <a href="https://www.reddit.com/user/Tripsix_Swe">/u/Tripsix_Swe</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">SuidAkrA -  Rise Of Taliesin live</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Suidakra - Rise of Taliesin (Live)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2v9rwd">Suidakra - Rise of Taliesin (Live)</a>
 <br>
                         submitted <span class="muted">2015-02-09 05:17</span> by <a href="https://www.reddit.com/user/HalfdanStrongbow">/u/HalfdanStrongbow</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">In skym yn it tsjuster - Baldrs Draumar - Aldgillissoan 2015</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Baldrs Draumer - In Skym yn it Tsjuster</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2uzz9k">Baldrs Draumer - In Skym yn it Tsjuster</a>
 <br>
                         submitted <span class="muted">2015-02-06 16:50</span> by <a href="https://www.reddit.com/user/arcticwolffox">/u/arcticwolffox</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lutavierje - А Славене ды Росе(Belarus Folk Metal)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Лютоверье - А Славене ды Росе [Belarus]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2vi030">Лютоверье - А Славене ды Росе [Belarus]</a>
 <br>
                         submitted <span class="muted">2015-02-11 03:58</span> by <a href="https://www.reddit.com/user/MetalDragon6666">/u/MetalDragon6666</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nothgard - Victory</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Nothgard - Victory</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2w1kkh">Nothgard - Victory</a>
 <br>
                         submitted <span class="muted">2015-02-16 04:20</span> by <a href="https://www.reddit.com/user/mrtrentster">/u/mrtrentster</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Sea Queen of Connaught</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Cruachan -- The Sea Queen of Connaught</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2wy1vi">Cruachan -- The Sea Queen of Connaught</a>
 <br>
                         submitted <span class="muted">2015-02-24 02:40</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Furor Gallico - Venti di Imbolc</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Furor Gallico - Venti di Imbolc</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2wl2xp">Furor Gallico - Venti di Imbolc</a>
 <br>
                         submitted <span class="muted">2015-02-20 20:38</span> by <a href="https://www.reddit.com/user/HalfdanStrongbow">/u/HalfdanStrongbow</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">A Menhirs Clay</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Suidakra - A Menhirs Clay</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2wqxvw">Suidakra - A Menhirs Clay</a>
 <br>
                         submitted <span class="muted">2015-02-22 09:34</span> by <a href="https://www.reddit.com/user/HalfdanStrongbow">/u/HalfdanStrongbow</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ensiferum -  Neito Pohjolan</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Ensiferum - Neito Pohjolan</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2wr0ct">Ensiferum - Neito Pohjolan</a>
 <br>
                         submitted <span class="muted">2015-02-22 10:21</span> by <a href="https://www.reddit.com/user/Devo9090">/u/Devo9090</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">In Extremo - Vollmond [HD Quality] *With Lyrics</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">In Extremo - Vollmond</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2uomfe">In Extremo - Vollmond</a>
 <br>
                         submitted <span class="muted">2015-02-03 21:53</span> by <a href="https://www.reddit.com/user/loudmuteswan">/u/loudmuteswan</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Heol Telwen - An Deiz Ruz | Full Album</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Heol Telwen - An Deiz Ruz | Full Album</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2w8f9u">Heol Telwen - An Deiz Ruz | Full Album</a>
 <br>
                         submitted <span class="muted">2015-02-17 20:54</span> by <a href="https://www.reddit.com/user/HalfdanStrongbow">/u/HalfdanStrongbow</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">GreenWood - Kołysanka Piastowska</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">GreenWood - Kołysanka Piastowska</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2x0hqa">GreenWood - Kołysanka Piastowska</a>
 <br>
                         submitted <span class="muted">2015-02-24 18:11</span> by <a href="https://www.reddit.com/user/stormelemental13">/u/stormelemental13</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Aq Bure - Nige Yana Yoregem ( Ак Бүре - Нигә яна йөрәгем )</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Aq Bure - Nige Yana Yoregem (Tatar folk metal)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2w3cuw">Aq Bure - Nige Yana Yoregem (Tatar folk metal)</a>
 <br>
                         submitted <span class="muted">2015-02-16 17:15</span> by <a href="https://www.reddit.com/user/a_cheerful_sadness">/u/a_cheerful_sadness</a>
 .</p>
@@ -475,7 +483,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Stormwitch  The Devil's Bride</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Stormwitch - The Devil's Bride</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2waghu">Stormwitch - The Devil's Bride</a>
 <br>
                         submitted <span class="muted">2015-02-18 07:13</span> by <a href="https://www.reddit.com/user/agersant">/u/agersant</a>
 .</p>
@@ -489,7 +497,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">HERCUNIA - Exobnos</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Hercunia - Exobnos (Italy - bagpipes, bouzouki, hurdy gurdy)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2urqyq">Hercunia - Exobnos (Italy - bagpipes, bouzouki, hurdy gurdy)</a>
 <br>
                         submitted <span class="muted">2015-02-04 17:02</span> by <a href="https://www.reddit.com/user/Stefan46664">/u/Stefan46664</a>
 .</p>
@@ -503,7 +511,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">In Extremo - Frei zu sein</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Saw the Bifröst title and it reminded me of this: In Extremo - Frei zu sein</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2wlm96">Saw the Bifröst title and it reminded me of this: In Extremo - Frei zu sein</a>
 <br>
                         submitted <span class="muted">2015-02-20 23:13</span> by <a href="https://www.reddit.com/user/spoon_of_doom">/u/spoon_of_doom</a>
 .</p>
@@ -517,7 +525,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">DOOM OF VALYRIA - MAN OF IRON BATHORY COVER</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">DOOM OF VALYRIA - Man of iron</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2usjy8">DOOM OF VALYRIA - Man of iron</a>
 <br>
                         submitted <span class="muted">2015-02-04 20:38</span> by <a href="https://www.reddit.com/user/aguilasycuervos">/u/aguilasycuervos</a>
 .</p>
@@ -531,7 +539,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sverdkamp - Skomakarnibbå</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Sverdkamp - Skomakarnibbå</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2vnnv7">Sverdkamp - Skomakarnibbå</a>
 <br>
                         submitted <span class="muted">2015-02-12 15:09</span> by <a href="https://www.reddit.com/user/headovmetal">/u/headovmetal</a>
 .</p>

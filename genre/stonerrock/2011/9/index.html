@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Planet Caravan - Black Sabbath</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">55</span> - <a href="https://www.reddit.com/">Planet Caravan by Black Sabbath... the slow, quiet side of stoner rock.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">55</span> - <a href="https://www.reddit.com/kfdbm">Planet Caravan by Black Sabbath... the slow, quiet side of stoner rock.</a>
 <br>
                         submitted <span class="muted">2011-09-14 14:14</span> by <a href="https://www.reddit.com/user/mattosaur">/u/mattosaur</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Queens Of The Stone Age - Walkin' On The Sidewalks</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">36</span> - <a href="https://www.reddit.com/">Queens of the Stone Age - Walkin' on the Sidewalks</a>
+                    <p><strong>Score:</strong> <span class="rd-score">36</span> - <a href="https://www.reddit.com/kitus">Queens of the Stone Age - Walkin' on the Sidewalks</a>
 <br>
                         submitted <span class="muted">2011-09-17 18:22</span> by <a href="https://www.reddit.com/user/NunsOnFire">/u/NunsOnFire</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Clutch - Tight Like That (Acoustic)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">30</span> - <a href="https://www.reddit.com/">Clutch - Tight Like That (acoustic from re-release)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">30</span> - <a href="https://www.reddit.com/kar1l">Clutch - Tight Like That (acoustic from re-release)</a>
 <br>
                         submitted <span class="muted">2011-09-10 02:33</span> by <a href="https://www.reddit.com/user/Sim-Sala-Bim">/u/Sim-Sala-Bim</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">GRAVEYARD - Hisingen Blues (OFFICIAL MUSIC VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">28</span> - <a href="https://www.reddit.com/">Graveyard - Hisingen Blues</a>
+                    <p><strong>Score:</strong> <span class="rd-score">28</span> - <a href="https://www.reddit.com/k6htz">Graveyard - Hisingen Blues</a>
 <br>
                         submitted <span class="muted">2011-09-06 15:42</span> by <a href="https://www.reddit.com/user/greatwhitehype_">/u/greatwhitehype_</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mastodon: Quintessence</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/">Quintessence - Mastodon</a>
+                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/kfdoi">Quintessence - Mastodon</a>
 <br>
                         submitted <span class="muted">2011-09-14 14:26</span> by <a href="https://www.reddit.com/user/adamd28">/u/adamd28</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mastodon - Curl Of The Burl [Official Music Video]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/">Mastodon - Curl of the Burl</a>
+                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/koddd">Mastodon - Curl of the Burl</a>
 <br>
                         submitted <span class="muted">2011-09-22 21:56</span> by <a href="https://www.reddit.com/user/SporadicApparatus">/u/SporadicApparatus</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Orange Goblin - Beginners Guide To Suicide</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">23</span> - <a href="https://www.reddit.com/">Orange Goblin - Beginners Guide To Suicide</a>
+                    <p><strong>Score:</strong> <span class="rd-score">23</span> - <a href="https://www.reddit.com/knhsx">Orange Goblin - Beginners Guide To Suicide</a>
 <br>
                         submitted <span class="muted">2011-09-22 03:06</span> by <a href="https://www.reddit.com/user/HooDooOperator">/u/HooDooOperator</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Torche - Mentor</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/">Torche – Mentor</a>
+                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/k6rv3">Torche – Mentor</a>
 <br>
                         submitted <span class="muted">2011-09-06 20:34</span> by <a href="https://www.reddit.com/user/serych">/u/serych</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Colour Haze - Aquamaria</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Colour Haze - Aquamaria</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/k4tz1">Colour Haze - Aquamaria</a>
 <br>
                         submitted <span class="muted">2011-09-05 00:31</span> by <a href="https://www.reddit.com/user/greatwhitehype_">/u/greatwhitehype_</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Colour Haze - Gold & Silver</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Colour Haze - Gold and Silver</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/k5c8l">Colour Haze - Gold and Silver</a>
 <br>
                         submitted <span class="muted">2011-09-05 14:14</span> by <a href="https://www.reddit.com/user/greatwhitehype_">/u/greatwhitehype_</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Earthless - Sonic Prayer</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Earthless - Sonic Prayer</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/kfo79">Earthless - Sonic Prayer</a>
 <br>
                         submitted <span class="muted">2011-09-14 19:30</span> by <a href="https://www.reddit.com/user/SporadicApparatus">/u/SporadicApparatus</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mudhoney - 1995</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Mudhoney - 1995</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/kirzk">Mudhoney - 1995</a>
 <br>
                         submitted <span class="muted">2011-09-17 17:12</span> by <a href="https://www.reddit.com/user/HooDooOperator">/u/HooDooOperator</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kyuss  - Happy Birthday</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Kyuss - Happy Birthday</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/kmy50">Kyuss - Happy Birthday</a>
 <br>
                         submitted <span class="muted">2011-09-21 17:51</span> by <a href="https://www.reddit.com/user/Decman">/u/Decman</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Melvins - Boris</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Melvins - Boris (Live from 1991)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/k5fuu">Melvins - Boris (Live from 1991)</a>
 <br>
                         submitted <span class="muted">2011-09-05 16:20</span> by <a href="https://www.reddit.com/user/spaced4ever">/u/spaced4ever</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Fu Manchu - live - 1993 - "superbird" - Huntington Beach, Ca - electric chair</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Fuck yeah! I've been waiting to see this for ages. [Fu Manchu]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/kngcz">Fuck yeah! I've been waiting to see this for ages. [Fu Manchu]</a>
 <br>
                         submitted <span class="muted">2011-09-22 02:24</span> by <a href="https://www.reddit.com/user/BurningKarma">/u/BurningKarma</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sonic Flower - Going Down</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Sonic Flower - Going Down (from Japan)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/ktd92">Sonic Flower - Going Down (from Japan)</a>
 <br>
                         submitted <span class="muted">2011-09-27 21:19</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Clutch - Careful with that mic</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">Neil Fallon (Clutch) insults rappers</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/k6agw">Neil Fallon (Clutch) insults rappers</a>
 <br>
                         submitted <span class="muted">2011-09-06 10:35</span> by <a href="https://www.reddit.com/user/nzhamstar">/u/nzhamstar</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sleepy Sun - Wild Machines</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">Sleepy Sun - Wild Machines</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/kkmi2">Sleepy Sun - Wild Machines</a>
 <br>
                         submitted <span class="muted">2011-09-19 16:53</span> by <a href="https://www.reddit.com/user/NunsOnFire">/u/NunsOnFire</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Floor Assassin</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Floor - Assassin. This song melts faces.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/kub93">Floor - Assassin. This song melts faces.</a>
 <br>
                         submitted <span class="muted">2011-09-28 18:06</span> by <a href="https://www.reddit.com/user/rospaya">/u/rospaya</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">abramis brama - kom gor mig klok</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Abramis brama - Kom gor mig klok</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/k9ep5">Abramis brama - Kom gor mig klok</a>
 <br>
                         submitted <span class="muted">2011-09-08 23:38</span> by <a href="https://www.reddit.com/user/keeldude">/u/keeldude</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">ACROSS THE RIVER live 1986</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Across The River live in 1986. This is where it all began...</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/kp1d7">Across The River live in 1986. This is where it all began...</a>
 <br>
                         submitted <span class="muted">2011-09-23 13:47</span> by <a href="https://www.reddit.com/user/JayforJustice">/u/JayforJustice</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Melt - Monster Magnet - God Says No</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Melt - Monster Magnet</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/kw01g">Melt - Monster Magnet</a>
 <br>
                         submitted <span class="muted">2011-09-30 02:14</span> by <a href="https://www.reddit.com/user/tOaDeR2005">/u/tOaDeR2005</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Clutch - Sink 'Em Low (Alternate Version)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Clutch - Sink 'Em Low (Alternate Version)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/kivw7">Clutch - Sink 'Em Low (Alternate Version)</a>
 <br>
                         submitted <span class="muted">2011-09-17 19:36</span> by <a href="https://www.reddit.com/user/NunsOnFire">/u/NunsOnFire</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Men Of Porn - Succulento</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Men of Porn-Succulento</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/k7bq7">Men of Porn-Succulento</a>
 <br>
                         submitted <span class="muted">2011-09-07 06:35</span> by <a href="https://www.reddit.com/user/HenryDorsettCase">/u/HenryDorsettCase</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Night Sun - Got A Bone Of My Own</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Night Sun - Got A Bone Of My Own [1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/kl9mm">Night Sun - Got A Bone Of My Own [1971]</a>
 <br>
                         submitted <span class="muted">2011-09-20 04:30</span> by <a href="https://www.reddit.com/user/handen">/u/handen</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Zozobra - Vast Expanse</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Zozobra - The Vast Expanse</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/k72i9">Zozobra - The Vast Expanse</a>
 <br>
                         submitted <span class="muted">2011-09-07 01:38</span> by <a href="https://www.reddit.com/user/seditiousme">/u/seditiousme</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">War</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Music a friend and I made on 9/11/01.  Thank you /r/StonerRock for all the new tunes you have exposed me to, I hope you enjoy this.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/kc9mb">Music a friend and I made on 9/11/01.  Thank you /r/StonerRock for all the new tunes you have exposed me to, I hope you enjoy this.</a>
 <br>
                         submitted <span class="muted">2011-09-11 19:02</span> by <a href="https://www.reddit.com/user/etherreal">/u/etherreal</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Samurai - Cassablanca</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Samurai - Cassablanca...(Argentinian awesome stoner rock!)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/khmyk">Samurai - Cassablanca...(Argentinian awesome stoner rock!)</a>
 <br>
                         submitted <span class="muted">2011-09-16 14:07</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">U.S. Christmas - Thin The Herd</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">U.S. Christmas - Thin The Herd</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/ksfqw">U.S. Christmas - Thin The Herd</a>
 <br>
                         submitted <span class="muted">2011-09-27 01:24</span> by <a href="https://www.reddit.com/user/3ricG">/u/3ricG</a>
 .</p>
@@ -475,7 +483,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Beehoover - 'Stanislav Petrov'</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Beehoover - Stanislav Petrov</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/k8upp">Beehoover - Stanislav Petrov</a>
 <br>
                         submitted <span class="muted">2011-09-08 14:41</span> by <a href="https://www.reddit.com/user/MarsColonist">/u/MarsColonist</a>
 .</p>
@@ -489,7 +497,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Just Dropped In - Kenny Rogers & The First Edition</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Kenny Rogers &amp; The First Edition - Just Dropped In</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/kwsg7">Kenny Rogers &amp; The First Edition - Just Dropped In</a>
 <br>
                         submitted <span class="muted">2011-09-30 19:36</span> by <a href="https://www.reddit.com/user/NunsOnFire">/u/NunsOnFire</a>
 .</p>
@@ -503,7 +511,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gentlemans Pistols - Widow Maker Live @ The Underworld</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Gentleman's Pistols</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/k565p">Gentleman's Pistols</a>
 <br>
                         submitted <span class="muted">2011-09-05 08:27</span> by <a href="https://www.reddit.com/user/Theophagist">/u/Theophagist</a>
 .</p>
@@ -517,7 +525,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rotor  An3R4</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">RotoR - An3R4</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/keccp">RotoR - An3R4</a>
 <br>
                         submitted <span class="muted">2011-09-13 16:26</span> by <a href="https://www.reddit.com/user/MarsColonist">/u/MarsColonist</a>
 .</p>
@@ -531,7 +539,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Atomic Bitchwax: Gettin' Old</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">The Atomic Bitchwax - Gettin' Old</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/kfnml">The Atomic Bitchwax - Gettin' Old</a>
 <br>
                         submitted <span class="muted">2011-09-14 19:14</span> by <a href="https://www.reddit.com/user/SporadicApparatus">/u/SporadicApparatus</a>
 .</p>
@@ -545,7 +553,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Comets On Fire - The Bee and the Cracking Egg</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Comets on Fire - The Bee and the Cracking Egg</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/kiayb">Comets on Fire - The Bee and the Cracking Egg</a>
 <br>
                         submitted <span class="muted">2011-09-17 02:09</span> by <a href="https://www.reddit.com/user/xiuxiu4life">/u/xiuxiu4life</a>
 .</p>
@@ -559,7 +567,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">08) YEAR LONG DISASTER - Swan On Black Lake (Area 4 Festival 2008)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Year Long Disaster - Swan On Black Lake (live)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/ksyt2">Year Long Disaster - Swan On Black Lake (live)</a>
 <br>
                         submitted <span class="muted">2011-09-27 14:35</span> by <a href="https://www.reddit.com/user/HalIsSad">/u/HalIsSad</a>
 .</p>
@@ -573,7 +581,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Operator Generator - Polar Fleet</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Operator Generator</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/khhrc">Operator Generator</a>
 <br>
                         submitted <span class="muted">2011-09-16 09:47</span> by <a href="https://www.reddit.com/user/Theophagist">/u/Theophagist</a>
 .</p>
@@ -587,7 +595,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Molly Hatchet - Whiskey Man</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Molly Hatchet - Whiskey Man</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/kj9ae">Molly Hatchet - Whiskey Man</a>
 <br>
                         submitted <span class="muted">2011-09-18 04:15</span> by <a href="https://www.reddit.com/user/handen">/u/handen</a>
 .</p>
@@ -601,7 +609,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">White Hills - Visions Of The Past, Present And Future</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">White hills - Visions Of The Past, Present And Future</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/kfdfg">White hills - Visions Of The Past, Present And Future</a>
 <br>
                         submitted <span class="muted">2011-09-14 14:17</span> by <a href="https://www.reddit.com/user/xkillx">/u/xkillx</a>
 .</p>
@@ -615,7 +623,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Honky - Undertaker</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Honky - Undertaker</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/kisp2">Honky - Undertaker</a>
 <br>
                         submitted <span class="muted">2011-09-17 17:37</span> by <a href="https://www.reddit.com/user/HooDooOperator">/u/HooDooOperator</a>
 .</p>
@@ -629,7 +637,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Groan  - The Martyr King</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Groan - The Martyr King [retro Doom]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/kokli">Groan - The Martyr King [retro Doom]</a>
 <br>
                         submitted <span class="muted">2011-09-23 01:37</span> by <a href="https://www.reddit.com/user/bruce656">/u/bruce656</a>
 .</p>
@@ -643,7 +651,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Zozobra - Laser eyes</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">zozobra - laser eyes</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/k72a5">zozobra - laser eyes</a>
 <br>
                         submitted <span class="muted">2011-09-07 01:32</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -657,7 +665,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Goatsnake - Hot Rod</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Goatsnake-Hot Rod (I love the spoken intro)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/ke1mu">Goatsnake-Hot Rod (I love the spoken intro)</a>
 <br>
                         submitted <span class="muted">2011-09-13 08:42</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -671,7 +679,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Spiritual Beggars - Nowhere to Go</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Spiritual Beggars - Nowhere to Go</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/kfej8">Spiritual Beggars - Nowhere to Go</a>
 <br>
                         submitted <span class="muted">2011-09-14 14:54</span> by <a href="https://www.reddit.com/user/SporadicApparatus">/u/SporadicApparatus</a>
 .</p>
@@ -685,7 +693,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Stream Of Sorrow - Burnin' Up - Stoner Rock</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Stream of Sorrow - Burnin' Up</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/khuei">Stream of Sorrow - Burnin' Up</a>
 <br>
                         submitted <span class="muted">2011-09-16 17:34</span> by <a href="https://www.reddit.com/user/HooDooOperator">/u/HooDooOperator</a>
 .</p>
@@ -699,7 +707,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Activator - Bashtari</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Activator - Bashtari</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/kppcn">Activator - Bashtari</a>
 <br>
                         submitted <span class="muted">2011-09-24 02:31</span> by <a href="https://www.reddit.com/user/MarsColonist">/u/MarsColonist</a>
 .</p>
@@ -713,7 +721,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Flaming Lips Slow Nerve Action</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Flaming Lips - Slow Nerve Action</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/ks1i2">Flaming Lips - Slow Nerve Action</a>
 <br>
                         submitted <span class="muted">2011-09-26 18:08</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>

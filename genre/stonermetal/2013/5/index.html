@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bongzilla - HP Keefmaker</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/">There is too little Bongzilla up in this hizzy, try some "HP Keefmaker", it's potent!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/1eoto0">There is too little Bongzilla up in this hizzy, try some "HP Keefmaker", it's potent!</a>
 <br>
                         submitted <span class="muted">2013-05-20 12:09</span> by <a href="https://www.reddit.com/user/White_Rune">/u/White_Rune</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">(1) Lord Of Doubts - Temple Of The Riff.wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Lord Of Doubts - Temple Of The Riff</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/1ei5fn">Lord Of Doubts - Temple Of The Riff</a>
 <br>
                         submitted <span class="muted">2013-05-17 06:21</span> by <a href="https://www.reddit.com/user/Crathbun">/u/Crathbun</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">THORUN - Hipster Circle Pit</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">THORUN - HIPSTER CIRCLE PIT</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/1f8rln">THORUN - HIPSTER CIRCLE PIT</a>
 <br>
                         submitted <span class="muted">2013-05-29 02:26</span> by <a href="https://www.reddit.com/user/sr20xe">/u/sr20xe</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bongzilla - Stone a Pig</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Well, here's more Bongzilla - "Stone a Pig" off Gateway</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1f9frd">Well, here's more Bongzilla - "Stone a Pig" off Gateway</a>
 <br>
                         submitted <span class="muted">2013-05-29 11:03</span> by <a href="https://www.reddit.com/user/Hazendeuce">/u/Hazendeuce</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Камни - Shiva THC</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Камни - Shiva THC</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1ere7p">Камни - Shiva THC</a>
 <br>
                         submitted <span class="muted">2013-05-21 12:48</span> by <a href="https://www.reddit.com/user/VelvetAntlers">/u/VelvetAntlers</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Static-X Tera-Fied</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Static-X Tera-Fied (Read the lyrics)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1es10j">Static-X Tera-Fied (Read the lyrics)</a>
 <br>
                         submitted <span class="muted">2013-05-21 18:16</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lo-Pan - Deciduous</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Been rocking out to these guys quite a bit lately</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1f057w">Been rocking out to these guys quite a bit lately</a>
 <br>
                         submitted <span class="muted">2013-05-25 00:16</span> by <a href="https://www.reddit.com/user/beardlywoodchop">/u/beardlywoodchop</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sadgiqacea - Thy Will Be None</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Sadgiqacea - Thy Will Be None</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1f7hbd">Sadgiqacea - Thy Will Be None</a>
 <br>
                         submitted <span class="muted">2013-05-28 16:43</span> by <a href="https://www.reddit.com/user/Karma_Druid">/u/Karma_Druid</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Red Fang - Hank Is Dead</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Can't believe I didn't find this subreddit earlier. I share with you Red Fang - Hank is Dead. [2:37]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1fei31">Can't believe I didn't find this subreddit earlier. I share with you Red Fang - Hank is Dead. [2:37]</a>
 <br>
                         submitted <span class="muted">2013-05-31 13:34</span> by <a href="https://www.reddit.com/user/Holku">/u/Holku</a>
 .</p>

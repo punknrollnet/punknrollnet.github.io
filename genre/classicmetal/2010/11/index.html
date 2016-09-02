@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Witchfinder General - Free Country</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Witchfinder General - Free Country [1982][NWOBHM]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/e0go4">Witchfinder General - Free Country [1982][NWOBHM]</a>
 <br>
                         submitted <span class="muted">2010-11-03 05:12</span> by <a href="https://www.reddit.com/user/VCR_PUKE">/u/VCR_PUKE</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">english dogs - premonition</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">English Dogs - Premonition [80's Crossover/Power Metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/e1b9p">English Dogs - Premonition [80's Crossover/Power Metal]</a>
 <br>
                         submitted <span class="muted">2010-11-04 19:11</span> by <a href="https://www.reddit.com/user/severedfragile">/u/severedfragile</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Kill - Kill or be killed - Speed Metal Hell Vol 3 (1987)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">The Kill - Kill or be Killed [1987] [Speed Metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/e6l8g">The Kill - Kill or be Killed [1987] [Speed Metal]</a>
 <br>
                         submitted <span class="muted">2010-11-15 21:26</span> by <a href="https://www.reddit.com/user/VCR_PUKE">/u/VCR_PUKE</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Led Zeppelin - Achilles Last Stand Live</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Led Zeppelin - Achilles Last Stand (Knebworth Festival, Live) [1979]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/e9eqz">Led Zeppelin - Achilles Last Stand (Knebworth Festival, Live) [1979]</a>
 <br>
                         submitted <span class="muted">2010-11-21 06:59</span> by <a href="https://www.reddit.com/user/VCR_PUKE">/u/VCR_PUKE</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">ADX - Memoire De L'eternel</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">ADX - Memoire De L'eternel [1986] [Power Metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/e4jy5">ADX - Memoire De L'eternel [1986] [Power Metal]</a>
 <br>
                         submitted <span class="muted">2010-11-11 12:33</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Satan...Trial By Fire</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Satan - Trial By Fire [1983 NWOBHM]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/e9kj3">Satan - Trial By Fire [1983 NWOBHM]</a>
 <br>
                         submitted <span class="muted">2010-11-21 19:32</span> by <a href="https://www.reddit.com/user/RocketRobinhood">/u/RocketRobinhood</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">G.I.S.M.- Good as it is</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">G.I.S.M. - Good As It Is [1987 - Punk/Heavy Metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/e1fv1">G.I.S.M. - Good As It Is [1987 - Punk/Heavy Metal]</a>
 <br>
                         submitted <span class="muted">2010-11-04 23:46</span> by <a href="https://www.reddit.com/user/severedfragile">/u/severedfragile</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Anialator - Mission Of Death</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Anialator - Mission of Death [US thrash metal] - 1986</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/ed5hr">Anialator - Mission of Death [US thrash metal] - 1986</a>
 <br>
                         submitted <span class="muted">2010-11-29 04:35</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Battlefield - Nuclear Death</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Battlefield - Nuclear Death [1987] [Power Metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/eaww7">Battlefield - Nuclear Death [1987] [Power Metal]</a>
 <br>
                         submitted <span class="muted">2010-11-24 04:05</span> by <a href="https://www.reddit.com/user/VCR_PUKE">/u/VCR_PUKE</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Led Zeppelin - Immigrant Song (Live Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Led Zeppelin - Immigrant Song (Live Video)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/e9egp">Led Zeppelin - Immigrant Song (Live Video)</a>
 <br>
                         submitted <span class="muted">2010-11-21 06:28</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Saints Anger - Danger Metal - 1985</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Saints Anger - Danger Metal [1985]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/eax06">Saints Anger - Danger Metal [1985]</a>
 <br>
                         submitted <span class="muted">2010-11-24 04:12</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>

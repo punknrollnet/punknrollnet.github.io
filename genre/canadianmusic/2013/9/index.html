@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">SHAD - The Old Prince Still Lives At Home</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">SHAD - The Old Prince Still Lives At Home</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/1n4dyo">SHAD - The Old Prince Still Lives At Home</a>
 <br>
                         submitted <span class="muted">2013-09-25 18:47</span> by <a href="https://www.reddit.com/user/rwilly">/u/rwilly</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Blue Rodeo and Friends | Lost Together</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Blue Rodeo (and friends) - Lost Together</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1n2z3c">Blue Rodeo (and friends) - Lost Together</a>
 <br>
                         submitted <span class="muted">2013-09-25 04:25</span> by <a href="https://www.reddit.com/user/Jaymesned">/u/Jaymesned</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Murray McLauchlan with Kate and Anna McGarrigle: The Shining Birch Tree (1992)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Murray McLauchlan with Kate and Anna McGarrigle: The Shining Birch Tree (1992)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1ltmx8">Murray McLauchlan with Kate and Anna McGarrigle: The Shining Birch Tree (1992)</a>
 <br>
                         submitted <span class="muted">2013-09-06 00:51</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mary Margaret O'Hara - Matty's Lullaby</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Mary Margaret O'Hara - Matty's Lullaby</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1maiy7">Mary Margaret O'Hara - Matty's Lullaby</a>
 <br>
                         submitted <span class="muted">2013-09-13 02:50</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Wordburglar & Moose Donair Live on CBC Radio One's GO -- Yo Canada</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Yo Canada - Wordburglar</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1melj6">Yo Canada - Wordburglar</a>
 <br>
                         submitted <span class="muted">2013-09-15 00:03</span> by <a href="https://www.reddit.com/user/b3hr">/u/b3hr</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">K'naan- Dusty foot Philosopher</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">k'naan - The Dusty Foot Philosopher</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1mefbn">k'naan - The Dusty Foot Philosopher</a>
 <br>
                         submitted <span class="muted">2013-09-14 22:24</span> by <a href="https://www.reddit.com/user/b3hr">/u/b3hr</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Finest Kind@Shepley Spring Festival 2011</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Finest Kind - No more fish nor fishermen</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1n42js">Finest Kind - No more fish nor fishermen</a>
 <br>
                         submitted <span class="muted">2013-09-25 16:34</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Auto Service</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Robert Service Vs. Queens of the Stone Age</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1m8q2e">Robert Service Vs. Queens of the Stone Age</a>
 <br>
                         submitted <span class="muted">2013-09-12 12:19</span> by <a href="https://www.reddit.com/user/joetravers">/u/joetravers</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kyprios - This Is My Hit</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Kyprios - My Hit</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1melub">Kyprios - My Hit</a>
 <br>
                         submitted <span class="muted">2013-09-15 00:08</span> by <a href="https://www.reddit.com/user/b3hr">/u/b3hr</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Tragically Hip - Bobcaygeon</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">The Tragically Hip - Bobcaygeon</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/1ljjpo">The Tragically Hip - Bobcaygeon</a>
 <br>
                         submitted <span class="muted">2013-09-01 23:03</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">HEADSTONES --  Cemetery</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">The Headstones - Cemetery</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/1ljk7u">The Headstones - Cemetery</a>
 <br>
                         submitted <span class="muted">2013-09-01 23:11</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Max Webster-Paradise Skies.WMV</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Max Webster-Paradise Skies</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/1ljkck">Max Webster-Paradise Skies</a>
 <br>
                         submitted <span class="muted">2013-09-01 23:13</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Why Can't I Relate?</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Jack Dump - Why Can't I Relate?</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/1lqbud">Jack Dump - Why Can't I Relate?</a>
 <br>
                         submitted <span class="muted">2013-09-04 18:45</span> by <a href="https://www.reddit.com/user/Al_X_Gore">/u/Al_X_Gore</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Take You Away - Tasman Jude (Official HD)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Canadian Reggae Band: Tasman Jude - Take You Away (Official HD)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/1mblwx">Canadian Reggae Band: Tasman Jude - Take You Away (Official HD)</a>
 <br>
                         submitted <span class="muted">2013-09-13 16:22</span> by <a href="https://www.reddit.com/user/checkeredowl">/u/checkeredowl</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Wordburglar ft. More Or Les - Spit Fresh</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Spit Fresh</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/1mefrp">Spit Fresh</a>
 <br>
                         submitted <span class="muted">2013-09-14 22:32</span> by <a href="https://www.reddit.com/user/b3hr">/u/b3hr</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rough Trade - Avoid Freud (1980) Full Album</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Rough Trade - Avoid Freud</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/1mki43">Rough Trade - Avoid Freud</a>
 <br>
                         submitted <span class="muted">2013-09-17 12:57</span> by <a href="https://www.reddit.com/user/sleepdirt">/u/sleepdirt</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">King Khan & the Shrines - Darkness (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">King Khan &amp; the Shrines - "Darkness"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/1nbzea">King Khan &amp; the Shrines - "Darkness"</a>
 <br>
                         submitted <span class="muted">2013-09-28 20:55</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>

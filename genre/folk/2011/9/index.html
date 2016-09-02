@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Murder in the City Music Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">57</span> - <a href="https://www.reddit.com/">Avett Brothers "Murder in the City"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">57</span> - <a href="https://www.reddit.com/kw41n">Avett Brothers "Murder in the City"</a>
 <br>
                         submitted <span class="muted">2011-09-30 04:14</span> by <a href="https://www.reddit.com/user/mudkip75">/u/mudkip75</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Tallest Man On Earth - I Won't Be Found (Live on KEXP)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">46</span> - <a href="https://www.reddit.com/">The Tallest Man On Earth - I Won't Be Found</a>
+                    <p><strong>Score:</strong> <span class="rd-score">46</span> - <a href="https://www.reddit.com/kt87l">The Tallest Man On Earth - I Won't Be Found</a>
 <br>
                         submitted <span class="muted">2011-09-27 18:58</span> by <a href="https://www.reddit.com/user/Tony1pointO">/u/Tony1pointO</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bon Iver - I Can't Make You Love Me / Nick of Time</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">30</span> - <a href="https://www.reddit.com/">Bon Iver covers Bonnie Raitt's "I Can't Make You Love Me" and "Nick of Time".</a>
+                    <p><strong>Score:</strong> <span class="rd-score">30</span> - <a href="https://www.reddit.com/kbcf5">Bon Iver covers Bonnie Raitt's "I Can't Make You Love Me" and "Nick of Time".</a>
 <br>
                         submitted <span class="muted">2011-09-10 19:02</span> by <a href="https://www.reddit.com/user/howardcord">/u/howardcord</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Tallest Man On Earth - Burden of Tomorrow</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">29</span> - <a href="https://www.reddit.com/">The Tallest Man on Earth - Burden of Tomorrow</a>
+                    <p><strong>Score:</strong> <span class="rd-score">29</span> - <a href="https://www.reddit.com/k94or">The Tallest Man on Earth - Burden of Tomorrow</a>
 <br>
                         submitted <span class="muted">2011-09-08 19:07</span> by <a href="https://www.reddit.com/user/vbhokie2010">/u/vbhokie2010</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Fleet Foxes - Mykonos [OFFICIAL VIDEO]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/">Fleet Foxes - Mykonos</a>
+                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/kg100">Fleet Foxes - Mykonos</a>
 <br>
                         submitted <span class="muted">2011-09-15 01:48</span> by <a href="https://www.reddit.com/user/sirconnorstack">/u/sirconnorstack</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Iron & Wine - Trapeze Swinger (Live @ Other Music, Pt. 3)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/">Iron &amp; Wine - Trapeze Swinger</a>
+                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/kg8iz">Iron &amp; Wine - Trapeze Swinger</a>
 <br>
                         submitted <span class="muted">2011-09-15 05:46</span> by <a href="https://www.reddit.com/user/frink99887">/u/frink99887</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bon Iver - For Emma, Forever Ago | A Take Away Show</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Bon Iver - For Emma, Forever Ago - A Take Away Show (x-post from r/music)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/kl9y5">Bon Iver - For Emma, Forever Ago - A Take Away Show (x-post from r/music)</a>
 <br>
                         submitted <span class="muted">2011-09-20 04:41</span> by <a href="https://www.reddit.com/user/vbhokie2010">/u/vbhokie2010</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">William Elliott Whitmore - Hell Or High Water (Live on KEXP)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">William Elliott Whitmore - Hell or High Water</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/kusjj">William Elliott Whitmore - Hell or High Water</a>
 <br>
                         submitted <span class="muted">2011-09-29 02:06</span> by <a href="https://www.reddit.com/user/GrammarAnneFrank">/u/GrammarAnneFrank</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Cave Singers - Summer Light</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">The Cave Singers  - Summer Light</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/kpkj1">The Cave Singers  - Summer Light</a>
 <br>
                         submitted <span class="muted">2011-09-23 23:21</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Woody Guthrie (Live July 7, 1944)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">Woody Guthrie (Live July 7, 1944)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/kr3ba">Woody Guthrie (Live July 7, 1944)</a>
 <br>
                         submitted <span class="muted">2011-09-25 20:02</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Boy & Bear - Blood To Gold</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Boy&amp;Bear Blood To Gold</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/ktggm">Boy&amp;Bear Blood To Gold</a>
 <br>
                         submitted <span class="muted">2011-09-27 22:55</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ghost Woman Blues</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">The Low Anthem - Ghost Woman Blues</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/k8gbn">The Low Anthem - Ghost Woman Blues</a>
 <br>
                         submitted <span class="muted">2011-09-08 04:28</span> by <a href="https://www.reddit.com/user/chaux00">/u/chaux00</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">All My Days - Alexi Murdoch (HQ)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">All My Days - Alexi Murdoch. It's that song you go to stay warm on a rainy day.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/kaz6u">All My Days - Alexi Murdoch. It's that song you go to stay warm on a rainy day.</a>
 <br>
                         submitted <span class="muted">2011-09-10 08:15</span> by <a href="https://www.reddit.com/user/TomFotz">/u/TomFotz</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">James Blackshaw - Cross (Full Album Version)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">James Blackshaw - Cross. An amazing 12-string guitarist. (Also, first post to Reddit ever. /r/folk is grand.)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/kfync">James Blackshaw - Cross. An amazing 12-string guitarist. (Also, first post to Reddit ever. /r/folk is grand.)</a>
 <br>
                         submitted <span class="muted">2011-09-15 00:37</span> by <a href="https://www.reddit.com/user/brokenviolins">/u/brokenviolins</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Not Going To Give It Back - Peggy Seeger</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Not Going to Give It Back "You're profits are higher than they've ever been, the economy's a mess cause you're greedy as sin!" - Peggy Seeger</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/kn1eq">Not Going to Give It Back "You're profits are higher than they've ever been, the economy's a mess cause you're greedy as sin!" - Peggy Seeger</a>
 <br>
                         submitted <span class="muted">2011-09-21 19:18</span> by <a href="https://www.reddit.com/user/Nuggetsurwha">/u/Nuggetsurwha</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bowerbirds - "In Our Talons" Dead Oceans</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Bowerbirds - In Our Talons</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/kuztq">Bowerbirds - In Our Talons</a>
 <br>
                         submitted <span class="muted">2011-09-29 05:48</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">"Color in your Cheeks" - The Mountain Goats Live</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">The Mountain Goats Live - Color in your Cheeks</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/kvlbh">The Mountain Goats Live - Color in your Cheeks</a>
 <br>
                         submitted <span class="muted">2011-09-29 19:16</span> by <a href="https://www.reddit.com/user/legendary_ironwood">/u/legendary_ironwood</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Low Anthem - Sally Where'd You Get Your Liquor From?</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">The Low Anthem cover of the old folk tune, "Sally Where'd You Get You Liquor From?"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/kvt63">The Low Anthem cover of the old folk tune, "Sally Where'd You Get You Liquor From?"</a>
 <br>
                         submitted <span class="muted">2011-09-29 22:50</span> by <a href="https://www.reddit.com/user/brokenviolins">/u/brokenviolins</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Chatham County Line - Out of the Running</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Chatham County Line - Out of the Running</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/ka778">Chatham County Line - Out of the Running</a>
 <br>
                         submitted <span class="muted">2011-09-09 16:53</span> by <a href="https://www.reddit.com/user/LightWolfCavalry">/u/LightWolfCavalry</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cast Spells - A Badge</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Cast Spells- A badge(live version feat. good old war)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/kjyj7">Cast Spells- A badge(live version feat. good old war)</a>
 <br>
                         submitted <span class="muted">2011-09-19 00:25</span> by <a href="https://www.reddit.com/user/bearvsshark420">/u/bearvsshark420</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Chamberlin - Dust - Audiotree Live</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Chamberlin - Dust</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/kfp7y">Chamberlin - Dust</a>
 <br>
                         submitted <span class="muted">2011-09-14 19:58</span> by <a href="https://www.reddit.com/user/sirconnorstack">/u/sirconnorstack</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">David Mayfield & Seth Avett sing, Breath Of Love by David Mayfield</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">David Mayfield &amp; Seth Avett - Breath Of Love (amazing BEARD)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/ko4yi">David Mayfield &amp; Seth Avett - Breath Of Love (amazing BEARD)</a>
 <br>
                         submitted <span class="muted">2011-09-22 18:04</span> by <a href="https://www.reddit.com/user/leftnutoffury">/u/leftnutoffury</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">MICHAEL JACKSON-BLUE GRASS COVER OF BILLY JEAN   BY HONEYWAGON!!</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Honeywagon covers "Billy Jean" by Michael Jackson</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/ks8q9">Honeywagon covers "Billy Jean" by Michael Jackson</a>
 <br>
                         submitted <span class="muted">2011-09-26 21:47</span> by <a href="https://www.reddit.com/user/discontinuuity">/u/discontinuuity</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">James Keelaghan "Cold Missouri Waters"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">James Keelaghan - Cold Missouri Waters</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/k0v97">James Keelaghan - Cold Missouri Waters</a>
 <br>
                         submitted <span class="muted">2011-09-01 02:15</span> by <a href="https://www.reddit.com/user/PhnomPencil">/u/PhnomPencil</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Pentangle - House Carpenter</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Excellent and different version of "House Carpenter" (Child 243) done by Pentangle</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/kae40">Excellent and different version of "House Carpenter" (Child 243) done by Pentangle</a>
 <br>
                         submitted <span class="muted">2011-09-09 19:56</span> by <a href="https://www.reddit.com/user/nerdyubergeek42">/u/nerdyubergeek42</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Jake Bugg - Saffron, Something Wrong & Love Me the Way You Do</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">16 yr old folk singer</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/kahyd">16 yr old folk singer</a>
 <br>
                         submitted <span class="muted">2011-09-09 21:41</span> by <a href="https://www.reddit.com/user/WeeSleekit">/u/WeeSleekit</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bobby Bare Jr. - Swollen But Not The Same @ The Collect</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Bobby Bare Jr. - Swollen But Not The Same</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/ksjls">Bobby Bare Jr. - Swollen But Not The Same</a>
 <br>
                         submitted <span class="muted">2011-09-27 03:17</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sufjan Stevens - Casimir Pulaski Day (from Come on feel the Illinoise)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Sufjan Stevens - Casimir Pulaski Day</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/kurhd">Sufjan Stevens - Casimir Pulaski Day</a>
 <br>
                         submitted <span class="muted">2011-09-29 01:37</span> by <a href="https://www.reddit.com/user/TomFotz">/u/TomFotz</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Zydepunks - Madeleine - live on Devil's Night 2010</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Zydepunks - Madeleine</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/k7bwj">Zydepunks - Madeleine</a>
 <br>
                         submitted <span class="muted">2011-09-07 06:42</span> by <a href="https://www.reddit.com/user/discontinuuity">/u/discontinuuity</a>
 .</p>
@@ -475,7 +483,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Stan Rogers - Bluenose</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Stan Rogers - Bluenose</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/k9nnp">Stan Rogers - Bluenose</a>
 <br>
                         submitted <span class="muted">2011-09-09 03:57</span> by <a href="https://www.reddit.com/user/mtnmetal">/u/mtnmetal</a>
 .</p>
@@ -489,7 +497,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">New Man by Joy Kills Sorrow</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Joy Kills Sorrow - "New Man"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/ktpg8">Joy Kills Sorrow - "New Man"</a>
 <br>
                         submitted <span class="muted">2011-09-28 03:28</span> by <a href="https://www.reddit.com/user/LightWolfCavalry">/u/LightWolfCavalry</a>
 .</p>
@@ -503,7 +511,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Big Black Car</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Gregory Alan Isakov - Big Black Car [Very hard to choose a representative song, but this is the one that turned me onto him]. Hope you all enjoy!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/ktqe8">Gregory Alan Isakov - Big Black Car [Very hard to choose a representative song, but this is the one that turned me onto him]. Hope you all enjoy!</a>
 <br>
                         submitted <span class="muted">2011-09-28 04:00</span> by <a href="https://www.reddit.com/user/The_Absurdist">/u/The_Absurdist</a>
 .</p>
@@ -517,7 +525,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Books - Enjoy your worries you may never have them again</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">The Books- Enjoy Your Worries, You May Never Have Them Again</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/kagdt">The Books- Enjoy Your Worries, You May Never Have Them Again</a>
 <br>
                         submitted <span class="muted">2011-09-09 20:57</span> by <a href="https://www.reddit.com/user/xiuxiu4life">/u/xiuxiu4life</a>
 .</p>
@@ -531,7 +539,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Head and the Heart - Down in the Valley</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">The Head and the Heart - Down in the Valley</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/kl90s">The Head and the Heart - Down in the Valley</a>
 <br>
                         submitted <span class="muted">2011-09-20 04:09</span> by <a href="https://www.reddit.com/user/vbhokie2010">/u/vbhokie2010</a>
 .</p>
@@ -545,7 +553,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Hartford's Real</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">SICK ASS MANDO!!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/kmrx9">SICK ASS MANDO!!</a>
 <br>
                         submitted <span class="muted">2011-09-21 14:57</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -559,7 +567,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dorkbot Alba's Waldflöte vs Kazookeylele - dueling  banjo's</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">MIDI pipe organ vs. kazookeylele -- "Dueling Banjos"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/kovcb">MIDI pipe organ vs. kazookeylele -- "Dueling Banjos"</a>
 <br>
                         submitted <span class="muted">2011-09-23 08:14</span> by <a href="https://www.reddit.com/user/discontinuuity">/u/discontinuuity</a>
 .</p>
@@ -573,7 +581,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Joe Strummer And The Mescaleros- X-Ray Style</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Joe Strummer And The Mescaleros- X-Ray Style</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/kqvh2">Joe Strummer And The Mescaleros- X-Ray Style</a>
 <br>
                         submitted <span class="muted">2011-09-25 15:06</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -587,7 +595,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Judee Sill - There's A Rugged Road</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">One of my favorite folk songs: Judee Sill - "There's a Rugged Road"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/kw66b">One of my favorite folk songs: Judee Sill - "There's a Rugged Road"</a>
 <br>
                         submitted <span class="muted">2011-09-30 05:30</span> by <a href="https://www.reddit.com/user/Spraynyrd">/u/Spraynyrd</a>
 .</p>
@@ -601,7 +609,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Martin Sexton-Black Sheep</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Martin Sexton - Black Sheep [John Mayer has called him the best live performer he's ever seen. I agree. :) ]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/k29sl">Martin Sexton - Black Sheep [John Mayer has called him the best live performer he's ever seen. I agree. :) ]</a>
 <br>
                         submitted <span class="muted">2011-09-02 08:28</span> by <a href="https://www.reddit.com/user/PhnomPencil">/u/PhnomPencil</a>
 .</p>
@@ -615,7 +623,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nick Drake- Riverman</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Not enough appreciation in the world for this man....</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/kfxss">Not enough appreciation in the world for this man....</a>
 <br>
                         submitted <span class="muted">2011-09-15 00:10</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -629,7 +637,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Bergen - Gordon Bok, Ann Mayo Muir and Ed Trickett.wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Jez Lowe's song "The Bergen" - Bok, Muir, and Trickett</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/kl2zh">Jez Lowe's song "The Bergen" - Bok, Muir, and Trickett</a>
 <br>
                         submitted <span class="muted">2011-09-20 01:02</span> by <a href="https://www.reddit.com/user/Moreau_it">/u/Moreau_it</a>
 .</p>
@@ -643,7 +651,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">October - Jonas Alaska</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Jonas Alaska - October</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/klxpr">Jonas Alaska - October</a>
 <br>
                         submitted <span class="muted">2011-09-20 20:17</span> by <a href="https://www.reddit.com/user/Jef_Costello">/u/Jef_Costello</a>
 .</p>
@@ -657,7 +665,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Joshua James - Today</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Joshua James - Today</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/kp059">Joshua James - Today</a>
 <br>
                         submitted <span class="muted">2011-09-23 12:59</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -671,7 +679,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">From Clare to here</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Patrick Cowman - From Clare to here.  Incredible performance</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/kvsfe">Patrick Cowman - From Clare to here.  Incredible performance</a>
 <br>
                         submitted <span class="muted">2011-09-29 22:28</span> by <a href="https://www.reddit.com/user/Pintlicker">/u/Pintlicker</a>
 .</p>
@@ -685,7 +693,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">James Keelaghan - Kiri's Piano - Listen Up</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">James Keelaghan - Kiri's Piano (On the WWII internment of Japanese on the West Coast of North America)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/k0vv6">James Keelaghan - Kiri's Piano (On the WWII internment of Japanese on the West Coast of North America)</a>
 <br>
                         submitted <span class="muted">2011-09-01 02:35</span> by <a href="https://www.reddit.com/user/PhnomPencil">/u/PhnomPencil</a>
 .</p>
@@ -699,7 +707,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Woods - Suffering Season</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Woods - Suffering Season</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/k5xd3">Woods - Suffering Season</a>
 <br>
                         submitted <span class="muted">2011-09-06 01:33</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -713,7 +721,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Con O'Drisceoil - The Spoons Murder</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Con O'Drisceoil - The Spoons Murder</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/k78oh">Con O'Drisceoil - The Spoons Murder</a>
 <br>
                         submitted <span class="muted">2011-09-07 04:42</span> by <a href="https://www.reddit.com/user/PhnomPencil">/u/PhnomPencil</a>
 .</p>
@@ -727,7 +735,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Resilience</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Annabelle Chvostek - Resilience</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/ka5v3">Annabelle Chvostek - Resilience</a>
 <br>
                         submitted <span class="muted">2011-09-09 16:18</span> by <a href="https://www.reddit.com/user/ChariotOfFire">/u/ChariotOfFire</a>
 .</p>
@@ -741,7 +749,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Corde Oblique & Pinknruby- Klara</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Corde Oblique – Klara (feat. Pinknruby)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/kce1o">Corde Oblique – Klara (feat. Pinknruby)</a>
 <br>
                         submitted <span class="muted">2011-09-11 21:29</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -755,7 +763,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Corde oblique - La gente che resta</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Corde Oblique - La gente che resta</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/kcf2o">Corde Oblique - La gente che resta</a>
 <br>
                         submitted <span class="muted">2011-09-11 22:04</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -769,7 +777,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Freebidou - Amicalement Votre</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Freebidou - Amicalement Votre</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/knrt7">Freebidou - Amicalement Votre</a>
 <br>
                         submitted <span class="muted">2011-09-22 10:19</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -783,7 +791,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Pumped Up Kicks - Foster The People Cover (ft. Imaginary Future)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Kina Grannis and her Imaginary Friend cover Pumped Up Kicks by Foster The People. Sweet and Plucky!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/ktpu2">Kina Grannis and her Imaginary Friend cover Pumped Up Kicks by Foster The People. Sweet and Plucky!</a>
 <br>
                         submitted <span class="muted">2011-09-28 03:42</span> by <a href="https://www.reddit.com/user/feyesh">/u/feyesh</a>
 .</p>
@@ -797,7 +805,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">From This Valley // The Civil Wars // Live from New Orleans</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">The Civil Wars - From This Valley (live New Orleans)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/kwvem">The Civil Wars - From This Valley (live New Orleans)</a>
 <br>
                         submitted <span class="muted">2011-09-30 20:58</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>

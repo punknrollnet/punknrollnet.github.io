@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Salt Creek</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/">Hey r/Bluegrass, check out my band at a show yesterday!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/mkah1">Hey r/Bluegrass, check out my band at a show yesterday!</a>
 <br>
                         submitted <span class="muted">2011-11-21 16:48</span> by <a href="https://www.reddit.com/user/LonesomeCounty">/u/LonesomeCounty</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Chris Thile & Michael Daves - "You're Running Wild"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">It simply doesn't get any better than this</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/lwsfw">It simply doesn't get any better than this</a>
 <br>
                         submitted <span class="muted">2011-11-01 19:56</span> by <a href="https://www.reddit.com/user/minivanhighway">/u/minivanhighway</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Chet Atkins, Bela Fleck, & Jerry Douglas - Alabama Jubilee</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Chet Atkins, Bela Fleck, &amp; Jerry Douglas - Alabama Jubilee</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/mm1d7">Chet Atkins, Bela Fleck, &amp; Jerry Douglas - Alabama Jubilee</a>
 <br>
                         submitted <span class="muted">2011-11-22 23:09</span> by <a href="https://www.reddit.com/user/DylanThomas928">/u/DylanThomas928</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Steeldrivers - Midnight Train to Memphis.wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Steeldrivers...these guys rock.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/moije">Steeldrivers...these guys rock.</a>
 <br>
                         submitted <span class="muted">2011-11-25 03:31</span> by <a href="https://www.reddit.com/user/mtgooner420">/u/mtgooner420</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gillian Welch & David Rawlings - Sing That Rock 'n Roll</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">Just listen to what Rawlings does to that guitar...</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/mf3in">Just listen to what Rawlings does to that guitar...</a>
 <br>
                         submitted <span class="muted">2011-11-17 01:09</span> by <a href="https://www.reddit.com/user/minivanhighway">/u/minivanhighway</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Whiskey Shivers - Gimme All Your Lovin'</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Haven't seen Whiskey Shivers here yet...</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/mhqvb">Haven't seen Whiskey Shivers here yet...</a>
 <br>
                         submitted <span class="muted">2011-11-19 04:19</span> by <a href="https://www.reddit.com/user/andycapp614">/u/andycapp614</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">good ol' mountain dew</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">good ol banjo picking by yours truly</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/mo2qj">good ol banjo picking by yours truly</a>
 <br>
                         submitted <span class="muted">2011-11-24 18:17</span> by <a href="https://www.reddit.com/user/brewtang">/u/brewtang</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Silver Spire @ The Cambridge Folk Festival</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">The Silver Spire</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/lz4ab">The Silver Spire</a>
 <br>
                         submitted <span class="muted">2011-11-03 16:21</span> by <a href="https://www.reddit.com/user/banjo_boy77">/u/banjo_boy77</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Whiskey 'Fore Breakfast-Mike Cross</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Anyone know where to find a better recording of this? Mike Cross - Whiskey Fore Breakfast</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/mp8jo">Anyone know where to find a better recording of this? Mike Cross - Whiskey Fore Breakfast</a>
 <br>
                         submitted <span class="muted">2011-11-25 21:40</span> by <a href="https://www.reddit.com/user/CupcakeUnicorn">/u/CupcakeUnicorn</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Yonder Mountain String Band "They Love Each Other" backstage at Harvest Fest</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">YMSB plays "They Love Each Other" backstage at Harvest Fest</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/lwh0x">YMSB plays "They Love Each Other" backstage at Harvest Fest</a>
 <br>
                         submitted <span class="muted">2011-11-01 15:05</span> by <a href="https://www.reddit.com/user/Snodgrass82">/u/Snodgrass82</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Punch Brothers - Wayside (Back in Time) (Live @pickathon 2010)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Bluegrass does not make people move this way. Punch Brothers wizardry.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/lzuuq">Bluegrass does not make people move this way. Punch Brothers wizardry.</a>
 <br>
                         submitted <span class="muted">2011-11-04 03:19</span> by <a href="https://www.reddit.com/user/gpup">/u/gpup</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Trampled By Turtles - Empire (live at 89.1 KHOL)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Trampled By Turtles - Empire. A beautiful song from these trailblazers in newgrass.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/mgm53">Trampled By Turtles - Empire. A beautiful song from these trailblazers in newgrass.</a>
 <br>
                         submitted <span class="muted">2011-11-18 05:27</span> by <a href="https://www.reddit.com/user/thsmchnkllsfcsts">/u/thsmchnkllsfcsts</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dan Tyminski : The Boy Who Wouldn't Hoe Corn</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Nice celtic fusion with Tyminski's - The Boy Who Wouldn't Hoe Corn</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/mpufe">Nice celtic fusion with Tyminski's - The Boy Who Wouldn't Hoe Corn</a>
 <br>
                         submitted <span class="muted">2011-11-26 13:16</span> by <a href="https://www.reddit.com/user/eastshores">/u/eastshores</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rhodes Brothers - Old Home Place</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">My brother and me playing Old Home Place on guitar and mandolin (I'm on guitar).</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/msshi">My brother and me playing Old Home Place on guitar and mandolin (I'm on guitar).</a>
 <br>
                         submitted <span class="muted">2011-11-29 02:17</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Caleb Meyer - Gillian Welch & David Rawlings</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">My little brother and me playing Old Home Place on guitar and mandolin (I'm on guitar).</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/msvmy">My little brother and me playing Old Home Place on guitar and mandolin (I'm on guitar).</a>
 <br>
                         submitted <span class="muted">2011-11-29 03:31</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cherokee Shuffle with Andy Falco, Tony Watt and Noam Pikelny</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">How I wish I could play the banjo.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/lz2zm">How I wish I could play the banjo.</a>
 <br>
                         submitted <span class="muted">2011-11-03 15:48</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>

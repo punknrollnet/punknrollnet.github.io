@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Socrates - Killer</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">Socrates - "Killer" [Greece - 1976]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/2030b2">Socrates - "Killer" [Greece - 1976]</a>
 <br>
                         submitted <span class="muted">2014-03-10 21:51</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Aphrodites Child - Magic Mirror</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Aphrodite's Child - Magic Mirror [Greece/France - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/1zwqh8">Aphrodite's Child - Magic Mirror [Greece/France - 1969]</a>
 <br>
                         submitted <span class="muted">2014-03-08 19:15</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Blues Image - Pay My Dues (1970)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Blues Image - Pay My Dues (USA - 1970)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/217lyt">Blues Image - Pay My Dues (USA - 1970)</a>
 <br>
                         submitted <span class="muted">2014-03-24 06:05</span> by <a href="https://www.reddit.com/user/BasketOfCats">/u/BasketOfCats</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Edgar Broughton Band - Call Me A Liar</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Edgar Broughton Band - Call Me a Liar [England - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/215d5r">Edgar Broughton Band - Call Me a Liar [England - 1969]</a>
 <br>
                         submitted <span class="muted">2014-03-23 14:23</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Underground Electrics (The Firebirds) Boogie Children (1968)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">The Underground Electrics - "Boogie Children" [USA - 1968]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/1znacr">The Underground Electrics - "Boogie Children" [USA - 1968]</a>
 <br>
                         submitted <span class="muted">2014-03-05 18:44</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Vavoura Band - The Dance Of Aphrodite</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Vavoura Band - "The Dance Of Aphrodite" [Greece - 1977]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/1zoc3x">Vavoura Band - "The Dance Of Aphrodite" [Greece - 1977]</a>
 <br>
                         submitted <span class="muted">2014-03-06 00:33</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Garden - Groundhogs</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">The Groundhogs - Garden [England - 1970]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/203cbs">The Groundhogs - Garden [England - 1970]</a>
 <br>
                         submitted <span class="muted">2014-03-10 23:46</span> by <a href="https://www.reddit.com/user/electrickenzo">/u/electrickenzo</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">White Lightning-Before My Time-1969-[US HEAVY PSYCH]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">White Lightning - Before My Time [USA - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/20xmk3">White Lightning - Before My Time [USA - 1969]</a>
 <br>
                         submitted <span class="muted">2014-03-20 20:19</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Τα 4 Επίπεδα της Ύπαρξης - Κάποια μέρα στην Αθήνα</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">The 4 Levels of Existence - "Κάποια μέρα στην Αθήνα (Someday in Athens)" [Greece - 1976]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1zri94">The 4 Levels of Existence - "Κάποια μέρα στην Αθήνα (Someday in Athens)" [Greece - 1976]</a>
 <br>
                         submitted <span class="muted">2014-03-06 23:39</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Maternal Joy . Fat (Germany 1971)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Maternal Joy - Fat [Germany - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/208z4a">Maternal Joy - Fat [Germany - 1971]</a>
 <br>
                         submitted <span class="muted">2014-03-12 18:25</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Davie Allan & The Arrows-13th Harley</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Davie Allan &amp; The Arrows - 13th Harley (US-1968)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/20iiov">Davie Allan &amp; The Arrows - 13th Harley (US-1968)</a>
 <br>
                         submitted <span class="muted">2014-03-15 23:19</span> by <a href="https://www.reddit.com/user/cuwabara">/u/cuwabara</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">DIASTHMOPLOIO-ASBESTOPOYLOS 2002 (1975)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Ilias Asvestopoulos &amp; 2002 - Διαστημόπλοιο [Greece - 1975]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/20kajv">Ilias Asvestopoulos &amp; 2002 - Διαστημόπλοιο [Greece - 1975]</a>
 <br>
                         submitted <span class="muted">2014-03-16 17:41</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Στέλλα Γαδέδη & Μπουρμπούλια - Μαύρη Θάλασσα</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Στέλλα Γαδέδη &amp; Μπουρμπούλια - "Μαύρη Θάλασσα" [Greece - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/210o8o">Στέλλα Γαδέδη &amp; Μπουρμπούλια - "Μαύρη Θάλασσα" [Greece - 1971]</a>
 <br>
                         submitted <span class="muted">2014-03-21 19:07</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dionysis Savvopoulos - Μαύρη θάλασσα</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Dionysis Savvopoulos - "Μαύρη θάλασσα" [Greece - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/210nqz">Dionysis Savvopoulos - "Μαύρη θάλασσα" [Greece - 1972]</a>
 <br>
                         submitted <span class="muted">2014-03-21 19:02</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Egor - Street (1971)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Egor - Street [UK - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1zb1uu">Egor - Street [UK - 1971]</a>
 <br>
                         submitted <span class="muted">2014-03-02 00:28</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Jessy Joyce. Welcome to my dream (France 1975)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Jessy Joyce - Welcome to my dream [France - 1975]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/21en27">Jessy Joyce - Welcome to my dream [France - 1975]</a>
 <br>
                         submitted <span class="muted">2014-03-26 11:39</span> by <a href="https://www.reddit.com/user/bobleflambeur">/u/bobleflambeur</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Coupla Prog - That's the way it goes</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Coupla Prog - "That's the Way it Goes" [Germany - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/21pr0d">Coupla Prog - "That's the Way it Goes" [Germany - 1972]</a>
 <br>
                         submitted <span class="muted">2014-03-30 01:27</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Osage Tribe : Arrow Head</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Osage Tribe - Arrow Head [Italy - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1zm1li">Osage Tribe - Arrow Head [Italy - 1972]</a>
 <br>
                         submitted <span class="muted">2014-03-05 08:31</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ransome Head - Sing (York Records 45 / Psych Rock, Fuzz 1971)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Ransome Head - "Sing" [USA - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1zni1a">Ransome Head - "Sing" [USA - 1971]</a>
 <br>
                         submitted <span class="muted">2014-03-05 19:54</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Galaxis-Uncle John/Castle Of Happyness(1971)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Galaxis - "Uncle John/Castle Of Happyness" [Netherlands - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1znvba">Galaxis - "Uncle John/Castle Of Happyness" [Netherlands - 1971]</a>
 <br>
                         submitted <span class="muted">2014-03-05 21:54</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">"O Ksenos Zitianos" & "Polemos Esti Fonias" by Kastores (Greece, 1973)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Kastores - "O Ksenos Zitianos/Polemos Esti Fonias" [Greece - 1973]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1znxvr">Kastores - "O Ksenos Zitianos/Polemos Esti Fonias" [Greece - 1973]</a>
 <br>
                         submitted <span class="muted">2014-03-05 22:17</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gazuama Sinchartchas - Ανύψωση, Αποτίναξη, Εκφυγή, Part II [1972, 7'' Pan-Vox]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Gazuama Sinchartchas - "Ανύψωση, Αποτίναξη, Εκφυγή, Part II" [Greece - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1zr6xi">Gazuama Sinchartchas - "Ανύψωση, Αποτίναξη, Εκφυγή, Part II" [Greece - 1972]</a>
 <br>
                         submitted <span class="muted">2014-03-06 21:51</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Strider - Searching the Clouds.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Strider - Searching the Clouds [England - 1974]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/20y234">Strider - Searching the Clouds [England - 1974]</a>
 <br>
                         submitted <span class="muted">2014-03-20 22:46</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Axis - Shine Lady Shine</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Axis - "Shine Lady Shine" [France - 1970] -- Greek musicians based in Paris.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/20yba0">Axis - "Shine Lady Shine" [France - 1970] -- Greek musicians based in Paris.</a>
 <br>
                         submitted <span class="muted">2014-03-21 00:17</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Laghonia - Speed Fever</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Laghonia - "Speed Fever" [Peru - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/21ogyn">Laghonia - "Speed Fever" [Peru - 1969]</a>
 <br>
                         submitted <span class="muted">2014-03-29 16:36</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">EMiLy - "YOU BeTTeR RuN!" ( 1969 RadiaNT LabeL 7iNCh ) KiLLeR BLue CheeR HEaVy GaRaGe PSyCh!</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Emily - "Better Run Fast" [USA - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1znf9n">Emily - "Better Run Fast" [USA - 1969]</a>
 <br>
                         submitted <span class="muted">2014-03-05 19:29</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">KING GEORGE DISCOVERY UNKNOWN TEST PRESS HENDRIX FUZZ PSYCH</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">King George Discovery - "Stone Free" [Sweden - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1zngmw">King George Discovery - "Stone Free" [Sweden - 1969]</a>
 <br>
                         submitted <span class="muted">2014-03-05 19:42</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">MY MINDS FANTASY</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Rabbit Food - "My Mind's Phantasy" [Netherlands - 1970]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1znxdb">Rabbit Food - "My Mind's Phantasy" [Netherlands - 1970]</a>
 <br>
                         submitted <span class="muted">2014-03-05 22:13</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">OXTAIL FOXTAIL - THE UNGRATEFUL LIVING</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Oxtail Foxtail - The Ungrateful Living (Can/Vancouver 1980 something)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/21bzp7">Oxtail Foxtail - The Ungrateful Living (Can/Vancouver 1980 something)</a>
 <br>
                         submitted <span class="muted">2014-03-25 16:32</span> by <a href="https://www.reddit.com/user/cuwabara">/u/cuwabara</a>
 .</p>
@@ -475,7 +483,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">PETROS TZAMTZIS & ALLOY - NAI S'AGAPO / Yes, I love You (Original 45 Greek Psych Funk Fuzz)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Petros Tzamtzis &amp; Alloy - "Nai S'Agapo (Yes, I Love You)" [Greece - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/21gmyv">Petros Tzamtzis &amp; Alloy - "Nai S'Agapo (Yes, I Love You)" [Greece - 1972]</a>
 <br>
                         submitted <span class="muted">2014-03-26 23:59</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -489,7 +497,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Idols - Ενα κορίτσι μου'χε πεί(1969)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Idols - "Ενα Κοριτσι Μου Ειχε Πει (A Girl Told Me)" [Greece - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/21go09">Idols - "Ενα Κοριτσι Μου Ειχε Πει (A Girl Told Me)" [Greece - 1969]</a>
 <br>
                         submitted <span class="muted">2014-03-27 00:10</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -503,7 +511,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">ΠΕΛΟΜΑ ΜΠΟΚΙΟΥ - Γαρύφαλλε</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Πελόμα Μποκιού - "Γαρύφαλλε, Γαρύφαλλε" [Greece - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/21iznj">Πελόμα Μποκιού - "Γαρύφαλλε, Γαρύφαλλε" [Greece - 1972]</a>
 <br>
                         submitted <span class="muted">2014-03-27 18:53</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -517,7 +525,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Huffer - Walk in the Park</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Huffer - Walk in the Park - 2014 - Los Angeles</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/1zom5s">Huffer - Walk in the Park - 2014 - Los Angeles</a>
 <br>
                         submitted <span class="muted">2014-03-06 02:19</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>

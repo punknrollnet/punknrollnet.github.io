@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Yeah Yeah Yeahs - Maps</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">95</span> - <a href="https://www.reddit.com/">Yeah Yeah Yeahs- Maps</a>
+                    <p><strong>Score:</strong> <span class="rd-score">95</span> - <a href="https://www.reddit.com/4app3b">Yeah Yeah Yeahs- Maps</a>
 <br>
                         submitted <span class="muted">2016-03-16 20:37</span> by <a href="https://www.reddit.com/user/That_one_cool_dude">/u/That_one_cool_dude</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Front Bottoms - Au Revoir (Adios) (Official)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">79</span> - <a href="https://www.reddit.com/">The Front Bottoms - Au Revoir (Adios)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">79</span> - <a href="https://www.reddit.com/49oyca">The Front Bottoms - Au Revoir (Adios)</a>
 <br>
                         submitted <span class="muted">2016-03-09 16:55</span> by <a href="https://www.reddit.com/user/LeviJenkinsTheFirst">/u/LeviJenkinsTheFirst</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Courtney Barnett - Sometimes I Sit And Think, And Sometimes I Just Sit (Official Full Album Stream)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">77</span> - <a href="https://www.reddit.com/">Courtney Barnett - Sometimes I Sit And Think, And Sometimes I Just Sit (Official Full Album Stream)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">77</span> - <a href="https://www.reddit.com/4ca6z4">Courtney Barnett - Sometimes I Sit And Think, And Sometimes I Just Sit (Official Full Album Stream)</a>
 <br>
                         submitted <span class="muted">2016-03-28 13:47</span> by <a href="https://www.reddit.com/user/blue_strat">/u/blue_strat</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">14. Talkin' Shit About a Pretty Sunset</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">63</span> - <a href="https://www.reddit.com/">Modest Mouse - Talkin' Shit About a Pretty Sunset</a>
+                    <p><strong>Score:</strong> <span class="rd-score">63</span> - <a href="https://www.reddit.com/48vmr5">Modest Mouse - Talkin' Shit About a Pretty Sunset</a>
 <br>
                         submitted <span class="muted">2016-03-04 03:39</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Spoon - Don't You Evah</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">56</span> - <a href="https://www.reddit.com/">Spoon - Don't You Evah</a>
+                    <p><strong>Score:</strong> <span class="rd-score">56</span> - <a href="https://www.reddit.com/490vxs">Spoon - Don't You Evah</a>
 <br>
                         submitted <span class="muted">2016-03-05 03:40</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Japandroids - Post-Nothing - Full Album HD</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">53</span> - <a href="https://www.reddit.com/">Japandroids - Post-Nothing (2009)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">53</span> - <a href="https://www.reddit.com/4bx4l7">Japandroids - Post-Nothing (2009)</a>
 <br>
                         submitted <span class="muted">2016-03-25 16:17</span> by <a href="https://www.reddit.com/user/Keaton_Buster">/u/Keaton_Buster</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">BEACH HOUSE  - "MYTH" (OFFICIAL TRACK)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">49</span> - <a href="https://www.reddit.com/">Beach House- Myth</a>
+                    <p><strong>Score:</strong> <span class="rd-score">49</span> - <a href="https://www.reddit.com/4b8ea6">Beach House- Myth</a>
 <br>
                         submitted <span class="muted">2016-03-20 17:28</span> by <a href="https://www.reddit.com/user/katbc">/u/katbc</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bright Eyes - The Calendar Hung Itself</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">47</span> - <a href="https://www.reddit.com/">Bright Eyes - The Calendar Hung Itself</a>
+                    <p><strong>Score:</strong> <span class="rd-score">47</span> - <a href="https://www.reddit.com/48hkkp">Bright Eyes - The Calendar Hung Itself</a>
 <br>
                         submitted <span class="muted">2016-03-01 17:34</span> by <a href="https://www.reddit.com/user/Already_Deleted_Once">/u/Already_Deleted_Once</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">In the Aeroplane Over the Sea</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">47</span> - <a href="https://www.reddit.com/">Neutral Milk Hotel - In the Aeroplane Over the Sea</a>
+                    <p><strong>Score:</strong> <span class="rd-score">47</span> - <a href="https://www.reddit.com/4afn13">Neutral Milk Hotel - In the Aeroplane Over the Sea</a>
 <br>
                         submitted <span class="muted">2016-03-14 23:03</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Arcade Fire: Headlights Look Like Diamonds (Lyrics in Description)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">43</span> - <a href="https://www.reddit.com/">Arcade Fire - Headlights Look Like Diamonds</a>
+                    <p><strong>Score:</strong> <span class="rd-score">43</span> - <a href="https://www.reddit.com/48vhke">Arcade Fire - Headlights Look Like Diamonds</a>
 <br>
                         submitted <span class="muted">2016-03-04 03:02</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Death Cab for Cutie - A Lack of Color</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">41</span> - <a href="https://www.reddit.com/">Death Cab for Cutie - A Lack of Color</a>
+                    <p><strong>Score:</strong> <span class="rd-score">41</span> - <a href="https://www.reddit.com/48sxmk">Death Cab for Cutie - A Lack of Color</a>
 <br>
                         submitted <span class="muted">2016-03-03 17:18</span> by <a href="https://www.reddit.com/user/bitterbuffaloheart">/u/bitterbuffaloheart</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">alt-J - Tessellate [OFFICIAL VIDEO]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">39</span> - <a href="https://www.reddit.com/">Alt-J, Tessellate</a>
+                    <p><strong>Score:</strong> <span class="rd-score">39</span> - <a href="https://www.reddit.com/4aviwy">Alt-J, Tessellate</a>
 <br>
                         submitted <span class="muted">2016-03-17 22:38</span> by <a href="https://www.reddit.com/user/katbc">/u/katbc</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Now, Now - Magnet</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">37</span> - <a href="https://www.reddit.com/">Now, Now - Magnet</a>
+                    <p><strong>Score:</strong> <span class="rd-score">37</span> - <a href="https://www.reddit.com/4bo4zk">Now, Now - Magnet</a>
 <br>
                         submitted <span class="muted">2016-03-23 19:50</span> by <a href="https://www.reddit.com/user/bitterbuffaloheart">/u/bitterbuffaloheart</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ugly Casanova - Diggin' Holes</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">36</span> - <a href="https://www.reddit.com/">Ugly Casanova - Diggin' Holes</a>
+                    <p><strong>Score:</strong> <span class="rd-score">36</span> - <a href="https://www.reddit.com/49u302">Ugly Casanova - Diggin' Holes</a>
 <br>
                         submitted <span class="muted">2016-03-10 16:13</span> by <a href="https://www.reddit.com/user/bitterbuffaloheart">/u/bitterbuffaloheart</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">My Morning Jacket - Lay Low</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">34</span> - <a href="https://www.reddit.com/">My Morning Jacket - Lay Low</a>
+                    <p><strong>Score:</strong> <span class="rd-score">34</span> - <a href="https://www.reddit.com/48oeeo">My Morning Jacket - Lay Low</a>
 <br>
                         submitted <span class="muted">2016-03-02 21:17</span> by <a href="https://www.reddit.com/user/Snazyman">/u/Snazyman</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Hold Steady - Separation Sunday FULL ALBUM</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">34</span> - <a href="https://www.reddit.com/">The Hold Steady - Separation Sunday (2005)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">34</span> - <a href="https://www.reddit.com/4cnucc">The Hold Steady - Separation Sunday (2005)</a>
 <br>
                         submitted <span class="muted">2016-03-31 01:20</span> by <a href="https://www.reddit.com/user/Keaton_Buster">/u/Keaton_Buster</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Los Campesinos! - We Are Beautiful, We Are Doomed</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">32</span> - <a href="https://www.reddit.com/">Los Campesinos! - We Are Beautiful, We Are Doomed (2008)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">32</span> - <a href="https://www.reddit.com/4as9p5">Los Campesinos! - We Are Beautiful, We Are Doomed (2008)</a>
 <br>
                         submitted <span class="muted">2016-03-17 09:46</span> by <a href="https://www.reddit.com/user/eddie_pls">/u/eddie_pls</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Editors - Munich</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">31</span> - <a href="https://www.reddit.com/">Editors - Munich</a>
+                    <p><strong>Score:</strong> <span class="rd-score">31</span> - <a href="https://www.reddit.com/49m4di">Editors - Munich</a>
 <br>
                         submitted <span class="muted">2016-03-09 03:13</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Greater Omaha</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">28</span> - <a href="https://www.reddit.com/">Greater Omaha by Desaparecidos (2002)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">28</span> - <a href="https://www.reddit.com/4cs2g4">Greater Omaha by Desaparecidos (2002)</a>
 <br>
                         submitted <span class="muted">2016-03-31 21:04</span> by <a href="https://www.reddit.com/user/dragon_king14">/u/dragon_king14</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">tUnE-yArDs - Powa</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/">tUnE-yArDs - Powa</a>
+                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/4b0nyt">tUnE-yArDs - Powa</a>
 <br>
                         submitted <span class="muted">2016-03-18 22:56</span> by <a href="https://www.reddit.com/user/dressmenice">/u/dressmenice</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Starfucker // STRFKR - Last Words</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/">Starfucker - Last Words</a>
+                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/4b0wwd">Starfucker - Last Words</a>
 <br>
                         submitted <span class="muted">2016-03-19 00:03</span> by <a href="https://www.reddit.com/user/JFN1234">/u/JFN1234</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Stephen Malkmus - Vague Space</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/">Stephen Malkmus - Vague Space</a>
+                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/4bfq0t">Stephen Malkmus - Vague Space</a>
 <br>
                         submitted <span class="muted">2016-03-22 03:01</span> by <a href="https://www.reddit.com/user/mphtmnslt">/u/mphtmnslt</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Elliott Smith - Car (Built To Spill Cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/">Elliott Smith - "Car" (Built to Spill cover)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/4coqy2">Elliott Smith - "Car" (Built to Spill cover)</a>
 <br>
                         submitted <span class="muted">2016-03-31 05:45</span> by <a href="https://www.reddit.com/user/Keaton_Buster">/u/Keaton_Buster</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Arcade Fire - Rebellion (Lies)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/">Arcade Fire - Rebellion (Lies)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/490w8u">Arcade Fire - Rebellion (Lies)</a>
 <br>
                         submitted <span class="muted">2016-03-05 03:42</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nirvana  - Verse Chorus Verse</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/">Nirvana - "Verse Chorus Verse" (aka "Sappy")</a>
+                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/4c32ya">Nirvana - "Verse Chorus Verse" (aka "Sappy")</a>
 <br>
                         submitted <span class="muted">2016-03-26 22:00</span> by <a href="https://www.reddit.com/user/Keaton_Buster">/u/Keaton_Buster</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Last Dinosaurs - Evie</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/">Last Dinosaurs - Evie</a>
+                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/4cn0db">Last Dinosaurs - Evie</a>
 <br>
                         submitted <span class="muted">2016-03-30 21:51</span> by <a href="https://www.reddit.com/user/LightVisions">/u/LightVisions</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Jeff Rosenstock - Nausea (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/">Jeff Rosenstock - Nausea</a>
+                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/4a88bw">Jeff Rosenstock - Nausea</a>
 <br>
                         submitted <span class="muted">2016-03-13 12:54</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Decemberists - The Wrong Year (Lyric Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/">The Decemberists - The Wrong Year.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/4b6k3i">The Decemberists - The Wrong Year.</a>
 <br>
                         submitted <span class="muted">2016-03-20 05:41</span> by <a href="https://www.reddit.com/user/katbc">/u/katbc</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Jungle Giants - Creepy Cool (OFFICIAL)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">23</span> - <a href="https://www.reddit.com/">The Jungle Giants - Creepy Cool</a>
+                    <p><strong>Score:</strong> <span class="rd-score">23</span> - <a href="https://www.reddit.com/49lwq6">The Jungle Giants - Creepy Cool</a>
 <br>
                         submitted <span class="muted">2016-03-09 02:19</span> by <a href="https://www.reddit.com/user/MagicTrashCan">/u/MagicTrashCan</a>
 .</p>
@@ -475,7 +483,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Affection - Cigarettes After Sex</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/">Cigarettes After Sex - Affection</a>
+                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/4aeo1u">Cigarettes After Sex - Affection</a>
 <br>
                         submitted <span class="muted">2016-03-14 19:32</span> by <a href="https://www.reddit.com/user/bitterbuffaloheart">/u/bitterbuffaloheart</a>
 .</p>
@@ -489,7 +497,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Oh, The Boss Is Coming - Arkells</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/">Oh, The Boss Is Coming - Arkells</a>
+                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/4bziwu">Oh, The Boss Is Coming - Arkells</a>
 <br>
                         submitted <span class="muted">2016-03-26 02:12</span> by <a href="https://www.reddit.com/user/gntrr">/u/gntrr</a>
 .</p>
@@ -503,7 +511,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Jawbreaker - Dear You [1995, FULL ALBUM]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/">Jawbreaker - Dear You (1995)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/4c1r2t">Jawbreaker - Dear You (1995)</a>
 <br>
                         submitted <span class="muted">2016-03-26 16:18</span> by <a href="https://www.reddit.com/user/Keaton_Buster">/u/Keaton_Buster</a>
 .</p>
@@ -517,7 +525,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Hippo Campus - South - Vevo dscvr (Live)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/">Hippo Campus - South</a>
+                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/4cje63">Hippo Campus - South</a>
 <br>
                         submitted <span class="muted">2016-03-30 05:03</span> by <a href="https://www.reddit.com/user/Travieso41">/u/Travieso41</a>
 .</p>
@@ -531,7 +539,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">SUNFLOWER BEAN - 'TAME IMPALA' (OFFICIAL MUSIC VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/">SUNFLOWER BEAN - 'TAME IMPALA' (OFFICIAL MUSIC VIDEO)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/49j5w5">SUNFLOWER BEAN - 'TAME IMPALA' (OFFICIAL MUSIC VIDEO)</a>
 <br>
                         submitted <span class="muted">2016-03-08 16:13</span> by <a href="https://www.reddit.com/user/space33man">/u/space33man</a>
 .</p>
@@ -545,7 +553,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Beat Happening -Black candy [Full Album]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Beat Happening - Black Candy - (1989) K Records</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/4abcol">Beat Happening - Black Candy - (1989) K Records</a>
 <br>
                         submitted <span class="muted">2016-03-14 02:52</span> by <a href="https://www.reddit.com/user/Keaton_Buster">/u/Keaton_Buster</a>
 .</p>
@@ -559,7 +567,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Orwells - "Who Needs You"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">The Orwells - Who Needs You</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/4afr01">The Orwells - Who Needs You</a>
 <br>
                         submitted <span class="muted">2016-03-14 23:29</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
 .</p>
@@ -573,7 +581,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Everything Everything - Hapsburg Lippp</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Everything Everything - Hapsburg Lippp</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/48egh2">Everything Everything - Hapsburg Lippp</a>
 <br>
                         submitted <span class="muted">2016-03-01 04:14</span> by <a href="https://www.reddit.com/user/biomed88">/u/biomed88</a>
 .</p>
@@ -587,7 +595,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Circa Survive - Strange Terrain</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Circa Survive - Strange Terrain</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/4avq91">Circa Survive - Strange Terrain</a>
 <br>
                         submitted <span class="muted">2016-03-17 23:30</span> by <a href="https://www.reddit.com/user/LeviJenkinsTheFirst">/u/LeviJenkinsTheFirst</a>
 .</p>
@@ -601,7 +609,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Stoned & Starving by Parquet Courts</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Parquet Courts- Stoned and Starving</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/4aweid">Parquet Courts- Stoned and Starving</a>
 <br>
                         submitted <span class="muted">2016-03-18 02:22</span> by <a href="https://www.reddit.com/user/GTFOTDW">/u/GTFOTDW</a>
 .</p>
@@ -615,7 +623,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tokyo Police Club - PCH</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Tokyo Police Club - PCH</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/4bzk9j">Tokyo Police Club - PCH</a>
 <br>
                         submitted <span class="muted">2016-03-26 02:23</span> by <a href="https://www.reddit.com/user/NotYouHaha">/u/NotYouHaha</a>
 .</p>
@@ -629,7 +637,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Not A Crook - Annihilate Me</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">a bit agressive indie rock from Iceland</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/48n61a">a bit agressive indie rock from Iceland</a>
 <br>
                         submitted <span class="muted">2016-03-02 17:29</span> by <a href="https://www.reddit.com/user/steinarg">/u/steinarg</a>
 .</p>
@@ -643,7 +651,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">[Full Album] Guided By Voices - Bee Thousand</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Guided by Voices - Bee Thousand (1994)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/4anp7w">Guided by Voices - Bee Thousand (1994)</a>
 <br>
                         submitted <span class="muted">2016-03-16 13:06</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -657,7 +665,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">My Bloody Valentine - Sometimes</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Some Irish indie rock for St. Paddy's Day - My Bloody Valentine - Sometimes</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/4atnr3">Some Irish indie rock for St. Paddy's Day - My Bloody Valentine - Sometimes</a>
 <br>
                         submitted <span class="muted">2016-03-17 15:42</span> by <a href="https://www.reddit.com/user/Copernican">/u/Copernican</a>
 .</p>
@@ -671,7 +679,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">GALAXIE 500 - ON FIRE [FULL ALBUM] 1989</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Galaxie 500 - On Fire (1989)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/4c2u3q">Galaxie 500 - On Fire (1989)</a>
 <br>
                         submitted <span class="muted">2016-03-26 20:53</span> by <a href="https://www.reddit.com/user/Keaton_Buster">/u/Keaton_Buster</a>
 .</p>
@@ -685,7 +693,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">"Work it Out" by Knox Hamilton (Official Music Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Work it out-Knox Hamiltion</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/4cl1f1">Work it out-Knox Hamiltion</a>
 <br>
                         submitted <span class="muted">2016-03-30 14:40</span> by <a href="https://www.reddit.com/user/joshyposhy189">/u/joshyposhy189</a>
 .</p>
@@ -699,7 +707,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Palehound - Cinnamon</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">Palehound - Cinnamon</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/4b4zum">Palehound - Cinnamon</a>
 <br>
                         submitted <span class="muted">2016-03-19 22:03</span> by <a href="https://www.reddit.com/user/Thepoopsniff">/u/Thepoopsniff</a>
 .</p>
@@ -713,7 +721,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Feelies - Only Life (Full Album)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">The Feelies - Only Life (1988)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/4c7akz">The Feelies - Only Life (1988)</a>
 <br>
                         submitted <span class="muted">2016-03-27 21:29</span> by <a href="https://www.reddit.com/user/Keaton_Buster">/u/Keaton_Buster</a>
 .</p>
@@ -727,7 +735,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mystery Jets - Bubblegum</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">Mystery Jets - Bubblegum</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/49epcw">Mystery Jets - Bubblegum</a>
 <br>
                         submitted <span class="muted">2016-03-07 20:48</span> by <a href="https://www.reddit.com/user/fyrahundraslag">/u/fyrahundraslag</a>
 .</p>
@@ -741,7 +749,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">EREZ - Proper Lady (LIVE Sessions)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">EREZ - Proper Lady (LIVE Sessions)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/49yzsr">EREZ - Proper Lady (LIVE Sessions)</a>
 <br>
                         submitted <span class="muted">2016-03-11 14:26</span> by <a href="https://www.reddit.com/user/bearmilo">/u/bearmilo</a>
 .</p>
@@ -755,7 +763,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Day Wave - Total Zombie</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">Day Wave - Total Zombie [2015]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/4cd9cy">Day Wave - Total Zombie [2015]</a>
 <br>
                         submitted <span class="muted">2016-03-29 01:23</span> by <a href="https://www.reddit.com/user/MovieReel">/u/MovieReel</a>
 .</p>
@@ -769,7 +777,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cured of Youth</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Tennis - "Cured of Youth" [indie pop]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/49hk50">Tennis - "Cured of Youth" [indie pop]</a>
 <br>
                         submitted <span class="muted">2016-03-08 08:16</span> by <a href="https://www.reddit.com/user/metyuadem">/u/metyuadem</a>
 .</p>
@@ -783,7 +791,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Jeff Buckley - I Know It's Over</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Jeff Buckley - I Know It's Over - New Release</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/49wmai">Jeff Buckley - I Know It's Over - New Release</a>
 <br>
                         submitted <span class="muted">2016-03-11 01:39</span> by <a href="https://www.reddit.com/user/sarahdrees">/u/sarahdrees</a>
 .</p>
@@ -797,7 +805,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">A Stare Like Yours</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">The Thermals - A Stare Like Yours</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/4aa5ki">The Thermals - A Stare Like Yours</a>
 <br>
                         submitted <span class="muted">2016-03-13 21:38</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
 .</p>
@@ -811,7 +819,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Broken Bells - An Easy Life (Audio)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Broken Bells - An Easy Life</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/4an3st">Broken Bells - An Easy Life</a>
 <br>
                         submitted <span class="muted">2016-03-16 10:12</span> by <a href="https://www.reddit.com/user/LukeTheBaws">/u/LukeTheBaws</a>
 .</p>
@@ -825,7 +833,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Oketo - Like A Child</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Oketo, Like a Child</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/4bkdsm">Oketo, Like a Child</a>
 <br>
                         submitted <span class="muted">2016-03-23 01:01</span> by <a href="https://www.reddit.com/user/MovieReel">/u/MovieReel</a>
 .</p>
@@ -839,7 +847,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Car Seat Headrest - "Something Soon" Official Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Car Seat Headrest - Something Soon</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/4c4feq">Car Seat Headrest - Something Soon</a>
 <br>
                         submitted <span class="muted">2016-03-27 04:41</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
 .</p>
@@ -853,7 +861,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bombay Bicycle Club perform What If at Jameson St. Patrick s Live, Dublin</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Bombay Bicycle Club - What If (live)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/49ufuq">Bombay Bicycle Club - What If (live)</a>
 <br>
                         submitted <span class="muted">2016-03-10 17:26</span> by <a href="https://www.reddit.com/user/ericsinsideout">/u/ericsinsideout</a>
 .</p>
@@ -867,7 +875,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Youth Lagoon - "Highway Patrol Stun Gun" (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Youth Lagoon- Highway Patrol Stun Gun</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/49w2aq">Youth Lagoon- Highway Patrol Stun Gun</a>
 <br>
                         submitted <span class="muted">2016-03-10 23:15</span> by <a href="https://www.reddit.com/user/GTFOTDW">/u/GTFOTDW</a>
 .</p>
@@ -881,7 +889,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sebadoh - Bakesale (full album)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Sebadoh - Bakesale (1994)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/4cgtyp">Sebadoh - Bakesale (1994)</a>
 <br>
                         submitted <span class="muted">2016-03-29 18:39</span> by <a href="https://www.reddit.com/user/Keaton_Buster">/u/Keaton_Buster</a>
 .</p>
@@ -895,7 +903,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">You Have To Be Joking (Autopsy Of The Devil's Brain)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">The Flaming Lips - You Have to Be Joking (Autopsy of the Devil's Brain)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/4a6img">The Flaming Lips - You Have to Be Joking (Autopsy of the Devil's Brain)</a>
 <br>
                         submitted <span class="muted">2016-03-13 01:46</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
 .</p>
@@ -909,7 +917,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">R.E.M. - Chronic Town Album (1982)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">R.E.M. - Chronic Town EP (1982)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/4aco1l">R.E.M. - Chronic Town EP (1982)</a>
 <br>
                         submitted <span class="muted">2016-03-14 11:07</span> by <a href="https://www.reddit.com/user/Keaton_Buster">/u/Keaton_Buster</a>
 .</p>
@@ -923,7 +931,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Jens Lekman - Your Arms Around Me</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Jens Lekman - Your Arms Around Me</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/4c8naq">Jens Lekman - Your Arms Around Me</a>
 <br>
                         submitted <span class="muted">2016-03-28 03:44</span> by <a href="https://www.reddit.com/user/a-e-riley">/u/a-e-riley</a>
 .</p>
@@ -937,7 +945,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ray LaMontagne - Part Two - In My Own Way (Audio)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Ray LaMontagne - Part Two - In My Own Way (Audio)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/495hzh">Ray LaMontagne - Part Two - In My Own Way (Audio)</a>
 <br>
                         submitted <span class="muted">2016-03-06 02:44</span> by <a href="https://www.reddit.com/user/WackyWy">/u/WackyWy</a>
 .</p>
@@ -951,7 +959,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Christian Death - Romeo´s Distress</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">from reviewing this subreddit, i think this is the song this sub doesnt want. but its the song it needs. Christian Death - Romeo's Distress</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/49bhsx">from reviewing this subreddit, i think this is the song this sub doesnt want. but its the song it needs. Christian Death - Romeo's Distress</a>
 <br>
                         submitted <span class="muted">2016-03-07 07:08</span> by <a href="https://www.reddit.com/user/jaketheshreeder">/u/jaketheshreeder</a>
 .</p>
@@ -965,7 +973,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Last Dinosaurs - Zoom</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Last Dinosaurs - Zoom</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/4apbyp">Last Dinosaurs - Zoom</a>
 <br>
                         submitted <span class="muted">2016-03-16 19:15</span> by <a href="https://www.reddit.com/user/LeviJenkinsTheFirst">/u/LeviJenkinsTheFirst</a>
 .</p>
@@ -979,7 +987,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Undertones - Teenage Kicks (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">The Undertones - "Teenage Kicks" (1979)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/4ar0ck">The Undertones - "Teenage Kicks" (1979)</a>
 <br>
                         submitted <span class="muted">2016-03-17 02:06</span> by <a href="https://www.reddit.com/user/Keaton_Buster">/u/Keaton_Buster</a>
 .</p>
@@ -993,7 +1001,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Whitney - Golden Days (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Whitney - Golden Days</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/4btn6m">Whitney - Golden Days</a>
 <br>
                         submitted <span class="muted">2016-03-24 21:25</span> by <a href="https://www.reddit.com/user/Go_Habs_Go31">/u/Go_Habs_Go31</a>
 .</p>
@@ -1007,7 +1015,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">interpol - pioneer to the falls</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Interpol - Pioneer to the Falls</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/4cgyjq">Interpol - Pioneer to the Falls</a>
 <br>
                         submitted <span class="muted">2016-03-29 19:06</span> by <a href="https://www.reddit.com/user/bitterbuffaloheart">/u/bitterbuffaloheart</a>
 .</p>
@@ -1021,7 +1029,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Yo La Tengo - "I'll Be Around" video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Yo La Tengo - "I'll Be Around"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/48vp2j">Yo La Tengo - "I'll Be Around"</a>
 <br>
                         submitted <span class="muted">2016-03-04 03:55</span> by <a href="https://www.reddit.com/user/little-bird">/u/little-bird</a>
 .</p>
@@ -1035,7 +1043,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">House of Cards Sountrack Season 4 - The High Dials : Echoes and Empty Rooms</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">House of Cards Sountrack Season 4 - The High Dials : Echoes and Empty Rooms</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/497ac6">House of Cards Sountrack Season 4 - The High Dials : Echoes and Empty Rooms</a>
 <br>
                         submitted <span class="muted">2016-03-06 13:21</span> by <a href="https://www.reddit.com/user/Themohave">/u/Themohave</a>
 .</p>
@@ -1049,7 +1057,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Spare Snare - As a Matter of Fact</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Spare Snare - As A Matter of Fact (Scottish lo-fi from the 90s)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/499cqu">Spare Snare - As A Matter of Fact (Scottish lo-fi from the 90s)</a>
 <br>
                         submitted <span class="muted">2016-03-06 21:53</span> by <a href="https://www.reddit.com/user/memorium">/u/memorium</a>
 .</p>
@@ -1063,7 +1071,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rx Bandits - Apparition</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Rx Bandits - Apparition</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/4b5g41">Rx Bandits - Apparition</a>
 <br>
                         submitted <span class="muted">2016-03-20 00:02</span> by <a href="https://www.reddit.com/user/frecky922">/u/frecky922</a>
 .</p>
@@ -1077,7 +1085,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">When the fire dies</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Max Americana- When the fire dies</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/49e8sz">Max Americana- When the fire dies</a>
 <br>
                         submitted <span class="muted">2016-03-07 19:19</span> by <a href="https://www.reddit.com/user/Max_Americana">/u/Max_Americana</a>
 .</p>
@@ -1091,7 +1099,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">John Wizards - Muizenberg</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">John Wizards - Muizenberg</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/49emjy">John Wizards - Muizenberg</a>
 <br>
                         submitted <span class="muted">2016-03-07 20:33</span> by <a href="https://www.reddit.com/user/ice_moonsugar">/u/ice_moonsugar</a>
 .</p>
@@ -1105,7 +1113,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">St. Vincent - Cheerleader (Cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">St. Vincent - Cheerleader (Cover)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/4a4u9c">St. Vincent - Cheerleader (Cover)</a>
 <br>
                         submitted <span class="muted">2016-03-12 18:19</span> by <a href="https://www.reddit.com/user/annalblanchard">/u/annalblanchard</a>
 .</p>
@@ -1119,7 +1127,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Nude Party - Life's A Joke (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">The Nude Party - Life's a Joke</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/4ak0u7">The Nude Party - Life's a Joke</a>
 <br>
                         submitted <span class="muted">2016-03-15 19:31</span> by <a href="https://www.reddit.com/user/mooseqwolf">/u/mooseqwolf</a>
 .</p>
@@ -1133,7 +1141,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">R. Stevie Moore - I Want You In My Life</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">R. Stevie Moore - I Want You In My Life (from "Verve" 1986)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/4axlgq">R. Stevie Moore - I Want You In My Life (from "Verve" 1986)</a>
 <br>
                         submitted <span class="muted">2016-03-18 09:44</span> by <a href="https://www.reddit.com/user/jimdpie">/u/jimdpie</a>
 .</p>
@@ -1147,7 +1155,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Luna - 23 Minutes In Brussels (Tell Me Do You Miss Me)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Luna - 23 Minutes in Brussels</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/4bks4q">Luna - 23 Minutes in Brussels</a>
 <br>
                         submitted <span class="muted">2016-03-23 02:46</span> by <a href="https://www.reddit.com/user/s_s">/u/s_s</a>
 .</p>
@@ -1161,7 +1169,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">All Get Out - The Season [HQ]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">All Get Out - The Season</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/4bx3r1">All Get Out - The Season</a>
 <br>
                         submitted <span class="muted">2016-03-25 16:12</span> by <a href="https://www.reddit.com/user/LeviJenkinsTheFirst">/u/LeviJenkinsTheFirst</a>
 .</p>
@@ -1175,7 +1183,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Teenage Fanclub - Bandwagonesque - Full Album - 1991</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Teenage Fanclub - Bandwagonesque (1991)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/4cof0b">Teenage Fanclub - Bandwagonesque (1991)</a>
 <br>
                         submitted <span class="muted">2016-03-31 03:58</span> by <a href="https://www.reddit.com/user/Keaton_Buster">/u/Keaton_Buster</a>
 .</p>
@@ -1189,7 +1197,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Do You Feel at Home? - Commander Venus</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Do You Feel at Home? - Commander Venus (A Young Conor Oberst)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/48dnk3">Do You Feel at Home? - Commander Venus (A Young Conor Oberst)</a>
 <br>
                         submitted <span class="muted">2016-03-01 01:02</span> by <a href="https://www.reddit.com/user/LinkinParkSunGlasses">/u/LinkinParkSunGlasses</a>
 .</p>
@@ -1203,7 +1211,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Go Away Bird - Sally (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Go Away Bird - Sally</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/48h628">Go Away Bird - Sally</a>
 <br>
                         submitted <span class="muted">2016-03-01 16:13</span> by <a href="https://www.reddit.com/user/I_A_H_G_S">/u/I_A_H_G_S</a>
 .</p>
@@ -1217,7 +1225,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kent - Sundance Kid</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">kent - Sundance Kid [2002]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/48q7t0">kent - Sundance Kid [2002]</a>
 <br>
                         submitted <span class="muted">2016-03-03 03:52</span> by <a href="https://www.reddit.com/user/Sportfreunde">/u/Sportfreunde</a>
 .</p>
@@ -1231,7 +1239,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Best Coast - "Who Have I Become" [Audio]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Best Coast - "Who Have I Become?" (2013)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/496j1t">Best Coast - "Who Have I Become?" (2013)</a>
 <br>
                         submitted <span class="muted">2016-03-06 08:16</span> by <a href="https://www.reddit.com/user/metyuadem">/u/metyuadem</a>
 .</p>
@@ -1245,7 +1253,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Market Girl (Cd)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Headlights - "Market Girl" (2008) [indie]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/4ale31">Headlights - "Market Girl" (2008) [indie]</a>
 <br>
                         submitted <span class="muted">2016-03-16 00:42</span> by <a href="https://www.reddit.com/user/metyuadem">/u/metyuadem</a>
 .</p>
@@ -1259,7 +1267,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Republic Tigers - Golden Sand</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">The Republic Tigers - Golden Sand</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/4azb3q">The Republic Tigers - Golden Sand</a>
 <br>
                         submitted <span class="muted">2016-03-18 17:25</span> by <a href="https://www.reddit.com/user/scribblesforever">/u/scribblesforever</a>
 .</p>
@@ -1273,7 +1281,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rumspringa - Shake Em Loose Tonight</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Rumspringa - Shake Em Loose Tonight</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/4bj927">Rumspringa - Shake Em Loose Tonight</a>
 <br>
                         submitted <span class="muted">2016-03-22 20:31</span> by <a href="https://www.reddit.com/user/dressmenice">/u/dressmenice</a>
 .</p>
@@ -1287,7 +1295,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">WALL - Cuban Cigars | Super Deluxe Music Video Premiere</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Wall - Cuban Cigar</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/4btp3k">Wall - Cuban Cigar</a>
 <br>
                         submitted <span class="muted">2016-03-24 21:37</span> by <a href="https://www.reddit.com/user/superderrick">/u/superderrick</a>
 .</p>
@@ -1301,7 +1309,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Wild Sweet Orange - Night Terrors</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Wild Sweet Orange - Night Terrors (2008)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/4c4i3f">Wild Sweet Orange - Night Terrors (2008)</a>
 <br>
                         submitted <span class="muted">2016-03-27 05:07</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1315,7 +1323,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mogwai - Don´t Cry - G`n´R Cover John Peel Sessions</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Mogwai - "Don't Cry" (Guns N' Roses Cover)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/4c6oda">Mogwai - "Don't Cry" (Guns N' Roses Cover)</a>
 <br>
                         submitted <span class="muted">2016-03-27 18:49</span> by <a href="https://www.reddit.com/user/Keaton_Buster">/u/Keaton_Buster</a>
 .</p>
@@ -1329,7 +1337,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Replacements - Pleased To Meet Me (Full Album)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">The Replacements - Pleased to Meet Me (1987)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/4cofcx">The Replacements - Pleased to Meet Me (1987)</a>
 <br>
                         submitted <span class="muted">2016-03-31 04:00</span> by <a href="https://www.reddit.com/user/Keaton_Buster">/u/Keaton_Buster</a>
 .</p>
@@ -1343,7 +1351,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">धन देकर बचानेवाला</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">धन देकर बचानेवाला (Dean Blunt - Redeemer)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/48h6ly">धन देकर बचानेवाला (Dean Blunt - Redeemer)</a>
 <br>
                         submitted <span class="muted">2016-03-01 16:16</span> by <a href="https://www.reddit.com/user/Snazyman">/u/Snazyman</a>
 .</p>
@@ -1357,7 +1365,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">HiaHC - Freak Me Out</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Hypocrite in a Hippy Crypt - Freak Me Out</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/49536h">Hypocrite in a Hippy Crypt - Freak Me Out</a>
 <br>
                         submitted <span class="muted">2016-03-06 00:50</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1371,7 +1379,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">"What It Comes To" - Queen Moo [Live at WSAM]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Queen Moo - "What It Comes To"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/49qvux">Queen Moo - "What It Comes To"</a>
 <br>
                         submitted <span class="muted">2016-03-09 23:47</span> by <a href="https://www.reddit.com/user/StephenHawking69">/u/StephenHawking69</a>
 .</p>
@@ -1385,7 +1393,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">No Vacation - Dræm Girl</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">No Vacation - Dræm Girl</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/49une1">No Vacation - Dræm Girl</a>
 <br>
                         submitted <span class="muted">2016-03-10 18:10</span> by <a href="https://www.reddit.com/user/suddenly-spiders">/u/suddenly-spiders</a>
 .</p>
@@ -1399,7 +1407,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Thompson Springs - Have You Looked At Me (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Thompson Springs - Have You Looked At Me (2016)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/49v403">Thompson Springs - Have You Looked At Me (2016)</a>
 <br>
                         submitted <span class="muted">2016-03-10 19:47</span> by <a href="https://www.reddit.com/user/sparrow_n">/u/sparrow_n</a>
 .</p>
@@ -1413,7 +1421,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mgmt- Congratulations</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Watch "Mgmt- Congratulations" on YouTube</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/49vm5x">Watch "Mgmt- Congratulations" on YouTube</a>
 <br>
                         submitted <span class="muted">2016-03-10 21:34</span> by <a href="https://www.reddit.com/user/dressmenice">/u/dressmenice</a>
 .</p>
@@ -1427,7 +1435,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Thin Lear - Second Nature</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Thin Lear- Second Nature (Jim Henson-Inspired, Puppet-Featuring Music Video)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/49zf52">Thin Lear- Second Nature (Jim Henson-Inspired, Puppet-Featuring Music Video)</a>
 <br>
                         submitted <span class="muted">2016-03-11 16:11</span> by <a href="https://www.reddit.com/user/Thin_Lear">/u/Thin_Lear</a>
 .</p>
@@ -1441,7 +1449,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Sun</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">The Flaming Lips - The Sun</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/4afrkn">The Flaming Lips - The Sun</a>
 <br>
                         submitted <span class="muted">2016-03-14 23:33</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
 .</p>
@@ -1455,7 +1463,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Territory Wintersleep</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Wintersleep - Territory [New Music]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/4b0pqu">Wintersleep - Territory [New Music]</a>
 <br>
                         submitted <span class="muted">2016-03-18 23:09</span> by <a href="https://www.reddit.com/user/quarrystone">/u/quarrystone</a>
 .</p>

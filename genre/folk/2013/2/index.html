@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Shakey Graves - Late July</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">33</span> - <a href="https://www.reddit.com/">I've been obsessively listening to Shakey Graves these days. Are there any other similar artists /r/folk recommends?</a>
+                    <p><strong>Score:</strong> <span class="rd-score">33</span> - <a href="https://www.reddit.com/17um3i">I've been obsessively listening to Shakey Graves these days. Are there any other similar artists /r/folk recommends?</a>
 <br>
                         submitted <span class="muted">2013-02-04 04:51</span> by <a href="https://www.reddit.com/user/timmysprinkles">/u/timmysprinkles</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Tallest Man On Earth & Idiot Wind - Working Titles</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">33</span> - <a href="https://www.reddit.com/">The Tallest Man On Earth &amp; Idiot Wind - Working Titles</a>
+                    <p><strong>Score:</strong> <span class="rd-score">33</span> - <a href="https://www.reddit.com/197457">The Tallest Man On Earth &amp; Idiot Wind - Working Titles</a>
 <br>
                         submitted <span class="muted">2013-02-25 16:15</span> by <a href="https://www.reddit.com/user/northern_wind">/u/northern_wind</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nick Drake - One of These Things First</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">30</span> - <a href="https://www.reddit.com/">Nick Drake - One of These Things First</a>
+                    <p><strong>Score:</strong> <span class="rd-score">30</span> - <a href="https://www.reddit.com/18vi9f">Nick Drake - One of These Things First</a>
 <br>
                         submitted <span class="muted">2013-02-20 07:14</span> by <a href="https://www.reddit.com/user/ThisIsSuspicious">/u/ThisIsSuspicious</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Avett Brothers - "Feburary Seven" (Live Session) I Billboard Tastemakers</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">29</span> - <a href="https://www.reddit.com/">"February Seven" - The Avett Bros.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">29</span> - <a href="https://www.reddit.com/182zvr">"February Seven" - The Avett Bros.</a>
 <br>
                         submitted <span class="muted">2013-02-07 19:55</span> by <a href="https://www.reddit.com/user/stanleythemanley44">/u/stanleythemanley44</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Joan Baez - The House Carpenter</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">29</span> - <a href="https://www.reddit.com/">Joan Baez - The House Carpenter</a>
+                    <p><strong>Score:</strong> <span class="rd-score">29</span> - <a href="https://www.reddit.com/18w7tz">Joan Baez - The House Carpenter</a>
 <br>
                         submitted <span class="muted">2013-02-20 17:05</span> by <a href="https://www.reddit.com/user/wisebunnysay">/u/wisebunnysay</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Andrew Jackson Jihad - People Who Can Eat People Are The Luckiest People In The World [Full Album]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/">Do we consider Andrew Jackson Jihad folk?
+                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/17vo4f">Do we consider Andrew Jackson Jihad folk?
 AJJ-People Who Eat People Are the Luckiest People</a>
 <br>
                         submitted <span class="muted">2013-02-04 18:40</span> by <a href="https://www.reddit.com/user/bobroxs">/u/bobroxs</a>
@@ -154,7 +162,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Townes Van Zandt - No Place to Fall</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/">Townes Van Zandt - No Place to Fall</a>
+                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/18rgq8">Townes Van Zandt - No Place to Fall</a>
 <br>
                         submitted <span class="muted">2013-02-18 18:13</span> by <a href="https://www.reddit.com/user/Skydog69">/u/Skydog69</a>
 .</p>
@@ -168,7 +176,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">James Taylor - "Carolina in My Mind "</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/">James Taylor - Carolina In My Mind - [3:57]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/18tue1">James Taylor - Carolina In My Mind - [3:57]</a>
 <br>
                         submitted <span class="muted">2013-02-19 17:49</span> by <a href="https://www.reddit.com/user/eternal_rhino">/u/eternal_rhino</a>
 .</p>
@@ -182,7 +190,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">House of the rising sun on the Autoharp</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/">House Of The Rising Sun on the Autoharp as played by me. Hope you enjoy!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/18ndrq">House Of The Rising Sun on the Autoharp as played by me. Hope you enjoy!</a>
 <br>
                         submitted <span class="muted">2013-02-16 18:58</span> by <a href="https://www.reddit.com/user/Autoharpist">/u/Autoharpist</a>
 .</p>
@@ -196,7 +204,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Joe Pug - Hymn #101</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/">Hymn 101 - Joe Pug</a>
+                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/17zwhn">Hymn 101 - Joe Pug</a>
 <br>
                         submitted <span class="muted">2013-02-06 13:17</span> by <a href="https://www.reddit.com/user/n311go">/u/n311go</a>
 .</p>
@@ -210,7 +218,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Haunted Windchimes Cover "Old Ship to Zion" by Leadbelly</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/">The Haunted Windchimes Cover "Old Ship to Zion" by Leadbelly</a>
+                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/17rsfh">The Haunted Windchimes Cover "Old Ship to Zion" by Leadbelly</a>
 <br>
                         submitted <span class="muted">2013-02-02 21:20</span> by <a href="https://www.reddit.com/user/PhatsCadwalader">/u/PhatsCadwalader</a>
 .</p>
@@ -224,7 +232,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sibylle Baier - Tonight</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/">Sybille Baier - "Tonight" (recorded in early '70s, not released until '06)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/1871g3">Sybille Baier - "Tonight" (recorded in early '70s, not released until '06)</a>
 <br>
                         submitted <span class="muted">2013-02-09 15:50</span> by <a href="https://www.reddit.com/user/juqjoint">/u/juqjoint</a>
 .</p>
@@ -238,7 +246,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Don't forget your old ship mates</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/">And now for something different, I am pissed off with the norm.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/19cvr3">And now for something different, I am pissed off with the norm.</a>
 <br>
                         submitted <span class="muted">2013-02-27 22:53</span> by <a href="https://www.reddit.com/user/Dizzymoth">/u/Dizzymoth</a>
 .</p>
@@ -252,7 +260,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Frontier Ruckus - Mona and Emmy [Official Music Film]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/">Frontier Ruckus - Mona and Emmy</a>
+                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/17o0fa">Frontier Ruckus - Mona and Emmy</a>
 <br>
                         submitted <span class="muted">2013-02-01 01:22</span> by <a href="https://www.reddit.com/user/MrRockHardNips">/u/MrRockHardNips</a>
 .</p>
@@ -266,7 +274,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Radical Face - Always Gold</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Radical Face - Always Gold</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/187ejw">Radical Face - Always Gold</a>
 <br>
                         submitted <span class="muted">2013-02-09 19:24</span> by <a href="https://www.reddit.com/user/MattPH1218">/u/MattPH1218</a>
 .</p>
@@ -280,7 +288,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Good Old War - "Not Quite Happiness" (Acoustic)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Good Old War - "Not Quite Happiness"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/18s6oy">Good Old War - "Not Quite Happiness"</a>
 <br>
                         submitted <span class="muted">2013-02-18 23:43</span> by <a href="https://www.reddit.com/user/HattrickMarleau">/u/HattrickMarleau</a>
 .</p>
@@ -294,7 +302,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Red Right Ankle - The Decemberists</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">The Decemberists - Red Right Ankle</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/17x4ue">The Decemberists - Red Right Ankle</a>
 <br>
                         submitted <span class="muted">2013-02-05 06:17</span> by <a href="https://www.reddit.com/user/MattPH1218">/u/MattPH1218</a>
 .</p>
@@ -308,7 +316,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Soley - Bad Dream</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">I've been on an Icelandic kick lately. Here's a small taste of Sóley.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/18urj5">I've been on an Icelandic kick lately. Here's a small taste of Sóley.</a>
 <br>
                         submitted <span class="muted">2013-02-20 00:48</span> by <a href="https://www.reddit.com/user/Incursio">/u/Incursio</a>
 .</p>
@@ -322,7 +330,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Switzerland - Bison</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">The Last Bison - Switzerland</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/18eu8g">The Last Bison - Switzerland</a>
 <br>
                         submitted <span class="muted">2013-02-13 00:33</span> by <a href="https://www.reddit.com/user/Wisconsi-knight">/u/Wisconsi-knight</a>
 .</p>
@@ -336,7 +344,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bhi Bhiman - "Guttersnipe" - HearYa Live Session</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Bhi Bhiman - "Guttersnipe". A really fantastic Sri-Lankan folksinger.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/18zsxf">Bhi Bhiman - "Guttersnipe". A really fantastic Sri-Lankan folksinger.</a>
 <br>
                         submitted <span class="muted">2013-02-22 01:56</span> by <a href="https://www.reddit.com/user/stanleythemanley44">/u/stanleythemanley44</a>
 .</p>
@@ -350,7 +358,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Väsen Street</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">How about some Swedish folk music? This is Vasen and they are incredible.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/19abtz">How about some Swedish folk music? This is Vasen and they are incredible.</a>
 <br>
                         submitted <span class="muted">2013-02-26 22:26</span> by <a href="https://www.reddit.com/user/ZtiWinterfell">/u/ZtiWinterfell</a>
 .</p>
@@ -364,7 +372,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Deer Tick- The Great Smoke Off</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">epic shel silverstein cover by john mccauley of deer tick</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/188m6c">epic shel silverstein cover by john mccauley of deer tick</a>
 <br>
                         submitted <span class="muted">2013-02-10 07:56</span> by <a href="https://www.reddit.com/user/linusnlucy25">/u/linusnlucy25</a>
 .</p>
@@ -378,7 +386,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Warpaint - 'Billie Holiday (Rough Trade Sessions)'</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">perhaps not technically 'folk' but thought you might appreciate Warpaint's 'Billie Holiday'</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/188ttw">perhaps not technically 'folk' but thought you might appreciate Warpaint's 'Billie Holiday'</a>
 <br>
                         submitted <span class="muted">2013-02-10 12:58</span> by <a href="https://www.reddit.com/user/irony">/u/irony</a>
 .</p>
@@ -392,7 +400,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Iris Dement - Our Town</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Iris Dement - Our Town</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/198r54">Iris Dement - Our Town</a>
 <br>
                         submitted <span class="muted">2013-02-26 05:12</span> by <a href="https://www.reddit.com/user/thewindisrising">/u/thewindisrising</a>
 .</p>
@@ -406,7 +414,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dylan LeBlanc performs "Changing of the Seasons" for The Line of Best Fit</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Dylan LeBlanc - Changing of the Seasons. Do yourself a favor and check it.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/18fkia">Dylan LeBlanc - Changing of the Seasons. Do yourself a favor and check it.</a>
 <br>
                         submitted <span class="muted">2013-02-13 06:30</span> by <a href="https://www.reddit.com/user/FartsMcMasters">/u/FartsMcMasters</a>
 .</p>
@@ -420,7 +428,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Spirit Family Reunion "Green Green Rocky Road"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Spirit Family Reunion - Green Rocky Road</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/1913fe">Spirit Family Reunion - Green Rocky Road</a>
 <br>
                         submitted <span class="muted">2013-02-22 17:20</span> by <a href="https://www.reddit.com/user/BoxOLuv">/u/BoxOLuv</a>
 .</p>
@@ -434,7 +442,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Big Man - Boy & Bear (Moonfire)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Big Man - Boy &amp; Bear (Moonfire)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/19585u">Big Man - Boy &amp; Bear (Moonfire)</a>
 <br>
                         submitted <span class="muted">2013-02-24 19:24</span> by <a href="https://www.reddit.com/user/chameleonfeet">/u/chameleonfeet</a>
 .</p>
@@ -448,7 +456,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Show Ponies | Choppin' Wood</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Chopping Wood-by The Show Ponies</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/195ncj">Chopping Wood-by The Show Ponies</a>
 <br>
                         submitted <span class="muted">2013-02-24 22:58</span> by <a href="https://www.reddit.com/user/IsackArroz">/u/IsackArroz</a>
 .</p>
@@ -462,7 +470,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ballad of an American Folksinger</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">I'm told there are too many white-skinned, blond-haired, blue-eyed American folksingers out there</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/1844eu">I'm told there are too many white-skinned, blond-haired, blue-eyed American folksingers out there</a>
 <br>
                         submitted <span class="muted">2013-02-08 04:44</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -476,7 +484,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gregory Alan Isakov - If I Go, I'm Going</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Gregory Alan Isakov - If I Go, I'm Going absolutely love.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/18bhca">Gregory Alan Isakov - If I Go, I'm Going absolutely love.</a>
 <br>
                         submitted <span class="muted">2013-02-11 17:36</span> by <a href="https://www.reddit.com/user/JessiiHAcker">/u/JessiiHAcker</a>
 .</p>
@@ -490,7 +498,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rachel Sermanni - Song For a Fox</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Rachel Sermanni - Song For a Fox</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/18lk0k">Rachel Sermanni - Song For a Fox</a>
 <br>
                         submitted <span class="muted">2013-02-15 20:17</span> by <a href="https://www.reddit.com/user/niekjurjens">/u/niekjurjens</a>
 .</p>
@@ -504,7 +512,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Great Lake Swimmers - Your Rocky Spine</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Great Lake Swimmers -- Hope you enjoy this group as much as I am.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/17qo5a">Great Lake Swimmers -- Hope you enjoy this group as much as I am.</a>
 <br>
                         submitted <span class="muted">2013-02-02 05:20</span> by <a href="https://www.reddit.com/user/tesolate">/u/tesolate</a>
 .</p>
@@ -518,7 +526,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Damien Rice - I Still Haven't Found What I'm Looking For</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Damien Rice - I Still Haven't Found What I'm Looking For</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/17rynk">Damien Rice - I Still Haven't Found What I'm Looking For</a>
 <br>
                         submitted <span class="muted">2013-02-02 22:57</span> by <a href="https://www.reddit.com/user/colmb86">/u/colmb86</a>
 .</p>
@@ -532,7 +540,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">City and Colour - The Grand Optimist</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">City and Colour - The Grand Optimist</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/17x3md">City and Colour - The Grand Optimist</a>
 <br>
                         submitted <span class="muted">2013-02-05 05:54</span> by <a href="https://www.reddit.com/user/MattPH1218">/u/MattPH1218</a>
 .</p>
@@ -546,7 +554,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Barr Brothers - Old Mythologies</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">The Barr Brothers - Old Mythologies</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/1838pt">The Barr Brothers - Old Mythologies</a>
 <br>
                         submitted <span class="muted">2013-02-07 21:44</span> by <a href="https://www.reddit.com/user/waffleboss">/u/waffleboss</a>
 .</p>
@@ -560,7 +568,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Corries - The Wild Mountain Thyme</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">The Corries - The Wild Mountain Thyme</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/18t08s">The Corries - The Wild Mountain Thyme</a>
 <br>
                         submitted <span class="muted">2013-02-19 06:40</span> by <a href="https://www.reddit.com/user/seastacks">/u/seastacks</a>
 .</p>
@@ -574,7 +582,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">We Own This Town #47 - William Tyler</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">William Tyler - We Own This Town [For fans of John Fahey, Leo Kottke]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/17vcbj">William Tyler - We Own This Town [For fans of John Fahey, Leo Kottke]</a>
 <br>
                         submitted <span class="muted">2013-02-04 15:45</span> by <a href="https://www.reddit.com/user/leiaskywalker">/u/leiaskywalker</a>
 .</p>
@@ -588,7 +596,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Folks and Ghosts - Ghost</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">New Irish/American Folk duo based in Nashville, TN. Here is their newest single. "ghosts" recorded in downtown Nashville... I think you might dig it. EP is coming soon</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/180cyz">New Irish/American Folk duo based in Nashville, TN. Here is their newest single. "ghosts" recorded in downtown Nashville... I think you might dig it. EP is coming soon</a>
 <br>
                         submitted <span class="muted">2013-02-06 17:52</span> by <a href="https://www.reddit.com/user/NDmusic2012">/u/NDmusic2012</a>
 .</p>
@@ -602,7 +610,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Head and the Heart - Down in the Valley [OFFICIAL VIDEO]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">The Head and the Heart - Down in the Valley</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/185e9i">The Head and the Heart - Down in the Valley</a>
 <br>
                         submitted <span class="muted">2013-02-08 19:57</span> by <a href="https://www.reddit.com/user/MattPH1218">/u/MattPH1218</a>
 .</p>
@@ -616,7 +624,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Old Man Luedecke - I Quit My Job [Live at WAMU's Bluegrass Country]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Old Man Luedecke - I Quit My Job</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/196hvf">Old Man Luedecke - I Quit My Job</a>
 <br>
                         submitted <span class="muted">2013-02-25 06:41</span> by <a href="https://www.reddit.com/user/but-i-read-it-online">/u/but-i-read-it-online</a>
 .</p>
@@ -630,7 +638,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ramblin' Jack Elliott - If I Were A Carpenter</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Ramblin' Jack Elliott - If I Were A Carpenter</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/185in7">Ramblin' Jack Elliott - If I Were A Carpenter</a>
 <br>
                         submitted <span class="muted">2013-02-08 20:55</span> by <a href="https://www.reddit.com/user/PhatsCadwalader">/u/PhatsCadwalader</a>
 .</p>
@@ -644,7 +652,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Swear and Shake - "The Light" - Music Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Swear and Shake - "The Light"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/186e5w">Swear and Shake - "The Light"</a>
 <br>
                         submitted <span class="muted">2013-02-09 04:37</span> by <a href="https://www.reddit.com/user/HattrickMarleau">/u/HattrickMarleau</a>
 .</p>
@@ -658,7 +666,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">River City Extension - South For The Winter - Live on Fearless Music HD</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">River City Extension - South For The Winter</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/18keph">River City Extension - South For The Winter</a>
 <br>
                         submitted <span class="muted">2013-02-15 05:27</span> by <a href="https://www.reddit.com/user/LittleLambLost">/u/LittleLambLost</a>
 .</p>
@@ -672,7 +680,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Mowgli's - Hi Hey There Hello</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">The Mowgli's - Hi Hey There Hello</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/18s706">The Mowgli's - Hi Hey There Hello</a>
 <br>
                         submitted <span class="muted">2013-02-18 23:47</span> by <a href="https://www.reddit.com/user/gettingawayfromthesp">/u/gettingawayfromthesp</a>
 .</p>
@@ -686,7 +694,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Brennan on the Moor-Clancy Brothers & Tommy Makem</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Brennan on the Moor-Clancy Brothers &amp; Tommy Makem</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/18voi3">Brennan on the Moor-Clancy Brothers &amp; Tommy Makem</a>
 <br>
                         submitted <span class="muted">2013-02-20 10:17</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -700,7 +708,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Pines - All The While</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">the pines - all the while</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/19agxl">the pines - all the while</a>
 <br>
                         submitted <span class="muted">2013-02-26 23:27</span> by <a href="https://www.reddit.com/user/inkonyourbus">/u/inkonyourbus</a>
 .</p>
@@ -714,7 +722,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Pearls Before Swine - There Was A Man</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Pearls Before Swine - There Was A Man (1968)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/19auk9">Pearls Before Swine - There Was A Man (1968)</a>
 <br>
                         submitted <span class="muted">2013-02-27 02:27</span> by <a href="https://www.reddit.com/user/starari">/u/starari</a>
 .</p>
@@ -728,7 +736,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Esther Smyth   Cruel</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Esther Smyth - Cruel (Kate Rusby cover)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/191ty0">Esther Smyth - Cruel (Kate Rusby cover)</a>
 <br>
                         submitted <span class="muted">2013-02-22 23:25</span> by <a href="https://www.reddit.com/user/untiltheygo">/u/untiltheygo</a>
 .</p>
@@ -742,7 +750,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Pentangle - Hunting Song</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">The Pentangle - Hunting Song (live version, ~1970)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/187rqn">The Pentangle - Hunting Song (live version, ~1970)</a>
 <br>
                         submitted <span class="muted">2013-02-09 22:40</span> by <a href="https://www.reddit.com/user/RayLomas">/u/RayLomas</a>
 .</p>
@@ -756,7 +764,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lisa LeBlanc: Cerveau ramolli</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Lisa LeBlanc - Cerveau Ramolli. A nice upbeat song about being in a stand-still in life [French/Acadian]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/18ff1e">Lisa LeBlanc - Cerveau Ramolli. A nice upbeat song about being in a stand-still in life [French/Acadian]</a>
 <br>
                         submitted <span class="muted">2013-02-13 05:01</span> by <a href="https://www.reddit.com/user/TomFotz">/u/TomFotz</a>
 .</p>
@@ -770,7 +778,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Stray birds   I dream in Blue</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Beautiful Song: I Dream In Blue - The Stray Birds</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/18itug">Beautiful Song: I Dream In Blue - The Stray Birds</a>
 <br>
                         submitted <span class="muted">2013-02-14 16:59</span> by <a href="https://www.reddit.com/user/waffleboss">/u/waffleboss</a>
 .</p>
@@ -784,7 +792,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Doc Dailey & Magnolia Devil - The Flame Beneath the Skin</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">The Flame Beneath the Skin - Doc Dailey &amp; Magnolia Devil.  Fantastic Song, Fantastic Band</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/18tn2o">The Flame Beneath the Skin - Doc Dailey &amp; Magnolia Devil.  Fantastic Song, Fantastic Band</a>
 <br>
                         submitted <span class="muted">2013-02-19 16:07</span> by <a href="https://www.reddit.com/user/waffleboss">/u/waffleboss</a>
 .</p>
@@ -798,7 +806,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Noah Gundersen - "Fire" [OFFICAL VIDEO]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Noah Gundersen - "Fire" - Alt/indie/folk. His other song, "David", is my favorite but this one is pretty damn good as well</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/18tzuz">Noah Gundersen - "Fire" - Alt/indie/folk. His other song, "David", is my favorite but this one is pretty damn good as well</a>
 <br>
                         submitted <span class="muted">2013-02-19 19:00</span> by <a href="https://www.reddit.com/user/TheCSKlepto">/u/TheCSKlepto</a>
 .</p>
@@ -812,7 +820,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Weakerthans - Fallow (acoustic)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">The Weakerthans - Fallow (Live Acoustic)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/191hhn">The Weakerthans - Fallow (Live Acoustic)</a>
 <br>
                         submitted <span class="muted">2013-02-22 20:34</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -826,7 +834,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Passenger: I See Love (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Passenger -  "I See Love"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/191o72">Passenger -  "I See Love"</a>
 <br>
                         submitted <span class="muted">2013-02-22 22:02</span> by <a href="https://www.reddit.com/user/HattrickMarleau">/u/HattrickMarleau</a>
 .</p>
@@ -840,7 +848,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Megafaun + The Tallest Man on Earth + Jaw Lesson - Creature Fear (Bon Iver) at FabrIQ Festival</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Megafaun + The Tallest Man on Earth + Jaw Lesson - Creature Fear (Bon Iver) at FabrIQ Festival</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/199qiy">Megafaun + The Tallest Man on Earth + Jaw Lesson - Creature Fear (Bon Iver) at FabrIQ Festival</a>
 <br>
                         submitted <span class="muted">2013-02-26 17:56</span> by <a href="https://www.reddit.com/user/northern_wind">/u/northern_wind</a>
 .</p>
@@ -854,7 +862,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">"Go", Avalanche City</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Avalanche City-Go</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/183bsf">Avalanche City-Go</a>
 <br>
                         submitted <span class="muted">2013-02-07 22:22</span> by <a href="https://www.reddit.com/user/MrRockHardNips">/u/MrRockHardNips</a>
 .</p>
@@ -868,7 +876,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gomez - Tijuana Lady (Live @ hmv Liverpool)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Gomez - Tijuana Lady</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/18qgtd">Gomez - Tijuana Lady</a>
 <br>
                         submitted <span class="muted">2013-02-18 05:15</span> by <a href="https://www.reddit.com/user/foolinthezoo">/u/foolinthezoo</a>
 .</p>
@@ -882,7 +890,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Green Room</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Marianne Kesler - Green Room</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/18u9p5">Marianne Kesler - Green Room</a>
 <br>
                         submitted <span class="muted">2013-02-19 21:05</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -896,7 +904,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Song Preservation Society "Xia" Video - Unplugged</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Xia - Song Preservation Society</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/18x7va">Xia - Song Preservation Society</a>
 <br>
                         submitted <span class="muted">2013-02-21 00:53</span> by <a href="https://www.reddit.com/user/ruiportugalfigo">/u/ruiportugalfigo</a>
 .</p>
@@ -910,7 +918,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Hard to Believe</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">TheSoundcheck - Hard to Believe [X-Post r/listentothis]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/19242d">TheSoundcheck - Hard to Believe [X-Post r/listentothis]</a>
 <br>
                         submitted <span class="muted">2013-02-23 02:08</span> by <a href="https://www.reddit.com/user/MrDrexel22">/u/MrDrexel22</a>
 .</p>
@@ -924,7 +932,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Willowing Band - We Lay Still</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">My friends and I have always wanted to make a video of one of our songs, here is the result: The Willowing Band - We Lay Still</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/192acj">My friends and I have always wanted to make a video of one of our songs, here is the result: The Willowing Band - We Lay Still</a>
 <br>
                         submitted <span class="muted">2013-02-23 03:56</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -938,7 +946,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Danny Doyle-Rollin' Ole River</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Danny Doyle - Rollin' Ole River</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/196hi2">Danny Doyle - Rollin' Ole River</a>
 <br>
                         submitted <span class="muted">2013-02-25 06:34</span> by <a href="https://www.reddit.com/user/RichKatz">/u/RichKatz</a>
 .</p>
@@ -952,7 +960,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">When It Rains Down Here - JD Vernon</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">When It Rains Down Here - JD Vernon</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1975tv">When It Rains Down Here - JD Vernon</a>
 <br>
                         submitted <span class="muted">2013-02-25 16:40</span> by <a href="https://www.reddit.com/user/northern_wind">/u/northern_wind</a>
 .</p>
@@ -966,7 +974,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bryan Benner & Hazen Metro - Always with you, live @ Clara Blumes Singer Songwriter Circus</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Bryan Benner &amp; Hazen Metro - Always with you</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/19bzza">Bryan Benner &amp; Hazen Metro - Always with you</a>
 <br>
                         submitted <span class="muted">2013-02-27 16:14</span> by <a href="https://www.reddit.com/user/zeroerockvideos">/u/zeroerockvideos</a>
 .</p>
@@ -980,7 +988,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Liz Lawrence - Unplugged KnockanStockan</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">The Lovely Liz Lawrence</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/17yali">The Lovely Liz Lawrence</a>
 <br>
                         submitted <span class="muted">2013-02-05 20:25</span> by <a href="https://www.reddit.com/user/robokento">/u/robokento</a>
 .</p>
@@ -994,7 +1002,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Earl Scruggs & The Byrds - Roger Mcguinn</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Can any of the good folks on /r/folk tell me what the tune in the beginning of this song is? From 0.00 to 1.30. Thanks!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/181dj4">Can any of the good folks on /r/folk tell me what the tune in the beginning of this song is? From 0.00 to 1.30. Thanks!</a>
 <br>
                         submitted <span class="muted">2013-02-07 01:52</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1008,7 +1016,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Father Son and Friends Old Maui</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Old Maui - Father Son and Friends</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1859k3">Old Maui - Father Son and Friends</a>
 <br>
                         submitted <span class="muted">2013-02-08 18:55</span> by <a href="https://www.reddit.com/user/Fallen_Milkman">/u/Fallen_Milkman</a>
 .</p>
@@ -1022,7 +1030,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Seen It All Jake Bugg Cover</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">I had a go at covering 'Seen It All' by Jake Bugg.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/18bc7x">I had a go at covering 'Seen It All' by Jake Bugg.</a>
 <br>
                         submitted <span class="muted">2013-02-11 16:24</span> by <a href="https://www.reddit.com/user/graziemille">/u/graziemille</a>
 .</p>
@@ -1036,7 +1044,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Plants & Animals - Light Show (Acoustic Cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">The Last Bison - Switzerland</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/18eswd">The Last Bison - Switzerland</a>
 <br>
                         submitted <span class="muted">2013-02-13 00:14</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1050,7 +1058,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Alela Diane & Alina Hardin - Matty Groves (Child 81)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Alela Diane &amp; Alina Hardin - Matty Groves - [4:45]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/18my6a">Alela Diane &amp; Alina Hardin - Matty Groves - [4:45]</a>
 <br>
                         submitted <span class="muted">2013-02-16 13:58</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1064,7 +1072,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Is It For Freedom?</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Is it for freedom - Sara Thomsen</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/18sbby">Is it for freedom - Sara Thomsen</a>
 <br>
                         submitted <span class="muted">2013-02-19 00:45</span> by <a href="https://www.reddit.com/user/quakerorts">/u/quakerorts</a>
 .</p>
@@ -1078,7 +1086,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sarah Jarosz singing "Simple Twist of Fate" @ Workplay 7/15</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Sarah Jarosz singing "Simple Twist of Fate" @ Workplay 7/15</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/190b3u">Sarah Jarosz singing "Simple Twist of Fate" @ Workplay 7/15</a>
 <br>
                         submitted <span class="muted">2013-02-22 06:25</span> by <a href="https://www.reddit.com/user/Winn3317">/u/Winn3317</a>
 .</p>
@@ -1092,7 +1100,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rocky Votolato: Suicide Medicine (Live in Amherst, NH)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Rocky Votolato: Suicide Medicine (Live in Amherst, NH) (x-post r/rockyvotolato)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1914o5">Rocky Votolato: Suicide Medicine (Live in Amherst, NH) (x-post r/rockyvotolato)</a>
 <br>
                         submitted <span class="muted">2013-02-22 17:38</span> by <a href="https://www.reddit.com/user/shouldyouneedus">/u/shouldyouneedus</a>
 .</p>
@@ -1106,7 +1114,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mike Seeger performs "Walking Boss" in the Smithsonian Folkways Studio</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Mike Seeger - Walking Boss</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1919mn">Mike Seeger - Walking Boss</a>
 <br>
                         submitted <span class="muted">2013-02-22 18:45</span> by <a href="https://www.reddit.com/user/B_D_I">/u/B_D_I</a>
 .</p>
@@ -1120,7 +1128,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Br'er Rabbit - Blind Like Glass (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Br'er Rabbit - Blind Like Glass (Official Video)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1928z1">Br'er Rabbit - Blind Like Glass (Official Video)</a>
 <br>
                         submitted <span class="muted">2013-02-23 03:31</span> by <a href="https://www.reddit.com/user/banans">/u/banans</a>
 .</p>
@@ -1134,7 +1142,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Craig Cardiff - dirty old town (you're the one)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Craig Cardiff - Dirty Old Town [youtube]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/193q2i">Craig Cardiff - Dirty Old Town [youtube]</a>
 <br>
                         submitted <span class="muted">2013-02-23 23:11</span> by <a href="https://www.reddit.com/user/mehmeh7">/u/mehmeh7</a>
 .</p>
@@ -1148,7 +1156,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Little Tybee - For Distant Viewing</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">"For Distant Viewing" by Little Tybee</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/199isn">"For Distant Viewing" by Little Tybee</a>
 <br>
                         submitted <span class="muted">2013-02-26 16:06</span> by <a href="https://www.reddit.com/user/Audiophiliac">/u/Audiophiliac</a>
 .</p>
@@ -1162,7 +1170,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Wagon Wheel (Old Crow Medicine Show Cover) - Scarlett Hill</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Great folk cover of OCMS's "Wagon Wheel" by Indiana band Scarlett Hill, fantastic fiddle player</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/17pco5">Great folk cover of OCMS's "Wagon Wheel" by Indiana band Scarlett Hill, fantastic fiddle player</a>
 <br>
                         submitted <span class="muted">2013-02-01 17:33</span> by <a href="https://www.reddit.com/user/Banjerpickin">/u/Banjerpickin</a>
 .</p>
@@ -1176,7 +1184,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Stone Dave Matthews</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Upside down Guitar cover of the Stone by Dave Matthews!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/17tfp2">Upside down Guitar cover of the Stone by Dave Matthews!</a>
 <br>
                         submitted <span class="muted">2013-02-03 18:38</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1190,7 +1198,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Passenger - Let Her Go [Official Video]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Passenger - Let Her Go [Official Video]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/17wevd">Passenger - Let Her Go [Official Video]</a>
 <br>
                         submitted <span class="muted">2013-02-05 00:17</span> by <a href="https://www.reddit.com/user/Null2005">/u/Null2005</a>
 .</p>
@@ -1204,7 +1212,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mike Bloom - "Tincture"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Mike Bloom - Tincture (Knock and Rock session)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/187h8j">Mike Bloom - Tincture (Knock and Rock session)</a>
 <br>
                         submitted <span class="muted">2013-02-09 20:02</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1218,7 +1226,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nedelle "Our Little Selves"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Nedelle: Our Little Selves</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/18cr79">Nedelle: Our Little Selves</a>
 <br>
                         submitted <span class="muted">2013-02-12 03:15</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1232,7 +1240,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">TED HAWKINS - HAPPY HOUR</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Ted Hawkins - Happy Hour</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/18e6np">Ted Hawkins - Happy Hour</a>
 <br>
                         submitted <span class="muted">2013-02-12 19:27</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1246,7 +1254,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">U2, Bono - Ballad of Springhill Mining Disaster,Dubliners - Don't get married girls,1987,Luke Kelly</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">U2, Bono - Ballad of Springhill Mining Disaster</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/18jzmf">U2, Bono - Ballad of Springhill Mining Disaster</a>
 <br>
                         submitted <span class="muted">2013-02-15 01:42</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1260,7 +1268,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lucius - How Loud Your Heart Gets</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Lucius - [Nobody Knows] How Loud Your Heart Gets.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/18okaw">Lucius - [Nobody Knows] How Loud Your Heart Gets.</a>
 <br>
                         submitted <span class="muted">2013-02-17 06:50</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1274,7 +1282,7 @@ AJJ-People Who Eat People Are the Luckiest People</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Beautiful dreamer on the Autoharp</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Another Autoharp piece. Beautiful Dreamer, Enjoy!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/18xk1q">Another Autoharp piece. Beautiful Dreamer, Enjoy!</a>
 <br>
                         submitted <span class="muted">2013-02-21 03:30</span> by <a href="https://www.reddit.com/user/Autoharpist">/u/Autoharpist</a>
 .</p>

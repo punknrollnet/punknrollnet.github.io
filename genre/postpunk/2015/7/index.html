@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Fall - Victoria</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">40</span> - <a href="https://www.reddit.com/">The Fall - Victoria</a>
+                    <p><strong>Score:</strong> <span class="rd-score">40</span> - <a href="https://www.reddit.com/3c0lj3">The Fall - Victoria</a>
 <br>
                         submitted <span class="muted">2015-07-03 17:55</span> by <a href="https://www.reddit.com/user/kingy123">/u/kingy123</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Pere Ubu - Final Solution</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">40</span> - <a href="https://www.reddit.com/">Pere Ubu - Final Solution [1976].</a>
+                    <p><strong>Score:</strong> <span class="rd-score">40</span> - <a href="https://www.reddit.com/3evzvg">Pere Ubu - Final Solution [1976].</a>
 <br>
                         submitted <span class="muted">2015-07-28 11:57</span> by <a href="https://www.reddit.com/user/weblypistol">/u/weblypistol</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nick Cave & the Bad Seeds - The Good Son</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">38</span> - <a href="https://www.reddit.com/">Nick Cave &amp; the Bad Seeds - The Good Son [1990]. R.I.P. Arthur Cave, 15.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">38</span> - <a href="https://www.reddit.com/3ddlid">Nick Cave &amp; the Bad Seeds - The Good Son [1990]. R.I.P. Arthur Cave, 15.</a>
 <br>
                         submitted <span class="muted">2015-07-15 13:07</span> by <a href="https://www.reddit.com/user/weblypistol">/u/weblypistol</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Siouxsie & The Banshees "Dazzle" ‌‌ - Bohemia Afterdark</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">37</span> - <a href="https://www.reddit.com/">Siouxie and the Banshees - Dazzle (1984)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">37</span> - <a href="https://www.reddit.com/3e792s">Siouxie and the Banshees - Dazzle (1984)</a>
 <br>
                         submitted <span class="muted">2015-07-22 14:26</span> by <a href="https://www.reddit.com/user/looki_chuck">/u/looki_chuck</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">death in june  the guilty have no pride 1983</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/">Death In June - The Guilty Have No Pride (1983)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/3dwex3">Death In June - The Guilty Have No Pride (1983)</a>
 <br>
                         submitted <span class="muted">2015-07-20 02:26</span> by <a href="https://www.reddit.com/user/JamZward">/u/JamZward</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Klaus Nomi - Total Eclipse 1981 Live Video HD</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/">Klaus Nomi - Total Eclipse (live, 1981)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/3dphua">Klaus Nomi - Total Eclipse (live, 1981)</a>
 <br>
                         submitted <span class="muted">2015-07-18 04:54</span> by <a href="https://www.reddit.com/user/vaguelyhuman">/u/vaguelyhuman</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">New Order - The Him</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/">New Order - The Him</a>
+                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/3e163l">New Order - The Him</a>
 <br>
                         submitted <span class="muted">2015-07-21 04:02</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Slint - Breadcrumb Trail</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/">Slint - Breadcrumb Trail</a>
+                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/3cuayz">Slint - Breadcrumb Trail</a>
 <br>
                         submitted <span class="muted">2015-07-10 20:58</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sonic Youth - 100%</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/">Sonic Youth - 100% (1992)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/3eocu2">Sonic Youth - 100% (1992)</a>
 <br>
                         submitted <span class="muted">2015-07-26 17:23</span> by <a href="https://www.reddit.com/user/Spodyody">/u/Spodyody</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nick Cave And The Bad Seeds - Your Funeral My Trial</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">23</span> - <a href="https://www.reddit.com/">Nick Cave and the Bad Seeds - Your Funeral My Trial</a>
+                    <p><strong>Score:</strong> <span class="rd-score">23</span> - <a href="https://www.reddit.com/3famp9">Nick Cave and the Bad Seeds - Your Funeral My Trial</a>
 <br>
                         submitted <span class="muted">2015-07-31 14:40</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Orchestral Manoeuvres In The Dark - Enola Gay</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/">Orchestral Manoeuvres In The Dark - Enola Gay</a>
+                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/3f0pa8">Orchestral Manoeuvres In The Dark - Enola Gay</a>
 <br>
                         submitted <span class="muted">2015-07-29 12:04</span> by <a href="https://www.reddit.com/user/miraoister">/u/miraoister</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Gun Club Sex Beat</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/">The Gun Club - Sex Beat</a>
+                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/3cqjui">The Gun Club - Sex Beat</a>
 <br>
                         submitted <span class="muted">2015-07-09 23:45</span> by <a href="https://www.reddit.com/user/miraoister">/u/miraoister</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nick Cave - Into My Arms</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Nick Cave - Into My Arms</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/3bq1y7">Nick Cave - Into My Arms</a>
 <br>
                         submitted <span class="muted">2015-07-01 05:55</span> by <a href="https://www.reddit.com/user/miraoister">/u/miraoister</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">XTC - Sgt. Rock (Is Going To Help Me)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">XTC - Sgt. Rock (Is Going To Help Me) [1980].</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/3bx2r7">XTC - Sgt. Rock (Is Going To Help Me) [1980].</a>
 <br>
                         submitted <span class="muted">2015-07-02 21:29</span> by <a href="https://www.reddit.com/user/weblypistol">/u/weblypistol</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">They Might Be Giants-Ana Ng</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">They Might Be Giants - "Ana Ng" (1988)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/3ctysf">They Might Be Giants - "Ana Ng" (1988)</a>
 <br>
                         submitted <span class="muted">2015-07-10 19:26</span> by <a href="https://www.reddit.com/user/amish_no_wave">/u/amish_no_wave</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The The - This Is The Day (Original)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">The The - This Is the Day (1983)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/3f5wsr">The The - This Is the Day (1983)</a>
 <br>
                         submitted <span class="muted">2015-07-30 14:28</span> by <a href="https://www.reddit.com/user/trashboner">/u/trashboner</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">U-MV170 - Yo La Tengo - From a Motel 6</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Yo La Tengo - From a Motel 6 ( Sounds like My Bloody Valentine IMHO)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/3cb0h4">Yo La Tengo - From a Motel 6 ( Sounds like My Bloody Valentine IMHO)</a>
 <br>
                         submitted <span class="muted">2015-07-06 14:35</span> by <a href="https://www.reddit.com/user/HoneyVortex">/u/HoneyVortex</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">VARIOUS - COLD WAVES + MINIMAL ELECTRONICS VOLUME ONE (VINYL)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Cold Waves and Minimal Electronics (Vol 1) - Full Album - Various Artists</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/3cg8ci">Cold Waves and Minimal Electronics (Vol 1) - Full Album - Various Artists</a>
 <br>
                         submitted <span class="muted">2015-07-07 17:50</span> by <a href="https://www.reddit.com/user/_RedPillFedora_">/u/_RedPillFedora_</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">This Mortal Coil - Song To The Siren (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">This Mortal Coil- Song To The Sirens (ok, ok, I'll post some postpunk)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/3ck2hn">This Mortal Coil- Song To The Sirens (ok, ok, I'll post some postpunk)</a>
 <br>
                         submitted <span class="muted">2015-07-08 15:00</span> by <a href="https://www.reddit.com/user/farmerdaniel">/u/farmerdaniel</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Silly Girl</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">Television Personalities - Silly Girl</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/3dco8b">Television Personalities - Silly Girl</a>
 <br>
                         submitted <span class="muted">2015-07-15 06:01</span> by <a href="https://www.reddit.com/user/Weaselfacedmonkey">/u/Weaselfacedmonkey</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gary Numan - Unreleased 7-UP TV Commercial Music!</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">Gary Numan - Unreleased 7-UP TV Commercial Music</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/3c8m8l">Gary Numan - Unreleased 7-UP TV Commercial Music</a>
 <br>
                         submitted <span class="muted">2015-07-05 22:40</span> by <a href="https://www.reddit.com/user/disposablegoddess">/u/disposablegoddess</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sonic Youth - Tom Violence</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">Sonic Youth - Tom Violence</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/3e5uuj">Sonic Youth - Tom Violence</a>
 <br>
                         submitted <span class="muted">2015-07-22 04:46</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Jesus and Mary Chain - Just Like Honey [Karaoke]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Karaoke version of "Just Like Honey" by The Jesus and Mary Chain</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/3d2dbg">Karaoke version of "Just Like Honey" by The Jesus and Mary Chain</a>
 <br>
                         submitted <span class="muted">2015-07-12 23:38</span> by <a href="https://www.reddit.com/user/sporesofdoubt">/u/sporesofdoubt</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">THE TWILIGHT SAD ~ I Became A Prostitute</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">The Twilight Sad - I Became a Prostitute (2007)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/3evf22">The Twilight Sad - I Became a Prostitute (2007)</a>
 <br>
                         submitted <span class="muted">2015-07-28 07:18</span> by <a href="https://www.reddit.com/user/vaguelyhuman">/u/vaguelyhuman</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Oppenheimer Analysis - Cold War ( Remastered )</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Oppenheimer Analysis - Cold War (1982)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/3cd9lw">Oppenheimer Analysis - Cold War (1982)</a>
 <br>
                         submitted <span class="muted">2015-07-07 00:34</span> by <a href="https://www.reddit.com/user/lemrez">/u/lemrez</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rudimentary Peni- Better Not Born</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Rudimentary Peni - Better Not Born</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/3cpbq0">Rudimentary Peni - Better Not Born</a>
 <br>
                         submitted <span class="muted">2015-07-09 18:10</span> by <a href="https://www.reddit.com/user/tornflags">/u/tornflags</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Butthole Surfers-Human Cannonball</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Butthole Surfers-Human Cannonball</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/3cr5up">Butthole Surfers-Human Cannonball</a>
 <br>
                         submitted <span class="muted">2015-07-10 02:52</span> by <a href="https://www.reddit.com/user/miraoister">/u/miraoister</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Firehose - under the influence of the Meat Puppets - Santa Monica College 1987</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">fIREHOSE-Live(Who needs jam bands?)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/3br85r">fIREHOSE-Live(Who needs jam bands?)</a>
 <br>
                         submitted <span class="muted">2015-07-01 14:30</span> by <a href="https://www.reddit.com/user/farmerdaniel">/u/farmerdaniel</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gang of Four - He'd Send In The Army (1980)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Gang of Four - He'd Send In The Army (1980) [2:55]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/3c456p">Gang of Four - He'd Send In The Army (1980) [2:55]</a>
 <br>
                         submitted <span class="muted">2015-07-04 16:26</span> by <a href="https://www.reddit.com/user/thefriendcatcher">/u/thefriendcatcher</a>
 .</p>
@@ -475,7 +483,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cranes - Adoration</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Cranes - Adoration</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/3cajmh">Cranes - Adoration</a>
 <br>
                         submitted <span class="muted">2015-07-06 11:48</span> by <a href="https://www.reddit.com/user/tornflags">/u/tornflags</a>
 .</p>
@@ -489,7 +497,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Breathing Water - World of Skin/Swans</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Swans - Breathing Water</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/3cx46b">Swans - Breathing Water</a>
 <br>
                         submitted <span class="muted">2015-07-11 15:30</span> by <a href="https://www.reddit.com/user/tobeornotobe">/u/tobeornotobe</a>
 .</p>
@@ -503,7 +511,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Theatre of Hate -- Do You Believe In The Westworld?</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Theatre of Hate -- Do You Believe In The Westworld? [1982].</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/3dz1l4">Theatre of Hate -- Do You Believe In The Westworld? [1982].</a>
 <br>
                         submitted <span class="muted">2015-07-20 18:11</span> by <a href="https://www.reddit.com/user/weblypistol">/u/weblypistol</a>
 .</p>
@@ -517,7 +525,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Fall - Shoulder Pads 1 & 2</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">The Fall-Shoulder Pads (one Fall post not postpunk enough)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/3c1yr2">The Fall-Shoulder Pads (one Fall post not postpunk enough)</a>
 <br>
                         submitted <span class="muted">2015-07-04 00:38</span> by <a href="https://www.reddit.com/user/farmerdaniel">/u/farmerdaniel</a>
 .</p>
@@ -531,7 +539,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bow Wow Wow-C30 C60 C90 Go!</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Bow Wow Wow - "C30, C60, C90, Go" (1980)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/3d0qil">Bow Wow Wow - "C30, C60, C90, Go" (1980)</a>
 <br>
                         submitted <span class="muted">2015-07-12 15:25</span> by <a href="https://www.reddit.com/user/amish_no_wave">/u/amish_no_wave</a>
 .</p>
@@ -545,7 +553,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kill Your Sons - Lydia Lunch</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Lydia Lunch - Kill Your Sons</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/3dq9ts">Lydia Lunch - Kill Your Sons</a>
 <br>
                         submitted <span class="muted">2015-07-18 11:59</span> by <a href="https://www.reddit.com/user/IAMAGrinderman">/u/IAMAGrinderman</a>
 .</p>
@@ -559,7 +567,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Crystal Stilts - Shake the Shackles 7"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Crystal Stilts - "Shake The Shackles" (2010)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/3e7wi7">Crystal Stilts - "Shake The Shackles" (2010)</a>
 <br>
                         submitted <span class="muted">2015-07-22 17:14</span> by <a href="https://www.reddit.com/user/amish_no_wave">/u/amish_no_wave</a>
 .</p>
@@ -573,7 +581,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The FALL - 'Rowche Rumble' - 1979 45rpm</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">The Fall - Rowche Rumble 45rpm</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/3ep67q">The Fall - Rowche Rumble 45rpm</a>
 <br>
                         submitted <span class="muted">2015-07-26 21:28</span> by <a href="https://www.reddit.com/user/SlackBadger">/u/SlackBadger</a>
 .</p>
@@ -587,7 +595,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Au Pairs - Playing With A Different Sex (Full Album)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Au Pairs - Playing With A Different Sex (Full Album)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/3ep9sr">Au Pairs - Playing With A Different Sex (Full Album)</a>
 <br>
                         submitted <span class="muted">2015-07-26 21:57</span> by <a href="https://www.reddit.com/user/SlackBadger">/u/SlackBadger</a>
 .</p>
@@ -601,7 +609,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ghosts Of Dance - Ghosts Of Dance</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">"Ghosts of Dance" - Ghosts of Dance (UK, 1982)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3bv8fk">"Ghosts of Dance" - Ghosts of Dance (UK, 1982)</a>
 <br>
                         submitted <span class="muted">2015-07-02 12:46</span> by <a href="https://www.reddit.com/user/ExLargeEggs">/u/ExLargeEggs</a>
 .</p>
@@ -615,7 +623,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bongwater: Nick Cave Dolls</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Well, I suppose this is fitting now. Bongwater - Nick Cave Dolls</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3bxqd6">Well, I suppose this is fitting now. Bongwater - Nick Cave Dolls</a>
 <br>
                         submitted <span class="muted">2015-07-03 00:50</span> by <a href="https://www.reddit.com/user/huckingfipster">/u/huckingfipster</a>
 .</p>
@@ -629,7 +637,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Psychedelic Furs - Fall</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">The Psychedelic Furs - Fall</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3c4qfc">The Psychedelic Furs - Fall</a>
 <br>
                         submitted <span class="muted">2015-07-04 19:39</span> by <a href="https://www.reddit.com/user/SlackBadger">/u/SlackBadger</a>
 .</p>
@@ -643,7 +651,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Cure - Siamese twins</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">The Cure - Siamese Twins (1982)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3ci9tv">The Cure - Siamese Twins (1982)</a>
 <br>
                         submitted <span class="muted">2015-07-08 03:02</span> by <a href="https://www.reddit.com/user/eratropicoil">/u/eratropicoil</a>
 .</p>
@@ -657,7 +665,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Electronic - "Getting away with it" - HD</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Electronic-Getting Away With It (When Johnny Marr &amp; Bernard Sumner hooked up)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3cseb3">Electronic-Getting Away With It (When Johnny Marr &amp; Bernard Sumner hooked up)</a>
 <br>
                         submitted <span class="muted">2015-07-10 11:43</span> by <a href="https://www.reddit.com/user/farmerdaniel">/u/farmerdaniel</a>
 .</p>
@@ -671,7 +679,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Circus Of Death (2003 Digital Remaster)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">The Human League - Circus Of Death (1979) [3:55]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3dad4x">The Human League - Circus Of Death (1979) [3:55]</a>
 <br>
                         submitted <span class="muted">2015-07-14 19:06</span> by <a href="https://www.reddit.com/user/thefriendcatcher">/u/thefriendcatcher</a>
 .</p>
@@ -685,7 +693,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Placebo - Pure Morning HD (Official)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Placebo - Pure Morning [1998].</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3e4b70">Placebo - Pure Morning [1998].</a>
 <br>
                         submitted <span class="muted">2015-07-21 21:14</span> by <a href="https://www.reddit.com/user/weblypistol">/u/weblypistol</a>
 .</p>
@@ -699,7 +707,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Fall - Backdrop (live)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">The Fall - Backdrop (live) [Brighton October 1983].</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/3dndz5">The Fall - Backdrop (live) [Brighton October 1983].</a>
 <br>
                         submitted <span class="muted">2015-07-17 18:03</span> by <a href="https://www.reddit.com/user/weblypistol">/u/weblypistol</a>
 .</p>
@@ -713,7 +721,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Cleaners From Venus - Only a Shadow (1982)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">The Cleaners From Venus - Only a Shadow (1982</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3c1u4a">The Cleaners From Venus - Only a Shadow (1982</a>
 <br>
                         submitted <span class="muted">2015-07-03 23:54</span> by <a href="https://www.reddit.com/user/PaulRigggaaal">/u/PaulRigggaaal</a>
 .</p>
@@ -727,7 +735,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Disco Inferno - The 5 EPs - Second Language</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Disco Inferno - Second Language</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3cza7v">Disco Inferno - Second Language</a>
 <br>
                         submitted <span class="muted">2015-07-12 03:30</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -741,7 +749,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Replacements -- Fuck School</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">The Replacements-Fuck School</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3ei6jn">The Replacements-Fuck School</a>
 <br>
                         submitted <span class="muted">2015-07-24 23:30</span> by <a href="https://www.reddit.com/user/farmerdaniel">/u/farmerdaniel</a>
 .</p>
@@ -755,7 +763,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Wolfgang Press - Raintime (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">The Wolfgang Press - Raintime [1988].</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3evu1n">The Wolfgang Press - Raintime [1988].</a>
 <br>
                         submitted <span class="muted">2015-07-28 10:43</span> by <a href="https://www.reddit.com/user/weblypistol">/u/weblypistol</a>
 .</p>
@@ -769,7 +777,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Martin Dupont - Under Nylon (1984)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Martin Dupont - Under Nylon (1984)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3bvzzz">Martin Dupont - Under Nylon (1984)</a>
 <br>
                         submitted <span class="muted">2015-07-02 16:37</span> by <a href="https://www.reddit.com/user/miraoister">/u/miraoister</a>
 .</p>
@@ -783,7 +791,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dead Can Dance - The Host Of Seraphim</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Dead Can Dance - The Host Of Seraphim [1987].</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3c0v4g">Dead Can Dance - The Host Of Seraphim [1987].</a>
 <br>
                         submitted <span class="muted">2015-07-03 19:08</span> by <a href="https://www.reddit.com/user/weblypistol">/u/weblypistol</a>
 .</p>
@@ -797,7 +805,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Life On the Line</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Fad Gadget - Life on the Line</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3c1lyn">Fad Gadget - Life on the Line</a>
 <br>
                         submitted <span class="muted">2015-07-03 22:42</span> by <a href="https://www.reddit.com/user/Caelmor">/u/Caelmor</a>
 .</p>
@@ -811,7 +819,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Oingo Boingo   Ain't this the life URGH!</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Oingo Boingo Ain't this the life URGH! A Music War</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3dpomf">Oingo Boingo Ain't this the life URGH! A Music War</a>
 <br>
                         submitted <span class="muted">2015-07-18 06:13</span> by <a href="https://www.reddit.com/user/Shadow23x">/u/Shadow23x</a>
 .</p>
@@ -825,7 +833,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Mo-Dettes - Masochistic Opposite</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">The Mo-Dettes - "Masochistic Opposite" (1981)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3e0zfo">The Mo-Dettes - "Masochistic Opposite" (1981)</a>
 <br>
                         submitted <span class="muted">2015-07-21 03:02</span> by <a href="https://www.reddit.com/user/amish_no_wave">/u/amish_no_wave</a>
 .</p>
@@ -839,7 +847,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">COLD CAVE - DOOM DOOM DOOM</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Cold Cave- Doom Doom Doom</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3e3jby">Cold Cave- Doom Doom Doom</a>
 <br>
                         submitted <span class="muted">2015-07-21 18:02</span> by <a href="https://www.reddit.com/user/Invisible-War">/u/Invisible-War</a>
 .</p>
@@ -853,7 +861,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Second Layer - Black Flowers</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">From the Sound's frontman, Adrian Borland: Second Layer - Black Flowers (1981)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3e80j2">From the Sound's frontman, Adrian Borland: Second Layer - Black Flowers (1981)</a>
 <br>
                         submitted <span class="muted">2015-07-22 17:42</span> by <a href="https://www.reddit.com/user/bidonvilles">/u/bidonvilles</a>
 .</p>
@@ -867,7 +875,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">soft cell - frustration</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Soft Cell - Frustration (1980 "Mutant Moments" Version)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3eort8">Soft Cell - Frustration (1980 "Mutant Moments" Version)</a>
 <br>
                         submitted <span class="muted">2015-07-26 19:27</span> by <a href="https://www.reddit.com/user/FantomeFollower">/u/FantomeFollower</a>
 .</p>
@@ -881,7 +889,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Adorations (BBC In Concert - 22nd August 1986)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Killing Joke - Adorations</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3c1nmp">Killing Joke - Adorations</a>
 <br>
                         submitted <span class="muted">2015-07-03 22:56</span> by <a href="https://www.reddit.com/user/Caelmor">/u/Caelmor</a>
 .</p>
@@ -895,7 +903,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nervous Gender - Christian Lovers</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Nervous Gender - Christian Lovers (1981) [4:48]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3c41y2">Nervous Gender - Christian Lovers (1981) [4:48]</a>
 <br>
                         submitted <span class="muted">2015-07-04 15:55</span> by <a href="https://www.reddit.com/user/thefriendcatcher">/u/thefriendcatcher</a>
 .</p>
@@ -909,7 +917,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">End of Data - Sahrah (1984)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">End of Data - Sahrah (1984) [4:53]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3c42qe">End of Data - Sahrah (1984) [4:53]</a>
 <br>
                         submitted <span class="muted">2015-07-04 16:03</span> by <a href="https://www.reddit.com/user/thefriendcatcher">/u/thefriendcatcher</a>
 .</p>
@@ -923,7 +931,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">DA!  Next to Nothing  (1982)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">DA! - Next to Nothing (1982)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3cp0ow">DA! - Next to Nothing (1982)</a>
 <br>
                         submitted <span class="muted">2015-07-09 16:53</span> by <a href="https://www.reddit.com/user/killwave">/u/killwave</a>
 .</p>
@@ -937,7 +945,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Best of Videowave 1980s</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Best of Videowave 1980s</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3d9a46">Best of Videowave 1980s</a>
 <br>
                         submitted <span class="muted">2015-07-14 14:33</span> by <a href="https://www.reddit.com/user/miraoister">/u/miraoister</a>
 .</p>
@@ -951,7 +959,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Public Image Ltd - Public Image (Rainbow Theatre 1978)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Public Image Ltd - Public Image (Live, Rainbow Theatre, London, 26-12-1978) [3:31]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3dacq3">Public Image Ltd - Public Image (Live, Rainbow Theatre, London, 26-12-1978) [3:31]</a>
 <br>
                         submitted <span class="muted">2015-07-14 19:04</span> by <a href="https://www.reddit.com/user/thefriendcatcher">/u/thefriendcatcher</a>
 .</p>
@@ -965,7 +973,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Drab Majesty - The Foyer (Official Music Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Drab Majesty - "The Foyer"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3djoe9">Drab Majesty - "The Foyer"</a>
 <br>
                         submitted <span class="muted">2015-07-16 20:32</span> by <a href="https://www.reddit.com/user/CharonApple">/u/CharonApple</a>
 .</p>
@@ -979,7 +987,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Mighty Lemon Drops 1987 Out Of Hand</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Mighty Lemon Drops - Out of Hand (1987)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3eelc8">Mighty Lemon Drops - Out of Hand (1987)</a>
 <br>
                         submitted <span class="muted">2015-07-24 03:35</span> by <a href="https://www.reddit.com/user/Psychlone23">/u/Psychlone23</a>
 .</p>
@@ -993,7 +1001,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sad Lovers and Giants - In Flux</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Sad Lovers and Giants - "In Flux"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3ewsgb">Sad Lovers and Giants - "In Flux"</a>
 <br>
                         submitted <span class="muted">2015-07-28 15:47</span> by <a href="https://www.reddit.com/user/gintonico">/u/gintonico</a>
 .</p>
@@ -1007,7 +1015,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Suck</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">The Wedding Present - Suck (1991)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3bqna1">The Wedding Present - Suck (1991)</a>
 <br>
                         submitted <span class="muted">2015-07-01 10:48</span> by <a href="https://www.reddit.com/user/ghostworldvhs">/u/ghostworldvhs</a>
 .</p>
@@ -1021,7 +1029,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Passions - I'm in Love with a German Film Star</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">The Passions - I'm in Love with a German Film Star</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3c3so6">The Passions - I'm in Love with a German Film Star</a>
 <br>
                         submitted <span class="muted">2015-07-04 14:23</span> by <a href="https://www.reddit.com/user/miraoister">/u/miraoister</a>
 .</p>
@@ -1035,7 +1043,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Specimen - Wolverines (1983)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Specimen - Wolverines (1983)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3c7nrl">Specimen - Wolverines (1983)</a>
 <br>
                         submitted <span class="muted">2015-07-05 17:39</span> by <a href="https://www.reddit.com/user/miraoister">/u/miraoister</a>
 .</p>
@@ -1049,7 +1057,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dog Faced Hermans - Bella Ciao</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Dog Faced Hermans - Bella Ciao [1989].</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3cj0ou">Dog Faced Hermans - Bella Ciao [1989].</a>
 <br>
                         submitted <span class="muted">2015-07-08 07:58</span> by <a href="https://www.reddit.com/user/weblypistol">/u/weblypistol</a>
 .</p>
@@ -1063,7 +1071,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ann Steel - My Time</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Ann Steel - My Time [Netherlands 1979]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3clbo4">Ann Steel - My Time [Netherlands 1979]</a>
 <br>
                         submitted <span class="muted">2015-07-08 20:15</span> by <a href="https://www.reddit.com/user/HotDogHell">/u/HotDogHell</a>
 .</p>
@@ -1077,7 +1085,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Red Transistor - Not Bite</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Red Transistor - "Not Bite" (1977)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3cmgm7">Red Transistor - "Not Bite" (1977)</a>
 <br>
                         submitted <span class="muted">2015-07-09 01:28</span> by <a href="https://www.reddit.com/user/amish_no_wave">/u/amish_no_wave</a>
 .</p>
@@ -1091,7 +1099,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rowland S. Howard - Oh Jim + Dead Radio</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Rowland S. Howard - Oh Jim (Lou Reed cover) + Dead Radio. Live at Ding Dong</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3cskij">Rowland S. Howard - Oh Jim (Lou Reed cover) + Dead Radio. Live at Ding Dong</a>
 <br>
                         submitted <span class="muted">2015-07-10 12:53</span> by <a href="https://www.reddit.com/user/El-lee-nor">/u/El-lee-nor</a>
 .</p>
@@ -1105,7 +1113,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Girlfriends and Boyfriends 'Young Ones' (SFW)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Girlfriends and Boyfriends - Young Ones</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3csuu0">Girlfriends and Boyfriends - Young Ones</a>
 <br>
                         submitted <span class="muted">2015-07-10 14:26</span> by <a href="https://www.reddit.com/user/_RedPillFedora_">/u/_RedPillFedora_</a>
 .</p>
@@ -1119,7 +1127,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Glorious Din - Cello Tape</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Glorious Din - Cello Tape (1985)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3ctgk0">Glorious Din - Cello Tape (1985)</a>
 <br>
                         submitted <span class="muted">2015-07-10 17:15</span> by <a href="https://www.reddit.com/user/tomatosoup93">/u/tomatosoup93</a>
 .</p>
@@ -1133,7 +1141,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tuff Love - Flamingo</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Tuff Love - Flamingo [2014].</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3cvsvd">Tuff Love - Flamingo [2014].</a>
 <br>
                         submitted <span class="muted">2015-07-11 04:50</span> by <a href="https://www.reddit.com/user/weblypistol">/u/weblypistol</a>
 .</p>
@@ -1147,7 +1155,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">New Order - Murder</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">New Order - Murder (lyrics reminds me of the Unidan v Jackdaw mishaps - I HATE CROWS!)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3e5td3">New Order - Murder (lyrics reminds me of the Unidan v Jackdaw mishaps - I HATE CROWS!)</a>
 <br>
                         submitted <span class="muted">2015-07-22 04:31</span> by <a href="https://www.reddit.com/user/FIDLAAR">/u/FIDLAAR</a>
 .</p>
@@ -1161,7 +1169,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Flour - There's Blood In My Food (off 1988 LP 'Flour')</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Flour - There's Blood In My Food (off 1988 LP 'Flour')</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3f2fc9">Flour - There's Blood In My Food (off 1988 LP 'Flour')</a>
 <br>
                         submitted <span class="muted">2015-07-29 19:28</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1175,7 +1183,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">INCA BABIES - Plenty More Mutants</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Inca Babies - 'Plenty More Mutants'</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3bxoy2">Inca Babies - 'Plenty More Mutants'</a>
 <br>
                         submitted <span class="muted">2015-07-03 00:36</span> by <a href="https://www.reddit.com/user/Comatose_Bat">/u/Comatose_Bat</a>
 .</p>
@@ -1189,7 +1197,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Caucasian Guilt</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Noh Mercy - "Caucasian Guilt" (1979)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3byb8b">Noh Mercy - "Caucasian Guilt" (1979)</a>
 <br>
                         submitted <span class="muted">2015-07-03 04:00</span> by <a href="https://www.reddit.com/user/amish_no_wave">/u/amish_no_wave</a>
 .</p>
@@ -1203,7 +1211,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">red zebra - i can`t live in a livingroom</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Red Zebra - I Can't Live in a Living Room</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3c1gla">Red Zebra - I Can't Live in a Living Room</a>
 <br>
                         submitted <span class="muted">2015-07-03 21:58</span> by <a href="https://www.reddit.com/user/disposablegoddess">/u/disposablegoddess</a>
 .</p>
@@ -1217,7 +1225,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">DNA - A Taste of DNA (Full Album)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">DNA - A Taste of DNA (Full Album, 1981) [9:48]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3c4284">DNA - A Taste of DNA (Full Album, 1981) [9:48]</a>
 <br>
                         submitted <span class="muted">2015-07-04 15:58</span> by <a href="https://www.reddit.com/user/thefriendcatcher">/u/thefriendcatcher</a>
 .</p>
@@ -1231,7 +1239,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Last Train To Clarksville- Plastics</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Plastics - Last Train To Clarksville (1979, Japan, Monkees cover)[3:06]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3c43y0">Plastics - Last Train To Clarksville (1979, Japan, Monkees cover)[3:06]</a>
 <br>
                         submitted <span class="muted">2015-07-04 16:14</span> by <a href="https://www.reddit.com/user/thefriendcatcher">/u/thefriendcatcher</a>
 .</p>
@@ -1245,7 +1253,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Deaf Kid (VHSHIT)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Deaf Kid - Squirm (2014) IDAHO POST PUNK</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3c7q88">Deaf Kid - Squirm (2014) IDAHO POST PUNK</a>
 <br>
                         submitted <span class="muted">2015-07-05 18:02</span> by <a href="https://www.reddit.com/user/coffeescoldbynow">/u/coffeescoldbynow</a>
 .</p>
@@ -1259,7 +1267,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cat Power - Myra Lee FULL ALBUM</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Cat Power - Myra Lee [1996]. Full album. Tracklist site/comments.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3cj2sq">Cat Power - Myra Lee [1996]. Full album. Tracklist site/comments.</a>
 <br>
                         submitted <span class="muted">2015-07-08 08:28</span> by <a href="https://www.reddit.com/user/weblypistol">/u/weblypistol</a>
 .</p>
@@ -1273,7 +1281,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Fred Schneider - Monster</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Fred Schneider - Monster</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3cr2va">Fred Schneider - Monster</a>
 <br>
                         submitted <span class="muted">2015-07-10 02:26</span> by <a href="https://www.reddit.com/user/miraoister">/u/miraoister</a>
 .</p>
@@ -1287,7 +1295,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dystopian Society - The City's Breath</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Dystopian Society - The City's Breath</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3cx2u5">Dystopian Society - The City's Breath</a>
 <br>
                         submitted <span class="muted">2015-07-11 15:17</span> by <a href="https://www.reddit.com/user/dystopico">/u/dystopico</a>
 .</p>
@@ -1301,7 +1309,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">A Sudden Sway - Jane's Third Party</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">A Sudden Sway - Jane's Third Party</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3dgb2s">A Sudden Sway - Jane's Third Party</a>
 <br>
                         submitted <span class="muted">2015-07-16 01:18</span> by <a href="https://www.reddit.com/user/MerryPrankster1967">/u/MerryPrankster1967</a>
 .</p>
@@ -1315,7 +1323,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ortrotasce - Forgotten</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Ortrotasce - Forgotten (Portland, 2013)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3dxzov">Ortrotasce - Forgotten (Portland, 2013)</a>
 <br>
                         submitted <span class="muted">2015-07-20 13:32</span> by <a href="https://www.reddit.com/user/olilo">/u/olilo</a>
 .</p>
@@ -1329,7 +1337,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Blue Orchids - Peel Session 1982</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Blue Orchids' Peel Session 1982</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3engk0">Blue Orchids' Peel Session 1982</a>
 <br>
                         submitted <span class="muted">2015-07-26 11:33</span> by <a href="https://www.reddit.com/user/bastet777">/u/bastet777</a>
 .</p>
@@ -1343,7 +1351,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kings Of The Wild Frontier (First Version) - Adam & The Ants</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Adam &amp; The Ants - Kings of the Wild Frontier (First Version)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3eonzp">Adam &amp; The Ants - Kings of the Wild Frontier (First Version)</a>
 <br>
                         submitted <span class="muted">2015-07-26 18:57</span> by <a href="https://www.reddit.com/user/FantomeFollower">/u/FantomeFollower</a>
 .</p>
@@ -1357,7 +1365,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Abecedarians - Spaghetti Western</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Abecedarians - Spaghetti Western</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3et9l5">Abecedarians - Spaghetti Western</a>
 <br>
                         submitted <span class="muted">2015-07-27 20:13</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1371,7 +1379,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Cure Theatre de L'Empire Paris 1979</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">The Cure Theatre de L'Empire Paris 1979</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3f6m6r">The Cure Theatre de L'Empire Paris 1979</a>
 <br>
                         submitted <span class="muted">2015-07-30 17:24</span> by <a href="https://www.reddit.com/user/miraoister">/u/miraoister</a>
 .</p>
@@ -1385,7 +1393,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">POSERS - New Romantics in the Kings Road, 1981</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">POSERS - New Romantics in the Kings Road, 1981</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3f94cg">POSERS - New Romantics in the Kings Road, 1981</a>
 <br>
                         submitted <span class="muted">2015-07-31 04:49</span> by <a href="https://www.reddit.com/user/miraoister">/u/miraoister</a>
 .</p>
@@ -1399,7 +1407,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Shane Macgowan & The Popes - Victoria</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Shane Macgowan &amp; The Popes - Victoria</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3c132q">Shane Macgowan &amp; The Popes - Victoria</a>
 <br>
                         submitted <span class="muted">2015-07-03 20:10</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1413,7 +1421,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Skids ~ Working For The Yankee Dollar</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">The Skids ~ Working For The Yankee Dollar [1979]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3c1ljh">The Skids ~ Working For The Yankee Dollar [1979]</a>
 <br>
                         submitted <span class="muted">2015-07-03 22:38</span> by <a href="https://www.reddit.com/user/weblypistol">/u/weblypistol</a>
 .</p>
@@ -1427,7 +1435,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Fall - Cab It Up!</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">The Fall - Cab it Up</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3c26f4">The Fall - Cab it Up</a>
 <br>
                         submitted <span class="muted">2015-07-04 01:53</span> by <a href="https://www.reddit.com/user/SlackBadger">/u/SlackBadger</a>
 .</p>
@@ -1441,7 +1449,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lydia Lunch & Birthday Party-The Agony Is The Extacy.wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Lydia Lunch &amp; Birthday Party-The Agony Is The Extacy</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3c3q4h">Lydia Lunch &amp; Birthday Party-The Agony Is The Extacy</a>
 <br>
                         submitted <span class="muted">2015-07-04 13:56</span> by <a href="https://www.reddit.com/user/miraoister">/u/miraoister</a>
 .</p>
@@ -1455,7 +1463,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Miko  -  Traumzeit/Weltzeit  (1983)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Miko - Traumzeit/Weltzeit (1983) [3:42]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3c41l5">Miko - Traumzeit/Weltzeit (1983) [3:42]</a>
 <br>
                         submitted <span class="muted">2015-07-04 15:52</span> by <a href="https://www.reddit.com/user/thefriendcatcher">/u/thefriendcatcher</a>
 .</p>

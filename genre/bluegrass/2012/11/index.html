@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">THe Devil Makes Three "All Hail"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">65</span> - <a href="https://www.reddit.com/">The Devil Makes Three -	All Hail [Atypical Bleugrass]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">65</span> - <a href="https://www.reddit.com/12utpt">The Devil Makes Three -	All Hail [Atypical Bleugrass]</a>
 <br>
                         submitted <span class="muted">2012-11-08 13:51</span> by <a href="https://www.reddit.com/user/KingPhine">/u/KingPhine</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Chris Thile and Michael Daves: NPR Music Tiny Desk Concert</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">53</span> - <a href="https://www.reddit.com/">Chris Thile and Michael Daves: NPR Music Tiny Desk Concert - AMAZING!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">53</span> - <a href="https://www.reddit.com/13tjj2">Chris Thile and Michael Daves: NPR Music Tiny Desk Concert - AMAZING!</a>
 <br>
                         submitted <span class="muted">2012-11-26 17:23</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Punch Brothers - "Another New World"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">33</span> - <a href="https://www.reddit.com/">Punch Brothers - "Another New World" - YouTube
+                    <p><strong>Score:</strong> <span class="rd-score">33</span> - <a href="https://www.reddit.com/140bh5">Punch Brothers - "Another New World" - YouTube
 Can't get this out of my head!</a>
 <br>
                         submitted <span class="muted">2012-11-29 19:28</span> by <a href="https://www.reddit.com/user/thatmusicchick">/u/thatmusicchick</a>
@@ -112,7 +120,7 @@ Can't get this out of my head!</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Trampled By Turtles -- Walt Whitman</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">32</span> - <a href="https://www.reddit.com/">"Walt Whitman" - Trampled By Turtles</a>
+                    <p><strong>Score:</strong> <span class="rd-score">32</span> - <a href="https://www.reddit.com/13qpj7">"Walt Whitman" - Trampled By Turtles</a>
 <br>
                         submitted <span class="muted">2012-11-25 02:26</span> by <a href="https://www.reddit.com/user/hotdumps">/u/hotdumps</a>
 .</p>
@@ -126,7 +134,7 @@ Can't get this out of my head!</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Hey Joe - Tim O'Brien</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/">Hey Joe - Tim O'Brien</a>
+                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/132r9t">Hey Joe - Tim O'Brien</a>
 <br>
                         submitted <span class="muted">2012-11-12 19:14</span> by <a href="https://www.reddit.com/user/F-Holes">/u/F-Holes</a>
 .</p>
@@ -140,7 +148,7 @@ Can't get this out of my head!</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Osborne Brothers - Rocky Top</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/">Osborne Brothers - Rocky Top - YouTube</a>
+                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/12lq1w">Osborne Brothers - Rocky Top - YouTube</a>
 <br>
                         submitted <span class="muted">2012-11-04 06:37</span> by <a href="https://www.reddit.com/user/pvandy">/u/pvandy</a>
 .</p>
@@ -154,7 +162,7 @@ Can't get this out of my head!</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tony Rice - Church Street Blues</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Tony Rice - Church Street Blues</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/12iwca">Tony Rice - Church Street Blues</a>
 <br>
                         submitted <span class="muted">2012-11-02 18:00</span> by <a href="https://www.reddit.com/user/munolou">/u/munolou</a>
 .</p>
@@ -168,7 +176,7 @@ Can't get this out of my head!</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Weight - Gillian Welch & Old Crow Medicine Show</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Not exactly bluegrass, but a beautiful cover.
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/12nqis">Not exactly bluegrass, but a beautiful cover.
 
 Gillian Welch w/David Rawlings and OCMS - The Weight</a>
 <br>
@@ -184,7 +192,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tony Rice ~ John Wilkes Booth</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Tony Rice - John Wilkes Booth [3:55]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/13ermv">Tony Rice - John Wilkes Booth [3:55]</a>
 <br>
                         submitted <span class="muted">2012-11-18 19:44</span> by <a href="https://www.reddit.com/user/ShittyNinja">/u/ShittyNinja</a>
 .</p>
@@ -198,7 +206,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Keller Williams & The Travelin' McCourys - Price tag - Electric Forest Festival 2012 - Rothbury, MI</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Keller Williams &amp; The Travelin' McCourys - Price tag - Electric Forest Festival 2012 - Rothbury, MI - YouTube</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/13h2md">Keller Williams &amp; The Travelin' McCourys - Price tag - Electric Forest Festival 2012 - Rothbury, MI - YouTube</a>
 <br>
                         submitted <span class="muted">2012-11-19 22:26</span> by <a href="https://www.reddit.com/user/OceanOfMyHead">/u/OceanOfMyHead</a>
 .</p>
@@ -212,7 +220,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Split Lip Rayfield -Truth & Lies- Music Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">Split Lip Rayfield 'Truth &amp; Lies' -R.I.P Kirk Rundstrom</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/12hokb">Split Lip Rayfield 'Truth &amp; Lies' -R.I.P Kirk Rundstrom</a>
 <br>
                         submitted <span class="muted">2012-11-02 01:21</span> by <a href="https://www.reddit.com/user/tduggs">/u/tduggs</a>
 .</p>
@@ -226,7 +234,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mustered Courage "Madeline"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">Just dropping some fun bluegrass from Australia on ya'll</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/12ws2q">Just dropping some fun bluegrass from Australia on ya'll</a>
 <br>
                         submitted <span class="muted">2012-11-09 12:32</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -240,7 +248,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Steve Earle & the Del McCoury Band - Carrie Brown (Live at Farm Aid 1998)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Carrie Brown - Steve Earle and the Del McCoury Band</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/12pku1">Carrie Brown - Steve Earle and the Del McCoury Band</a>
 <br>
                         submitted <span class="muted">2012-11-06 03:54</span> by <a href="https://www.reddit.com/user/Jeffy_Weffy">/u/Jeffy_Weffy</a>
 .</p>
@@ -254,7 +262,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sensitive New Age Cowpersons - I still haven't found what I'm looking for</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Sensitive New Age Cowpersons - I still haven't found what I'm looking for (Fun U2 cover) [2:58]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/1370r4">Sensitive New Age Cowpersons - I still haven't found what I'm looking for (Fun U2 cover) [2:58]</a>
 <br>
                         submitted <span class="muted">2012-11-14 19:06</span> by <a href="https://www.reddit.com/user/ShittyNinja">/u/ShittyNinja</a>
 .</p>
@@ -268,7 +276,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gentle On My Mind - Mailander, Tuttle, Karlson, Witler 2012-08-22 The Coffee Gallery Backstage</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Molly Tuttle - Gentle On My Mind</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/139611">Molly Tuttle - Gentle On My Mind</a>
 <br>
                         submitted <span class="muted">2012-11-15 19:25</span> by <a href="https://www.reddit.com/user/banjoman74">/u/banjoman74</a>
 .</p>
@@ -282,7 +290,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dance  all night with a bottle in your hand</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Chance McCoy and the Appalachian String Band - Dance  all night with a bottle in your hand - YouTube</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/13tjcu">Chance McCoy and the Appalachian String Band - Dance  all night with a bottle in your hand - YouTube</a>
 <br>
                         submitted <span class="muted">2012-11-26 17:21</span> by <a href="https://www.reddit.com/user/pvandy">/u/pvandy</a>
 .</p>
@@ -296,7 +304,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Toxic- ATL Encore</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Toxic - Nickel Creek (Atlanta encore, entire song)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/12hlf3">Toxic - Nickel Creek (Atlanta encore, entire song)</a>
 <br>
                         submitted <span class="muted">2012-11-02 00:32</span> by <a href="https://www.reddit.com/user/AMBAA">/u/AMBAA</a>
 .</p>
@@ -310,7 +318,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sierra Hull - Chasin' Skies</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Sierra Hull - Chasin' Skies - YouTube</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/12ouk4">Sierra Hull - Chasin' Skies - YouTube</a>
 <br>
                         submitted <span class="muted">2012-11-05 21:45</span> by <a href="https://www.reddit.com/user/pvandy">/u/pvandy</a>
 .</p>
@@ -324,7 +332,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Crowder - I Saw the Light [iTunes Session]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Crowder - I Saw the Light [5:03]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/134xld">Crowder - I Saw the Light [5:03]</a>
 <br>
                         submitted <span class="muted">2012-11-13 19:24</span> by <a href="https://www.reddit.com/user/inkysquares">/u/inkysquares</a>
 .</p>
@@ -338,7 +346,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Blue Sky Boys - Are You From Dixie (1936)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Bluegrass beginnings: The Blue Sky Boys</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/13w4v4">Bluegrass beginnings: The Blue Sky Boys</a>
 <br>
                         submitted <span class="muted">2012-11-27 20:47</span> by <a href="https://www.reddit.com/user/mildmuse">/u/mildmuse</a>
 .</p>
@@ -352,7 +360,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">12 PertNearSandstone 2011-04-09 Appalachian Girl</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Pert Near Sandstone-Appalachian Girl</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/13y7f6">Pert Near Sandstone-Appalachian Girl</a>
 <br>
                         submitted <span class="muted">2012-11-28 19:53</span> by <a href="https://www.reddit.com/user/Once_a_Fool">/u/Once_a_Fool</a>
 .</p>
@@ -366,7 +374,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Floodwood After- moe. -show at Sullivan Hall 11-25-11 : Hobo Song</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Hey /r/Bluegrass -- I present to you Floodwood!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/12oi5h">Hey /r/Bluegrass -- I present to you Floodwood!</a>
 <br>
                         submitted <span class="muted">2012-11-05 18:51</span> by <a href="https://www.reddit.com/user/MakisupaVT">/u/MakisupaVT</a>
 .</p>
@@ -380,7 +388,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Roan Mountain Rag</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Roan Mountain Rag - Richard Bennett</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/13av45">Roan Mountain Rag - Richard Bennett</a>
 <br>
                         submitted <span class="muted">2012-11-16 15:32</span> by <a href="https://www.reddit.com/user/darkon">/u/darkon</a>
 .</p>
@@ -394,7 +402,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sleepy Man Banjo Boys - 'Time Lapse' Practice</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Incredibly talented kids.. literally blew my mind..</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/13sk9u">Incredibly talented kids.. literally blew my mind..</a>
 <br>
                         submitted <span class="muted">2012-11-26 03:20</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -408,7 +416,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">dolly parton- i'm gone</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Dolly Parton - I'm Gone</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/12nykl">Dolly Parton - I'm Gone</a>
 <br>
                         submitted <span class="muted">2012-11-05 13:12</span> by <a href="https://www.reddit.com/user/captious_">/u/captious_</a>
 .</p>
@@ -422,7 +430,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Papa Made A Living By Working Sawmills Blue Moon Rising</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Papa Made A Living By Working Sawmills - Blue Moon Rising</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/12tj0t">Papa Made A Living By Working Sawmills - Blue Moon Rising</a>
 <br>
                         submitted <span class="muted">2012-11-07 21:40</span> by <a href="https://www.reddit.com/user/Peralton">/u/Peralton</a>
 .</p>
@@ -436,7 +444,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Darrell Scott "The Day Before Thanksgiving" Live at KDHX 11/11/11 (HD)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">It's The Day Before Thanksgiving...</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/13klzt">It's The Day Before Thanksgiving...</a>
 <br>
                         submitted <span class="muted">2012-11-21 16:43</span> by <a href="https://www.reddit.com/user/colliningram">/u/colliningram</a>
 .</p>
@@ -450,7 +458,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Infamous Stringdusters "You Can't Stop the Changes"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">The Infamous Stringdusters "You Can't Stop the Changes"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/12k3ck">The Infamous Stringdusters "You Can't Stop the Changes"</a>
 <br>
                         submitted <span class="muted">2012-11-03 08:22</span> by <a href="https://www.reddit.com/user/Cool_beansss">/u/Cool_beansss</a>
 .</p>
@@ -464,7 +472,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bluegrass Album Band - Devil in Disguise</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Bluegrass Album Band - Devil in Disguise (aka Christine's Tune) - [3:20]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/12tvpl">Bluegrass Album Band - Devil in Disguise (aka Christine's Tune) - [3:20]</a>
 <br>
                         submitted <span class="muted">2012-11-08 00:39</span> by <a href="https://www.reddit.com/user/ShittyNinja">/u/ShittyNinja</a>
 .</p>
@@ -478,7 +486,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Black Rock - The Infamous Stringdusters</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Black Rock - The Infamous Stringdusters</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/13c0vr">Black Rock - The Infamous Stringdusters</a>
 <br>
                         submitted <span class="muted">2012-11-17 02:42</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -492,7 +500,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Infamous Stringdusters 'Cripple Creek' GoPro LIVE Burlington, VT 10.19.12</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Infamous Stringdusters - Cripple Creek [The Band cover]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/12wwbf">Infamous Stringdusters - Cripple Creek [The Band cover]</a>
 <br>
                         submitted <span class="muted">2012-11-09 14:26</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -506,7 +514,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Custers Grass Band Live Bluegrass Performance</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">"I Wish You Knew" performed by Custers Grass Band a Pacific Northwest band - YouTube</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1374u6">"I Wish You Knew" performed by Custers Grass Band a Pacific Northwest band - YouTube</a>
 <br>
                         submitted <span class="muted">2012-11-14 20:07</span> by <a href="https://www.reddit.com/user/Winkie1">/u/Winkie1</a>
 .</p>
@@ -520,7 +528,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Old Man Markley - Blood on my Hands</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">My favourite band in the world just released a new single.  Old Man Markley - Blood On My Hands</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/12u4ex">My favourite band in the world just released a new single.  Old Man Markley - Blood On My Hands</a>
 <br>
                         submitted <span class="muted">2012-11-08 02:52</span> by <a href="https://www.reddit.com/user/scobes">/u/scobes</a>
 .</p>
@@ -534,7 +542,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Yonder Mountain String Band "Ooh La La" 8-18-10</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Yonder always knows</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/12lenf">Yonder always knows</a>
 <br>
                         submitted <span class="muted">2012-11-04 02:24</span> by <a href="https://www.reddit.com/user/OceanOfMyHead">/u/OceanOfMyHead</a>
 .</p>
@@ -548,7 +556,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">See You Again</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Whiskey Treats - "See You Again" at charity show</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/12vaet">Whiskey Treats - "See You Again" at charity show</a>
 <br>
                         submitted <span class="muted">2012-11-08 18:38</span> by <a href="https://www.reddit.com/user/ThrobZombie">/u/ThrobZombie</a>
 .</p>
@@ -562,7 +570,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Punch Brothers Montreal 2012 Full Show</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Punch Brothers - Montreal 9/27/2012 (Whole Show!)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/134lct">Punch Brothers - Montreal 9/27/2012 (Whole Show!)</a>
 <br>
                         submitted <span class="muted">2012-11-13 16:25</span> by <a href="https://www.reddit.com/user/LightWolfCavalry">/u/LightWolfCavalry</a>
 .</p>
@@ -576,7 +584,7 @@ Gillian Welch w/David Rawlings and OCMS - The Weight</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Farewell Drifters - Punchline</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Not your traditional bluegrass, But still a great band.
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/136nxe">Not your traditional bluegrass, But still a great band.
 Farewell Drifters-Punchline</a>
 <br>
                         submitted <span class="muted">2012-11-14 15:50</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
@@ -591,7 +599,7 @@ Farewell Drifters-Punchline</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">PLUM SIDEWAYS - Tripple Creek Park 1990</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Plum Sideways - You don't know my mind</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/13bvtt">Plum Sideways - You don't know my mind</a>
 <br>
                         submitted <span class="muted">2012-11-17 01:08</span> by <a href="https://www.reddit.com/user/HedgeC">/u/HedgeC</a>
 .</p>
@@ -605,7 +613,7 @@ Farewell Drifters-Punchline</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Old Man Markley - For Better For Worse - Fat Wreck Chords (Official Music Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Old man markley</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/13lhhr">Old man markley</a>
 <br>
                         submitted <span class="muted">2012-11-22 00:52</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -619,7 +627,7 @@ Farewell Drifters-Punchline</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">One Tin Soldier - Bluegrass Alliance (1971) COMPLETE!</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">One Tin Soldier - Bluegrass Alliance (Really young Sam Bush &amp; Tony Rice) [3:05]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/13vqi0">One Tin Soldier - Bluegrass Alliance (Really young Sam Bush &amp; Tony Rice) [3:05]</a>
 <br>
                         submitted <span class="muted">2012-11-27 17:15</span> by <a href="https://www.reddit.com/user/ShittyNinja">/u/ShittyNinja</a>
 .</p>
@@ -633,7 +641,7 @@ Farewell Drifters-Punchline</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Best Of Bluegrass - Roll in My Sweet Baby's Arms 1991</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">The best of bluegrass. Bold statement maybe, but a snapshot of cool.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/141lcm">The best of bluegrass. Bold statement maybe, but a snapshot of cool.</a>
 <br>
                         submitted <span class="muted">2012-11-30 08:09</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -647,7 +655,7 @@ Farewell Drifters-Punchline</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cherryholmes "Black and White"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">[Youtube] Cherryholmes - "Black and White"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/12lkvt">[Youtube] Cherryholmes - "Black and White"</a>
 <br>
                         submitted <span class="muted">2012-11-04 04:27</span> by <a href="https://www.reddit.com/user/iliketohighfivy">/u/iliketohighfivy</a>
 .</p>
@@ -661,7 +669,7 @@ Farewell Drifters-Punchline</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">BLUEGRASS/shady grove</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Shady Grove - James Alan Shelton</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/12pw1b">Shady Grove - James Alan Shelton</a>
 <br>
                         submitted <span class="muted">2012-11-06 07:17</span> by <a href="https://www.reddit.com/user/IronWolve">/u/IronWolve</a>
 .</p>
@@ -675,7 +683,7 @@ Farewell Drifters-Punchline</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nitty Gritty Dirt Band - Catfish John</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Nitty Gritty Dirt Band and Alison Krauss- Catfish John - YouTube</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/12uikn">Nitty Gritty Dirt Band and Alison Krauss- Catfish John - YouTube</a>
 <br>
                         submitted <span class="muted">2012-11-08 07:23</span> by <a href="https://www.reddit.com/user/pvandy">/u/pvandy</a>
 .</p>
@@ -689,7 +697,7 @@ Farewell Drifters-Punchline</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Abrams Brothers - Big Mon (SNTAT Series)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">The Abrams Brothers destroy "Big Mon".</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/12w2b3">The Abrams Brothers destroy "Big Mon".</a>
 <br>
                         submitted <span class="muted">2012-11-09 01:43</span> by <a href="https://www.reddit.com/user/LightWolfCavalry">/u/LightWolfCavalry</a>
 .</p>
@@ -703,7 +711,7 @@ Farewell Drifters-Punchline</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Brokedown Hustlers - Blackedoutwasted</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Brokedown Hustlers</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/13r4xf">Brokedown Hustlers</a>
 <br>
                         submitted <span class="muted">2012-11-25 08:23</span> by <a href="https://www.reddit.com/user/chancelure">/u/chancelure</a>
 .</p>

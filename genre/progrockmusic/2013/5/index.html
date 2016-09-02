@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Camel, Lady Fantasy, 1974. Prog-Rock Classic.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">100</span> - <a href="https://www.reddit.com/">Camel - Lady Fantasy - To me, this song is the epitome of prog rock [12:46]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">100</span> - <a href="https://www.reddit.com/1eox1q">Camel - Lady Fantasy - To me, this song is the epitome of prog rock [12:46]</a>
 <br>
                         submitted <span class="muted">2013-05-20 13:20</span> by <a href="https://www.reddit.com/user/mushroomlsdcocaine">/u/mushroomlsdcocaine</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Pink Floyd - Echoes / Live at Pompeii ( full )</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">66</span> - <a href="https://www.reddit.com/">Pink Floyd - Echoes - Live at Pompeii</a>
+                    <p><strong>Score:</strong> <span class="rd-score">66</span> - <a href="https://www.reddit.com/1ffo8d">Pink Floyd - Echoes - Live at Pompeii</a>
 <br>
                         submitted <span class="muted">2013-05-31 23:26</span> by <a href="https://www.reddit.com/user/joshuastarlight">/u/joshuastarlight</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Fountain of Lamneth - Rush</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">57</span> - <a href="https://www.reddit.com/">Rush - Fountain of Lamneth</a>
+                    <p><strong>Score:</strong> <span class="rd-score">57</span> - <a href="https://www.reddit.com/1euwlo">Rush - Fountain of Lamneth</a>
 <br>
                         submitted <span class="muted">2013-05-22 20:42</span> by <a href="https://www.reddit.com/user/THEREALTHOMASTHOMAS">/u/THEREALTHOMASTHOMAS</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Oceansize - Music for a Nurse [HQ Audio]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">38</span> - <a href="https://www.reddit.com/">Oceansize - Music for a Nurse</a>
+                    <p><strong>Score:</strong> <span class="rd-score">38</span> - <a href="https://www.reddit.com/1ekkxn">Oceansize - Music for a Nurse</a>
 <br>
                         submitted <span class="muted">2013-05-18 10:47</span> by <a href="https://www.reddit.com/user/JJKeys">/u/JJKeys</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Spock's Beard -  The Light</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">37</span> - <a href="https://www.reddit.com/">Spock's Beard - The Light</a>
+                    <p><strong>Score:</strong> <span class="rd-score">37</span> - <a href="https://www.reddit.com/1f78ba">Spock's Beard - The Light</a>
 <br>
                         submitted <span class="muted">2013-05-28 14:35</span> by <a href="https://www.reddit.com/user/CDerpington">/u/CDerpington</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Clockwork Kids - The Swain Sessions - Bishop Smith's Machines (4 of 5)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">36</span> - <a href="https://www.reddit.com/">This song by my band was strongly influenced by early King Crimson/Yes/Pink Floyd, thought you guys might like it. Clockwork Kids- Bishop Smith's Machines</a>
+                    <p><strong>Score:</strong> <span class="rd-score">36</span> - <a href="https://www.reddit.com/1di2mz">This song by my band was strongly influenced by early King Crimson/Yes/Pink Floyd, thought you guys might like it. Clockwork Kids- Bishop Smith's Machines</a>
 <br>
                         submitted <span class="muted">2013-05-01 19:50</span> by <a href="https://www.reddit.com/user/pcarne01">/u/pcarne01</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Premiata Forneria Marconi- Appena Un Po'</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">34</span> - <a href="https://www.reddit.com/">Premiata Forneria Marconi- Appena Un Po'</a>
+                    <p><strong>Score:</strong> <span class="rd-score">34</span> - <a href="https://www.reddit.com/1exe7l">Premiata Forneria Marconi- Appena Un Po'</a>
 <br>
                         submitted <span class="muted">2013-05-23 20:50</span> by <a href="https://www.reddit.com/user/Iwassentbylargemarge">/u/Iwassentbylargemarge</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Genesis - Riding the Scree</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">31</span> - <a href="https://www.reddit.com/">Genesis - Riding the Scree</a>
+                    <p><strong>Score:</strong> <span class="rd-score">31</span> - <a href="https://www.reddit.com/1dxuh9">Genesis - Riding the Scree</a>
 <br>
                         submitted <span class="muted">2013-05-08 16:35</span> by <a href="https://www.reddit.com/user/Eldritchbane">/u/Eldritchbane</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Genesis - The Musical Box - Midnight Special - 20/12/1973</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">30</span> - <a href="https://www.reddit.com/">Genesis, The Musical Box -- live performance on The Midnight Special, 1973</a>
+                    <p><strong>Score:</strong> <span class="rd-score">30</span> - <a href="https://www.reddit.com/1f8vki">Genesis, The Musical Box -- live performance on The Midnight Special, 1973</a>
 <br>
                         submitted <span class="muted">2013-05-29 03:17</span> by <a href="https://www.reddit.com/user/yzerdog">/u/yzerdog</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Karnivool - Simple Boy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">29</span> - <a href="https://www.reddit.com/">Karnivool - Simple Boy</a>
+                    <p><strong>Score:</strong> <span class="rd-score">29</span> - <a href="https://www.reddit.com/1elf9c">Karnivool - Simple Boy</a>
 <br>
                         submitted <span class="muted">2013-05-18 20:47</span> by <a href="https://www.reddit.com/user/AnalogPopcorn">/u/AnalogPopcorn</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Porcupine Tree - So Called Friend</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/">Porcupine Tree - So Called Friend</a>
+                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/1ds04l">Porcupine Tree - So Called Friend</a>
 <br>
                         submitted <span class="muted">2013-05-06 05:39</span> by <a href="https://www.reddit.com/user/whatthefuboom">/u/whatthefuboom</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Electric Light Orchestra - Turn To Stone</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/">Electric Light Orchestra - Turn to Stone [3:50]. The lyrics are true poetry. They never cease to amaze me.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/1dj9x1">Electric Light Orchestra - Turn to Stone [3:50]. The lyrics are true poetry. They never cease to amaze me.</a>
 <br>
                         submitted <span class="muted">2013-05-02 05:22</span> by <a href="https://www.reddit.com/user/MachoMania">/u/MachoMania</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gentle Giant - Just The Same</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/">Gentle Giant - Just The Same [Live in 1978]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/1dxiz1">Gentle Giant - Just The Same [Live in 1978]</a>
 <br>
                         submitted <span class="muted">2013-05-08 13:47</span> by <a href="https://www.reddit.com/user/whatthefuboom">/u/whatthefuboom</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Anathema - Lightning song HD</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/">Anathema - Lightning song (Weather Systems, 2012)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/1f6ucr">Anathema - Lightning song (Weather Systems, 2012)</a>
 <br>
                         submitted <span class="muted">2013-05-28 08:52</span> by <a href="https://www.reddit.com/user/dencker60">/u/dencker60</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Reggie Watts - Tweet Yourselves Right</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/">Reggie Watts gets Prog on this motherf***er @2:57 (comedy song otherwise not prog related)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/1efmm3">Reggie Watts gets Prog on this motherf***er @2:57 (comedy song otherwise not prog related)</a>
 <br>
                         submitted <span class="muted">2013-05-16 04:55</span> by <a href="https://www.reddit.com/user/LiquidEnthusiasm">/u/LiquidEnthusiasm</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Caravan - "Winter Wine" (Recorded live for Beat-Club, Germany, June 1971)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Caravan - Winter Wine</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/1djngc">Caravan - Winter Wine</a>
 <br>
                         submitted <span class="muted">2013-05-02 11:51</span> by <a href="https://www.reddit.com/user/chreestmao">/u/chreestmao</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Genesis: Live 1973 - First time in HD with Enhanced Soundtrack</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Genesis: Live 1973</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/1dkru8">Genesis: Live 1973</a>
 <br>
                         submitted <span class="muted">2013-05-02 21:15</span> by <a href="https://www.reddit.com/user/EastBayBass">/u/EastBayBass</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Porcupine Tree - Synesthesia (remastered with Gavin Harrison drums)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Porcupine Tree - Synthesia [2004 remaster w/ Gavin Harrison on drums]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/1fd7f6">Porcupine Tree - Synthesia [2004 remaster w/ Gavin Harrison on drums]</a>
 <br>
                         submitted <span class="muted">2013-05-30 22:27</span> by <a href="https://www.reddit.com/user/whatthefuboom">/u/whatthefuboom</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Physics House Band - Abraxical Solapse</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">The Physics House Band - Abraxical Collapse</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/1f58qk">The Physics House Band - Abraxical Collapse</a>
 <br>
                         submitted <span class="muted">2013-05-27 17:01</span> by <a href="https://www.reddit.com/user/mrspindle">/u/mrspindle</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ace Of Wands - Steve Hackett</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Steve Hackett (Of Genesis) - Ace of Wands</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/1dvm1k">Steve Hackett (Of Genesis) - Ace of Wands</a>
 <br>
                         submitted <span class="muted">2013-05-07 18:45</span> by <a href="https://www.reddit.com/user/THEREALTHOMASTHOMAS">/u/THEREALTHOMASTHOMAS</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">THE MOODY BLUES -- In Search of the Lost Chord -- 1968.wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">The Moody Blues - In Search of the Lost Chord (Full Album)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/1dyb3t">The Moody Blues - In Search of the Lost Chord (Full Album)</a>
 <br>
                         submitted <span class="muted">2013-05-08 20:04</span> by <a href="https://www.reddit.com/user/Flaptothejack">/u/Flaptothejack</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">PFM (Premiata Forneria Marconi) - Introduzione/Impressioni di Settembre/E' Festa</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">Premiata Forneria Marconi: Introduzione/Impressioni di Settembre/E' Festa - Amazing Italian prog</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/1dq92c">Premiata Forneria Marconi: Introduzione/Impressioni di Settembre/E' Festa - Amazing Italian prog</a>
 <br>
                         submitted <span class="muted">2013-05-05 12:41</span> by <a href="https://www.reddit.com/user/m60">/u/m60</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Oceansize - Trail Of Fire (Islington 2007)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">Oceansize - Trail of Fire (live)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/1ff2m7">Oceansize - Trail of Fire (live)</a>
 <br>
                         submitted <span class="muted">2013-05-31 18:26</span> by <a href="https://www.reddit.com/user/Tjinguuu">/u/Tjinguuu</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Magma - De Futura (high quality)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Magma- De Futura, live</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/1epa08">Magma- De Futura, live</a>
 <br>
                         submitted <span class="muted">2013-05-20 16:33</span> by <a href="https://www.reddit.com/user/Awkwardlittleboy2112">/u/Awkwardlittleboy2112</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Genesis - Back in N.Y.C.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Genesis - Back in N.Y.C.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/1epv7l">Genesis - Back in N.Y.C.</a>
 <br>
                         submitted <span class="muted">2013-05-20 20:57</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Pineapple Thief - Prey for me</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">The Pineapple Thief - Prey For Me</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/1f2t5x">The Pineapple Thief - Prey For Me</a>
 <br>
                         submitted <span class="muted">2013-05-26 11:49</span> by <a href="https://www.reddit.com/user/JJKeys">/u/JJKeys</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Big Big Train - Uncle Jack</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Big Big Train - Uncle Jack</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/1f91dk">Big Big Train - Uncle Jack</a>
 <br>
                         submitted <span class="muted">2013-05-29 04:47</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Robert Fripp "Breathless"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Robert Fripp - Breathless (4:39) ..this is pretty much Red Part II</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/1djys5">Robert Fripp - Breathless (4:39) ..this is pretty much Red Part II</a>
 <br>
                         submitted <span class="muted">2013-05-02 15:10</span> by <a href="https://www.reddit.com/user/AnalogPopcorn">/u/AnalogPopcorn</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gavin Harrison & 05Ric - Faith</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Gavin Harrison &amp; 05Ric - Faith</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/1doqan">Gavin Harrison &amp; 05Ric - Faith</a>
 <br>
                         submitted <span class="muted">2013-05-04 17:28</span> by <a href="https://www.reddit.com/user/JJKeys">/u/JJKeys</a>
 .</p>
@@ -475,7 +483,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Genesis - Blood on the Rooftops</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Genesis - Blood on the Rooftops</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/1e0knf">Genesis - Blood on the Rooftops</a>
 <br>
                         submitted <span class="muted">2013-05-09 18:17</span> by <a href="https://www.reddit.com/user/AnalogPopcorn">/u/AnalogPopcorn</a>
 .</p>
@@ -489,7 +497,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ian Anderson from Jethro Tull with Bruce Dickinson  - Jerusalem</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Bruce Dickinson (of Iron Maiden) &amp; Ian Anderson - Jerusalem (Live)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/1eus5u">Bruce Dickinson (of Iron Maiden) &amp; Ian Anderson - Jerusalem (Live)</a>
 <br>
                         submitted <span class="muted">2013-05-22 19:49</span> by <a href="https://www.reddit.com/user/TylerTheOrc">/u/TylerTheOrc</a>
 .</p>
@@ -503,7 +511,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Camel / ♪  Lunar Sea ♪ ☸ڿڰۣ——</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Camel - Lunar Sea - [8:47]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/1drfdl">Camel - Lunar Sea - [8:47]</a>
 <br>
                         submitted <span class="muted">2013-05-06 00:24</span> by <a href="https://www.reddit.com/user/ahydell">/u/ahydell</a>
 .</p>
@@ -517,7 +525,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Fair To Midland - "Amarillo Sleeps On My Pillow" (Violitionist Sessions)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Fair To Midland - "Amarillo Sleeps On My Pillow" (Violitionist Sessions)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/1f3qlg">Fair To Midland - "Amarillo Sleeps On My Pillow" (Violitionist Sessions)</a>
 <br>
                         submitted <span class="muted">2013-05-26 22:20</span> by <a href="https://www.reddit.com/user/allaboutandroids">/u/allaboutandroids</a>
 .</p>
@@ -531,7 +539,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Haken - Visions ( Music Video by Marc Papeghin )</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">It may not be official, but it's the best music video I've ever seen. (Haken - Visions)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/1e663a">It may not be official, but it's the best music video I've ever seen. (Haken - Visions)</a>
 <br>
                         submitted <span class="muted">2013-05-12 05:48</span> by <a href="https://www.reddit.com/user/Fantasticunts">/u/Fantasticunts</a>
 .</p>
@@ -545,7 +553,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">RPWL - Start the Fire (Live)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">RPWL - Start the Fire (Live)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/1en93q">RPWL - Start the Fire (Live)</a>
 <br>
                         submitted <span class="muted">2013-05-19 19:14</span> by <a href="https://www.reddit.com/user/fox_mulder">/u/fox_mulder</a>
 .</p>
@@ -559,7 +567,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rachel Flowers on the Modular Moog - intro by Keith Emerson</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">ELP - Blind keyboardist Rachel Flowers playing Keith Emerson's Modular Moog with an into by Keith.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/1eq9no">ELP - Blind keyboardist Rachel Flowers playing Keith Emerson's Modular Moog with an into by Keith.</a>
 <br>
                         submitted <span class="muted">2013-05-20 23:54</span> by <a href="https://www.reddit.com/user/rminsk">/u/rminsk</a>
 .</p>
@@ -573,7 +581,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Uriah Heep - Happy Birthday (Previously Unreleased Version)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Uriah Heep - Happy Birthday (Previously Unreleased Version)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/1eto5c">Uriah Heep - Happy Birthday (Previously Unreleased Version)</a>
 <br>
                         submitted <span class="muted">2013-05-22 08:40</span> by <a href="https://www.reddit.com/user/Rustain">/u/Rustain</a>
 .</p>
@@ -587,7 +595,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lunatic Soul - The Final Truth</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Lunatic Soul - The Final Truth</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/1e9vvz">Lunatic Soul - The Final Truth</a>
 <br>
                         submitted <span class="muted">2013-05-13 22:24</span> by <a href="https://www.reddit.com/user/Tabazan">/u/Tabazan</a>
 .</p>
@@ -601,7 +609,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">anathema - are you there</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Anathema - Are You There?</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/1exvux">Anathema - Are You There?</a>
 <br>
                         submitted <span class="muted">2013-05-24 00:47</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -615,7 +623,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Eldorado: A symphony by the Electric Light Orchestra  (1974) [Full Album] HQ</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">ELO - El Dorado</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/1e38pd">ELO - El Dorado</a>
 <br>
                         submitted <span class="muted">2013-05-10 20:23</span> by <a href="https://www.reddit.com/user/Rdelune">/u/Rdelune</a>
 .</p>
@@ -629,7 +637,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Wind Danse - Chick Corea</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Pushing the boundaries a bit: Chick Corea - Wind Danse</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/1eg105">Pushing the boundaries a bit: Chick Corea - Wind Danse</a>
 <br>
                         submitted <span class="muted">2013-05-16 11:30</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -643,7 +651,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Wings Denied - Signs (Official Lyrics Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Progressive rock with hints of djent: Wings Denied - Signs</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/1f0ol2">Progressive rock with hints of djent: Wings Denied - Signs</a>
 <br>
                         submitted <span class="muted">2013-05-25 06:31</span> by <a href="https://www.reddit.com/user/moonlight_rider">/u/moonlight_rider</a>
 .</p>
@@ -657,7 +665,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Van der Graaf Generator "The Boat Of Millions Of Years"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Van der Graaf Generator "The Boat Of Millions Of Years" ....this is actually a b-side from the ''Refugees'' single....worth checking out if you like this album!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/1feji1">Van der Graaf Generator "The Boat Of Millions Of Years" ....this is actually a b-side from the ''Refugees'' single....worth checking out if you like this album!</a>
 <br>
                         submitted <span class="muted">2013-05-31 13:58</span> by <a href="https://www.reddit.com/user/AnalogPopcorn">/u/AnalogPopcorn</a>
 .</p>
@@ -671,7 +679,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cardiacs Special Garage Concert 19th October 2003 with CD Sounds</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Cardiacs Special Garage Concert 19th October 2003 (Full Concert!)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1dtjbp">Cardiacs Special Garage Concert 19th October 2003 (Full Concert!)</a>
 <br>
                         submitted <span class="muted">2013-05-06 21:58</span> by <a href="https://www.reddit.com/user/Tabazan">/u/Tabazan</a>
 .</p>
@@ -685,7 +693,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Grand Master - Nine Cats (Porcupine Tree Cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">A beautiful cover of Porcupine Tree's "Nine Cats"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1ei4b9">A beautiful cover of Porcupine Tree's "Nine Cats"</a>
 <br>
                         submitted <span class="muted">2013-05-17 05:56</span> by <a href="https://www.reddit.com/user/whatthefuboom">/u/whatthefuboom</a>
 .</p>
@@ -699,7 +707,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">BlackField - Go to hell</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Blackfield - Go to Hell</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1eqpiu">Blackfield - Go to Hell</a>
 <br>
                         submitted <span class="muted">2013-05-21 03:17</span> by <a href="https://www.reddit.com/user/whatthefuboom">/u/whatthefuboom</a>
 .</p>
@@ -713,7 +721,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Chris Letchford & Travis LeVrier • "Odyssey" (HD) • Scale the Summit</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Odyssey" Dual Guitar Play Through w/ Chris Letchford &amp; Travis LeVrier • Scale the Summit.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1eribc">Odyssey" Dual Guitar Play Through w/ Chris Letchford &amp; Travis LeVrier • Scale the Summit.</a>
 <br>
                         submitted <span class="muted">2013-05-21 14:03</span> by <a href="https://www.reddit.com/user/CDerpington">/u/CDerpington</a>
 .</p>
@@ -727,7 +735,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Amplifier-The Octopus</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">The Octopus by Amplifier</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1dnln7">The Octopus by Amplifier</a>
 <br>
                         submitted <span class="muted">2013-05-04 01:24</span> by <a href="https://www.reddit.com/user/pureatheisttroll">/u/pureatheisttroll</a>
 .</p>
@@ -741,7 +749,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">An Inmate's Lullaby (Gentle Giant Cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">So I made this guitar cover of Gentle Giant's "An Inmate's Lullaby"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1dr8t5">So I made this guitar cover of Gentle Giant's "An Inmate's Lullaby"</a>
 <br>
                         submitted <span class="muted">2013-05-05 22:49</span> by <a href="https://www.reddit.com/user/goldenvalorianx">/u/goldenvalorianx</a>
 .</p>
@@ -755,7 +763,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Anthony Phillips - Nightmare [HQ audio]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Anthony Phillips (Ex-Genesis) - Nightmare - [7:34]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1dubks">Anthony Phillips (Ex-Genesis) - Nightmare - [7:34]</a>
 <br>
                         submitted <span class="muted">2013-05-07 03:55</span> by <a href="https://www.reddit.com/user/cyberp0lice">/u/cyberp0lice</a>
 .</p>
@@ -769,7 +777,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Moongarden - Sonya in Search of the Moon 4</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Give it a chance: Moongarden - Sonya in Search of the Moon</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1e9euh">Give it a chance: Moongarden - Sonya in Search of the Moon</a>
 <br>
                         submitted <span class="muted">2013-05-13 18:59</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -783,7 +791,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Renaissance Ashes Are Burning Live At Carnegie Hall</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Renaissance (Live At Carnegie Hall) "Ashes Are Burning"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1ex2a9">Renaissance (Live At Carnegie Hall) "Ashes Are Burning"</a>
 <br>
                         submitted <span class="muted">2013-05-23 18:23</span> by <a href="https://www.reddit.com/user/WeAreWonderfulNow">/u/WeAreWonderfulNow</a>
 .</p>
@@ -797,7 +805,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Druckfarben - ELPO (CND 2011)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Obviously a tribute: Druckfarben - ELPO</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1f1hp2">Obviously a tribute: Druckfarben - ELPO</a>
 <br>
                         submitted <span class="muted">2013-05-25 18:43</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -811,7 +819,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Pure Reason Revolution - The Twyncyn / Trembilin Willows</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Pure Reason Revolution - The Twyncyn / Trembilin Willows</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1f8yrt">Pure Reason Revolution - The Twyncyn / Trembilin Willows</a>
 <br>
                         submitted <span class="muted">2013-05-29 04:03</span> by <a href="https://www.reddit.com/user/EmmanuelZorg">/u/EmmanuelZorg</a>
 .</p>
@@ -825,7 +833,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Frost* - Hyperventilate (HD - High Quality)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Frost* - Hyperventilate. Because Jem Godfrey is a wizard.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1dni9u">Frost* - Hyperventilate. Because Jem Godfrey is a wizard.</a>
 <br>
                         submitted <span class="muted">2013-05-04 00:27</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -839,7 +847,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Steve Vai - Ya-Yo Gakk</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Am I the only one who's creeped out by this song?</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1e9xy9">Am I the only one who's creeped out by this song?</a>
 <br>
                         submitted <span class="muted">2013-05-13 22:50</span> by <a href="https://www.reddit.com/user/Cygnus421">/u/Cygnus421</a>
 .</p>
@@ -853,7 +861,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">PoiL - Trouille Cosmique</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">PoiL - Trouille Cosmique</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1efwd9">PoiL - Trouille Cosmique</a>
 <br>
                         submitted <span class="muted">2013-05-16 09:05</span> by <a href="https://www.reddit.com/user/fripponic">/u/fripponic</a>
 .</p>
@@ -867,7 +875,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">U.K.  The Only Thing She Needs</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Is there someone around here who can explain to me what the lyrics are about? U.K. - The only thing she needs</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1f2tat">Is there someone around here who can explain to me what the lyrics are about? U.K. - The only thing she needs</a>
 <br>
                         submitted <span class="muted">2013-05-26 11:55</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -881,7 +889,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Waiting for the Axe to Fall - Phideaux</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Phideaux - Waiting for the Axe to Fall</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1f7r3s">Phideaux - Waiting for the Axe to Fall</a>
 <br>
                         submitted <span class="muted">2013-05-28 18:46</span> by <a href="https://www.reddit.com/user/JJKeys">/u/JJKeys</a>
 .</p>
@@ -895,7 +903,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Humble Grumble Horny LIVE at Vooruit</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Humble Grumble - Horn Y [2:54] - A very funny band (a "zappian" band perhaps?)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1drsoq">Humble Grumble - Horn Y [2:54] - A very funny band (a "zappian" band perhaps?)</a>
 <br>
                         submitted <span class="muted">2013-05-06 03:34</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -909,7 +917,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Romantic Warriors - About Rock in Opposition - Special Features DVD Trailer</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Romantic Warriors - About Rock in Opposition - Special Features DVD Trailer</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1e77b4">Romantic Warriors - About Rock in Opposition - Special Features DVD Trailer</a>
 <br>
                         submitted <span class="muted">2013-05-12 20:00</span> by <a href="https://www.reddit.com/user/BaronVonSyphonis">/u/BaronVonSyphonis</a>
 .</p>
@@ -923,7 +931,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Daryl Hall - NYCNY (1977)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Daryl Hall - NYCNY</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1eelpo">Daryl Hall - NYCNY</a>
 <br>
                         submitted <span class="muted">2013-05-15 20:30</span> by <a href="https://www.reddit.com/user/wjames88">/u/wjames88</a>
 .</p>
@@ -937,7 +945,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">22 - FLUX - Plastik</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">22 - Plastik (not sure how this band is so overlooked)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1efgyh">22 - Plastik (not sure how this band is so overlooked)</a>
 <br>
                         submitted <span class="muted">2013-05-16 03:23</span> by <a href="https://www.reddit.com/user/cograve">/u/cograve</a>
 .</p>
@@ -951,7 +959,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Guided By Voices  - Know Me As Heavy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Guided By Voices - Know Me As Heavy</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1eglm2">Guided By Voices - Know Me As Heavy</a>
 <br>
                         submitted <span class="muted">2013-05-16 17:09</span> by <a href="https://www.reddit.com/user/raggedoldbear">/u/raggedoldbear</a>
 .</p>
@@ -965,7 +973,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Oceansize  :  Savant</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Oceansize - Savant (Video is from fantasia, but it goes really well with the song)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1ekw8n">Oceansize - Savant (Video is from fantasia, but it goes really well with the song)</a>
 <br>
                         submitted <span class="muted">2013-05-18 15:40</span> by <a href="https://www.reddit.com/user/deaddogsanallsorts">/u/deaddogsanallsorts</a>
 .</p>
@@ -979,7 +987,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sleepytime Gorilla Museum - Widening Eye</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Sleepytime Gorilla Museum - Widening Eye</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1esm1o">Sleepytime Gorilla Museum - Widening Eye</a>
 <br>
                         submitted <span class="muted">2013-05-21 22:29</span> by <a href="https://www.reddit.com/user/Tabazan">/u/Tabazan</a>
 .</p>
@@ -993,7 +1001,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Elio e le Storie Tese - Plafone - Live in Carroponte di Sesto San Giovanni 8/17</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Elio e le Storie Tese - Plafone (live)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1f5w47">Elio e le Storie Tese - Plafone (live)</a>
 <br>
                         submitted <span class="muted">2013-05-27 22:38</span> by <a href="https://www.reddit.com/user/Gabrielfox">/u/Gabrielfox</a>
 .</p>
@@ -1007,7 +1015,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sir Yes Sir - Longing = Good Taste [Official Music Video]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Sir Yes Sir - Longing = Good Taste</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1dh07y">Sir Yes Sir - Longing = Good Taste</a>
 <br>
                         submitted <span class="muted">2013-05-01 09:06</span> by <a href="https://www.reddit.com/user/Dargonfly">/u/Dargonfly</a>
 .</p>
@@ -1021,7 +1029,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Aurora - See It Through</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Aurora - See It Through (How are these guys not famous??!)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1dmv7g">Aurora - See It Through (How are these guys not famous??!)</a>
 <br>
                         submitted <span class="muted">2013-05-03 18:53</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1035,7 +1043,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Shpongle - Around the World in a Tea Daze (full)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Shpongle - "Around the World in a Tea Daze"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1drhsd">Shpongle - "Around the World in a Tea Daze"</a>
 <br>
                         submitted <span class="muted">2013-05-06 00:59</span> by <a href="https://www.reddit.com/user/The_Atlas_Broadcast">/u/The_Atlas_Broadcast</a>
 .</p>
@@ -1049,7 +1057,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Klaatu- We're Off You Know</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Klaatu - We're Off You Know</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1duucn">Klaatu - We're Off You Know</a>
 <br>
                         submitted <span class="muted">2013-05-07 11:50</span> by <a href="https://www.reddit.com/user/irmojason">/u/irmojason</a>
 .</p>
@@ -1063,7 +1071,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Family - The Weavers Answer (Live 1970).flv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Family - The Weaver's Answer (Live, 1970)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1e2edg">Family - The Weaver's Answer (Live, 1970)</a>
 <br>
                         submitted <span class="muted">2013-05-10 13:10</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1077,7 +1085,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Spring-Spring 1971 [FULL ALBUM]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Spring-Spring 1971 [FULL ALBUM] ......for fans of Crimson, Camel, Yes, etc.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1e2wh6">Spring-Spring 1971 [FULL ALBUM] ......for fans of Crimson, Camel, Yes, etc.</a>
 <br>
                         submitted <span class="muted">2013-05-10 17:40</span> by <a href="https://www.reddit.com/user/AnalogPopcorn">/u/AnalogPopcorn</a>
 .</p>
@@ -1091,7 +1099,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">vincent - Shadows (feat. B)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">vincent - Shadows (feat. B.). New Australian prog-rock/pop single</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1e683y">vincent - Shadows (feat. B.). New Australian prog-rock/pop single</a>
 <br>
                         submitted <span class="muted">2013-05-12 06:37</span> by <a href="https://www.reddit.com/user/dizzzy13">/u/dizzzy13</a>
 .</p>
@@ -1105,7 +1113,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Greenslade-Drowning man</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Greenslade - Drowning Man</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1ee14z">Greenslade - Drowning Man</a>
 <br>
                         submitted <span class="muted">2013-05-15 16:15</span> by <a href="https://www.reddit.com/user/AnalogPopcorn">/u/AnalogPopcorn</a>
 .</p>
@@ -1119,7 +1127,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dust - (Hard Attack) 2. Walk In The Soft Rain</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Dust - Walk In The Soft Rain (4:27)[1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1eh7dh">Dust - Walk In The Soft Rain (4:27)[1972]</a>
 <br>
                         submitted <span class="muted">2013-05-16 21:44</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1133,7 +1141,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">KingBathmat 7th Album Teaser Trailer</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">KingBathmat 7th Album Teaser Trailer</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1elrzp">KingBathmat 7th Album Teaser Trailer</a>
 <br>
                         submitted <span class="muted">2013-05-19 00:15</span> by <a href="https://www.reddit.com/user/powerjuggler">/u/powerjuggler</a>
 .</p>
@@ -1147,7 +1155,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">between the buried and me - the parallax ll : future sequence</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Haven't seen these guys on here yet: Between The Buried and Me - The Parallax II: Future Sequence [Full Album] [1:12:40]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1eqe92">Haven't seen these guys on here yet: Between The Buried and Me - The Parallax II: Future Sequence [Full Album] [1:12:40]</a>
 <br>
                         submitted <span class="muted">2013-05-21 00:53</span> by <a href="https://www.reddit.com/user/XxCRANBERRYxX">/u/XxCRANBERRYxX</a>
 .</p>
@@ -1161,7 +1169,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Crime in Choir - Pictures in the Dictionary</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Crime in Choir - Pictures in the Dictionary</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1ev85p">Crime in Choir - Pictures in the Dictionary</a>
 <br>
                         submitted <span class="muted">2013-05-22 23:07</span> by <a href="https://www.reddit.com/user/anti_anti">/u/anti_anti</a>
 .</p>
@@ -1175,7 +1183,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Horslips: The Book of Invasions (A Celtic Symphony) - Full Album</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Horslips - The Book of Invasions (a Celtic Symphony) [Album] [41:08] (cool irish folk/prog)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1ewy1c">Horslips - The Book of Invasions (a Celtic Symphony) [Album] [41:08] (cool irish folk/prog)</a>
 <br>
                         submitted <span class="muted">2013-05-23 17:31</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1189,7 +1197,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Radar Men from The Moon</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">There is a future, listen this band: Radar Men from The Moon</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1drpzr">There is a future, listen this band: Radar Men from The Moon</a>
 <br>
                         submitted <span class="muted">2013-05-06 02:55</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1203,7 +1211,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Il Balletto Di Bronzo - 1972 Ys - 03 Secondo incontro</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Il Balletto Di Bronzo - Secondo Incontro</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1dtkxt">Il Balletto Di Bronzo - Secondo Incontro</a>
 <br>
                         submitted <span class="muted">2013-05-06 22:18</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1217,7 +1225,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">henrytennis / Valencia raincoats [PV]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">henrytennis - Valencia Raincoats. Enchanting.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1dv9pr">henrytennis - Valencia Raincoats. Enchanting.</a>
 <br>
                         submitted <span class="muted">2013-05-07 16:05</span> by <a href="https://www.reddit.com/user/wheeloflime">/u/wheeloflime</a>
 .</p>
@@ -1231,7 +1239,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Alusa Fallax - Carta Carbone</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Alusa Fallax - Carta Carbone</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1e39ox">Alusa Fallax - Carta Carbone</a>
 <br>
                         submitted <span class="muted">2013-05-10 20:36</span> by <a href="https://www.reddit.com/user/Rustain">/u/Rustain</a>
 .</p>
@@ -1245,7 +1253,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bad Religion - Losing Generation</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Bad Religion - Losing Generation</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1e8o91">Bad Religion - Losing Generation</a>
 <br>
                         submitted <span class="muted">2013-05-13 12:32</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1259,7 +1267,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">FRUUPP - Graveyard Epistle</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Fruupp - "Graveyard Epistle"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1ec5iy">Fruupp - "Graveyard Epistle"</a>
 <br>
                         submitted <span class="muted">2013-05-14 20:32</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -1273,7 +1281,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cabala - O Terço</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Cabala - "O Terço" [Brazil - 1976]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1epaya">Cabala - "O Terço" [Brazil - 1976]</a>
 <br>
                         submitted <span class="muted">2013-05-20 16:46</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -1287,7 +1295,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mr. Sirius - Fanfare~Legal Dance</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Mr. Sirius - Fanfare~Legal Dance - Proving that prog was alive and well in 1990.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1euqwe">Mr. Sirius - Fanfare~Legal Dance - Proving that prog was alive and well in 1990.</a>
 <br>
                         submitted <span class="muted">2013-05-22 19:34</span> by <a href="https://www.reddit.com/user/wheeloflime">/u/wheeloflime</a>
 .</p>
@@ -1301,7 +1309,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Pat Metheny Group - "Have You Heard" on Night Music</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Pat Metheny Group - "Have You Heard" on Night Music TV Show</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1ex7pl">Pat Metheny Group - "Have You Heard" on Night Music TV Show</a>
 <br>
                         submitted <span class="muted">2013-05-23 19:31</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1315,7 +1323,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Flower Kings : Banks of Eden - 02 For The Love Of Gold</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">The Flower Kings : Banks of Eden - 02 For The Love Of Gold</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1exebs">The Flower Kings : Banks of Eden - 02 For The Love Of Gold</a>
 <br>
                         submitted <span class="muted">2013-05-23 20:52</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1329,7 +1337,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kansas - Journey From Mariabronn</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Kansas - Journey From Mariabronn</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1f2euf">Kansas - Journey From Mariabronn</a>
 <br>
                         submitted <span class="muted">2013-05-26 04:19</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1343,7 +1351,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Jon & Vangelis - The Friends of Mr. Cairo [Official]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Jon &amp; Vangelis -- The Friends of Mr. Cairo.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1f4b02">Jon &amp; Vangelis -- The Friends of Mr. Cairo.</a>
 <br>
                         submitted <span class="muted">2013-05-27 04:04</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1357,7 +1365,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nighthawks in 10 minutes</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Nighthawks in 10 minutes</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1f5c8m">Nighthawks in 10 minutes</a>
 <br>
                         submitted <span class="muted">2013-05-27 17:56</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1371,7 +1379,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Shadow Gallery - Floydian Memories (Pink Floyd medley cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Shadow Gallery - Floydian Memories (Pink Floyd Medley) - [24:38]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1f93tm">Shadow Gallery - Floydian Memories (Pink Floyd Medley) - [24:38]</a>
 <br>
                         submitted <span class="muted">2013-05-29 05:32</span> by <a href="https://www.reddit.com/user/notfakestevejobs">/u/notfakestevejobs</a>
 .</p>
@@ -1385,7 +1393,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Helios - The Obesiant Vine (Hammock Remix)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Helios - The Obesiant Vine (Hammock Remix)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1fbnxq">Helios - The Obesiant Vine (Hammock Remix)</a>
 <br>
                         submitted <span class="muted">2013-05-30 07:04</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1399,7 +1407,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">David Fiuczynski - La Fiesta</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Jazz-Rock by David Fiuczynski - La Fiesta</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1fcy6o">Jazz-Rock by David Fiuczynski - La Fiesta</a>
 <br>
                         submitted <span class="muted">2013-05-30 20:32</span> by <a href="https://www.reddit.com/user/porkperson">/u/porkperson</a>
 .</p>
@@ -1413,7 +1421,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Queen of All Queens - Popol Vuh - (Popol Ace)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Popol Vu - Queen Of All Queens</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/1dwi8h">Popol Vu - Queen Of All Queens</a>
 <br>
                         submitted <span class="muted">2013-05-08 01:23</span> by <a href="https://www.reddit.com/user/daniel_oliva">/u/daniel_oliva</a>
 .</p>
@@ -1427,7 +1435,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Hail The Sun - Ow! (SPLIDAO!) I Like It, Though</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Hail The Sun (FFO Circa Survive/The Fall Of Troy/Dance Gavin Dance/Tides of Man)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/1ecv8p">Hail The Sun (FFO Circa Survive/The Fall Of Troy/Dance Gavin Dance/Tides of Man)</a>
 <br>
                         submitted <span class="muted">2013-05-15 02:10</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>

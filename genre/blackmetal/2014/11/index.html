@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ash Borer -- In the Midst of Life, We Are in Death</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">66</span> - <a href="https://www.reddit.com/">Ash Borer - In the Midst of Life, We Are in Death</a>
+                    <p><strong>Score:</strong> <span class="rd-score">66</span> - <a href="https://www.reddit.com/2n4810">Ash Borer - In the Midst of Life, We Are in Death</a>
 <br>
                         submitted <span class="muted">2014-11-22 22:48</span> by <a href="https://www.reddit.com/user/SoyBeanExplosion">/u/SoyBeanExplosion</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Blut Aus Nord - Sons Of Wisdom, Master Of Elements</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">51</span> - <a href="https://www.reddit.com/">Blut Aus Nord - Sons of Wisdom, Master of Elements</a>
+                    <p><strong>Score:</strong> <span class="rd-score">51</span> - <a href="https://www.reddit.com/2m2vc5">Blut Aus Nord - Sons of Wisdom, Master of Elements</a>
 <br>
                         submitted <span class="muted">2014-11-12 15:35</span> by <a href="https://www.reddit.com/user/angry_buttfucker">/u/angry_buttfucker</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Saor - Aura (New Song - 2014)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">42</span> - <a href="https://www.reddit.com/">Saor - Aura</a>
+                    <p><strong>Score:</strong> <span class="rd-score">42</span> - <a href="https://www.reddit.com/2nafvd">Saor - Aura</a>
 <br>
                         submitted <span class="muted">2014-11-24 19:14</span> by <a href="https://www.reddit.com/user/joelph">/u/joelph</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Thy Light- In my Last Mourning...</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">38</span> - <a href="https://www.reddit.com/">(Suicidal Black Metal from Brazil) Thy Light - In my Last Mourning...</a>
+                    <p><strong>Score:</strong> <span class="rd-score">38</span> - <a href="https://www.reddit.com/2n766m">(Suicidal Black Metal from Brazil) Thy Light - In my Last Mourning...</a>
 <br>
                         submitted <span class="muted">2014-11-23 21:21</span> by <a href="https://www.reddit.com/user/JohnWayne46">/u/JohnWayne46</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gris - Cicatrice [complete with lyrics]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">36</span> - <a href="https://www.reddit.com/">Gris - Cicatrice</a>
+                    <p><strong>Score:</strong> <span class="rd-score">36</span> - <a href="https://www.reddit.com/2mkfi6">Gris - Cicatrice</a>
 <br>
                         submitted <span class="muted">2014-11-17 15:54</span> by <a href="https://www.reddit.com/user/KittenLoves_">/u/KittenLoves_</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Oathbreaker - The Abyss Looks Into Me</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">36</span> - <a href="https://www.reddit.com/">Seen these last night, absolute blast. The evilest band ever seen live: Oathbreaker - The Abyss Looks Into Me</a>
+                    <p><strong>Score:</strong> <span class="rd-score">36</span> - <a href="https://www.reddit.com/2mliyp">Seen these last night, absolute blast. The evilest band ever seen live: Oathbreaker - The Abyss Looks Into Me</a>
 <br>
                         submitted <span class="muted">2014-11-17 21:21</span> by <a href="https://www.reddit.com/user/jaujoet">/u/jaujoet</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Behexen - My Soul for His Glory</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">34</span> - <a href="https://www.reddit.com/">Behexen - My Soul for His Glory</a>
+                    <p><strong>Score:</strong> <span class="rd-score">34</span> - <a href="https://www.reddit.com/2ms7rj">Behexen - My Soul for His Glory</a>
 <br>
                         submitted <span class="muted">2014-11-19 16:42</span> by <a href="https://www.reddit.com/user/JohnWayne46">/u/JohnWayne46</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Black Metal's Unexplored Fringes - One Man Metal - Part 1/3</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">33</span> - <a href="https://www.reddit.com/">Black Metal's Unexplored Fringes: One Man Metal</a>
+                    <p><strong>Score:</strong> <span class="rd-score">33</span> - <a href="https://www.reddit.com/2lc8s2">Black Metal's Unexplored Fringes: One Man Metal</a>
 <br>
                         submitted <span class="muted">2014-11-05 05:10</span> by <a href="https://www.reddit.com/user/i_am_omega">/u/i_am_omega</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Judas Iscariot -  Spill the blood of the Lamb (special blitzkrieg version)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">31</span> - <a href="https://www.reddit.com/">Judas Iscariot - Spill The Blood Of The Lamb (Special Blitzkrieg Version)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">31</span> - <a href="https://www.reddit.com/2n68as">Judas Iscariot - Spill The Blood Of The Lamb (Special Blitzkrieg Version)</a>
 <br>
                         submitted <span class="muted">2014-11-23 15:55</span> by <a href="https://www.reddit.com/user/tobeornotobe">/u/tobeornotobe</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Hate Forest - Our Fading Horizons</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">28</span> - <a href="https://www.reddit.com/">Hate Forest - Our Fading Horizons</a>
+                    <p><strong>Score:</strong> <span class="rd-score">28</span> - <a href="https://www.reddit.com/2mizgh">Hate Forest - Our Fading Horizons</a>
 <br>
                         submitted <span class="muted">2014-11-17 03:40</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kriegsmaschine - None Shall See Redemption (HD)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/">Kriegsmaschine - None Shall See Redemption</a>
+                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/2li89b">Kriegsmaschine - None Shall See Redemption</a>
 <br>
                         submitted <span class="muted">2014-11-06 20:02</span> by <a href="https://www.reddit.com/user/YourFaceIsARapeScene">/u/YourFaceIsARapeScene</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ash Borer - Removed Forms</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/">Ash Borer- "Removed Forms"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/2m9iot">Ash Borer- "Removed Forms"</a>
 <br>
                         submitted <span class="muted">2014-11-14 06:52</span> by <a href="https://www.reddit.com/user/blackmetalandbrews">/u/blackmetalandbrews</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cult Of Fire -मृत्यु का तापसी अनुध्यान</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/">Cult Of Fire -मृत्यु का तापसी अनुध्यान</a>
+                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/2n5j5n">Cult Of Fire -मृत्यु का तापसी अनुध्यान</a>
 <br>
                         submitted <span class="muted">2014-11-23 08:25</span> by <a href="https://www.reddit.com/user/yEA_bUZZ">/u/yEA_bUZZ</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Glossolalia - Gift of Tongues [from "Gold In The Throat, 2010]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/">Glossolalia - Gift of Tongues (Same dude that does Tukaaria and Absum {Rhinocervs})</a>
+                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/2nm4ks">Glossolalia - Gift of Tongues (Same dude that does Tukaaria and Absum {Rhinocervs})</a>
 <br>
                         submitted <span class="muted">2014-11-27 22:11</span> by <a href="https://www.reddit.com/user/cheesecakerice">/u/cheesecakerice</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Al Namrood - Ya'jooj Wa Ma'jooj</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Al Namrood - Ya'jooj Wa Ma'jooj</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/2mgw3e">Al Namrood - Ya'jooj Wa Ma'jooj</a>
 <br>
                         submitted <span class="muted">2014-11-16 15:10</span> by <a href="https://www.reddit.com/user/TransilvanianHunger">/u/TransilvanianHunger</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Aquilus - Nihil</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Aquilus - Nihil</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/2l1ana">Aquilus - Nihil</a>
 <br>
                         submitted <span class="muted">2014-11-02 03:20</span> by <a href="https://www.reddit.com/user/TheInundation">/u/TheInundation</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Psychonaut 4 - Parasite</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Psychonaut 4 - Parasite</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/2lt572">Psychonaut 4 - Parasite</a>
 <br>
                         submitted <span class="muted">2014-11-10 00:03</span> by <a href="https://www.reddit.com/user/Sellanraa">/u/Sellanraa</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Heimdalls Wacht - Threnos (Ursprung Teil II)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Heimdalls Wacht - Threnos (Ursprung Teil II)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/2nv4pu">Heimdalls Wacht - Threnos (Ursprung Teil II)</a>
 <br>
                         submitted <span class="muted">2014-11-30 19:08</span> by <a href="https://www.reddit.com/user/Strid">/u/Strid</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">ARCHGOAT - Nuns, Cunts & Darkness</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">[War] Archgoat - "Nuns, Cunts, and Darkness" (New LP due in January)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/2l6yjt">[War] Archgoat - "Nuns, Cunts, and Darkness" (New LP due in January)</a>
 <br>
                         submitted <span class="muted">2014-11-03 20:58</span> by <a href="https://www.reddit.com/user/aderptoremember">/u/aderptoremember</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Forteresse - Dιluge Blanc</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Forteresse - Dιluge Blanc</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/2ltdcr">Forteresse - Dιluge Blanc</a>
 <br>
                         submitted <span class="muted">2014-11-10 01:24</span> by <a href="https://www.reddit.com/user/THRASHINGMADNESS">/u/THRASHINGMADNESS</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Darkspace - Dark 1.1</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">though I dream</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/2notca">though I dream</a>
 <br>
                         submitted <span class="muted">2014-11-28 19:06</span> by <a href="https://www.reddit.com/user/cheesecakerice">/u/cheesecakerice</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kuxan Suum - Kinich Ahau</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">Kuxan Suum - Kinich Ahau</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/2lf2a5">Kuxan Suum - Kinich Ahau</a>
 <br>
                         submitted <span class="muted">2014-11-05 23:26</span> by <a href="https://www.reddit.com/user/ThePowerglove">/u/ThePowerglove</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kvist - Mørk, Skjebnesvanger Og Erotisk Lokkende (1994 Demo)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">Kvist - Mørk, Skjebnesvanger Og Erotisk Lokkende (1994 Demo) [5:33]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/2lm5nc">Kvist - Mørk, Skjebnesvanger Og Erotisk Lokkende (1994 Demo) [5:33]</a>
 <br>
                         submitted <span class="muted">2014-11-07 21:03</span> by <a href="https://www.reddit.com/user/Neurot5">/u/Neurot5</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Funeral Mist,Circle of Eyes</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">Funeral Mist - Circle of Eyes</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/2l4hiu">Funeral Mist - Circle of Eyes</a>
 <br>
                         submitted <span class="muted">2014-11-03 03:07</span> by <a href="https://www.reddit.com/user/ThrndrMjgSglandi">/u/ThrndrMjgSglandi</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ephemer - Vers d'Anciennes Cités Magiques</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">Ephemer - Vers d'Anciennes Cités Magiques</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/2ldm7e">Ephemer - Vers d'Anciennes Cités Magiques</a>
 <br>
                         submitted <span class="muted">2014-11-05 16:21</span> by <a href="https://www.reddit.com/user/THRASHINGMADNESS">/u/THRASHINGMADNESS</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sargeist -  In Charnel Dreams</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">Sargeist - In Charnel Dreams (2014)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/2muhh1">Sargeist - In Charnel Dreams (2014)</a>
 <br>
                         submitted <span class="muted">2014-11-20 04:31</span> by <a href="https://www.reddit.com/user/FancyTea">/u/FancyTea</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mare Cognitum - Noumenon (2014)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">Mare Cognitum - Noumenon</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/2n06cd">Mare Cognitum - Noumenon</a>
 <br>
                         submitted <span class="muted">2014-11-21 18:10</span> by <a href="https://www.reddit.com/user/DoctorDownloader">/u/DoctorDownloader</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gorgoroth - Revelation Of Doom (Live At Wacken Open Air 1998)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">This appears to be one of Gaahls first ever live performances - interesting to see the difference in stage presence</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/2ltw95">This appears to be one of Gaahls first ever live performances - interesting to see the difference in stage presence</a>
 <br>
                         submitted <span class="muted">2014-11-10 04:35</span> by <a href="https://www.reddit.com/user/Asmaedus">/u/Asmaedus</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">White Medal - Us Tiem Ut Bitter Folk</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">White Medal - Us Tiem Ut Bitter Folk</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/2lkzv4">White Medal - Us Tiem Ut Bitter Folk</a>
 <br>
                         submitted <span class="muted">2014-11-07 14:54</span> by <a href="https://www.reddit.com/user/Samccx19">/u/Samccx19</a>
 .</p>
@@ -475,7 +483,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Owl's Blood - Mournful Recitations (2014)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Owl's Blood - Mournful Recitations (2014)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2kzpl7">Owl's Blood - Mournful Recitations (2014)</a>
 <br>
                         submitted <span class="muted">2014-11-01 17:38</span> by <a href="https://www.reddit.com/user/SOY_REINDEER_GRANDE">/u/SOY_REINDEER_GRANDE</a>
 .</p>
@@ -489,7 +497,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Thule - Inn í eilífdina</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Thule - Inn í eilífdina</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2lyr4j">Thule - Inn í eilífdina</a>
 <br>
                         submitted <span class="muted">2014-11-11 13:54</span> by <a href="https://www.reddit.com/user/EarthSculptor">/u/EarthSculptor</a>
 .</p>
@@ -503,7 +511,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lord Belial - Hymn Of The Ancient Misanthropic Spirit Of The Forest</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Lord Belial - Hymn Of The Ancient Misanthropic Spirit Of The Forest</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2m8rc8">Lord Belial - Hymn Of The Ancient Misanthropic Spirit Of The Forest</a>
 <br>
                         submitted <span class="muted">2014-11-14 02:01</span> by <a href="https://www.reddit.com/user/tobeornotobe">/u/tobeornotobe</a>
 .</p>
@@ -517,7 +525,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Arx Atrata - The Broken Man</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Arx Atrata - The Broken Man</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2mga7t">Arx Atrata - The Broken Man</a>
 <br>
                         submitted <span class="muted">2014-11-16 08:02</span> by <a href="https://www.reddit.com/user/i_am_omega">/u/i_am_omega</a>
 .</p>
@@ -531,7 +539,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Death Fortress - Pulling Ancient Stone</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Death Fortress - Pulling Ancient Stone .</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2mwbbe">Death Fortress - Pulling Ancient Stone .</a>
 <br>
                         submitted <span class="muted">2014-11-20 18:17</span> by <a href="https://www.reddit.com/user/Taintmash">/u/Taintmash</a>
 .</p>
@@ -545,7 +553,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Proclamation - Hecatomb</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Proclamation - Hecatomb (SLIMEY.BESTIAL.FILTH)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2np74x">Proclamation - Hecatomb (SLIMEY.BESTIAL.FILTH)</a>
 <br>
                         submitted <span class="muted">2014-11-28 21:16</span> by <a href="https://www.reddit.com/user/cheesecakerice">/u/cheesecakerice</a>
 .</p>
@@ -559,7 +567,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ghast - Give your Wrists</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Ghast - Give your Wrists</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2l9fir">Ghast - Give your Wrists</a>
 <br>
                         submitted <span class="muted">2014-11-04 14:12</span> by <a href="https://www.reddit.com/user/xenozenoify">/u/xenozenoify</a>
 .</p>
@@ -573,7 +581,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Avsky- The Sickness Within</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Avsky - The Sickness Within</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2ll0vq">Avsky - The Sickness Within</a>
 <br>
                         submitted <span class="muted">2014-11-07 15:05</span> by <a href="https://www.reddit.com/user/N3PHxx">/u/N3PHxx</a>
 .</p>
@@ -587,7 +595,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lascowiec - Far From Reality (2014)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Lascowiec - Far From Reality (2014)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2lox2i">Lascowiec - Far From Reality (2014)</a>
 <br>
                         submitted <span class="muted">2014-11-08 18:21</span> by <a href="https://www.reddit.com/user/vertexavery">/u/vertexavery</a>
 .</p>
@@ -601,7 +609,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Darvulia - Le Rituel Des Sept Serpents</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Darvulia - Le Rituel Des Sept Serpents</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2ls8z6">Darvulia - Le Rituel Des Sept Serpents</a>
 <br>
                         submitted <span class="muted">2014-11-09 19:08</span> by <a href="https://www.reddit.com/user/Ondskapt666">/u/Ondskapt666</a>
 .</p>
@@ -615,7 +623,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ampütator- With Hate</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Ampütator - With Hate</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2mr8jl">Ampütator - With Hate</a>
 <br>
                         submitted <span class="muted">2014-11-19 08:57</span> by <a href="https://www.reddit.com/user/Hitmon">/u/Hitmon</a>
 .</p>
@@ -629,7 +637,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Primordial "Babel's Tower" (OFFICIAL VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Primordial - Babel's Tower</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2n9nqh">Primordial - Babel's Tower</a>
 <br>
                         submitted <span class="muted">2014-11-24 15:11</span> by <a href="https://www.reddit.com/user/joelph">/u/joelph</a>
 .</p>
@@ -643,7 +651,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">DODSFERD - Suicide and the Rest of Your Kind Will Follow (GRE) (full album 2009)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Dodsderd - suicide and the rest of your kind will follow</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2na999">Dodsderd - suicide and the rest of your kind will follow</a>
 <br>
                         submitted <span class="muted">2014-11-24 18:21</span> by <a href="https://www.reddit.com/user/palduun">/u/palduun</a>
 .</p>
@@ -657,7 +665,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">PHANTOM WINTER (ex omega massif) - WINTERCVLT</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Phantom Winter – Wintercvlt</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2nf2cg">Phantom Winter – Wintercvlt</a>
 <br>
                         submitted <span class="muted">2014-11-25 22:28</span> by <a href="https://www.reddit.com/user/the-iek">/u/the-iek</a>
 .</p>
@@ -671,7 +679,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Til Valhallar (Bonus Track)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Sólstafir - Til Valhallar</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2nr55m">Sólstafir - Til Valhallar</a>
 <br>
                         submitted <span class="muted">2014-11-29 12:46</span> by <a href="https://www.reddit.com/user/thepiltdownman">/u/thepiltdownman</a>
 .</p>
@@ -685,7 +693,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Black Fucking Cancer - Summoning Aural Hell</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Black Fucking Cancer - Summoning Aural Hell</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2nv73m">Black Fucking Cancer - Summoning Aural Hell</a>
 <br>
                         submitted <span class="muted">2014-11-30 19:30</span> by <a href="https://www.reddit.com/user/germancunt">/u/germancunt</a>
 .</p>
@@ -699,7 +707,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Black Cilice - Crawling Through Bloodsoaked Chambers</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Black Cilice - Crawling Through Bloodsoaked Chambers</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2lox1h">Black Cilice - Crawling Through Bloodsoaked Chambers</a>
 <br>
                         submitted <span class="muted">2014-11-08 18:21</span> by <a href="https://www.reddit.com/user/vertexavery">/u/vertexavery</a>
 .</p>
@@ -713,7 +721,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Galaktik Cancer Squad - When the Void whispers my name</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Galaktik Cancer Squad - When the Void whispers my name (2013)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2lpc8e">Galaktik Cancer Squad - When the Void whispers my name (2013)</a>
 <br>
                         submitted <span class="muted">2014-11-08 20:49</span> by <a href="https://www.reddit.com/user/Leirbag666">/u/Leirbag666</a>
 .</p>
@@ -727,7 +735,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Navrog - Samo sloga Srbina spasava (with lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Navrog - Samo Sloga Srbina Spasava [3:55]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2lus04">Navrog - Samo Sloga Srbina Spasava [3:55]</a>
 <br>
                         submitted <span class="muted">2014-11-10 12:47</span> by <a href="https://www.reddit.com/user/Ubi_bene_ibi_patria">/u/Ubi_bene_ibi_patria</a>
 .</p>
@@ -741,7 +749,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Saille - Eater of Worlds - Official lyric video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Saille - Eater of Worlds (2014) [Belgium]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2lv7zk">Saille - Eater of Worlds (2014) [Belgium]</a>
 <br>
                         submitted <span class="muted">2014-11-10 15:50</span> by <a href="https://www.reddit.com/user/inugami47">/u/inugami47</a>
 .</p>
@@ -755,7 +763,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nasheim - Leda</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Nasheim - Leda</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2m9j49">Nasheim - Leda</a>
 <br>
                         submitted <span class="muted">2014-11-14 06:58</span> by <a href="https://www.reddit.com/user/Leirbag666">/u/Leirbag666</a>
 .</p>
@@ -769,7 +777,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Arthedain - Visions Of Fire</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Arthedain - Visions Of Fire</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2mecgh">Arthedain - Visions Of Fire</a>
 <br>
                         submitted <span class="muted">2014-11-15 18:42</span> by <a href="https://www.reddit.com/user/Ondskapt666">/u/Ondskapt666</a>
 .</p>
@@ -783,7 +791,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nychts -  Und So Gehen Wir...</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Nychts – Und so gehen wir... (Unreleased)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2mgitp">Nychts – Und so gehen wir... (Unreleased)</a>
 <br>
                         submitted <span class="muted">2014-11-16 11:07</span> by <a href="https://www.reddit.com/user/d125q">/u/d125q</a>
 .</p>
@@ -797,7 +805,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">EVILFEAST - Fullmoon over the Eastern Woods (NYKTA 2011)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">[Atmospheric] It's the first big snowfall of the year here in Montreal. To celebrate, here's some Evilfeast - Fullmoon Over Eastern Woods</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2mklkp">[Atmospheric] It's the first big snowfall of the year here in Montreal. To celebrate, here's some Evilfeast - Fullmoon Over Eastern Woods</a>
 <br>
                         submitted <span class="muted">2014-11-17 16:45</span> by <a href="https://www.reddit.com/user/aderptoremember">/u/aderptoremember</a>
 .</p>
@@ -811,7 +819,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Black Fucking Cancer - " Exit Wounds "</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Black Fucking Cancer - 'Exit Wounds'</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2mr2hg">Black Fucking Cancer - 'Exit Wounds'</a>
 <br>
                         submitted <span class="muted">2014-11-19 07:16</span> by <a href="https://www.reddit.com/user/Leirbag666">/u/Leirbag666</a>
 .</p>
@@ -825,7 +833,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Odz Manouk - The Scavenger</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Odz Manouk - The Scavenger</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2kyal1">Odz Manouk - The Scavenger</a>
 <br>
                         submitted <span class="muted">2014-11-01 04:15</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -839,7 +847,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kampfar -Norse (A Portriat of Norway)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Kampfar - Norse</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2lqjvt">Kampfar - Norse</a>
 <br>
                         submitted <span class="muted">2014-11-09 04:40</span> by <a href="https://www.reddit.com/user/Jackaloado">/u/Jackaloado</a>
 .</p>
@@ -853,7 +861,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Northern Hate - Hypothermia - 04 Ancient Force</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Northern Hate - Ancient Force (2014) [Germany]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2lvdxu">Northern Hate - Ancient Force (2014) [Germany]</a>
 <br>
                         submitted <span class="muted">2014-11-10 16:42</span> by <a href="https://www.reddit.com/user/inugami47">/u/inugami47</a>
 .</p>
@@ -867,7 +875,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rhinocervs - RH-16</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Rhinocervs - RH-16 (mysterious record label/solo project from California)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2muvhj">Rhinocervs - RH-16 (mysterious record label/solo project from California)</a>
 <br>
                         submitted <span class="muted">2014-11-20 07:21</span> by <a href="https://www.reddit.com/user/cheesecakerice">/u/cheesecakerice</a>
 .</p>
@@ -881,7 +889,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Borknagar - The Dawn of the End</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Borknagar - The Dawn of the End</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2mznos">Borknagar - The Dawn of the End</a>
 <br>
                         submitted <span class="muted">2014-11-21 15:22</span> by <a href="https://www.reddit.com/user/Saarnath">/u/Saarnath</a>
 .</p>
@@ -895,7 +903,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Apati - Morgondagen</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Apati - Morgondagen</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2nbmcy">Apati - Morgondagen</a>
 <br>
                         submitted <span class="muted">2014-11-25 01:05</span> by <a href="https://www.reddit.com/user/Agilaz">/u/Agilaz</a>
 .</p>
@@ -909,7 +917,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Korgonthurus - Epätoivo Seuranasi (HQ)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Korgonthurus - Epätoivo Seuranasi</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2ntegt">Korgonthurus - Epätoivo Seuranasi</a>
 <br>
                         submitted <span class="muted">2014-11-30 03:59</span> by <a href="https://www.reddit.com/user/AveLucifer">/u/AveLucifer</a>
 .</p>
@@ -923,7 +931,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mournful Winter - Under a Wintermoon</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Mournful Winter - Under a Wintermoon</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2l3vim">Mournful Winter - Under a Wintermoon</a>
 <br>
                         submitted <span class="muted">2014-11-02 23:27</span> by <a href="https://www.reddit.com/user/Tenebros">/u/Tenebros</a>
 .</p>
@@ -937,7 +945,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Myrkgrav - Olav Tryggvason</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Myrkgrav - Olav Tryggvason</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2lldc0">Myrkgrav - Olav Tryggvason</a>
 <br>
                         submitted <span class="muted">2014-11-07 17:00</span> by <a href="https://www.reddit.com/user/NotQuiteKvlt">/u/NotQuiteKvlt</a>
 .</p>
@@ -951,7 +959,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Inquinok - King</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Any love for Seattle based Black Metal band Inquinok?</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2mcct6">Any love for Seattle based Black Metal band Inquinok?</a>
 <br>
                         submitted <span class="muted">2014-11-15 01:58</span> by <a href="https://www.reddit.com/user/intelevgarog">/u/intelevgarog</a>
 .</p>
@@ -965,7 +973,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Klage - Verlöre sich nur dieses Enden</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Klage - Verlöre sich nur dieses Enden</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2mdooc">Klage - Verlöre sich nur dieses Enden</a>
 <br>
                         submitted <span class="muted">2014-11-15 14:14</span> by <a href="https://www.reddit.com/user/N3PHxx">/u/N3PHxx</a>
 .</p>
@@ -979,7 +987,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Diaboli - Collective Hallucination</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Diaboli - Collective Hallucination</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2mebtj">Diaboli - Collective Hallucination</a>
 <br>
                         submitted <span class="muted">2014-11-15 18:36</span> by <a href="https://www.reddit.com/user/Ondskapt666">/u/Ondskapt666</a>
 .</p>
@@ -993,7 +1001,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Werewolf Lycs- I swear it's heaven.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">I swear it's heaven.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2mu90y">I swear it's heaven.</a>
 <br>
                         submitted <span class="muted">2014-11-20 03:09</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1007,7 +1015,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Satanic Warmaster - A Wolf Cries in Anger</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Satanic Warmaster - A Wolf Cries in Anger [6:48]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2n6jle">Satanic Warmaster - A Wolf Cries in Anger [6:48]</a>
 <br>
                         submitted <span class="muted">2014-11-23 17:54</span> by <a href="https://www.reddit.com/user/Neurot5">/u/Neurot5</a>
 .</p>
@@ -1021,7 +1029,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">HORDAGAARD (NOR) "Tarer Rundt Ei Sorgfull Grav"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Hordagaard - Tarer Rundt Ei Sorgfull Grav</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2n9bz1">Hordagaard - Tarer Rundt Ei Sorgfull Grav</a>
 <br>
                         submitted <span class="muted">2014-11-24 12:48</span> by <a href="https://www.reddit.com/user/PenetratorHammer">/u/PenetratorHammer</a>
 .</p>
@@ -1035,7 +1043,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Strid - Nattevandring</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Strid - Nattevandring</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2nbzqc">Strid - Nattevandring</a>
 <br>
                         submitted <span class="muted">2014-11-25 03:10</span> by <a href="https://www.reddit.com/user/AveLucifer">/u/AveLucifer</a>
 .</p>
@@ -1049,7 +1057,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cloak of Altering | Ancient Paths Through Timeless Voids | All I See Is Dead Stars</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Cloak of Altering - All I See Is Dead Stars</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2nlz5a">Cloak of Altering - All I See Is Dead Stars</a>
 <br>
                         submitted <span class="muted">2014-11-27 21:12</span> by <a href="https://www.reddit.com/user/Aries512">/u/Aries512</a>
 .</p>
@@ -1063,7 +1071,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Shining - Stonelands (with lyrics) [HD]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Shinings - Stonelands ( Swedish Black Metal )</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2l74wh">Shinings - Stonelands ( Swedish Black Metal )</a>
 <br>
                         submitted <span class="muted">2014-11-03 21:50</span> by <a href="https://www.reddit.com/user/JebusXI">/u/JebusXI</a>
 .</p>
@@ -1077,7 +1085,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Panphage - Svarta vågor</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Panphage - Svarta vågor</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2l9o7f">Panphage - Svarta vågor</a>
 <br>
                         submitted <span class="muted">2014-11-04 15:37</span> by <a href="https://www.reddit.com/user/N3PHxx">/u/N3PHxx</a>
 .</p>
@@ -1091,7 +1099,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Amystery - Nailed</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Amystery - Nailed</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2ls9f7">Amystery - Nailed</a>
 <br>
                         submitted <span class="muted">2014-11-09 19:12</span> by <a href="https://www.reddit.com/user/Ondskapt666">/u/Ondskapt666</a>
 .</p>
@@ -1105,7 +1113,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sortilegia - Pestilent Black Sorcery</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Sortilegia - Pestilent Black Sorcery</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2ltipc">Sortilegia - Pestilent Black Sorcery</a>
 <br>
                         submitted <span class="muted">2014-11-10 02:17</span> by <a href="https://www.reddit.com/user/morbid_bean">/u/morbid_bean</a>
 .</p>
@@ -1119,7 +1127,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">BARATHRUM - Warmetal - (Jetblack Warmetal, 2014)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Barathrum - Warmetal</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2lvk1i">Barathrum - Warmetal</a>
 <br>
                         submitted <span class="muted">2014-11-10 17:34</span> by <a href="https://www.reddit.com/user/dilonovich">/u/dilonovich</a>
 .</p>
@@ -1133,7 +1141,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ajattara - Ikuisen aamun sara</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Ajattara - Ikuisen aamun sara</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2myd5o">Ajattara - Ikuisen aamun sara</a>
 <br>
                         submitted <span class="muted">2014-11-21 04:38</span> by <a href="https://www.reddit.com/user/ThatKennedy">/u/ThatKennedy</a>
 .</p>
@@ -1147,7 +1155,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Darkened Nocturn Slaughtercult - Kataklysmic Bretherens</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Darkened Nocturn Slaughtercult - Kataklysmic Bretherens</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2n3pz4">Darkened Nocturn Slaughtercult - Kataklysmic Bretherens</a>
 <br>
                         submitted <span class="muted">2014-11-22 19:42</span> by <a href="https://www.reddit.com/user/Saarnath">/u/Saarnath</a>
 .</p>
@@ -1161,7 +1169,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">SLIDHR - Earth's Mouth Opens</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Slidhr - Earth's Mouth Opens</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2nbvkj">Slidhr - Earth's Mouth Opens</a>
 <br>
                         submitted <span class="muted">2014-11-25 02:31</span> by <a href="https://www.reddit.com/user/Agilaz">/u/Agilaz</a>
 .</p>
@@ -1175,7 +1183,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Deep Mountains - 超脫 / Detachment</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Deep Mountains (深山) - 超脫 / Detachment (China, 2014) [song starts at 1:33]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2ncyjo">Deep Mountains (深山) - 超脫 / Detachment (China, 2014) [song starts at 1:33]</a>
 <br>
                         submitted <span class="muted">2014-11-25 10:18</span> by <a href="https://www.reddit.com/user/FancyTea">/u/FancyTea</a>
 .</p>
@@ -1189,7 +1197,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kampfar - I Ondskapens kunst</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Kampfar - I Ondskapens Kunst [Folky/Pagen Black Metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2nkop5">Kampfar - I Ondskapens Kunst [Folky/Pagen Black Metal]</a>
 <br>
                         submitted <span class="muted">2014-11-27 12:40</span> by <a href="https://www.reddit.com/user/Agilaz">/u/Agilaz</a>
 .</p>
@@ -1203,7 +1211,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Forest of Fog - Das Licht Erlosch</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Forest of Fog - Das Licht Erlosch</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2nnwkm">Forest of Fog - Das Licht Erlosch</a>
 <br>
                         submitted <span class="muted">2014-11-28 12:48</span> by <a href="https://www.reddit.com/user/Suthi">/u/Suthi</a>
 .</p>
@@ -1217,7 +1225,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Natan - Wild Huntsman</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Natan - Wild Huntsman [Pagan Black Metal, BE]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2nudk3">Natan - Wild Huntsman [Pagan Black Metal, BE]</a>
 <br>
                         submitted <span class="muted">2014-11-30 13:56</span> by <a href="https://www.reddit.com/user/Agilaz">/u/Agilaz</a>
 .</p>
@@ -1231,7 +1239,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Voidcraeft - The Vertical Mammal</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Voidcraeft - The Vertical Mammal (2014)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2nvnxk">Voidcraeft - The Vertical Mammal (2014)</a>
 <br>
                         submitted <span class="muted">2014-11-30 22:06</span> by <a href="https://www.reddit.com/user/KjellJagland">/u/KjellJagland</a>
 .</p>
@@ -1245,7 +1253,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mournful Winter - Into the Eternal Void</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Mournful Winter - Into the Eternal Void</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2kz18p">Mournful Winter - Into the Eternal Void</a>
 <br>
                         submitted <span class="muted">2014-11-01 12:49</span> by <a href="https://www.reddit.com/user/Tenebros">/u/Tenebros</a>
 .</p>
@@ -1259,7 +1267,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tyranny Enthroned - The Incubus (Vader, Hate, Emperor, Dark Funeral)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Tyranny Enthroned - The Incubus (2014) [USA]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2l8u8s">Tyranny Enthroned - The Incubus (2014) [USA]</a>
 <br>
                         submitted <span class="muted">2014-11-04 08:29</span> by <a href="https://www.reddit.com/user/inugami47">/u/inugami47</a>
 .</p>
@@ -1273,7 +1281,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lord Belial - Wrath of the Antichrist Horde</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Lord Belial - Wrath of the Antichrist Horde</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2m1kqx">Lord Belial - Wrath of the Antichrist Horde</a>
 <br>
                         submitted <span class="muted">2014-11-12 04:39</span> by <a href="https://www.reddit.com/user/Matthiacle">/u/Matthiacle</a>
 .</p>
@@ -1287,7 +1295,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rauhnåcht - Zur Ew'gen Ruh (2014 - New Track)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Rauhnåcht - Zur Ew'gen Ruh (2014 - New Track)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2m7xx6">Rauhnåcht - Zur Ew'gen Ruh (2014 - New Track)</a>
 <br>
                         submitted <span class="muted">2014-11-13 21:44</span> by <a href="https://www.reddit.com/user/Ozymandius383">/u/Ozymandius383</a>
 .</p>
@@ -1301,7 +1309,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tulus - Døderhulder</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Tulus - Døderhulder</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2mb7zi">Tulus - Døderhulder</a>
 <br>
                         submitted <span class="muted">2014-11-14 19:30</span> by <a href="https://www.reddit.com/user/flame_of_udun">/u/flame_of_udun</a>
 .</p>
@@ -1315,7 +1323,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mzoraxc - Defending the Northline</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Mzoraxc - Defending the Northline</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2meb9q">Mzoraxc - Defending the Northline</a>
 <br>
                         submitted <span class="muted">2014-11-15 18:30</span> by <a href="https://www.reddit.com/user/Ondskapt666">/u/Ondskapt666</a>
 .</p>
@@ -1329,7 +1337,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Eternum - Heretics of Might</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Eternum - Heretics of Might</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2n7pqk">Eternum - Heretics of Might</a>
 <br>
                         submitted <span class="muted">2014-11-24 00:25</span> by <a href="https://www.reddit.com/user/PenetratorHammer">/u/PenetratorHammer</a>
 .</p>
@@ -1343,7 +1351,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ellorsith - Compelling Natural Force (2014)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Ellorsith - Compelling Natural Force [2014]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2naui1">Ellorsith - Compelling Natural Force [2014]</a>
 <br>
                         submitted <span class="muted">2014-11-24 21:09</span> by <a href="https://www.reddit.com/user/_ITK">/u/_ITK</a>
 .</p>
@@ -1357,7 +1365,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Waldschrat - Als das Leid das Land heimsuchte</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Waldschrat - Als das Leid das Land heimsuchte</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2ng0v3">Waldschrat - Als das Leid das Land heimsuchte</a>
 <br>
                         submitted <span class="muted">2014-11-26 03:54</span> by <a href="https://www.reddit.com/user/crinn">/u/crinn</a>
 .</p>
@@ -1371,7 +1379,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Iskald - Dommedag</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Iskald - Dommedag</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2ns530">Iskald - Dommedag</a>
 <br>
                         submitted <span class="muted">2014-11-29 19:57</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -1385,7 +1393,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lux Occulta - The Kingdom Is Mine</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Lux Occulta - The Kingdom Is Mine</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2kyhuo">Lux Occulta - The Kingdom Is Mine</a>
 <br>
                         submitted <span class="muted">2014-11-01 06:05</span> by <a href="https://www.reddit.com/user/frijoos">/u/frijoos</a>
 .</p>
@@ -1399,7 +1407,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">KALMANKANTAJA - Hauta Vailla Ristiä</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Kalmankantaja - Hauta Vailla Ristiä</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2l06rj">Kalmankantaja - Hauta Vailla Ristiä</a>
 <br>
                         submitted <span class="muted">2014-11-01 20:23</span> by <a href="https://www.reddit.com/user/N3PHxx">/u/N3PHxx</a>
 .</p>
@@ -1413,7 +1421,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Moontower-The Fall of christian Europe</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Moontower - The Fall of christian Europe - [4:23]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2l2xrg">Moontower - The Fall of christian Europe - [4:23]</a>
 <br>
                         submitted <span class="muted">2014-11-02 18:04</span> by <a href="https://www.reddit.com/user/ShitArchonXPR">/u/ShitArchonXPR</a>
 .</p>
@@ -1427,7 +1435,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Venedae - Flaga Nienawiści</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Venedae - Flaga Nienawiści</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2l7gw5">Venedae - Flaga Nienawiści</a>
 <br>
                         submitted <span class="muted">2014-11-03 23:32</span> by <a href="https://www.reddit.com/user/PenetratorHammer">/u/PenetratorHammer</a>
 .</p>
@@ -1441,7 +1449,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nocturnal Depression - Home Asylum</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Nocturnal Depression - Home Asylum</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2l8nt6">Nocturnal Depression - Home Asylum</a>
 <br>
                         submitted <span class="muted">2014-11-04 06:42</span> by <a href="https://www.reddit.com/user/Leirbag666">/u/Leirbag666</a>
 .</p>
@@ -1455,7 +1463,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">All the Cold - Through the Dead World</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">All the cold - Through the dead world</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2lhhn0">All the cold - Through the dead world</a>
 <br>
                         submitted <span class="muted">2014-11-06 16:25</span> by <a href="https://www.reddit.com/user/Aerria">/u/Aerria</a>
 .</p>

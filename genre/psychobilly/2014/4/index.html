@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Demented Are Go - Skating In The Rain.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/">Demented Are Go - Skating In The Rain</a>
+                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/23re9j">Demented Are Go - Skating In The Rain</a>
 <br>
                         submitted <span class="muted">2014-04-23 11:53</span> by <a href="https://www.reddit.com/user/ameliamonster">/u/ameliamonster</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gutter Demons - Day Of The Dead</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Gutter Demons - Day of the Dead</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/22nf08">Gutter Demons - Day of the Dead</a>
 <br>
                         submitted <span class="muted">2014-04-09 23:40</span> by <a href="https://www.reddit.com/user/audreyad">/u/audreyad</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Batmobile Kiss me now</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Batmobile -Kiss Me Now live</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/22g4gv">Batmobile -Kiss Me Now live</a>
 <br>
                         submitted <span class="muted">2014-04-07 18:53</span> by <a href="https://www.reddit.com/user/mrlizaola">/u/mrlizaola</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Frantic Flintstones   -   sad and lonely</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">at the end of the night this is still one of my favorite songs by the Frantic Flintstones..Frantic Flintstones-Sad and Lonely</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/232jmc">at the end of the night this is still one of my favorite songs by the Frantic Flintstones..Frantic Flintstones-Sad and Lonely</a>
 <br>
                         submitted <span class="muted">2014-04-15 05:07</span> by <a href="https://www.reddit.com/user/mrlizaola">/u/mrlizaola</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mad Ramblers - Desmadre</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Mad Ramblers - Desmadre</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/21z380">Mad Ramblers - Desmadre</a>
 <br>
                         submitted <span class="muted">2014-04-02 00:54</span> by <a href="https://www.reddit.com/user/mrlizaola">/u/mrlizaola</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Evil Elvis - Live at Cherry Cola's Toronto</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Evil Elvis - Teenage Creature - Cherry Cola's Toronto</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/229etj">Evil Elvis - Teenage Creature - Cherry Cola's Toronto</a>
 <br>
                         submitted <span class="muted">2014-04-05 09:22</span> by <a href="https://www.reddit.com/user/EvilElvisKC">/u/EvilElvisKC</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Maü-Maü - Maü Baker</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">The Maü-Maü - Maü Baker. You can get the album for free, if you like them.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/22poc5">The Maü-Maü - Maü Baker. You can get the album for free, if you like them.</a>
 <br>
                         submitted <span class="muted">2014-04-10 18:25</span> by <a href="https://www.reddit.com/user/audreyad">/u/audreyad</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Psychobilly Kadillaks - Drinking Beer and Eating Pussy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Psychobilly Kadillaks - Drinking Beer and Eating Pussy</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/23t0y2">Psychobilly Kadillaks - Drinking Beer and Eating Pussy</a>
 <br>
                         submitted <span class="muted">2014-04-23 22:07</span> by <a href="https://www.reddit.com/user/mrlizaola">/u/mrlizaola</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">WILL & THE HI-ROLLERS Rock'n'Roll Baby WILD RECORDS</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">a little bit of rockabilly never hurt anyone</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/21z125">a little bit of rockabilly never hurt anyone</a>
 <br>
                         submitted <span class="muted">2014-04-02 00:30</span> by <a href="https://www.reddit.com/user/mrlizaola">/u/mrlizaola</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Baron Von Psycho & The Pumpernickel Hearts- We Are The Dazed & Confused</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">"We like to dress just like our friends, and say that we don't look like them" Baron Von Psycho &amp; The Pumpernickel Hearts- We Are The Dazed &amp; Confused</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/21z4k4">"We like to dress just like our friends, and say that we don't look like them" Baron Von Psycho &amp; The Pumpernickel Hearts- We Are The Dazed &amp; Confused</a>
 <br>
                         submitted <span class="muted">2014-04-02 01:08</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Empress of Fur - We Like Weird</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Empress of Fur - We Like Weird</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/23t0kb">Empress of Fur - We Like Weird</a>
 <br>
                         submitted <span class="muted">2014-04-23 22:03</span> by <a href="https://www.reddit.com/user/mrlizaola">/u/mrlizaola</a>
 .</p>

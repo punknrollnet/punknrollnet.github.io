@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">"Sailin' Shoes" - Sam Bush - One-Take</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/">No matter how hard you try, you'll never be cooler than Sam Bush.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/14u43z">No matter how hard you try, you'll never be cooler than Sam Bush.</a>
 <br>
                         submitted <span class="muted">2012-12-14 09:25</span> by <a href="https://www.reddit.com/user/CptDancingShoes">/u/CptDancingShoes</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nickel Creek - House Of Tom Bombadil HQ</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">People of r/Bluegrass, this is the incredible song I'm listening to tonight</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/1451en">People of r/Bluegrass, this is the incredible song I'm listening to tonight</a>
 <br>
                         submitted <span class="muted">2012-12-02 05:35</span> by <a href="https://www.reddit.com/user/dfith">/u/dfith</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Seldom Scene 1979 - Rider (Bluegrass)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">And another legend joins the Angel Band. R.I.P Mike Auldridge.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/15n007">And another legend joins the Angel Band. R.I.P Mike Auldridge.</a>
 <br>
                         submitted <span class="muted">2012-12-29 20:38</span> by <a href="https://www.reddit.com/user/colliningram">/u/colliningram</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Trampled By Turtles - Alone (Live on 89.3 The Current)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">TBT: Alone [They crescendo up to second gear...]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/14ngki">TBT: Alone [They crescendo up to second gear...]</a>
 <br>
                         submitted <span class="muted">2012-12-11 05:39</span> by <a href="https://www.reddit.com/user/YonderMTN">/u/YonderMTN</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Walk Like an Eqyptian</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">Walk Like an Eqyptian</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/14oitg">Walk Like an Eqyptian</a>
 <br>
                         submitted <span class="muted">2012-12-11 19:55</span> by <a href="https://www.reddit.com/user/ChristopherCamisa">/u/ChristopherCamisa</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">William Elliot Whitmore - Diggin' My Grave</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">William Elliot Whitmore - Diggin' My Grave</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/15msk7">William Elliot Whitmore - Diggin' My Grave</a>
 <br>
                         submitted <span class="muted">2012-12-29 18:24</span> by <a href="https://www.reddit.com/user/twoemptypockets">/u/twoemptypockets</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The SteelDrivers - "Where Rainbows Never Die" (Album Version)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">The SteelDrivers - Where Rainbows Never Die</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/14dvww">The SteelDrivers - Where Rainbows Never Die</a>
 <br>
                         submitted <span class="muted">2012-12-06 15:02</span> by <a href="https://www.reddit.com/user/MofoJack">/u/MofoJack</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lindsay Lou & the Flatbellys - My Side of the Mountain</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Lindsey Lou and the Flatbellys - My Side Of the Mountain. Great Ann Arbor-area bluegrass.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/14paoq">Lindsey Lou and the Flatbellys - My Side Of the Mountain. Great Ann Arbor-area bluegrass.</a>
 <br>
                         submitted <span class="muted">2012-12-12 02:33</span> by <a href="https://www.reddit.com/user/thsmchnkllsfcsts">/u/thsmchnkllsfcsts</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Earl Scruggs - Till The End Of The World Rolls Round</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Till The End Of The World Rolls Round...</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/157knp">Till The End Of The World Rolls Round...</a>
 <br>
                         submitted <span class="muted">2012-12-21 04:37</span> by <a href="https://www.reddit.com/user/colliningram">/u/colliningram</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">HQ "Chris Stapelton" with The Steeldrivers "If it Hadn't Been for Love" Original that Adele covered</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">The Steeldrivers - It It Hadn't Been For Love - [4:04]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/144yj7">The Steeldrivers - It It Hadn't Been For Love - [4:04]</a>
 <br>
                         submitted <span class="muted">2012-12-02 04:35</span> by <a href="https://www.reddit.com/user/sparebitofparchment">/u/sparebitofparchment</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Carolina Chocolate Drops :: Full Session via Liveset</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Carolina Chocolate Drops liveset</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/14hpi9">Carolina Chocolate Drops liveset</a>
 <br>
                         submitted <span class="muted">2012-12-08 08:39</span> by <a href="https://www.reddit.com/user/Gorgoleon">/u/Gorgoleon</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sam Bush Band  "Laps in Seven"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">This is one the best Sam Bush pieces I've ever heard. Just wait until that electric mandolin comes out.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/15a5nq">This is one the best Sam Bush pieces I've ever heard. Just wait until that electric mandolin comes out.</a>
 <br>
                         submitted <span class="muted">2012-12-22 15:18</span> by <a href="https://www.reddit.com/user/FrenchGnome">/u/FrenchGnome</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Jingle Bells</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">A very merry bluegrass Christmas to y'all!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/14fsei">A very merry bluegrass Christmas to y'all!</a>
 <br>
                         submitted <span class="muted">2012-12-07 10:18</span> by <a href="https://www.reddit.com/user/HaxleRose">/u/HaxleRose</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Stanley Brothers - Pass Me Not O' Gentle Savior.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">On this date in 1966, one of the purest voices of bluegrass music passed away - Carter Stanley</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/144kei">On this date in 1966, one of the purest voices of bluegrass music passed away - Carter Stanley</a>
 <br>
                         submitted <span class="muted">2012-12-02 00:06</span> by <a href="https://www.reddit.com/user/banjoman74">/u/banjoman74</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Creak- Whiskey Before Breakfast</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Just my friend and I playing Whiskey Before Breakfast</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/14jcmz">Just my friend and I playing Whiskey Before Breakfast</a>
 <br>
                         submitted <span class="muted">2012-12-09 06:15</span> by <a href="https://www.reddit.com/user/joereadel">/u/joereadel</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">BEARFOOT - Midnight in Montana  - MUSIC VIDEO</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">BEARFOOT - Midnight in Montana  - MUSIC VIDEO - YouTube</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/146jh7">BEARFOOT - Midnight in Montana  - MUSIC VIDEO - YouTube</a>
 <br>
                         submitted <span class="muted">2012-12-03 03:12</span> by <a href="https://www.reddit.com/user/discontinuuity">/u/discontinuuity</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Yo-Yo Ma, Stuart Duncan, Edgar Meyer, Chris Thile - Attaboy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Not sure if this counts, but enjoy!!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/146skx">Not sure if this counts, but enjoy!!</a>
 <br>
                         submitted <span class="muted">2012-12-03 06:16</span> by <a href="https://www.reddit.com/user/u_are_ridiculous">/u/u_are_ridiculous</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Boone Creek ~ One Way Track</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Boone Creek - "One Way Track" (Early Jerry Douglas, Ricky Skaggs, and Terry Baucom)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/148wso">Boone Creek - "One Way Track" (Early Jerry Douglas, Ricky Skaggs, and Terry Baucom)</a>
 <br>
                         submitted <span class="muted">2012-12-04 05:18</span> by <a href="https://www.reddit.com/user/LightWolfCavalry">/u/LightWolfCavalry</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Doc Watson - Three Days with Doc</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">3 Days With Doc- 1976 documentary aired on BBC's Omnibus</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/14etks">3 Days With Doc- 1976 documentary aired on BBC's Omnibus</a>
 <br>
                         submitted <span class="muted">2012-12-06 23:19</span> by <a href="https://www.reddit.com/user/jack_a_roe">/u/jack_a_roe</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Punch Brothers: Manchicken</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Very excited for my FIFTH Punch Brothers show tonight. Anyone else going to the Salt Lake show?</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/14g50n">Very excited for my FIFTH Punch Brothers show tonight. Anyone else going to the Salt Lake show?</a>
 <br>
                         submitted <span class="muted">2012-12-07 15:55</span> by <a href="https://www.reddit.com/user/LightWolfCavalry">/u/LightWolfCavalry</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Phillip Roebuck - Be My Little Widow - One-Man Band</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Phillip Roebuck - Be My Little Widow</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/15oi5i">Phillip Roebuck - Be My Little Widow</a>
 <br>
                         submitted <span class="muted">2012-12-30 18:03</span> by <a href="https://www.reddit.com/user/twoemptypockets">/u/twoemptypockets</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">New Grass Revival - Vamp In The Middle</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">New Grass Revival- Vamp in the Middle (One of my all time favorites)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/146skb">New Grass Revival- Vamp in the Middle (One of my all time favorites)</a>
 <br>
                         submitted <span class="muted">2012-12-03 06:16</span> by <a href="https://www.reddit.com/user/1010821317">/u/1010821317</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Chasing Blue - Two Broken Wings [Official Music Video]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Chasing Blue - Two Broken Wings</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/14p270">Chasing Blue - Two Broken Wings</a>
 <br>
                         submitted <span class="muted">2012-12-12 00:30</span> by <a href="https://www.reddit.com/user/trubbanot">/u/trubbanot</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ricky Skaggs - Get Up John</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Get Up John - Ricky Skaggs &amp; Kentucky Thunder [4:06]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/14p31j">Get Up John - Ricky Skaggs &amp; Kentucky Thunder [4:06]</a>
 <br>
                         submitted <span class="muted">2012-12-12 00:42</span> by <a href="https://www.reddit.com/user/ShittyNinja">/u/ShittyNinja</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cabinet - RRR - Live In Denver, CO</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Cabinet - RRR - Live In Denver, CO [progressive]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/14pcj6">Cabinet - RRR - Live In Denver, CO [progressive]</a>
 <br>
                         submitted <span class="muted">2012-12-12 03:01</span> by <a href="https://www.reddit.com/user/icculus20">/u/icculus20</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tim Eriksen: Wayfaring Stranger</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Tim Eriksen: Wayfaring Stranger - YouTube</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/146mgu">Tim Eriksen: Wayfaring Stranger - YouTube</a>
 <br>
                         submitted <span class="muted">2012-12-03 04:09</span> by <a href="https://www.reddit.com/user/discontinuuity">/u/discontinuuity</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Merry Christmas from The Bix Mix Boys</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">My band last year wishing everyone a Merry Christmas - Santa Claus is coming to Town</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/14j1hu">My band last year wishing everyone a Merry Christmas - Santa Claus is coming to Town</a>
 <br>
                         submitted <span class="muted">2012-12-09 02:35</span> by <a href="https://www.reddit.com/user/banjoman74">/u/banjoman74</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sean Hayes - Alabama Chicken</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Sean Hayes - Alabama Chicken</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/158avx">Sean Hayes - Alabama Chicken</a>
 <br>
                         submitted <span class="muted">2012-12-21 15:38</span> by <a href="https://www.reddit.com/user/VaekTheWise">/u/VaekTheWise</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tim O'Brien and Darrell Scott - A House of Gold (with Lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Darrell Scott &amp; Tim O'Brien- House of Gold</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/14f7p4">Darrell Scott &amp; Tim O'Brien- House of Gold</a>
 <br>
                         submitted <span class="muted">2012-12-07 02:53</span> by <a href="https://www.reddit.com/user/wzrdlf">/u/wzrdlf</a>
 .</p>
@@ -475,7 +483,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Hot Rize: Shady Grove</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Hot Rize - Shady Grove [3:48]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/1578n3">Hot Rize - Shady Grove [3:48]</a>
 <br>
                         submitted <span class="muted">2012-12-21 01:26</span> by <a href="https://www.reddit.com/user/ShittyNinja">/u/ShittyNinja</a>
 .</p>

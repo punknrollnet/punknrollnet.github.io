@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Neil Young - Down By The River [Remastered]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Neil Young - Down By The River [Remastered]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/40h3b2">Neil Young - Down By The River [Remastered]</a>
 <br>
                         submitted <span class="muted">2016-01-11 14:59</span> by <a href="https://www.reddit.com/user/pappin_taps">/u/pappin_taps</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gordon Lightfoot 1974 - Sundown</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Gordon Lightfoot 1974 - Sundown (live)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/40nlmu">Gordon Lightfoot 1974 - Sundown (live)</a>
 <br>
                         submitted <span class="muted">2016-01-12 18:13</span> by <a href="https://www.reddit.com/user/pappin_taps">/u/pappin_taps</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Shadowy Men On A Shadowy Planet -   Good Cop Bad Cop -  1990 Surf</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">[Surf Rock] Shadowy Men on a Shadowy Planet | Good Cop Bad Cop - 1990</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/42npjw">[Surf Rock] Shadowy Men on a Shadowy Planet | Good Cop Bad Cop - 1990</a>
 <br>
                         submitted <span class="muted">2016-01-25 21:03</span> by <a href="https://www.reddit.com/user/Van-Life">/u/Van-Life</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bif Naked - "I Love Myself Today" Her Royal Majesty's Records</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">[Rock] Bif Naked | I Love Myself Today - 2001</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/434cta">[Rock] Bif Naked | I Love Myself Today - 2001</a>
 <br>
                         submitted <span class="muted">2016-01-28 17:40</span> by <a href="https://www.reddit.com/user/Van-Life">/u/Van-Life</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">54-40 - Lost And Lazy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">54-40 — Lost &amp; Lazy</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/41d91o">54-40 — Lost &amp; Lazy</a>
 <br>
                         submitted <span class="muted">2016-01-17 12:11</span> by <a href="https://www.reddit.com/user/Vranak">/u/Vranak</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Econoline Crush - Home PV</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">[Industrial Rock] Econoline Crush | Home - 1997</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/41hkp3">[Industrial Rock] Econoline Crush | Home - 1997</a>
 <br>
                         submitted <span class="muted">2016-01-18 05:42</span> by <a href="https://www.reddit.com/user/Van-Life">/u/Van-Life</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">CHIXDIGGIT Chupacabras</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">[Pop-Punk] Chixdiggit! | Chupacabra - 1998</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/41z6e0">[Pop-Punk] Chixdiggit! | Chupacabra - 1998</a>
 <br>
                         submitted <span class="muted">2016-01-21 09:17</span> by <a href="https://www.reddit.com/user/Van-Life">/u/Van-Life</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">D.O.A - World War 3</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">[Punk] D.O.A. (Dead on Arrival) | World War III - 1980</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/42bqp3">[Punk] D.O.A. (Dead on Arrival) | World War III - 1980</a>
 <br>
                         submitted <span class="muted">2016-01-23 17:29</span> by <a href="https://www.reddit.com/user/Van-Life">/u/Van-Life</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Jenn Grant - Dreamer</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">[Folk] Jenn Grant - Dreamer</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/42pzzw">[Folk] Jenn Grant - Dreamer</a>
 <br>
                         submitted <span class="muted">2016-01-26 05:07</span> by <a href="https://www.reddit.com/user/cyclemonster">/u/cyclemonster</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Real McKenzies - Scots Wha' Ha'e</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">[Celtic Punk] The Real McKenzies - Scots Wha' Ha'e (In Celebration of Robbie Burns Day)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/42ntmd">[Celtic Punk] The Real McKenzies - Scots Wha' Ha'e (In Celebration of Robbie Burns Day)</a>
 <br>
                         submitted <span class="muted">2016-01-25 21:24</span> by <a href="https://www.reddit.com/user/JDGumby">/u/JDGumby</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sun K - New York City Blues (Lyric Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Sun K - New York City Blues</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3zfbc0">Sun K - New York City Blues</a>
 <br>
                         submitted <span class="muted">2016-01-04 15:57</span> by <a href="https://www.reddit.com/user/My_Public_Profile">/u/My_Public_Profile</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Do Make Say Think - Soul and Onward</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">[Post Rock] Do Make Say Think - Soul and Onward</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/42ogrj">[Post Rock] Do Make Say Think - Soul and Onward</a>
 <br>
                         submitted <span class="muted">2016-01-25 23:27</span> by <a href="https://www.reddit.com/user/cyclemonster">/u/cyclemonster</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Creepshow-Shake</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">[Psychobilly] The Creepshow | Shake - 2006</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/41z4vd">[Psychobilly] The Creepshow | Shake - 2006</a>
 <br>
                         submitted <span class="muted">2016-01-21 09:00</span> by <a href="https://www.reddit.com/user/Van-Life">/u/Van-Life</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">JULY TALK - SUMMER DRESS (Official)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">[Rock 'n' Roll] July Talk | Summer Dress - 2012</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/42etx4">[Rock 'n' Roll] July Talk | Summer Dress - 2012</a>
 <br>
                         submitted <span class="muted">2016-01-24 06:05</span> by <a href="https://www.reddit.com/user/Van-Life">/u/Van-Life</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">SNFU -  Dont Have the Cow</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">[Punk] SNFU | Don't have the Cow - 1996</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/42eu8m">[Punk] SNFU | Don't have the Cow - 1996</a>
 <br>
                         submitted <span class="muted">2016-01-24 06:08</span> by <a href="https://www.reddit.com/user/Van-Life">/u/Van-Life</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Meno Mony Falls - Faunts</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">[Shoegaze] Faunts - Meno Mony Falls</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/42opjh">[Shoegaze] Faunts - Meno Mony Falls</a>
 <br>
                         submitted <span class="muted">2016-01-26 00:17</span> by <a href="https://www.reddit.com/user/cyclemonster">/u/cyclemonster</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sunset Rubdown - Silver Moons</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">[Indie Rock] Sunset Rubdown - Silver Moons</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/42qaed">[Indie Rock] Sunset Rubdown - Silver Moons</a>
 <br>
                         submitted <span class="muted">2016-01-26 06:29</span> by <a href="https://www.reddit.com/user/cyclemonster">/u/cyclemonster</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Esthero - Heaven Sent</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">[Trip-Hop] Esthero | Heaven Sent - 1998</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/41ho6n">[Trip-Hop] Esthero | Heaven Sent - 1998</a>
 <br>
                         submitted <span class="muted">2016-01-18 06:11</span> by <a href="https://www.reddit.com/user/Van-Life">/u/Van-Life</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Headstones - When Something Stands For Nothing</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">[Rock] Headstones | When Something Stands for Nothing - 1993</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/41p58a">[Rock] Headstones | When Something Stands for Nothing - 1993</a>
 <br>
                         submitted <span class="muted">2016-01-19 15:34</span> by <a href="https://www.reddit.com/user/Van-Life">/u/Van-Life</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Planet Smashers - Life of the Party</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">[Ska] The Planet Smashers | Life of the Party - 1999</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/42br6k">[Ska] The Planet Smashers | Life of the Party - 1999</a>
 <br>
                         submitted <span class="muted">2016-01-23 17:32</span> by <a href="https://www.reddit.com/user/Van-Life">/u/Van-Life</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Skydiggers - "Anything For You" (official video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">[Roots Rock] Skydiggers - Anything For You</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/42oehj">[Roots Rock] Skydiggers - Anything For You</a>
 <br>
                         submitted <span class="muted">2016-01-25 23:13</span> by <a href="https://www.reddit.com/user/cyclemonster">/u/cyclemonster</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">A.C. Newman - Miracle Drug</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">[Power Pop] A.C. Newman - Miracle Drug</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/42oirk">[Power Pop] A.C. Newman - Miracle Drug</a>
 <br>
                         submitted <span class="muted">2016-01-25 23:37</span> by <a href="https://www.reddit.com/user/cyclemonster">/u/cyclemonster</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Waiting For You (Official)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">[Pop] The Good Lovelies - Waiting For You</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/42ordq">[Pop] The Good Lovelies - Waiting For You</a>
 <br>
                         submitted <span class="muted">2016-01-26 00:27</span> by <a href="https://www.reddit.com/user/cyclemonster">/u/cyclemonster</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Harlan Pepper  -  Love Takes A Lot</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">[Blues Rock] Harlan Pepper - Love Takes a Lot</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/42otln">[Blues Rock] Harlan Pepper - Love Takes a Lot</a>
 <br>
                         submitted <span class="muted">2016-01-26 00:40</span> by <a href="https://www.reddit.com/user/cyclemonster">/u/cyclemonster</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">3. Don't Call Me Whitney, Bobby</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">[Indie Pop] Islands - Don't Call Me Whitney, Bobby</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/42pyoa">[Indie Pop] Islands - Don't Call Me Whitney, Bobby</a>
 <br>
                         submitted <span class="muted">2016-01-26 04:58</span> by <a href="https://www.reddit.com/user/cyclemonster">/u/cyclemonster</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Jill Barber - Oh Heart</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">[Indie Pop] Jill Barber - Oh Heart</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/42q41u">[Indie Pop] Jill Barber - Oh Heart</a>
 <br>
                         submitted <span class="muted">2016-01-26 05:37</span> by <a href="https://www.reddit.com/user/cyclemonster">/u/cyclemonster</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">sianspheric-the stars above</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">[Shoegaze] Sianspheric - The Stars Above</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/42q84p">[Shoegaze] Sianspheric - The Stars Above</a>
 <br>
                         submitted <span class="muted">2016-01-26 06:10</span> by <a href="https://www.reddit.com/user/cyclemonster">/u/cyclemonster</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">southpacific - Interconnect</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">[Space Rock] Southpacific - Interconnect</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/42q906">[Space Rock] Southpacific - Interconnect</a>
 <br>
                         submitted <span class="muted">2016-01-26 06:17</span> by <a href="https://www.reddit.com/user/cyclemonster">/u/cyclemonster</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">ONE UGLY COWBOY - GET YER UGLY ON  (lyric video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Great new country band from TO!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/411dvv">Great new country band from TO!</a>
 <br>
                         submitted <span class="muted">2016-01-15 03:58</span> by <a href="https://www.reddit.com/user/eggs_esg">/u/eggs_esg</a>
 .</p>
@@ -475,7 +483,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Brains - Stay Back (official video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">[Psychobilly] The Brains | Stay Back - 2013</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/42nozm">[Psychobilly] The Brains | Stay Back - 2013</a>
 <br>
                         submitted <span class="muted">2016-01-25 21:01</span> by <a href="https://www.reddit.com/user/Van-Life">/u/Van-Life</a>
 .</p>
@@ -489,7 +497,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The High Dials - Teenage Love Made Me Insane (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">[Psychedelic rock] The High Dials - Teenage Love Made Me Insane</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/42pxbt">[Psychedelic rock] The High Dials - Teenage Love Made Me Insane</a>
 <br>
                         submitted <span class="muted">2016-01-26 04:49</span> by <a href="https://www.reddit.com/user/cyclemonster">/u/cyclemonster</a>
 .</p>
@@ -503,7 +511,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Jennifer Castle - Sparta</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">[Americana] Jennifer Castle - Sparta</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/42q18h">[Americana] Jennifer Castle - Sparta</a>
 <br>
                         submitted <span class="muted">2016-01-26 05:16</span> by <a href="https://www.reddit.com/user/cyclemonster">/u/cyclemonster</a>
 .</p>
@@ -517,7 +525,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kevin Drew - First In Line</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">[Indie Rock] Kevin Drew - First in Line</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/42q4jr">[Indie Rock] Kevin Drew - First in Line</a>
 <br>
                         submitted <span class="muted">2016-01-26 05:41</span> by <a href="https://www.reddit.com/user/cyclemonster">/u/cyclemonster</a>
 .</p>
@@ -531,7 +539,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Adam Brown - Big Roker</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">The Adam Brown - Big Roker</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/42q6e0">The Adam Brown - Big Roker</a>
 <br>
                         submitted <span class="muted">2016-01-26 05:56</span> by <a href="https://www.reddit.com/user/echoeightythree">/u/echoeightythree</a>
 .</p>
@@ -545,7 +553,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sam Cash & The Romantic Dogs - Fall Together</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">[Rock] Sam Cash &amp; The Romantic Dogs - Fall Together</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/42q6rq">[Rock] Sam Cash &amp; The Romantic Dogs - Fall Together</a>
 <br>
                         submitted <span class="muted">2016-01-26 05:59</span> by <a href="https://www.reddit.com/user/cyclemonster">/u/cyclemonster</a>
 .</p>
@@ -559,7 +567,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Billy Talent - Cut The Curtains + Lyrics</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">[Rock] Billy Talent | Cut the Curtains - 2003</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/434cdu">[Rock] Billy Talent | Cut the Curtains - 2003</a>
 <br>
                         submitted <span class="muted">2016-01-28 17:38</span> by <a href="https://www.reddit.com/user/Van-Life">/u/Van-Life</a>
 .</p>

@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Beat Your Heart Out</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">My favorite song ever..."Beat Your Heart Out" by the Distillers.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/jvsl7">My favorite song ever..."Beat Your Heart Out" by the Distillers.</a>
 <br>
                         submitted <span class="muted">2011-08-27 03:02</span> by <a href="https://www.reddit.com/user/aviopticus">/u/aviopticus</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nightwish - 17 Over the Hills and Far Away （End of An Era）</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">There's no female fronted metal on here yet... so here's Nightwish's cover of Gary Moore's "Over the Hills and Far Away."</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/jw8p3">There's no female fronted metal on here yet... so here's Nightwish's cover of Gary Moore's "Over the Hills and Far Away."</a>
 <br>
                         submitted <span class="muted">2011-08-27 17:32</span> by <a href="https://www.reddit.com/user/simoneclone">/u/simoneclone</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Distillers Beat Your Heart Out (Reading)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Just amazing. Distillers at Reading.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/jwedw">Just amazing. Distillers at Reading.</a>
 <br>
                         submitted <span class="muted">2011-08-27 20:46</span> by <a href="https://www.reddit.com/user/almeras">/u/almeras</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lunachicks - "Don't Want You" Go-kart Records</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">90s Punk - Lunachicks "Don't Want You"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/jxbpa">90s Punk - Lunachicks "Don't Want You"</a>
 <br>
                         submitted <span class="muted">2011-08-28 21:46</span> by <a href="https://www.reddit.com/user/almeras">/u/almeras</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">MANHATTAN LOVE SUICIDES - CLUSTERF**K</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">"Clusterfuck" by The Manhattan Love Suicides.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/jvip3">"Clusterfuck" by The Manhattan Love Suicides.</a>
 <br>
                         submitted <span class="muted">2011-08-26 21:16</span> by <a href="https://www.reddit.com/user/aviopticus">/u/aviopticus</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Oysters Everyday</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">New subreddit? Sure why not...Here's my first youtube video. Check out my soundcloud for more of my electro-pop stuff :)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/jw764">New subreddit? Sure why not...Here's my first youtube video. Check out my soundcloud for more of my electro-pop stuff :)</a>
 <br>
                         submitted <span class="muted">2011-08-27 16:35</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">be your own pet 'bicycle, bicycle, you are my bicycle'</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">be your own pet 'bicycle, bicycle, you are my bicycle'</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/jw8rl">be your own pet 'bicycle, bicycle, you are my bicycle'</a>
 <br>
                         submitted <span class="muted">2011-08-27 17:34</span> by <a href="https://www.reddit.com/user/duckysfirst">/u/duckysfirst</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tapping The Vein - Butterfly</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Female fronted moody metal band. For those times when we experience some girl angst. Tapping the Vein</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/jxgp5">Female fronted moody metal band. For those times when we experience some girl angst. Tapping the Vein</a>
 <br>
                         submitted <span class="muted">2011-08-29 00:42</span> by <a href="https://www.reddit.com/user/autumnfloss">/u/autumnfloss</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Camera Obscura - The Sweetest Thing (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Camera Obscura- The Sweetest Thing</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/jy8jn">Camera Obscura- The Sweetest Thing</a>
 <br>
                         submitted <span class="muted">2011-08-29 19:12</span> by <a href="https://www.reddit.com/user/aviopticus">/u/aviopticus</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Horrorpops - Miss Take</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Horrorpops - "Miss Take"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/jyjsz">Horrorpops - "Miss Take"</a>
 <br>
                         submitted <span class="muted">2011-08-30 01:10</span> by <a href="https://www.reddit.com/user/almeras">/u/almeras</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lolita Black - Live at Libertyfest 2011 (Part 1)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Lolita Black</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/jvrzb">Lolita Black</a>
 <br>
                         submitted <span class="muted">2011-08-27 02:38</span> by <a href="https://www.reddit.com/user/shieldforyoureyes">/u/shieldforyoureyes</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Spinnerette - Ghetto Love</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">"Ghetto Love" by Spinnertte, featuring Brody Dalle of The Distillers fame.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/jvst5">"Ghetto Love" by Spinnertte, featuring Brody Dalle of The Distillers fame.</a>
 <br>
                         submitted <span class="muted">2011-08-27 03:11</span> by <a href="https://www.reddit.com/user/aviopticus">/u/aviopticus</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">PJ Harvey - To bring you my love</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">[FAN] PJ Harvey - To bring you my love (live)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/jw0t5">[FAN] PJ Harvey - To bring you my love (live)</a>
 <br>
                         submitted <span class="muted">2011-08-27 10:06</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Veruca Salt - Seether</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Veruca Salt - "Seether"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/jyz9d">Veruca Salt - "Seether"</a>
 <br>
                         submitted <span class="muted">2011-08-30 12:07</span> by <a href="https://www.reddit.com/user/almeras">/u/almeras</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">letters to cleo- dangerous type</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">"Dangerous Type" video by Letters to Cleo</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/jvi9k">"Dangerous Type" video by Letters to Cleo</a>
 <br>
                         submitted <span class="muted">2011-08-26 21:03</span> by <a href="https://www.reddit.com/user/aviopticus">/u/aviopticus</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Theo and the Skyscrapers - "Broken Girl" Waxlips/Morpheus Records</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">"Broken Girl" by Theo and the Skyscrapers.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/jviai">"Broken Girl" by Theo and the Skyscrapers.</a>
 <br>
                         submitted <span class="muted">2011-08-26 21:04</span> by <a href="https://www.reddit.com/user/aviopticus">/u/aviopticus</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Start: The 1234</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">"The 1234" A great song from TheSTART.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/jvimn">"The 1234" A great song from TheSTART.</a>
 <br>
                         submitted <span class="muted">2011-08-26 21:13</span> by <a href="https://www.reddit.com/user/aviopticus">/u/aviopticus</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Stalingrad Cowgirls: Baby Girl</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">"Baby Girl" by Stalingrad Cowgirls.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/jvinr">"Baby Girl" by Stalingrad Cowgirls.</a>
 <br>
                         submitted <span class="muted">2011-08-26 21:14</span> by <a href="https://www.reddit.com/user/aviopticus">/u/aviopticus</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Manda and the Marbles - "Forget About the Day" Go-Kart Records</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">"Forget About the Day" by Columbus OH pop punk band Manda and the Marbles.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/jvqnq">"Forget About the Day" by Columbus OH pop punk band Manda and the Marbles.</a>
 <br>
                         submitted <span class="muted">2011-08-27 01:50</span> by <a href="https://www.reddit.com/user/aviopticus">/u/aviopticus</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gimme Brains-Bratmobile</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">[Fan] Gimme Brains-Bratmobile</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/jw0n9">[Fan] Gimme Brains-Bratmobile</a>
 <br>
                         submitted <span class="muted">2011-08-27 09:53</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Lunachicks - "Say What You Mean" Go-kart Records</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">More of NYC's classic punk/riot grrl Lunachicks.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/jxz8j">More of NYC's classic punk/riot grrl Lunachicks.</a>
 <br>
                         submitted <span class="muted">2011-08-29 14:23</span> by <a href="https://www.reddit.com/user/aviopticus">/u/aviopticus</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mad Marge and the Stonecutters - Shake</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Mad Marge and the Stonecutters - "Shake"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/jyzm3">Mad Marge and the Stonecutters - "Shake"</a>
 <br>
                         submitted <span class="muted">2011-08-30 12:25</span> by <a href="https://www.reddit.com/user/almeras">/u/almeras</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Epica- Sensorium</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Awesome studio-live version of Epica's "Sensorium" (fronted by the beautiful and talented Simone Simons)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/jxha2">Awesome studio-live version of Epica's "Sensorium" (fronted by the beautiful and talented Simone Simons)</a>
 <br>
                         submitted <span class="muted">2011-08-29 01:01</span> by <a href="https://www.reddit.com/user/simoneclone">/u/simoneclone</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Glitter Freeze - No Control (Official Music Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Glitter Freeze - No Control (heathaaaah, a fellow redditor posted this recently)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/jy9ke">Glitter Freeze - No Control (heathaaaah, a fellow redditor posted this recently)</a>
 <br>
                         submitted <span class="muted">2011-08-29 19:43</span> by <a href="https://www.reddit.com/user/beerbabe">/u/beerbabe</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Devil Doll - Man in Black</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Devil Doll - "Man in Black"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/jyz7b">Devil Doll - "Man in Black"</a>
 <br>
                         submitted <span class="muted">2011-08-30 12:04</span> by <a href="https://www.reddit.com/user/almeras">/u/almeras</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">IN THIS MOMENT - The Gun Show (OFFICIAL VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">In This Moment - "The Gun Show"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/jyzcp">In This Moment - "The Gun Show"</a>
 <br>
                         submitted <span class="muted">2011-08-30 12:12</span> by <a href="https://www.reddit.com/user/almeras">/u/almeras</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Valeze - Go Go Go (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">"Go Go Go" by Brooklyn rockers Valeze.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/jz3gk">"Go Go Go" by Brooklyn rockers Valeze.</a>
 <br>
                         submitted <span class="muted">2011-08-30 14:50</span> by <a href="https://www.reddit.com/user/aviopticus">/u/aviopticus</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Poe - Hello Band version</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">The darker, rock mix of Poe's "Hello." A classic of 90s alternative music.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/k0ctq">The darker, rock mix of Poe's "Hello." A classic of 90s alternative music.</a>
 <br>
                         submitted <span class="muted">2011-08-31 16:59</span> by <a href="https://www.reddit.com/user/aviopticus">/u/aviopticus</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Soviettes Tonight</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">/r/womenrock needs some Soviettes.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/k0eea">/r/womenrock needs some Soviettes.</a>
 <br>
                         submitted <span class="muted">2011-08-31 17:43</span> by <a href="https://www.reddit.com/user/aviopticus">/u/aviopticus</a>
 .</p>
@@ -475,7 +483,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Spinnerette :: Ghetto Love</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Spinnerette - Ghetto Love</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/jwes7">Spinnerette - Ghetto Love</a>
 <br>
                         submitted <span class="muted">2011-08-27 20:59</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>

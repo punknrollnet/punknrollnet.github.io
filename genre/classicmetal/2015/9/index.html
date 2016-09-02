@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Metal Ed.: Randy (Dnk) - The Beast</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Randy - "The Beast" (HM, '86)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/3lqisr">Randy - "The Beast" (HM, '86)</a>
 <br>
                         submitted <span class="muted">2015-09-20 23:30</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Savage Death - Legions of Doom</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Savage Death - "Legions of Doom" (TM/DM, '85)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3kj16o">Savage Death - "Legions of Doom" (TM/DM, '85)</a>
 <br>
                         submitted <span class="muted">2015-09-11 11:00</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tröjan - Aggressor.wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Tröjan - "Aggressor" (SM, '85)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3m29fh">Tröjan - "Aggressor" (SM, '85)</a>
 <br>
                         submitted <span class="muted">2015-09-23 13:15</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Witchhammer- Kill All In Sight</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Witchhammer - "Kill All in Sight" (SM, '90)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3k6098">Witchhammer - "Kill All in Sight" (SM, '90)</a>
 <br>
                         submitted <span class="muted">2015-09-09 00:31</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Fates Warning "Point Of View" (OFFICIAL VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Fates Warning -Point Of View (Progressive Metal, 1991)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3kuuaq">Fates Warning -Point Of View (Progressive Metal, 1991)</a>
 <br>
                         submitted <span class="muted">2015-09-14 01:52</span> by <a href="https://www.reddit.com/user/Dexley">/u/Dexley</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Armored Saint "Can U Deliver" (OFFICIAL VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Armored Saint - Can U Deliver (HM) 1984</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3lzpsw">Armored Saint - Can U Deliver (HM) 1984</a>
 <br>
                         submitted <span class="muted">2015-09-22 22:11</span> by <a href="https://www.reddit.com/user/Dexley">/u/Dexley</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Risk-Roadwar</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Risk - "Roadwar" (SM/TM, '88)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3mw7fh">Risk - "Roadwar" (SM/TM, '88)</a>
 <br>
                         submitted <span class="muted">2015-09-29 22:52</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">sinful- burn your eyes</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Sinful - "Burn Your Eyes" (HM, '85)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3jcryt">Sinful - "Burn Your Eyes" (HM, '85)</a>
 <br>
                         submitted <span class="muted">2015-09-02 13:23</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Fight - Nailed To The Gun</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Fight - Nailed To The Gun</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3kgr9a">Fight - Nailed To The Gun</a>
 <br>
                         submitted <span class="muted">2015-09-10 22:11</span> by <a href="https://www.reddit.com/user/Dexley">/u/Dexley</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sniper (Jpn) - 08 - Fire.wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Sniper - "Fire" (HM, '84)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3mw72e">Sniper - "Fire" (HM, '84)</a>
 <br>
                         submitted <span class="muted">2015-09-29 22:49</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Solitary Solitude - Meliah Rage</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Meliah Rage- Solitary Solitude</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3jyi16">Meliah Rage- Solitary Solitude</a>
 <br>
                         submitted <span class="muted">2015-09-07 10:20</span> by <a href="https://www.reddit.com/user/Dexley">/u/Dexley</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Wolfsbane - Manhunt (Studio)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Wolfsbane - Manhunt (HM, 1991)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3kw28i">Wolfsbane - Manhunt (HM, 1991)</a>
 <br>
                         submitted <span class="muted">2015-09-14 09:36</span> by <a href="https://www.reddit.com/user/Dexley">/u/Dexley</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Pokolgép - Győzd le a gonoszt</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Pokolgép - "Győzd le a Gonoszt" (HM, '91)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3j67us">Pokolgép - "Győzd le a Gonoszt" (HM, '91)</a>
 <br>
                         submitted <span class="muted">2015-09-01 03:13</span> by <a href="https://www.reddit.com/user/raoulduke25">/u/raoulduke25</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Jameson Raid - The Hypnotist</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Jameson Raid - "The Hypnotist" (HM, '80)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3jkyb1">Jameson Raid - "The Hypnotist" (HM, '80)</a>
 <br>
                         submitted <span class="muted">2015-09-04 04:55</span> by <a href="https://www.reddit.com/user/raoulduke25">/u/raoulduke25</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Hardline(Nor) - Tyrant</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Hardline - "Tyrant" (HM, '84)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3jmu1o">Hardline - "Tyrant" (HM, '84)</a>
 <br>
                         submitted <span class="muted">2015-09-04 16:07</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Virus - Pray for War</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Virus - "Pray For War" (TM, '87)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3jvvts">Virus - "Pray For War" (TM, '87)</a>
 <br>
                         submitted <span class="muted">2015-09-06 19:04</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rage (Avenger) - Prayers Of Steel (1985) - 01 Battlefield</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Avenger (GER) - "Battlefield" (SM, '85)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3jvvu1">Avenger (GER) - "Battlefield" (SM, '85)</a>
 <br>
                         submitted <span class="muted">2015-09-06 19:04</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Destiny (Swe) - Sirens in the Dark</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Destiny - "Sirens in the Dark" (HM/PM, '85)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3k60p3">Destiny - "Sirens in the Dark" (HM/PM, '85)</a>
 <br>
                         submitted <span class="muted">2015-09-09 00:35</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Excess - foreign lands - 1986 - borges france</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Excess - "Foreign Lands" (HM, '86)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3ksrmg">Excess - "Foreign Lands" (HM, '86)</a>
 <br>
                         submitted <span class="muted">2015-09-13 16:36</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">L.A. (Dnk) - Hunted</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">L.A. - "Hunted" (HM, '85)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3l32br">L.A. - "Hunted" (HM, '85)</a>
 <br>
                         submitted <span class="muted">2015-09-15 20:19</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">War Cry - Wicked Warlock</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">War Cry - "Wicked Warlock" (doom, '83)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3lhke4">War Cry - "Wicked Warlock" (doom, '83)</a>
 <br>
                         submitted <span class="muted">2015-09-18 22:10</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Citron - Hon na Bluda</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Citron - "Hon na Bluda" (HM, '87)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3lhksj">Citron - "Hon na Bluda" (HM, '87)</a>
 <br>
                         submitted <span class="muted">2015-09-18 22:13</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Villain - Only Time Will Tell</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Villain - "Only Time Will Tell" (USPM, '86)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3mcydp">Villain - "Only Time Will Tell" (USPM, '86)</a>
 <br>
                         submitted <span class="muted">2015-09-25 17:25</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sacred Few Wildlife Metal</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Sacred Few - "Wildlife" (HM, '85)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3mm1cc">Sacred Few - "Wildlife" (HM, '85)</a>
 <br>
                         submitted <span class="muted">2015-09-27 19:54</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bad lizard - black hole -1985</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Bad Lizard - "Black Hole" (HM, '85)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3mm25z">Bad Lizard - "Black Hole" (HM, '85)</a>
 <br>
                         submitted <span class="muted">2015-09-27 20:00</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Paul Gillman - La Historia del Anticristo</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Gillman - "La Historia Del Anticristo" (HM, '84)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3m2a80">Gillman - "La Historia Del Anticristo" (HM, '84)</a>
 <br>
                         submitted <span class="muted">2015-09-23 13:22</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Steel Angel - "Born In The Ocean"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Steel Angel - "Born in the Ocean" (HM, '86)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3mcybh">Steel Angel - "Born in the Ocean" (HM, '86)</a>
 <br>
                         submitted <span class="muted">2015-09-25 17:25</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Raw Run: Zak Maytum</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Metallica - "The Four Horsemen" (in /r/Videos top post of today, of some dude longboarding at 70 mph) (TM '83)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/3k5h2b">Metallica - "The Four Horsemen" (in /r/Videos top post of today, of some dude longboarding at 70 mph) (TM '83)</a>
 <br>
                         submitted <span class="muted">2015-09-08 22:29</span> by <a href="https://www.reddit.com/user/tellman1257">/u/tellman1257</a>
 .</p>

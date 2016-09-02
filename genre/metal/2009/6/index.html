@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Jesu - Friends Are Evil</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Jesu - Friends Are Evil - [Justin Broadrick's Post Godflesh project]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/8urgn">Jesu - Friends Are Evil - [Justin Broadrick's Post Godflesh project]</a>
 <br>
                         submitted <span class="muted">2009-06-23 02:53</span> by <a href="https://www.reddit.com/user/SeekingEnlightenment">/u/SeekingEnlightenment</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Iron Maiden - Hallowed Be Thy Name (Live '85)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">The sands of time for me are running low...</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/8r3ni">The sands of time for me are running low...</a>
 <br>
                         submitted <span class="muted">2009-06-09 17:38</span> by <a href="https://www.reddit.com/user/LiveLucid">/u/LiveLucid</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">At the Gates - Raped by the Light of Christ</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">At the Gates - Raped by the Light of Christ</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/8tdg5">At the Gates - Raped by the Light of Christ</a>
 <br>
                         submitted <span class="muted">2009-06-17 19:14</span> by <a href="https://www.reddit.com/user/SeekingEnlightenment">/u/SeekingEnlightenment</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Burzum - Hvis Lyset Tar Oss</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Burzum - Hvis Lyset Tar Oss (Varg is free!)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/8qdup">Burzum - Hvis Lyset Tar Oss (Varg is free!)</a>
 <br>
                         submitted <span class="muted">2009-06-06 21:48</span> by <a href="https://www.reddit.com/user/qabsteak">/u/qabsteak</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Probot - Shake Your Blood (Uncensored)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Probot - Shake Your Blood [Lemmy and Grohl featuring Suicide Girls in the video]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/8vh1k">Probot - Shake Your Blood [Lemmy and Grohl featuring Suicide Girls in the video]</a>
 <br>
                         submitted <span class="muted">2009-06-25 06:45</span> by <a href="https://www.reddit.com/user/Clemsanza">/u/Clemsanza</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">HIMSA - Unleash Carnage (OFFICIAL VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Himsa made a pretty funny video for "Unleash Carnage"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/8wwkq">Himsa made a pretty funny video for "Unleash Carnage"</a>
 <br>
                         submitted <span class="muted">2009-06-30 08:54</span> by <a href="https://www.reddit.com/user/LiveLucid">/u/LiveLucid</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Deströyer 666 - lone wolf winter (Partysan 2006)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Deströyer 666 - Lone wolf winter (Australia's finest metal!)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/8tllp">Deströyer 666 - Lone wolf winter (Australia's finest metal!)</a>
 <br>
                         submitted <span class="muted">2009-06-18 14:18</span> by <a href="https://www.reddit.com/user/Zootex">/u/Zootex</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Demilich When the Sun Drank the Weight of Water</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Demilich - When the Sun Drank the Weight of Water</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/8ps77">Demilich - When the Sun Drank the Weight of Water</a>
 <br>
                         submitted <span class="muted">2009-06-04 14:56</span> by <a href="https://www.reddit.com/user/mayonesa">/u/mayonesa</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Hunter / Killer - Quo Vadis -</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Wow.  I just heard Hunter/killer by Quo Vadis.  This is some grade A thrash.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/8qcp9">Wow.  I just heard Hunter/killer by Quo Vadis.  This is some grade A thrash.</a>
 <br>
                         submitted <span class="muted">2009-06-06 18:12</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">MORBID ANGEL: Immortal Rites - Fagersta, Sweden 02.06.1990</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Morbid Angel - "Immortal Rites" (Live in Sweden, 1990)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/8truw">Morbid Angel - "Immortal Rites" (Live in Sweden, 1990)</a>
 <br>
                         submitted <span class="muted">2009-06-19 02:47</span> by <a href="https://www.reddit.com/user/mayonesa">/u/mayonesa</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Buried Inside - II</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Buried Inside - "II" - These guys have so much potential and such a small fanbase...</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/8pxh9">Buried Inside - "II" - These guys have so much potential and such a small fanbase...</a>
 <br>
                         submitted <span class="muted">2009-06-05 01:15</span> by <a href="https://www.reddit.com/user/klarth">/u/klarth</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">DREAM EVIL - The Book Of Heavy Metal (OFFICIAL VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">This is what metal is all about.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/8t86v">This is what metal is all about.</a>
 <br>
                         submitted <span class="muted">2009-06-17 09:50</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Skeletonwitch "Onward to Battle"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">SKELETONWITCH anyone? "here is onward to battle"  live, enjoy</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/8qdvq">SKELETONWITCH anyone? "here is onward to battle"  live, enjoy</a>
 <br>
                         submitted <span class="muted">2009-06-06 21:56</span> by <a href="https://www.reddit.com/user/metalbread">/u/metalbread</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bathory - Twilight Of The Gods (With Lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Bathory - Twilight of the Gods</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/8plni">Bathory - Twilight of the Gods</a>
 <br>
                         submitted <span class="muted">2009-06-03 23:43</span> by <a href="https://www.reddit.com/user/mayonesa">/u/mayonesa</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cenotaph (Mex) - The Gloomy Reflection Of Our Hidden Sorrows</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Cenotaph - Infinite Meditations of an Uncertain Existence</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/8ptfm">Cenotaph - Infinite Meditations of an Uncertain Existence</a>
 <br>
                         submitted <span class="muted">2009-06-04 16:57</span> by <a href="https://www.reddit.com/user/mayonesa">/u/mayonesa</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cannibal Corpse "Evisceration Plague" (OFFICIAL VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Cannibal Corpse-'Evisceration Plague' in HD. It doesn't get much more metal than this.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/8q4cg">Cannibal Corpse-'Evisceration Plague' in HD. It doesn't get much more metal than this.</a>
 <br>
                         submitted <span class="muted">2009-06-05 17:24</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Slayer - South Of Heaven - The String Quartet</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">String quartet performs "South of Heaven" by Slayer</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/8rs8m">String quartet performs "South of Heaven" by Slayer</a>
 <br>
                         submitted <span class="muted">2009-06-11 21:06</span> by <a href="https://www.reddit.com/user/mayonesa">/u/mayonesa</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Abigail Williams - Into The Ashes" Official Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Abigail Williams - Into the Ashes</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/8w9fi">Abigail Williams - Into the Ashes</a>
 <br>
                         submitted <span class="muted">2009-06-27 21:17</span> by <a href="https://www.reddit.com/user/LiveLucid">/u/LiveLucid</a>
 .</p>

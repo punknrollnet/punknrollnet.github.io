@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Iron Maiden - The Trooper (cover) By Gauchos</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/">Iron Maiden - The Trooper (cover) By Gauchos -- this is pure gold!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/80doy">Iron Maiden - The Trooper (cover) By Gauchos -- this is pure gold!</a>
 <br>
                         submitted <span class="muted">2009-02-26 05:33</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Meshuggah Rational Gaze</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Meshuggah - Rational Gaze</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/7w64o">Meshuggah - Rational Gaze</a>
 <br>
                         submitted <span class="muted">2009-02-10 03:53</span> by <a href="https://www.reddit.com/user/daysi">/u/daysi</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">ORTHRELM</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Ortherlm: Saw these cats open for Dillinger Escape Plan and some grindcore group. Pissed a whole bunch of people off.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/7xasi">Ortherlm: Saw these cats open for Dillinger Escape Plan and some grindcore group. Pissed a whole bunch of people off.</a>
 <br>
                         submitted <span class="muted">2009-02-14 02:58</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mastodon - Mother Puncher (live)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Mastodon playing Mother Puncher live.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/7x9m1">Mastodon playing Mother Puncher live.</a>
 <br>
                         submitted <span class="muted">2009-02-13 23:04</span> by <a href="https://www.reddit.com/user/wirefaceone">/u/wirefaceone</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">In The Presence Of Enemies Part I - Dream Theater (Cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Acoustic guitar trio covers Dream Theater's "In The Presence Of Enemies Part I"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/7xaa4">Acoustic guitar trio covers Dream Theater's "In The Presence Of Enemies Part I"</a>
 <br>
                         submitted <span class="muted">2009-02-14 01:06</span> by <a href="https://www.reddit.com/user/recorcholis">/u/recorcholis</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Faceless Michael Keene at NAMM 2009</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Michael Keen of The Facless shredding at NAMM 2009.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/7z7cy">Michael Keen of The Facless shredding at NAMM 2009.</a>
 <br>
                         submitted <span class="muted">2009-02-21 17:10</span> by <a href="https://www.reddit.com/user/wirefaceone">/u/wirefaceone</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Wintersun - Battle Against Time</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Wintersun - Battle Against Time</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/809yf">Wintersun - Battle Against Time</a>
 <br>
                         submitted <span class="muted">2009-02-25 20:28</span> by <a href="https://www.reddit.com/user/FaithlessValor">/u/FaithlessValor</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Black Mountain - "Wucan" (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Have you ever heard a song that made you want to go to the desert and do copious amounts of drugs?</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/7voru">Have you ever heard a song that made you want to go to the desert and do copious amounts of drugs?</a>
 <br>
                         submitted <span class="muted">2009-02-07 22:50</span> by <a href="https://www.reddit.com/user/tommyrxc">/u/tommyrxc</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Converge - Plagues</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Converge-Plagues</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/7x9p5">Converge-Plagues</a>
 <br>
                         submitted <span class="muted">2009-02-13 23:15</span> by <a href="https://www.reddit.com/user/wirefaceone">/u/wirefaceone</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Black Legions Promo</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Black Legions / MOEVOT [VID]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/7wvgg">Black Legions / MOEVOT [VID]</a>
 <br>
                         submitted <span class="muted">2009-02-12 15:17</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Spongebob Metalpants</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Spongebob Metalpants</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/7xtvw">Spongebob Metalpants</a>
 <br>
                         submitted <span class="muted">2009-02-16 18:44</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Motorhead - Overkill HD quality</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Overkill!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/7y9lb">Overkill!</a>
 <br>
                         submitted <span class="muted">2009-02-18 06:02</span> by <a href="https://www.reddit.com/user/localhorst">/u/localhorst</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">David After Dentist - A Metal Tribute</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">David After Dentist - A Metal Tribute</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/7ycp2">David After Dentist - A Metal Tribute</a>
 <br>
                         submitted <span class="muted">2009-02-18 14:32</span> by <a href="https://www.reddit.com/user/cocoon56">/u/cocoon56</a>
 .</p>

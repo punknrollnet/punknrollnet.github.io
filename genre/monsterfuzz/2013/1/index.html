@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bob Seger System "2+2" with Vietnam Footage</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">The Bob Seger System - "2+2=?" [USA - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/17lqkd">The Bob Seger System - "2+2=?" [USA - 1969]</a>
 <br>
                         submitted <span class="muted">2013-01-31 02:28</span> by <a href="https://www.reddit.com/user/juqjoint">/u/juqjoint</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Suck - the Whip (1971) South Africa, Heavy Progressive Rock.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Suck - "The Whip" [South Africa - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/17fp3p">Suck - "The Whip" [South Africa - 1971]</a>
 <br>
                         submitted <span class="muted">2013-01-28 16:50</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Glass Sun - Silence of the Morning (1968)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">Glass Sun - Silence of the Morning (US-1968)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/179m8o">Glass Sun - Silence of the Morning (US-1968)</a>
 <br>
                         submitted <span class="muted">2013-01-25 18:09</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Art - I Think Im Going Weird (Spooky Tooth)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Art - I Think I'm Going Weird (UK 1967)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/16inrw">Art - I Think I'm Going Weird (UK 1967)</a>
 <br>
                         submitted <span class="muted">2013-01-13 23:47</span> by <a href="https://www.reddit.com/user/sfcharger">/u/sfcharger</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Simply Saucer-Illegal Bodies</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Simply Saucer - Illegal Bodies [Canada - 1975]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/16j1dh">Simply Saucer - Illegal Bodies [Canada - 1975]</a>
 <br>
                         submitted <span class="muted">2013-01-14 03:05</span> by <a href="https://www.reddit.com/user/lipsonlips">/u/lipsonlips</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lucifer Was - Light My Cigarette</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Lucifer Was - Light My Cigarette (Norway, 1972)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/175byt">Lucifer Was - Light My Cigarette (Norway, 1972)</a>
 <br>
                         submitted <span class="muted">2013-01-23 21:46</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Parojoma-Crystallized insanity(1971)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Earth &amp; Fire - Lost Forever [Netherlands - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/17dmv4">Earth &amp; Fire - Lost Forever [Netherlands - 1971]</a>
 <br>
                         submitted <span class="muted">2013-01-27 18:30</span> by <a href="https://www.reddit.com/user/juqjoint">/u/juqjoint</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Coloured Balls - Human Being</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Coloured Balls - Human Being [Australia - 1973]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/1641k5">Coloured Balls - Human Being [Australia - 1973]</a>
 <br>
                         submitted <span class="muted">2013-01-07 08:54</span> by <a href="https://www.reddit.com/user/OsamaBongLoadin">/u/OsamaBongLoadin</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Strawberry Path - Woman Called Yellow Z (1971)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Strawberry Path - Woman Called Yellow Z [Japan - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/16l5jj">Strawberry Path - Woman Called Yellow Z [Japan - 1971]</a>
 <br>
                         submitted <span class="muted">2013-01-15 01:04</span> by <a href="https://www.reddit.com/user/juqjoint">/u/juqjoint</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bijelo dugme Kad bi bio bijelo dugme 1975</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Bijelo Dugme - Kad bi' bio bijelo dugme [Yugoslavia - 1974]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/16ft9t">Bijelo Dugme - Kad bi' bio bijelo dugme [Yugoslavia - 1974]</a>
 <br>
                         submitted <span class="muted">2013-01-12 15:29</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Stan Webb's Chicken Shack "Poor Boy" Live</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Chicken Shack - Poor Boy (UK, 1974)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/16juok">Chicken Shack - Poor Boy (UK, 1974)</a>
 <br>
                         submitted <span class="muted">2013-01-14 14:14</span> by <a href="https://www.reddit.com/user/sergio_giorgini">/u/sergio_giorgini</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Riot - Warrior</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Riot-Warrior [US 1977] [3:51]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/15um58">Riot-Warrior [US 1977] [3:51]</a>
 <br>
                         submitted <span class="muted">2013-01-02 22:19</span> by <a href="https://www.reddit.com/user/theoreticalxtc">/u/theoreticalxtc</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Marcus Hook Roll Band - "Natural Man"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Marcus Hook Roll Band - Natural Man [Australia - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/16oyeo">Marcus Hook Roll Band - Natural Man [Australia - 1972]</a>
 <br>
                         submitted <span class="muted">2013-01-16 17:08</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Funkees- Break Through</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">The Funkees- Break Through (Atomic Rooster Cover) - [Nigeria - 1974]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/17kuey">The Funkees- Break Through (Atomic Rooster Cover) - [Nigeria - 1974]</a>
 <br>
                         submitted <span class="muted">2013-01-30 19:43</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">BALLETTO DI BRONZO "Introduzione"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Balletto Di Bronzo-Introduzione[Italy-1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/162xzs">Balletto Di Bronzo-Introduzione[Italy-1972]</a>
 <br>
                         submitted <span class="muted">2013-01-06 22:05</span> by <a href="https://www.reddit.com/user/mrpoopypantsmcdoodoo">/u/mrpoopypantsmcdoodoo</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Blue Phantom -  Microchaos</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Blue Phantom -  Microchaos [Italy - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/166tb7">Blue Phantom -  Microchaos [Italy - 1971]</a>
 <br>
                         submitted <span class="muted">2013-01-08 16:17</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Master's Apprentice - Light A Fire Within Yourself</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Master's Apprentice - Light a Fire Within Yourself [Australia - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/16tze8">Master's Apprentice - Light a Fire Within Yourself [Australia - 1971]</a>
 <br>
                         submitted <span class="muted">2013-01-18 19:24</span> by <a href="https://www.reddit.com/user/toonhole">/u/toonhole</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Chrissy Zebby Tembo & Ngozi Family -- My Ancestors</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Chrissy Zebby Tembo &amp; Ngozi Family - My Ancestors [Zambia - 1974]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/16usbj">Chrissy Zebby Tembo &amp; Ngozi Family - My Ancestors [Zambia - 1974]</a>
 <br>
                         submitted <span class="muted">2013-01-19 02:24</span> by <a href="https://www.reddit.com/user/juqjoint">/u/juqjoint</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">ATTILA - WONDER WOMAN</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Attila - Wonder Woman [1970 - USA]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/172dxe">Attila - Wonder Woman [1970 - USA]</a>
 <br>
                         submitted <span class="muted">2013-01-22 17:59</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ronno-Power Of Darkness/4th Hour of My Sleep(1971)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Ronno - "Power Of Darkness/4th Hour of My Sleep" [UK - 1971] Side project of The Hype, David Bowie's backing band while recording "The Man Who Sold the World"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/179heq">Ronno - "Power Of Darkness/4th Hour of My Sleep" [UK - 1971] Side project of The Hype, David Bowie's backing band while recording "The Man Who Sold the World"</a>
 <br>
                         submitted <span class="muted">2013-01-25 17:06</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">CHASE - Cronus/Zeus/Poseidon/Aphrodite/Hades</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Chase - Poseidon</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/17gfr6">Chase - Poseidon</a>
 <br>
                         submitted <span class="muted">2013-01-28 22:33</span> by <a href="https://www.reddit.com/user/devilbatsunshine">/u/devilbatsunshine</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Astaroth - Satanispiritus</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Astaroth - Satanispiritus [USA - 1960s]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1609iw">Astaroth - Satanispiritus [USA - 1960s]</a>
 <br>
                         submitted <span class="muted">2013-01-05 13:50</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Doug Jerebine - Ain't So Hard To Do (1969)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Doug Jerebine - Ain't So Hard To Do [New Zealand - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/160e0g">Doug Jerebine - Ain't So Hard To Do [New Zealand - 1969]</a>
 <br>
                         submitted <span class="muted">2013-01-05 15:52</span> by <a href="https://www.reddit.com/user/juqjoint">/u/juqjoint</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Heavy Load - Midnight Crawler</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Heavy Load - Midnight Crawler (Sweden - 1978)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1724tj">Heavy Load - Midnight Crawler (Sweden - 1978)</a>
 <br>
                         submitted <span class="muted">2013-01-22 15:48</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Aguaturbia - Psychedelic Drugstore [Full Album/Album Completo]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Aguaturbia - Psychedelic Drugstore (Full Album) [Chile - 1970]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/17k30v">Aguaturbia - Psychedelic Drugstore (Full Album) [Chile - 1970]</a>
 <br>
                         submitted <span class="muted">2013-01-30 12:18</span> by <a href="https://www.reddit.com/user/freesoulJAH">/u/freesoulJAH</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dragonfly  -  Blue Monday (1968)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Dragonfly-Blue Monday[US-1968]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/17ljt9">Dragonfly-Blue Monday[US-1968]</a>
 <br>
                         submitted <span class="muted">2013-01-31 00:59</span> by <a href="https://www.reddit.com/user/mrpoopypantsmcdoodoo">/u/mrpoopypantsmcdoodoo</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Six Feet Under - What Would You Do (1969)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Six Feet Under-What Would You Do?[US-1968-70?]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1614wp">Six Feet Under-What Would You Do?[US-1968-70?]</a>
 <br>
                         submitted <span class="muted">2013-01-05 23:30</span> by <a href="https://www.reddit.com/user/mrpoopypantsmcdoodoo">/u/mrpoopypantsmcdoodoo</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tiny Tex and the J Jones Connection - Who Am I</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Tiny Tex &amp; The J Jones Connection - Who Am I? [US - early 70's]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/168qp7">Tiny Tex &amp; The J Jones Connection - Who Am I? [US - early 70's]</a>
 <br>
                         submitted <span class="muted">2013-01-09 10:19</span> by <a href="https://www.reddit.com/user/toonhole">/u/toonhole</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nino Ferrer : Fallen Angels (France 1979)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Nino Ferrer - Fallen Angels [France - 1979]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/16z0dp">Nino Ferrer - Fallen Angels [France - 1979]</a>
 <br>
                         submitted <span class="muted">2013-01-21 05:00</span> by <a href="https://www.reddit.com/user/juqjoint">/u/juqjoint</a>
 .</p>
@@ -475,7 +483,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Frumpy - Take Care Of Illusion</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Frumpy - Take Care of Illusion (Germany 1971)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/170yk9">Frumpy - Take Care of Illusion (Germany 1971)</a>
 <br>
                         submitted <span class="muted">2013-01-22 01:29</span> by <a href="https://www.reddit.com/user/sfcharger">/u/sfcharger</a>
 .</p>
@@ -489,7 +497,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ashkan - One of Us Two (UK 1969)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Ashkan - One of Us Two (UK-1969)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/179i82">Ashkan - One of Us Two (UK-1969)</a>
 <br>
                         submitted <span class="muted">2013-01-25 17:17</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
 .</p>
@@ -503,7 +511,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ngozi Family - Night of Fear (Zambia, 1977)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Ngozi Family - Night of Fear (Zambia, 1977)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/17hhnx">Ngozi Family - Night of Fear (Zambia, 1977)</a>
 <br>
                         submitted <span class="muted">2013-01-29 07:25</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -517,7 +525,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lazy Livin'-Heavy Equipment-Euclid(1970)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Euclid-Lazy Livin'(US-1970)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/173l94">Euclid-Lazy Livin'(US-1970)</a>
 <br>
                         submitted <span class="muted">2013-01-23 03:04</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
 .</p>
@@ -531,7 +539,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Stefano Torossi - Fearing Much</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Stefano Torossi - Fearing Much [Italy, 1975]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/160ep5">Stefano Torossi - Fearing Much [Italy, 1975]</a>
 <br>
                         submitted <span class="muted">2013-01-05 16:08</span> by <a href="https://www.reddit.com/user/clinthoward">/u/clinthoward</a>
 .</p>
@@ -545,7 +553,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Yesterday's Children - Hunter's Moon</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Yesterday's Children - Hunter's Moon [USA - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1722kj">Yesterday's Children - Hunter's Moon [USA - 1969]</a>
 <br>
                         submitted <span class="muted">2013-01-22 15:10</span> by <a href="https://www.reddit.com/user/juqjoint">/u/juqjoint</a>
 .</p>
@@ -559,7 +567,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Titus Groan - It's all up with us</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Titus Groan - It's All Up With Us [UK - 1970]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1746x8">Titus Groan - It's All Up With Us [UK - 1970]</a>
 <br>
                         submitted <span class="muted">2013-01-23 10:28</span> by <a href="https://www.reddit.com/user/Reigned">/u/Reigned</a>
 .</p>
@@ -573,7 +581,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Aum - You Can't Hide (US 1969)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Aum -You Can't Hide (USA-1969)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/179gn1">Aum -You Can't Hide (USA-1969)</a>
 <br>
                         submitted <span class="muted">2013-01-25 16:54</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
 .</p>
@@ -587,7 +595,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">MAGIC CIRCLE - "Scream Evil" - 2011</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">MAGIC CIRCLE - "Scream Evil" -(U.S. 2011) - YouTube</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/16a8xf">MAGIC CIRCLE - "Scream Evil" -(U.S. 2011) - YouTube</a>
 <br>
                         submitted <span class="muted">2013-01-10 01:04</span> by <a href="https://www.reddit.com/user/ElCid821">/u/ElCid821</a>
 .</p>
@@ -601,7 +609,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">AINIGMA - ALL THINGS ARE FADING</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Ainigma - All Things Are Fading [Germany - 1973]
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/16l58o">Ainigma - All Things Are Fading [Germany - 1973]
 AINIGMA - ALL THINGS ARE FADING</a>
 <br>
                         submitted <span class="muted">2013-01-15 01:01</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
@@ -616,7 +624,7 @@ AINIGMA - ALL THINGS ARE FADING</a>
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Bob Seger System - 2 + 2 = ?</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">The Bob Seger System - "2+2=?" [USA - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/17lqfr">The Bob Seger System - "2+2=?" [USA - 1969]</a>
 <br>
                         submitted <span class="muted">2013-01-31 02:26</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>

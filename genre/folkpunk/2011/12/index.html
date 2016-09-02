@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Andrew Jackson Jihad - Skate Park</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">30</span> - <a href="https://www.reddit.com/">"The skate park is only fifteen Minutemen songs away."</a>
+                    <p><strong>Score:</strong> <span class="rd-score">30</span> - <a href="https://www.reddit.com/mx2wu">"The skate park is only fifteen Minutemen songs away."</a>
 <br>
                         submitted <span class="muted">2011-12-02 03:50</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Freddy Fudpucker- Man Is A Bad Animal.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/">Freddy Fudpucker folk punk form Ireland: i saw these guys play in my friends living room(in Mississippi).</a>
+                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/nwkz5">Freddy Fudpucker folk punk form Ireland: i saw these guys play in my friends living room(in Mississippi).</a>
 <br>
                         submitted <span class="muted">2011-12-30 19:42</span> by <a href="https://www.reddit.com/user/HipsterHillbilly">/u/HipsterHillbilly</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tell Me a Story - Mischief Brew</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">23</span> - <a href="https://www.reddit.com/">Mischief Brew - Tell Me a Story</a>
+                    <p><strong>Score:</strong> <span class="rd-score">23</span> - <a href="https://www.reddit.com/nn7e2">Mischief Brew - Tell Me a Story</a>
 <br>
                         submitted <span class="muted">2011-12-22 23:03</span> by <a href="https://www.reddit.com/user/Richard_Fey">/u/Richard_Fey</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Andrew Jackson Jihad - People II 2: Still Peoplin'</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/">Andrew Jackson Jihad - People II: Still Peoplin'</a>
+                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/njfa0">Andrew Jackson Jihad - People II: Still Peoplin'</a>
 <br>
                         submitted <span class="muted">2011-12-20 04:17</span> by <a href="https://www.reddit.com/user/stansfriend">/u/stansfriend</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Wingnut Dishwasher's Union - Picking sides</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/">So if we're picking sides I guess I hate the policeman and the white man tonight!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/n71z6">So if we're picking sides I guess I hate the policeman and the white man tonight!</a>
 <br>
                         submitted <span class="muted">2011-12-10 03:24</span> by <a href="https://www.reddit.com/user/kcamsdog1387">/u/kcamsdog1387</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Billy Bragg - To Have And To Have Not</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">I see your Frank Turner and Raise you Billy Bragg.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/nk7lq">I see your Frank Turner and Raise you Billy Bragg.</a>
 <br>
                         submitted <span class="muted">2011-12-20 19:42</span> by <a href="https://www.reddit.com/user/Dischord">/u/Dischord</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Toh Kay - A Moment of Silence</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">Acoustic Streetlight Manifesto: Tomas Kalnoky, A Moment of Silence</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/ndgry">Acoustic Streetlight Manifesto: Tomas Kalnoky, A Moment of Silence</a>
 <br>
                         submitted <span class="muted">2011-12-15 06:08</span> by <a href="https://www.reddit.com/user/mouseteeth">/u/mouseteeth</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Frank Turner - I Still Believe (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Frank Turner - I Still Believe</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/nk1n7">Frank Turner - I Still Believe</a>
 <br>
                         submitted <span class="muted">2011-12-20 17:30</span> by <a href="https://www.reddit.com/user/haleymcpunchy">/u/haleymcpunchy</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cobra Skulls - Cobracoustic</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Cobra Skulls - Cobracoustic</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/nwljv">Cobra Skulls - Cobracoustic</a>
 <br>
                         submitted <span class="muted">2011-12-30 19:56</span> by <a href="https://www.reddit.com/user/firemind">/u/firemind</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Come Home</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Come Home- Dark Dark Dark</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/nclbr">Come Home- Dark Dark Dark</a>
 <br>
                         submitted <span class="muted">2011-12-14 17:42</span> by <a href="https://www.reddit.com/user/ggisdead">/u/ggisdead</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Foot Ox - Angel Eyes & Basketball</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Foot Ox - Angel Eyes and Basketball</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/nmzvn">Foot Ox - Angel Eyes and Basketball</a>
 <br>
                         submitted <span class="muted">2011-12-22 20:05</span> by <a href="https://www.reddit.com/user/stvwtr">/u/stvwtr</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ukulele Anthem - Amanda Palmer (Studio Version)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">ukelele anthem by amanda palmer, i figured you guys would enjoy it</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/n26of">ukelele anthem by amanda palmer, i figured you guys would enjoy it</a>
 <br>
                         submitted <span class="muted">2011-12-06 05:49</span> by <a href="https://www.reddit.com/user/milesistherowl">/u/milesistherowl</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Wegrowbeards - Peasants Revolt</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">WEGROWBEARDS - Peasants' Revolt</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/nvvag">WEGROWBEARDS - Peasants' Revolt</a>
 <br>
                         submitted <span class="muted">2011-12-30 04:54</span> by <a href="https://www.reddit.com/user/j3107">/u/j3107</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Pogues & Kirsty McColl Fairytale Of New York</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Not sure if this belongs, but fuck it its Christmas!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/npwnm">Not sure if this belongs, but fuck it its Christmas!</a>
 <br>
                         submitted <span class="muted">2011-12-25 05:45</span> by <a href="https://www.reddit.com/user/thehumanboy519">/u/thehumanboy519</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lynched - Carlo Giuliani</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Lynched - Carlo Guiliani</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/n7jj6">Lynched - Carlo Guiliani</a>
 <br>
                         submitted <span class="muted">2011-12-10 17:24</span> by <a href="https://www.reddit.com/user/Satanicbearmaster">/u/Satanicbearmaster</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">witter - bell peppers</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Witter - Bell Peppers (one of my slower songs)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/n181f">Witter - Bell Peppers (one of my slower songs)</a>
 <br>
                         submitted <span class="muted">2011-12-05 16:24</span> by <a href="https://www.reddit.com/user/stvwtr">/u/stvwtr</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Micah Schnabel of Two Cow Garage - Skinny Legged Girl</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Micah Schnabel of Two Cow Garage - Skinny Legged Girl</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/nk0f7">Micah Schnabel of Two Cow Garage - Skinny Legged Girl</a>
 <br>
                         submitted <span class="muted">2011-12-20 17:01</span> by <a href="https://www.reddit.com/user/haleymcpunchy">/u/haleymcpunchy</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Waxahatchee - Sister Saint (Nervous Energies session)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Doesn't Seem to be any Waxahatchee here</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/n2629">Doesn't Seem to be any Waxahatchee here</a>
 <br>
                         submitted <span class="muted">2011-12-06 05:33</span> by <a href="https://www.reddit.com/user/theevilnarwhale">/u/theevilnarwhale</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The District Sleeps Alone Tonight - Ben Marwood, Frank Turner & Franz Nicolay Backstage Session.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">I see your Billy Bragg and raise you Ben Marwood, Frank Turner &amp; Franz Nicolay.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/nk9qh">I see your Billy Bragg and raise you Ben Marwood, Frank Turner &amp; Franz Nicolay.</a>
 <br>
                         submitted <span class="muted">2011-12-20 20:19</span> by <a href="https://www.reddit.com/user/haleymcpunchy">/u/haleymcpunchy</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Travis Frederickson & Adam Armstrong- The 11th Hour (Rancid cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">This is actually Travis James and Adam and the Ancient Gods</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/ns1cz">This is actually Travis James and Adam and the Ancient Gods</a>
 <br>
                         submitted <span class="muted">2011-12-27 06:56</span> by <a href="https://www.reddit.com/user/plygar">/u/plygar</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rory Gallagher - Going To My Hometown (1972)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Going to my Hometown - Rory Gallagher (not quite folk punk, but pretty close)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/ni6ux">Going to my Hometown - Rory Gallagher (not quite folk punk, but pretty close)</a>
 <br>
                         submitted <span class="muted">2011-12-19 05:50</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Wild - Ballad of Johnny Z</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Ballad of Johnny Z played by the Wild</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/nk73u">Ballad of Johnny Z played by the Wild</a>
 <br>
                         submitted <span class="muted">2011-12-20 19:31</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Scotty Eberhard - That Thing You Do</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Check check......check it out.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/nm9qd">Check check......check it out.</a>
 <br>
                         submitted <span class="muted">2011-12-22 05:30</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>

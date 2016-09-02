@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sleep - Dopesmoker [full]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/">Sitting at work. Just started the Caravan. Sleep - Dopesmoker</a>
+                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/2dj7d9">Sitting at work. Just started the Caravan. Sleep - Dopesmoker</a>
 <br>
                         submitted <span class="muted">2014-08-14 12:38</span> by <a href="https://www.reddit.com/user/m3t4lhed">/u/m3t4lhed</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Alice in Chains - Junkhead (Live)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Alice in Chains- Junkhead (live)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/2e89vj">Alice in Chains- Junkhead (live)</a>
 <br>
                         submitted <span class="muted">2014-08-21 23:47</span> by <a href="https://www.reddit.com/user/Grooves_Well">/u/Grooves_Well</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">THE HEAVY EYES - One Hand On The Buffalo</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">The Heavy Eyes- One Hand on The Buffalo. (maybe a little more not the Stoner Rock side instead of metal. but yeah. HEAVY)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/2e4tix">The Heavy Eyes- One Hand on The Buffalo. (maybe a little more not the Stoner Rock side instead of metal. but yeah. HEAVY)</a>
 <br>
                         submitted <span class="muted">2014-08-21 00:21</span> by <a href="https://www.reddit.com/user/Grooves_Well">/u/Grooves_Well</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bongripper - The People Mover</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">The people mover-Bongripper</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2e27oz">The people mover-Bongripper</a>
 <br>
                         submitted <span class="muted">2014-08-20 06:53</span> by <a href="https://www.reddit.com/user/Thirdeye666">/u/Thirdeye666</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">All Them Witches -  When God Comes Back</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">All Them Witches-When God Comes Back</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2el48z">All Them Witches-When God Comes Back</a>
 <br>
                         submitted <span class="muted">2014-08-26 01:33</span> by <a href="https://www.reddit.com/user/Grooves_Well">/u/Grooves_Well</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cough - Crooked Spine</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Cough-Crooked Spine.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2e1lif">Cough-Crooked Spine.</a>
 <br>
                         submitted <span class="muted">2014-08-20 02:16</span> by <a href="https://www.reddit.com/user/Grooves_Well">/u/Grooves_Well</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Oozing Wound - Call Your Guy (Official Music Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Oozing Wound - Call Your Guy</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2e8nbp">Oozing Wound - Call Your Guy</a>
 <br>
                         submitted <span class="muted">2014-08-22 02:12</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Moses - Skæv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Moses - Skæv [4:45]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2cgbz9">Moses - Skæv [4:45]</a>
 <br>
                         submitted <span class="muted">2014-08-02 21:38</span> by <a href="https://www.reddit.com/user/Heavymetalcorpse">/u/Heavymetalcorpse</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tuskrat "Pyre"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Tuskrat -"Pyre"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2e3ygw">Tuskrat -"Pyre"</a>
 <br>
                         submitted <span class="muted">2014-08-20 19:29</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Miss Lava - Don't Tell a Soul</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Miss Lava - Don't Tell a Soul</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2emv6u">Miss Lava - Don't Tell a Soul</a>
 <br>
                         submitted <span class="muted">2014-08-26 15:37</span> by <a href="https://www.reddit.com/user/DMarquesJorge">/u/DMarquesJorge</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Öken "Apart Of Me"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Öken - "Apart Of Me"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2d5h7u">Öken - "Apart Of Me"</a>
 <br>
                         submitted <span class="muted">2014-08-10 15:27</span> by <a href="https://www.reddit.com/user/Ruukkz">/u/Ruukkz</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Abysmal Dirge - Impia Spiritus Sanctum</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Feedback on doom metal song by my band, Abysmal Dirge?</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2dw5wr">Feedback on doom metal song by my band, Abysmal Dirge?</a>
 <br>
                         submitted <span class="muted">2014-08-18 15:47</span> by <a href="https://www.reddit.com/user/BaronIronside">/u/BaronIronside</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Corrosion of Conformity - Stone Breaker</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Corrosion of Conformity - Stone Breaker (missing the old days with Pepper)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2e8ibc">Corrosion of Conformity - Stone Breaker (missing the old days with Pepper)</a>
 <br>
                         submitted <span class="muted">2014-08-22 01:17</span> by <a href="https://www.reddit.com/user/BigNickTX">/u/BigNickTX</a>
 .</p>

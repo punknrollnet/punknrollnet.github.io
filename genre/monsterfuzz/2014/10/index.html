@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Osmonds - Crazy Horses</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">28</span> - <a href="https://www.reddit.com/">The Osmonds - Crazy Horses [US - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">28</span> - <a href="https://www.reddit.com/2jgwyw">The Osmonds - Crazy Horses [US - 1972]</a>
 <br>
                         submitted <span class="muted">2014-10-17 00:03</span> by <a href="https://www.reddit.com/user/toonhole">/u/toonhole</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Vanilla Fudge "Season of the Witch"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Vanilla Fudge - Season of the Witch [USA - 1968]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/2ilaa3">Vanilla Fudge - Season of the Witch [USA - 1968]</a>
 <br>
                         submitted <span class="muted">2014-10-07 20:03</span> by <a href="https://www.reddit.com/user/thefriendcatcher">/u/thefriendcatcher</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">jack bruce-never tell your mother shes out of tune</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Jack Bruce (RIP) - never tell your mother she's out of tune [England - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/2kd1jv">Jack Bruce (RIP) - never tell your mother she's out of tune [England - 1969]</a>
 <br>
                         submitted <span class="muted">2014-10-26 11:13</span> by <a href="https://www.reddit.com/user/rankkasilli">/u/rankkasilli</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nyrvana Pancake - Open Your Eyes [1973 Germany]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Nyrvana Pancake - "Open Your Eyes" [Germany - 1973]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2hzqc0">Nyrvana Pancake - "Open Your Eyes" [Germany - 1973]</a>
 <br>
                         submitted <span class="muted">2014-10-01 14:20</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Brainticket - Black Sand</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Brainticket - Black Sand [Switzerland - 1970]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2jpj08">Brainticket - Black Sand [Switzerland - 1970]</a>
 <br>
                         submitted <span class="muted">2014-10-19 18:09</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Leafhound - Work My Body</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Leaf Hound - Work My Body [England - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2i4ry2">Leaf Hound - Work My Body [England - 1971]</a>
 <br>
                         submitted <span class="muted">2014-10-02 22:01</span> by <a href="https://www.reddit.com/user/prezuiwf">/u/prezuiwf</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Potliquor - Rooster Blues</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Potliquor - Rooster Blues [USA - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2i8pje">Potliquor - Rooster Blues [USA - 1971]</a>
 <br>
                         submitted <span class="muted">2014-10-04 01:24</span> by <a href="https://www.reddit.com/user/dsallen7">/u/dsallen7</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Samuel Prody-Time Is All Mine-1970-[UK HEAVY BLUES ROCK]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Samuel Prody - Time is All Mine [UK - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2iex9s">Samuel Prody - Time is All Mine [UK - 1971]</a>
 <br>
                         submitted <span class="muted">2014-10-06 03:06</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mouse - Hit & Run (1973)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Mouse - Hit &amp; Run [England - 1973]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2ivlaj">Mouse - Hit &amp; Run [England - 1973]</a>
 <br>
                         submitted <span class="muted">2014-10-10 18:18</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Far East Family Band     Mystery Of Northern Space</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Far East Family Band - Mystery Of Northern Space [Japan - 1975]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2jexu4">Far East Family Band - Mystery Of Northern Space [Japan - 1975]</a>
 <br>
                         submitted <span class="muted">2014-10-16 13:16</span> by <a href="https://www.reddit.com/user/thefriendcatcher">/u/thefriendcatcher</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Quicksilver Messenger Service - Hair like Sunshine (1966)US Blues Rock</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Quicksilver Messenger Service - Hair like Sunshine [USA - 1966]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2i4b9p">Quicksilver Messenger Service - Hair like Sunshine [USA - 1966]</a>
 <br>
                         submitted <span class="muted">2014-10-02 19:34</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Muddy Waters Herbert Harper's Free Press News_0001.wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">The Rotary Connection With Muddy Waters - "Herbert Harper's Free Press News" [USA - 1968]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2ioyyh">The Rotary Connection With Muddy Waters - "Herbert Harper's Free Press News" [USA - 1968]</a>
 <br>
                         submitted <span class="muted">2014-10-08 20:15</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Steel Mill Treadmill</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Steel Mill - "Treadmill" [England - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2k3c0h">Steel Mill - "Treadmill" [England - 1972]</a>
 <br>
                         submitted <span class="muted">2014-10-23 13:14</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Big Brother - Heavy Load (1970) HQ</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Big Brother - Heavy Load [USA - 1970]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2kx34r">Big Brother - Heavy Load [USA - 1970]</a>
 <br>
                         submitted <span class="muted">2014-10-31 20:24</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tony Williams Lifetime - "Right On" (1970)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Tony Williams Lifetime - Right On [1970]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2kb2dp">Tony Williams Lifetime - Right On [1970]</a>
 <br>
                         submitted <span class="muted">2014-10-25 19:03</span> by <a href="https://www.reddit.com/user/j3434">/u/j3434</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">DÊ UM ROLÊ - Gal Costa</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Gal Costa -- Dê Um Rolê [Brazil - 1971] xpost from r/psychedelicrock</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2inrn4">Gal Costa -- Dê Um Rolê [Brazil - 1971] xpost from r/psychedelicrock</a>
 <br>
                         submitted <span class="muted">2014-10-08 13:52</span> by <a href="https://www.reddit.com/user/rounding_error">/u/rounding_error</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Underground Electrics - The Syndicator US (1968) Heavy Psych / Blues</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">The Underground Electrics - The Syndicator [USA - 1968]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2jsn3x">The Underground Electrics - The Syndicator [USA - 1968]</a>
 <br>
                         submitted <span class="muted">2014-10-20 16:11</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cathedral - The Little Boy Blues [Chicago, Illinois] - 1968</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">The Little Boy Blues - Cathedral [USA - 1968]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2klk7l">The Little Boy Blues - Cathedral [USA - 1968]</a>
 <br>
                         submitted <span class="muted">2014-10-28 19:29</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">1960'S HIPPIES HEAVY BLUES ROCK BAND TRACK ☮♥♫☼ (O♥E) Share By Gurol Erkan</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Floating Bridge - Watch Your Step [US - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2iewtd">Floating Bridge - Watch Your Step [US - 1969]</a>
 <br>
                         submitted <span class="muted">2014-10-06 03:01</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Freeborne - Yellow Sky</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">The Freeborne - Yellow Sky [US-1967]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2ieznr">The Freeborne - Yellow Sky [US-1967]</a>
 <br>
                         submitted <span class="muted">2014-10-06 03:31</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Decision- Fruupp</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Fruupp - Decision (Ireland 1973)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2iqv0c">Fruupp - Decision (Ireland 1973)</a>
 <br>
                         submitted <span class="muted">2014-10-09 09:43</span> by <a href="https://www.reddit.com/user/rankkasilli">/u/rankkasilli</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bloody Mary-Stonewall(Stoner)-Stonewall(1976)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Stonewall - Bloody Mary [USA - 1969~70]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2j8nia">Stonewall - Bloody Mary [USA - 1969~70]</a>
 <br>
                         submitted <span class="muted">2014-10-14 18:38</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Beck, Bogert & Appice - Black Cat Moan - 01</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Beck, Bogert &amp; Appice - Black Cat Moan [USA/England - 1973]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2kcymt">Beck, Bogert &amp; Appice - Black Cat Moan [USA/England - 1973]</a>
 <br>
                         submitted <span class="muted">2014-10-26 10:08</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>

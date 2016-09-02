@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sir Lord Baltimore - Kingdom Come</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">[Relatives Of Doom] [1970s] Sir Lord Baltimore - Kingdom Come [proto-doom/hard rock]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/jlh8y">[Relatives Of Doom] [1970s] Sir Lord Baltimore - Kingdom Come [proto-doom/hard rock]</a>
 <br>
                         submitted <span class="muted">2011-08-17 10:54</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Grief- Earthworm</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Grief - Earthworm [Sludge]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/jst40">Grief - Earthworm [Sludge]</a>
 <br>
                         submitted <span class="muted">2011-08-24 12:47</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dead Meadow - One And Old</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Dead Meadow (at their doomiest) - One and Old</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/jwouo">Dead Meadow (at their doomiest) - One and Old</a>
 <br>
                         submitted <span class="muted">2011-08-28 03:02</span> by <a href="https://www.reddit.com/user/shiveringking">/u/shiveringking</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Necrosis - Crown of Thorns</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">[Relatives Of Doom] [1990s] Necrosis - Crown Of Thorns [death metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/jxy66">[Relatives Of Doom] [1990s] Necrosis - Crown Of Thorns [death metal]</a>
 <br>
                         submitted <span class="muted">2011-08-29 13:42</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sabazius-Occult</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Sabazius - Occult</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/jpjj8">Sabazius - Occult</a>
 <br>
                         submitted <span class="muted">2011-08-21 09:20</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Buffalo - Shylock  (Volcanic Rock)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Buffalo - Shylock (Volcanic Rock) 1970 [proto doom]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/jy697">Buffalo - Shylock (Volcanic Rock) 1970 [proto doom]</a>
 <br>
                         submitted <span class="muted">2011-08-29 18:05</span> by <a href="https://www.reddit.com/user/bigstinky">/u/bigstinky</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Big Business "The Drift" Music Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Big Business -The Drift</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/jhuns">Big Business -The Drift</a>
 <br>
                         submitted <span class="muted">2011-08-13 18:43</span> by <a href="https://www.reddit.com/user/iamzen7">/u/iamzen7</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Pallbearer - Gloomy Sunday</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Pallbearer - Gloomy Sunday</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/jl8hl">Pallbearer - Gloomy Sunday</a>
 <br>
                         submitted <span class="muted">2011-08-17 04:08</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Melvins - Heaviness of the Load</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Melvins - Heaviness Of The Load</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/j81vj">Melvins - Heaviness Of The Load</a>
 <br>
                         submitted <span class="muted">2011-08-03 19:53</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cromagnon- Caledonia- 1969</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">[Relatives Of Doom] [1960s] Cromagnon - Caledonia [proto black-metal/noise-drone doom]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/jc2xs">[Relatives Of Doom] [1960s] Cromagnon - Caledonia [proto black-metal/noise-drone doom]</a>
 <br>
                         submitted <span class="muted">2011-08-08 04:03</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">solitude-candlemass</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Candlemass - Solitude</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/jhqef">Candlemass - Solitude</a>
 <br>
                         submitted <span class="muted">2011-08-13 15:39</span> by <a href="https://www.reddit.com/user/bood_war">/u/bood_war</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Buffalo    Shylock   Volcanic Rock  1973</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">[Relatives Of Doom] [1970s] Buffalo - Shylock [proto-metal/stoner rock]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/jkceg">[Relatives Of Doom] [1970s] Buffalo - Shylock [proto-metal/stoner rock]</a>
 <br>
                         submitted <span class="muted">2011-08-16 10:35</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Moss - Gate III: Devils From The Outer Dark</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Moss - Gate III: Devils From The Outer Dark</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/jqelm">Moss - Gate III: Devils From The Outer Dark</a>
 <br>
                         submitted <span class="muted">2011-08-22 08:02</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Amebix - Coming Home</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Amebix - Coming Home [thrash/punk/doom... aka crust punk!]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/j81p3">Amebix - Coming Home [thrash/punk/doom... aka crust punk!]</a>
 <br>
                         submitted <span class="muted">2011-08-03 19:47</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The First Heavy Metal Song Ever Made (Bitter Creek - Plastic Thunder, 1967)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">[Relatives Of Doom] [1960s] Bitter Creek - Plastic Thunder [proto-metal/heavy rock]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/jfde3">[Relatives Of Doom] [1960s] Bitter Creek - Plastic Thunder [proto-metal/heavy rock]</a>
 <br>
                         submitted <span class="muted">2011-08-11 04:36</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Taurus - Orthodox</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Orthodox - Taurus</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/ji7uz">Orthodox - Taurus</a>
 <br>
                         submitted <span class="muted">2011-08-14 04:12</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Stumm - Not Waving But Drowning</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Stumm - Not Waving But drowning</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/jkr80">Stumm - Not Waving But drowning</a>
 <br>
                         submitted <span class="muted">2011-08-16 19:07</span> by <a href="https://www.reddit.com/user/backrightpocket">/u/backrightpocket</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Thorr's Hammer - "Norge"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Thorr's Hammer - "Norge"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/jmhjl">Thorr's Hammer - "Norge"</a>
 <br>
                         submitted <span class="muted">2011-08-18 06:25</span> by <a href="https://www.reddit.com/user/Ca5bah">/u/Ca5bah</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Night Sun - Got a Bone of My Own (1972)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">[Relatives Of Doom] [1970s] Night Sun - Bone Of My Own [heavy prog/psych, doom/stoner rock]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/jnu3o">[Relatives Of Doom] [1970s] Night Sun - Bone Of My Own [heavy prog/psych, doom/stoner rock]</a>
 <br>
                         submitted <span class="muted">2011-08-19 13:25</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Black Boned Angel - Verdun</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Black Boned Angel - Verdun</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/jqdkg">Black Boned Angel - Verdun</a>
 <br>
                         submitted <span class="muted">2011-08-22 07:09</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Corrupted - Bloodscape</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Corrupted - Bloodscape [Sludge]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/jrk6q">Corrupted - Bloodscape [Sludge]</a>
 <br>
                         submitted <span class="muted">2011-08-23 10:19</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Blue Oyster Cult: Wings Wetted Down</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">[Relatives of Doom] [1970s] Blue Oyster Cult - Wings Wetted Down [hard rock/psychedelic]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/jsuz0">[Relatives of Doom] [1970s] Blue Oyster Cult - Wings Wetted Down [hard rock/psychedelic]</a>
 <br>
                         submitted <span class="muted">2011-08-24 13:57</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Autopsy - Slaughterday</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">[Relatives Of Doom] [1990s] Autopsy - Slaughterday [death metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/k069c">[Relatives Of Doom] [1990s] Autopsy - Slaughterday [death metal]</a>
 <br>
                         submitted <span class="muted">2011-08-31 13:46</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Carnivore - Thermonuclear Warrior</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">[Relatives Of Doom] [1980s] Carnivore - Thermonuclear Warrior [thrash]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/jv1g6">[Relatives Of Doom] [1980s] Carnivore - Thermonuclear Warrior [thrash]</a>
 <br>
                         submitted <span class="muted">2011-08-26 12:08</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Odyssey - Angel Dust (1969)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">[Relatives Of Doom] [1960s] Odyssey - Angel Dust [stoner/heavy rock]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/jd41u">[Relatives Of Doom] [1960s] Odyssey - Angel Dust [stoner/heavy rock]</a>
 <br>
                         submitted <span class="muted">2011-08-09 03:42</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">THE UGLY DUCKLINGS - "HANGMAN"-  FEB 1968</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">[Relatives Of Doom] [1960s] The Ugly Ducklings - Hangman [psych rock/proto-doom]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/je8ac">[Relatives Of Doom] [1960s] The Ugly Ducklings - Hangman [psych rock/proto-doom]</a>
 <br>
                         submitted <span class="muted">2011-08-10 03:55</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Slumber - Rapture with Lyrics</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Slumber - Rapture</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/jgxa6">Slumber - Rapture</a>
 <br>
                         submitted <span class="muted">2011-08-12 17:07</span> by <a href="https://www.reddit.com/user/Sabayn">/u/Sabayn</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dirge - Morphée Rouge</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Dirge - Morphée Rouge (2011)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/jik5s">Dirge - Morphée Rouge (2011)</a>
 <br>
                         submitted <span class="muted">2011-08-14 17:12</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Like Drone Razors Through Flesh Sphere -  Misanthropy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Like Drone Razors Through Flesh Sphere - Misanthropy</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/jqeg8">Like Drone Razors Through Flesh Sphere - Misanthropy</a>
 <br>
                         submitted <span class="muted">2011-08-22 07:54</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -475,7 +483,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Venom - Manitou</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">[Relatives Of Doom] [1980s] Venom - Manitou [NWOBHM/thrash]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/jrfqp">[Relatives Of Doom] [1980s] Venom - Manitou [NWOBHM/thrash]</a>
 <br>
                         submitted <span class="muted">2011-08-23 06:16</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -489,7 +497,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nirvana - Paper Cuts</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">[Relatives Of Doom] [1980s] Nirvana - Paper Cuts [sludge pop]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/jtxc0">[Relatives Of Doom] [1980s] Nirvana - Paper Cuts [sludge pop]</a>
 <br>
                         submitted <span class="muted">2011-08-25 11:30</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>
@@ -503,7 +511,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Head of David - Dustbowl - 108</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Head of David - 108</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/jvsh0">Head of David - 108</a>
 <br>
                         submitted <span class="muted">2011-08-27 02:57</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -517,7 +525,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">SAINT VITUS - I BLEED BLACK</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">St. Vitus - I Bleed Black</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/jrdag">St. Vitus - I Bleed Black</a>
 <br>
                         submitted <span class="muted">2011-08-23 04:44</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -531,7 +539,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Nirvana - Something In The Way (lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Nirvana - Something in the Way</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/jo4c8">Nirvana - Something in the Way</a>
 <br>
                         submitted <span class="muted">2011-08-19 18:39</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -545,7 +553,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sunn O))) - Aghartha</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Sunn O))) - Agartha (Lets talk Drone in the thread)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/jqdfj">Sunn O))) - Agartha (Lets talk Drone in the thread)</a>
 <br>
                         submitted <span class="muted">2011-08-22 07:02</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -559,7 +567,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">KAT - Łza dla cieniów minoinych</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">[Relatives Of Doom] [1990s] KAT - Łza Dla Cieniów Minoinych [Polish thrash]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/jyysg">[Relatives Of Doom] [1990s] KAT - Łza Dla Cieniów Minoinych [Polish thrash]</a>
 <br>
                         submitted <span class="muted">2011-08-30 11:41</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
 .</p>

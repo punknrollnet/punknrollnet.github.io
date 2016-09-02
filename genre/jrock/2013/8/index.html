@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">ギルガメッシュ（girugamesh）「INCOMPLETE」MV (Full Ver.)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Girugamesh - Incomplete [PV] - [4:00]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/1kxswq">Girugamesh - Incomplete [PV] - [4:00]</a>
 <br>
                         submitted <span class="muted">2013-08-23 12:30</span> by <a href="https://www.reddit.com/user/mhalkmim">/u/mhalkmim</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">DNA BAKS / 市松模様</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">DNA BAKS - Checkerboard [PV]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1k958h">DNA BAKS - Checkerboard [PV]</a>
 <br>
                         submitted <span class="muted">2013-08-13 03:07</span> by <a href="https://www.reddit.com/user/proinpretius">/u/proinpretius</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">SiM - Blah Blah Blah (OFFICIAL VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">SiM - Blah Blah Blah</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1kxj25">SiM - Blah Blah Blah</a>
 <br>
                         submitted <span class="muted">2013-08-23 07:48</span> by <a href="https://www.reddit.com/user/NP16">/u/NP16</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">HaKU「ショウガイレンサ」Live PV (@HaKU_music) #HaKU</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">HaKU - Shogairensa</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1jyi1g">HaKU - Shogairensa</a>
 <br>
                         submitted <span class="muted">2013-08-08 14:50</span> by <a href="https://www.reddit.com/user/DoddyUK">/u/DoddyUK</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cinq element ‐ Destiny (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Cinq Element - Destiny [PV]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1k73fh">Cinq Element - Destiny [PV]</a>
 <br>
                         submitted <span class="muted">2013-08-12 08:48</span> by <a href="https://www.reddit.com/user/proinpretius">/u/proinpretius</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Suneohair - Koushite hai rare nai</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Suneohair - Koushite Hai Rare Nai</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1lb66x">Suneohair - Koushite Hai Rare Nai</a>
 <br>
                         submitted <span class="muted">2013-08-29 04:15</span> by <a href="https://www.reddit.com/user/PubicAdmiral">/u/PubicAdmiral</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">From Noon Till Dawn (feat.Tabu Zombie & Kunikazu Tanaka)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">From Noon Till Dawn (feat.Tabu Zombie &amp; Kunikazu Tanaka)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1l5f0o">From Noon Till Dawn (feat.Tabu Zombie &amp; Kunikazu Tanaka)</a>
 <br>
                         submitted <span class="muted">2013-08-26 23:22</span> by <a href="https://www.reddit.com/user/NP16">/u/NP16</a>
 .</p>

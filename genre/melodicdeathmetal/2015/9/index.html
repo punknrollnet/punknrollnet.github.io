@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Be'lakor - Fraught (HD)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">57</span> - <a href="https://www.reddit.com/">Be'lakor - Fraught [Of Breath and Bone/2012]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">57</span> - <a href="https://www.reddit.com/3kwckt">Be'lakor - Fraught [Of Breath and Bone/2012]</a>
 <br>
                         submitted <span class="muted">2015-09-14 11:40</span> by <a href="https://www.reddit.com/user/Eastbound_and_Downs">/u/Eastbound_and_Downs</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Avalerion- Into The Wild (Lyrics Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/">This guy released one song in 2013 and it is amazing.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/3lecf1">This guy released one song in 2013 and it is amazing.</a>
 <br>
                         submitted <span class="muted">2015-09-18 05:35</span> by <a href="https://www.reddit.com/user/djherp">/u/djherp</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mors Principium Est - Cleansing Rain with Lyrics</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">23</span> - <a href="https://www.reddit.com/">Mors Principium Est - Cleansing Rain</a>
+                    <p><strong>Score:</strong> <span class="rd-score">23</span> - <a href="https://www.reddit.com/3joh8r">Mors Principium Est - Cleansing Rain</a>
 <br>
                         submitted <span class="muted">2015-09-04 22:58</span> by <a href="https://www.reddit.com/user/Eastbound_and_Downs">/u/Eastbound_and_Downs</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Blood Stain Child- Sirius VI [HD]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/">Blood Stain Child - Sirius VI</a>
+                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/3mj2as">Blood Stain Child - Sirius VI</a>
 <br>
                         submitted <span class="muted">2015-09-27 01:01</span> by <a href="https://www.reddit.com/user/Isaaczz">/u/Isaaczz</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Wolfheart - Shadow World [Full-Album HD]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Wolfheart - Shadow World [Full-Album HD]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/3ja7g3">Wolfheart - Shadow World [Full-Album HD]</a>
 <br>
                         submitted <span class="muted">2015-09-01 23:06</span> by <a href="https://www.reddit.com/user/cyberbemon">/u/cyberbemon</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Soilwork - "Death In General" - Vocal Cover</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Soilwork - Death In General [Ryan Strain Cover]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/3mh2h4">Soilwork - Death In General [Ryan Strain Cover]</a>
 <br>
                         submitted <span class="muted">2015-09-26 15:36</span> by <a href="https://www.reddit.com/user/SirSigma">/u/SirSigma</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dark Tranquillity - At loss For Words (Haven 2000 album)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">Dark Tranquillity - At Loss For Words (Haven, 2000)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/3ktxqy">Dark Tranquillity - At Loss For Words (Haven, 2000)</a>
 <br>
                         submitted <span class="muted">2015-09-13 21:33</span> by <a href="https://www.reddit.com/user/lapagen">/u/lapagen</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">CHILDREN OF BODOM - I Hurt (OFFICIAL TRACK & LYRICS)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">CHILDREN OF BODOM - I Hurt (OFFICIAL TRACK &amp; LYRICS)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/3lbm92">CHILDREN OF BODOM - I Hurt (OFFICIAL TRACK &amp; LYRICS)</a>
 <br>
                         submitted <span class="muted">2015-09-17 16:58</span> by <a href="https://www.reddit.com/user/TonsilTrouble">/u/TonsilTrouble</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Shade Empire - Omega Arcane</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/">Shade Empire - Omega Arcane</a>
+                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/3mf2iq">Shade Empire - Omega Arcane</a>
 <br>
                         submitted <span class="muted">2015-09-26 02:42</span> by <a href="https://www.reddit.com/user/Archimonde1308">/u/Archimonde1308</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Countless Skies - Ethereal [Melodic Death Metal]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">Countless Skies - Ethereal</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/3k2pkz">Countless Skies - Ethereal</a>
 <br>
                         submitted <span class="muted">2015-09-08 09:36</span> by <a href="https://www.reddit.com/user/BrutalCowbell">/u/BrutalCowbell</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Disarmonia Mundi - Flare</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Disarmonia Mundi - Flare</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/3l8mgg">Disarmonia Mundi - Flare</a>
 <br>
                         submitted <span class="muted">2015-09-17 00:03</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">God Syndrome - Drum Recording Session By Paweł Jaroszewicz</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">God Syndrome - Summon The Sun [extreme melodic death metal] Drum Recording Session By Paweł Jaroszewicz</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/3kdpyo">God Syndrome - Summon The Sun [extreme melodic death metal] Drum Recording Session By Paweł Jaroszewicz</a>
 <br>
                         submitted <span class="muted">2015-09-10 10:40</span> by <a href="https://www.reddit.com/user/gs_dmitry">/u/gs_dmitry</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rapture - Misery 24/7</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Rapture- Misery 24/7</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/3l29u7">Rapture- Misery 24/7</a>
 <br>
                         submitted <span class="muted">2015-09-15 17:03</span> by <a href="https://www.reddit.com/user/DAD_FISTER">/u/DAD_FISTER</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Soilwork - Whirl of Pain [Lyrics]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Soilwork - Whirl Of Pain [2015], easily the strongest track off the new album</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/3l43bw">Soilwork - Whirl Of Pain [2015], easily the strongest track off the new album</a>
 <br>
                         submitted <span class="muted">2015-09-16 00:53</span> by <a href="https://www.reddit.com/user/Floodman11">/u/Floodman11</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Black Dahlia Murder "Moonlight Equilibrium" (OFFICIAL VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Hey guys.. Do you feel the pull? [The Black Dahlia Murder-Moonlight Equilibrium] ... If you're a looking for a song to bring you to the death metal side [melodically], you're welcome!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/3mx42o">Hey guys.. Do you feel the pull? [The Black Dahlia Murder-Moonlight Equilibrium] ... If you're a looking for a song to bring you to the death metal side [melodically], you're welcome!</a>
 <br>
                         submitted <span class="muted">2015-09-30 03:05</span> by <a href="https://www.reddit.com/user/chrismetalrock">/u/chrismetalrock</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">HANGING GARDEN - Words That Bear No Meaning (full track teaser)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">HANGING GARDEN - Words That Bear No Meaning (full track teaser)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/3jjeg2">HANGING GARDEN - Words That Bear No Meaning (full track teaser)</a>
 <br>
                         submitted <span class="muted">2015-09-03 21:25</span> by <a href="https://www.reddit.com/user/cyberbemon">/u/cyberbemon</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">GYZE "Black Bride" OFFICIAL VIDEO</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">GYZE "Black Bride" OFFICIAL VIDEO</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3kektb">GYZE "Black Bride" OFFICIAL VIDEO</a>
 <br>
                         submitted <span class="muted">2015-09-10 14:31</span> by <a href="https://www.reddit.com/user/Supermander">/u/Supermander</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">All I Lost - Dawn of Perception [HD] + lyrics</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">All I Lost - Dawn of Perception [HD]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3mlpd0">All I Lost - Dawn of Perception [HD]</a>
 <br>
                         submitted <span class="muted">2015-09-27 18:24</span> by <a href="https://www.reddit.com/user/bipolarrealist">/u/bipolarrealist</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">HANGING GARDEN - Borrowed Eyes (2015)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">HANGING GARDEN - Borrowed Eyes (2015)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3mlqf7">HANGING GARDEN - Borrowed Eyes (2015)</a>
 <br>
                         submitted <span class="muted">2015-09-27 18:33</span> by <a href="https://www.reddit.com/user/cyberbemon">/u/cyberbemon</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Disarmonia Mundi - "Ringside Seat To Human Tragedy" - Vocal Cover</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Disarmonia Mundi - Ringside Seat to Human Tragedy [Ryan Strain Cover]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3mtnx7">Disarmonia Mundi - Ringside Seat to Human Tragedy [Ryan Strain Cover]</a>
 <br>
                         submitted <span class="muted">2015-09-29 12:01</span> by <a href="https://www.reddit.com/user/Revenem">/u/Revenem</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">GYZE "Julius" OFFICIAL VIDEO</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">GYZE "Julius" OFFICIAL VIDEO</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3je4sp">GYZE "Julius" OFFICIAL VIDEO</a>
 <br>
                         submitted <span class="muted">2015-09-02 18:55</span> by <a href="https://www.reddit.com/user/Supermander">/u/Supermander</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gardenian - Deserted</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Gardenian - Deserted</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3jfwcb">Gardenian - Deserted</a>
 <br>
                         submitted <span class="muted">2015-09-03 02:34</span> by <a href="https://www.reddit.com/user/Tesseract91">/u/Tesseract91</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Aetherian - Tales Of Our Times</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Aetherian - Tales Of Our Times</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3k48fj">Aetherian - Tales Of Our Times</a>
 <br>
                         submitted <span class="muted">2015-09-08 17:23</span> by <a href="https://www.reddit.com/user/aroulis1213">/u/aroulis1213</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">In Mourning - The Poet and the Painter of Souls(Lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">In Mourning - The Poet and the Painter of Souls (Lyrics)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3kwgx4">In Mourning - The Poet and the Painter of Souls (Lyrics)</a>
 <br>
                         submitted <span class="muted">2015-09-14 12:23</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Algos - Corruption Defined (OFFICIAL LYRIC VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Dutch Melodeath project Algos released his new song: Corruption Defined!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3l7i4q">Dutch Melodeath project Algos released his new song: Corruption Defined!</a>
 <br>
                         submitted <span class="muted">2015-09-16 19:18</span> by <a href="https://www.reddit.com/user/Reapersfault">/u/Reapersfault</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">HYPOCRISY - Tales Of Thy Spineless (OFFICIAL MUSIC VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Hypocrisy - Tales of the Spineless</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3lamz2">Hypocrisy - Tales of the Spineless</a>
 <br>
                         submitted <span class="muted">2015-09-17 12:32</span> by <a href="https://www.reddit.com/user/Shayh55d">/u/Shayh55d</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Faith Eater</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">The Arcane Order - Faith Eater (from their new album "Cult of None")</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3n08yi">The Arcane Order - Faith Eater (from their new album "Cult of None")</a>
 <br>
                         submitted <span class="muted">2015-09-30 19:36</span> by <a href="https://www.reddit.com/user/Synovius">/u/Synovius</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cyanotic - Solitary King [Denmark]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Cyanotic - Solitary King (1996) [Denmark]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3ji8wb">Cyanotic - Solitary King (1996) [Denmark]</a>
 <br>
                         submitted <span class="muted">2015-09-03 16:40</span> by <a href="https://www.reddit.com/user/inugami47">/u/inugami47</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Devation - The Fixation (OFFICIAL VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">[Gothenburg] Devation - The Fixation</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3jy5wc">[Gothenburg] Devation - The Fixation</a>
 <br>
                         submitted <span class="muted">2015-09-07 07:38</span> by <a href="https://www.reddit.com/user/Devationswe">/u/Devationswe</a>
 .</p>
@@ -475,7 +483,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mist of Nihil - "The Lake" Official Teaser Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Mist of Nihil - "The Lake" Official Teaser Video</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3kkggb">Mist of Nihil - "The Lake" Official Teaser Video</a>
 <br>
                         submitted <span class="muted">2015-09-11 17:41</span> by <a href="https://www.reddit.com/user/aroulis1213">/u/aroulis1213</a>
 .</p>
@@ -489,7 +497,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mile - Confide</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Mile - Confide (2014)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3m2ugg">Mile - Confide (2014)</a>
 <br>
                         submitted <span class="muted">2015-09-23 15:50</span> by <a href="https://www.reddit.com/user/flen_paris">/u/flen_paris</a>
 .</p>
@@ -503,7 +511,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Gormathon - Lens of Guardian</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Gormathon - Lens of Guardian</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3m696b">Gormathon - Lens of Guardian</a>
 <br>
                         submitted <span class="muted">2015-09-24 07:27</span> by <a href="https://www.reddit.com/user/DoomsdayBlues">/u/DoomsdayBlues</a>
 .</p>
@@ -517,7 +525,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kardashev - Conscium Pre Pro</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Kardashev - Conscium (Pre-Production and lyric video)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3joik5">Kardashev - Conscium (Pre-Production and lyric video)</a>
 <br>
                         submitted <span class="muted">2015-09-04 23:09</span> by <a href="https://www.reddit.com/user/Darkchylde89">/u/Darkchylde89</a>
 .</p>
@@ -531,7 +539,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ionic Bond - Searchlight Kill</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Ionic Bond - Searchlight Kill</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3l0ug4">Ionic Bond - Searchlight Kill</a>
 <br>
                         submitted <span class="muted">2015-09-15 09:36</span> by <a href="https://www.reddit.com/user/runq94">/u/runq94</a>
 .</p>
@@ -545,7 +553,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">SUMMON IN SEANCE - "The Death of Evelyn" - Official Lyric Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">SUMMON IN SEANCE - The Death of Evelyn - NEW RELEASE</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3mb2uc">SUMMON IN SEANCE - The Death of Evelyn - NEW RELEASE</a>
 <br>
                         submitted <span class="muted">2015-09-25 06:55</span> by <a href="https://www.reddit.com/user/SummonInSeance">/u/SummonInSeance</a>
 .</p>
@@ -559,7 +567,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Chain Collector - Neverwhere [Lyrics]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">[Norway] Chain Collector - Neverwhere</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3jqoco">[Norway] Chain Collector - Neverwhere</a>
 <br>
                         submitted <span class="muted">2015-09-05 13:12</span> by <a href="https://www.reddit.com/user/Eastbound_and_Downs">/u/Eastbound_and_Downs</a>
 .</p>
@@ -573,7 +581,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">In Twilight’s Embrace - The Grim Muse (Album Track)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">In Twilight’s Embrace - The Grim Muse (2015) [Poland]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3l0mdh">In Twilight’s Embrace - The Grim Muse (2015) [Poland]</a>
 <br>
                         submitted <span class="muted">2015-09-15 07:48</span> by <a href="https://www.reddit.com/user/inugami47">/u/inugami47</a>
 .</p>
@@ -587,7 +595,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kromlek - The Cocoon</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Kromlek - The Cocoon</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3lb46i">Kromlek - The Cocoon</a>
 <br>
                         submitted <span class="muted">2015-09-17 14:53</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -601,7 +609,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">James Labrie - Letting Go (album "Impermanent Resonance")</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">James Labrie - Letting Go (Impermanent Resonance, 2013)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/3k4obu">James Labrie - Letting Go (Impermanent Resonance, 2013)</a>
 <br>
                         submitted <span class="muted">2015-09-08 19:09</span> by <a href="https://www.reddit.com/user/sofaraway731">/u/sofaraway731</a>
 .</p>
@@ -615,7 +623,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Black Dahlia Murder - Seppuku</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">The Black Dahlia Murder - Seppuku [Everblack, Japanese Bonus Track]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/3l37cq">The Black Dahlia Murder - Seppuku [Everblack, Japanese Bonus Track]</a>
 <br>
                         submitted <span class="muted">2015-09-15 20:55</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -629,7 +637,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Disarmonia Mundi - The Restless Memoirs EP (Full Album)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Disarmonia Mundi - The Restless Memoirs EP (Full Album)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/3l858o">Disarmonia Mundi - The Restless Memoirs EP (Full Album)</a>
 <br>
                         submitted <span class="muted">2015-09-16 21:54</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -643,7 +651,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mt Royal Snowboarding</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">The Faceless - An Autopsy (a snowboard vid of mine)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/3msnz4">The Faceless - An Autopsy (a snowboard vid of mine)</a>
 <br>
                         submitted <span class="muted">2015-09-29 04:43</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -657,7 +665,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Starborn - Time</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Starborn - Time [What Wintersun's Time should have been like...]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/3m4fav">Starborn - Time [What Wintersun's Time should have been like...]</a>
 <br>
                         submitted <span class="muted">2015-09-23 22:04</span> by <a href="https://www.reddit.com/user/Unblacksmith">/u/Unblacksmith</a>
 .</p>

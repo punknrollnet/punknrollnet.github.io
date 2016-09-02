@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">That Ragged Old Flag</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">That Ragged Old Flag by Johnny Cash (For the Veterans)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/131ywp">That Ragged Old Flag by Johnny Cash (For the Veterans)</a>
 <br>
                         submitted <span class="muted">2012-11-12 07:54</span> by <a href="https://www.reddit.com/user/Sariel007">/u/Sariel007</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">David Allan Coe - Long Haired Redneck</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">David Allan Coe - Long Haired Redneck (I was suprised this wasn't already posted, you guys/gals are slacking)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/13hhl6">David Allan Coe - Long Haired Redneck (I was suprised this wasn't already posted, you guys/gals are slacking)</a>
 <br>
                         submitted <span class="muted">2012-11-20 02:07</span> by <a href="https://www.reddit.com/user/Sariel007">/u/Sariel007</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Johnny Cash - Dark As The Dungeon</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Johnny Cash - Dark as the Dungeon</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/12qk1q">Johnny Cash - Dark as the Dungeon</a>
 <br>
                         submitted <span class="muted">2012-11-06 17:08</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dale Watson, Nashville Rash, Ft. Worth Rodeo</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Dale Watson perfoming Nashville Rash</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/13jao6">Dale Watson perfoming Nashville Rash</a>
 <br>
                         submitted <span class="muted">2012-11-20 23:20</span> by <a href="https://www.reddit.com/user/Sariel007">/u/Sariel007</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">David Allan Coe - Penitentiary Blues (full album)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">DAC Full Album- Penitentiary Blues...amazing</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/142t3e">DAC Full Album- Penitentiary Blues...amazing</a>
 <br>
                         submitted <span class="muted">2012-11-30 23:37</span> by <a href="https://www.reddit.com/user/oopsipoop">/u/oopsipoop</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dimebag - Cross Canadian Rag Weed - Garage album</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Cross Canadian Rag Weed (Red Dirt/Texas Country) sings the song "Dimebag" A song about the late great Dimebag Darell of Pantera fame (the band is not outlaw but the song is).</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/12jyad">Cross Canadian Rag Weed (Red Dirt/Texas Country) sings the song "Dimebag" A song about the late great Dimebag Darell of Pantera fame (the band is not outlaw but the song is).</a>
 <br>
                         submitted <span class="muted">2012-11-03 05:29</span> by <a href="https://www.reddit.com/user/Sariel007">/u/Sariel007</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Wayne Hancock - Johnny Law</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Wayne Hancock - Johnny Law</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/13uver">Wayne Hancock - Johnny Law</a>
 <br>
                         submitted <span class="muted">2012-11-27 04:47</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Johnny Cash - Rusty Cage</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Johnny Cash - Rusty Cage</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/12y9fc">Johnny Cash - Rusty Cage</a>
 <br>
                         submitted <span class="muted">2012-11-10 04:55</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Randy Travis - Diggin Up Bones</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Randy Travis - Diggin' Up Bones</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/13cb3o">Randy Travis - Diggin' Up Bones</a>
 <br>
                         submitted <span class="muted">2012-11-17 06:11</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">David Allan Coe - Living on the run</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">David Allan Coe - Livin' on the Run</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/13hw8o">David Allan Coe - Livin' on the Run</a>
 <br>
                         submitted <span class="muted">2012-11-20 06:07</span> by <a href="https://www.reddit.com/user/daysi">/u/daysi</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Just Good Ole Boys  (Moe & Joe) w/ lyrics</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Just Good Ole Boys  (Moe &amp; Joe) w/ lyrics - YouTube</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/13j35o">Just Good Ole Boys  (Moe &amp; Joe) w/ lyrics - YouTube</a>
 <br>
                         submitted <span class="muted">2012-11-20 21:29</span> by <a href="https://www.reddit.com/user/oopsipoop">/u/oopsipoop</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Charlie Daniels Uneasy Rider</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Charlie Daniels Uneasy Rider</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/13v4ax">Charlie Daniels Uneasy Rider</a>
 <br>
                         submitted <span class="muted">2012-11-27 07:39</span> by <a href="https://www.reddit.com/user/Sariel007">/u/Sariel007</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Tim McGraw - Indian Outlaw (official music video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Indian Outlaw - Tim McGraw</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/13oqjj">Indian Outlaw - Tim McGraw</a>
 <br>
                         submitted <span class="muted">2012-11-23 22:30</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>

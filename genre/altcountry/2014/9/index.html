@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Weight - Gillian Welch & Old Crow Medicine Show</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">29</span> - <a href="https://www.reddit.com/">Old Crow Medicine Show joins Gillian Welch for a cover of The Band's "The Weight"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">29</span> - <a href="https://www.reddit.com/2hg3h0">Old Crow Medicine Show joins Gillian Welch for a cover of The Band's "The Weight"</a>
 <br>
                         submitted <span class="muted">2014-09-25 17:19</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sturgill Simpson - Turtles All The Way Down</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/">Sturgill Simpson - Turtles All The Way Down</a>
+                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/2ftzj4">Sturgill Simpson - Turtles All The Way Down</a>
 <br>
                         submitted <span class="muted">2014-09-08 18:59</span> by <a href="https://www.reddit.com/user/McMurphyCrazy">/u/McMurphyCrazy</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Hayes Carll - Another Like You ft. Cary Ann Hearst</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/">Hayes Carll featuring Cary Ann Hearst, "Another Like You"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/2h9leq">Hayes Carll featuring Cary Ann Hearst, "Another Like You"</a>
 <br>
                         submitted <span class="muted">2014-09-23 21:11</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ben Nichols - God's Medicine</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/">Ben Nichols covers John Moreland's "God's Medicine"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/2fufrt">Ben Nichols covers John Moreland's "God's Medicine"</a>
 <br>
                         submitted <span class="muted">2014-09-08 21:22</span> by <a href="https://www.reddit.com/user/elkanor">/u/elkanor</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Guy Clark with Karen Matheson - Dublin Blues</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">Guy Clark - Dublin Blues</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/2gh960">Guy Clark - Dublin Blues</a>
 <br>
                         submitted <span class="muted">2014-09-15 17:54</span> by <a href="https://www.reddit.com/user/blaze_foley">/u/blaze_foley</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Jayhawks - Wichita</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/">The Jayhawks -- "Wichita" (1992)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/2hl9qi">The Jayhawks -- "Wichita" (1992)</a>
 <br>
                         submitted <span class="muted">2014-09-27 04:06</span> by <a href="https://www.reddit.com/user/ateix">/u/ateix</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Steve Earle - The Galway Girl - Acoustic</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/">Steve Earle - The Galway Girl (live)[3:53]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/2hpdpb">Steve Earle - The Galway Girl (live)[3:53]</a>
 <br>
                         submitted <span class="muted">2014-09-28 15:59</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sammy Brue "I Don't Wanna Die" (Original) New version</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">13 yr old Sammy Brue - "I Don't Wanna Die" (Original). Holy Shit!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2fg9tj">13 yr old Sammy Brue - "I Don't Wanna Die" (Original). Holy Shit!</a>
 <br>
                         submitted <span class="muted">2014-09-04 13:22</span> by <a href="https://www.reddit.com/user/pantsthemusical">/u/pantsthemusical</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Todd Snider - Positiviely Negative (With Lyrics in Info)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">[TBT] Todd Snider - Positively Negative [4:40]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2g3wky">[TBT] Todd Snider - Positively Negative [4:40]</a>
 <br>
                         submitted <span class="muted">2014-09-11 14:59</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Old Crow Medicine Show - Wagon Wheel (Rare Version)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">A Live Version of Old Crow Medicine Show's "Wagon Wheel"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2h69re">A Live Version of Old Crow Medicine Show's "Wagon Wheel"</a>
 <br>
                         submitted <span class="muted">2014-09-22 22:59</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Wild Feathers - Ramblin' Man (Truckstop Covers Series - Part 1)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">New around here, just figured I'd give some love to one of my favorite bands. The Wild Feathers, doing a cover of Ramblin' Man.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2gxr49">New around here, just figured I'd give some love to one of my favorite bands. The Wild Feathers, doing a cover of Ramblin' Man.</a>
 <br>
                         submitted <span class="muted">2014-09-20 08:40</span> by <a href="https://www.reddit.com/user/ManifestNightmare">/u/ManifestNightmare</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Trampled by Turtles- Western World</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Trampled by Turtles - Western World</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2fbg4d">Trampled by Turtles - Western World</a>
 <br>
                         submitted <span class="muted">2014-09-03 01:55</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lyle Lovett: NPR Music Tiny Desk Concert</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Lyle Lovett: NPR Music Tiny Desk Concert</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2g02jj">Lyle Lovett: NPR Music Tiny Desk Concert</a>
 <br>
                         submitted <span class="muted">2014-09-10 13:03</span> by <a href="https://www.reddit.com/user/GlobalSouth">/u/GlobalSouth</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lydia Loveless on WFPK's Live Lunch</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Lydia Loveless on WFPK's Live Lunch</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2g4236">Lydia Loveless on WFPK's Live Lunch</a>
 <br>
                         submitted <span class="muted">2014-09-11 15:50</span> by <a href="https://www.reddit.com/user/chadridesabike">/u/chadridesabike</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lindi Ortega - Lived And Died Alone</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Lindi Ortega - "Lived and died Alone"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2ggo95">Lindi Ortega - "Lived and died Alone"</a>
 <br>
                         submitted <span class="muted">2014-09-15 14:47</span> by <a href="https://www.reddit.com/user/stanthemanchan">/u/stanthemanchan</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Hurray for the Riff Raff - Go Out On The Road</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Hurray for the Riff Raff - Go Out On The Road</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2gxk4m">Hurray for the Riff Raff - Go Out On The Road</a>
 <br>
                         submitted <span class="muted">2014-09-20 06:25</span> by <a href="https://www.reddit.com/user/blaze_foley">/u/blaze_foley</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Slobberbone - I Can Tell Your Love Is Waning</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Slobberbone - I Can Tell Your Love Is Waning</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2h5hdp">Slobberbone - I Can Tell Your Love Is Waning</a>
 <br>
                         submitted <span class="muted">2014-09-22 18:53</span> by <a href="https://www.reddit.com/user/mchurchill">/u/mchurchill</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Luke Bell Live - The Bullfighter | State Line Sessions at the Downtown Artery</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Proof that there's still plenty of good music coming out of Nashville. Luke Bell - "The Bullfighter".</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2g8sdq">Proof that there's still plenty of good music coming out of Nashville. Luke Bell - "The Bullfighter".</a>
 <br>
                         submitted <span class="muted">2014-09-12 22:50</span> by <a href="https://www.reddit.com/user/colliningram">/u/colliningram</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ramblin', Scramblin' - Jerry Jeff Walker</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Jerry Jeff Walker - Ramblin', Scramblin'</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2gbrg7">Jerry Jeff Walker - Ramblin', Scramblin'</a>
 <br>
                         submitted <span class="muted">2014-09-13 23:05</span> by <a href="https://www.reddit.com/user/burningsnailman">/u/burningsnailman</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The White Buffalo - How The West Was Won [Official Music Video]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">The White Buffalo - How The West Was Won</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2geg3b">The White Buffalo - How The West Was Won</a>
 <br>
                         submitted <span class="muted">2014-09-14 21:22</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Another Binaural Webcam Jam: "Swinging Doors" by Merle Haggard</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Campfires &amp; Constellations performs acoustic-electric cover of "Swinging Doors" by Merle Haggard. Recorded binaurally in a living room (HD video), with trading banjo and guitar solos, and Miller High Life. Enjoy! [x-post r/outlawcountry]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2f7mxp">Campfires &amp; Constellations performs acoustic-electric cover of "Swinging Doors" by Merle Haggard. Recorded binaurally in a living room (HD video), with trading banjo and guitar solos, and Miller High Life. Enjoy! [x-post r/outlawcountry]</a>
 <br>
                         submitted <span class="muted">2014-09-01 23:54</span> by <a href="https://www.reddit.com/user/yabbadabbadoob">/u/yabbadabbadoob</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Giant Sand & Victoria Williams, WONDER - dir: Laura Levine</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Giant Sand - Wonder</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2h4dh5">Giant Sand - Wonder</a>
 <br>
                         submitted <span class="muted">2014-09-22 12:39</span> by <a href="https://www.reddit.com/user/ModernLifeIsRubbish">/u/ModernLifeIsRubbish</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mustered Courage LIVE & Acoustic: "Still Shining" (Folk, Country, Melbourne)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Mustered Courage - Still Shining</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2f7gj1">Mustered Courage - Still Shining</a>
 <br>
                         submitted <span class="muted">2014-09-01 22:47</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Eyes Don't Cry - Emmie Chambers & Robyn Ludwick</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Eyes Don't Cry - Emmie Chambers &amp; Robyn Ludwick</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2fspu7">Eyes Don't Cry - Emmie Chambers &amp; Robyn Ludwick</a>
 <br>
                         submitted <span class="muted">2014-09-08 10:51</span> by <a href="https://www.reddit.com/user/TheDrover">/u/TheDrover</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Old 97's Beer Cans (Unreleased).wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Old 97's - Beer Cans</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2fyvti">Old 97's - Beer Cans</a>
 <br>
                         submitted <span class="muted">2014-09-10 02:20</span> by <a href="https://www.reddit.com/user/blaze_foley">/u/blaze_foley</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Amy Ray "Duane Allman"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Amy Ray - "Duane Allman"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2fyzn3">Amy Ray - "Duane Allman"</a>
 <br>
                         submitted <span class="muted">2014-09-10 03:01</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Sure Fire Groove - Call the Captain (2014)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Sure Fire Groove - "Call The Captain" -- The single from my band's recently released record "Last Good Standing." Hope you like it!</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2hjrql">Sure Fire Groove - "Call The Captain" -- The single from my band's recently released record "Last Good Standing." Hope you like it!</a>
 <br>
                         submitted <span class="muted">2014-09-26 18:15</span> by <a href="https://www.reddit.com/user/Philip_Marlowe">/u/Philip_Marlowe</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dance the Night Away (Official) - Shane Smith & the Saints</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Dance the Night Away - Shane Smith &amp; the Saints</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2fo3dp">Dance the Night Away - Shane Smith &amp; the Saints</a>
 <br>
                         submitted <span class="muted">2014-09-06 21:40</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Railroad Earth - Elko - Head - 2008 (Live - Jam - SBD - Best Ever)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">If CrustyCaballero can get away with posting Trampled by Turtles, let’s just turn this into /r/altbluegrass.</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2fyt6j">If CrustyCaballero can get away with posting Trampled by Turtles, let’s just turn this into /r/altbluegrass.</a>
 <br>
                         submitted <span class="muted">2014-09-10 01:54</span> by <a href="https://www.reddit.com/user/ke7ofi">/u/ke7ofi</a>
 .</p>
@@ -475,7 +483,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">JIMMY SWOPE - 5 CHAMBERS EMPTY</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">[WW] Another one, straight from Farmageddon Records: Jimmy Swope - 5 Chambers [5:47]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2g0gxl">[WW] Another one, straight from Farmageddon Records: Jimmy Swope - 5 Chambers [5:47]</a>
 <br>
                         submitted <span class="muted">2014-09-10 15:32</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
 .</p>
@@ -489,7 +497,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lucette: Bobby Reid ft. Sturgill Simpson & JD Wilkes [OFFICIAL VIDEO]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Lucette - "Bobby Reid" feat. Sturgill Simpson &amp; JD Wilkes</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2g0og0">Lucette - "Bobby Reid" feat. Sturgill Simpson &amp; JD Wilkes</a>
 <br>
                         submitted <span class="muted">2014-09-10 16:41</span> by <a href="https://www.reddit.com/user/MediocreResponse">/u/MediocreResponse</a>
 .</p>
@@ -503,7 +511,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Puss N Boots. Album - No Fools, No Fun. Twilight. 2014.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Puss N Boots - Twilight</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2glngn">Puss N Boots - Twilight</a>
 <br>
                         submitted <span class="muted">2014-09-16 21:55</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
 .</p>
@@ -517,7 +525,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cody Johnson Band "I Don't Care About You"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Cody Johnson - I Don't Care About You</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2h076q">Cody Johnson - I Don't Care About You</a>
 <br>
                         submitted <span class="muted">2014-09-21 03:12</span> by <a href="https://www.reddit.com/user/UncleBananaGrabber">/u/UncleBananaGrabber</a>
 .</p>
@@ -531,7 +539,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Doghouse Rose - No Mercy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Doghouse Rose - No Mercy</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2h9kdw">Doghouse Rose - No Mercy</a>
 <br>
                         submitted <span class="muted">2014-09-23 21:02</span> by <a href="https://www.reddit.com/user/Rifty_Business">/u/Rifty_Business</a>
 .</p>
@@ -545,7 +553,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Jimmyriggers - Sleepwalking (Official Music Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Here's an alt-country band from Montreal ... This song is called "Sleepwalking"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2hcyuq">Here's an alt-country band from Montreal ... This song is called "Sleepwalking"</a>
 <br>
                         submitted <span class="muted">2014-09-24 19:41</span> by <a href="https://www.reddit.com/user/jimmy_rigger">/u/jimmy_rigger</a>
 .</p>
@@ -559,7 +567,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Railroad Earth performs "Saddle Of The Sun" at Gathering of the Vibes Music Festival 2013</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">/r/altcountry goes bluegrass (part 2): Saddle of the Sun by Railroad Earth</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/2g2t31">/r/altcountry goes bluegrass (part 2): Saddle of the Sun by Railroad Earth</a>
 <br>
                         submitted <span class="muted">2014-09-11 05:05</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -573,7 +581,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Elijah Ocean / Ride It Out / Official Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Elijah Ocean - Ride It Out</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/2hjwug">Elijah Ocean - Ride It Out</a>
 <br>
                         submitted <span class="muted">2014-09-26 19:06</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>

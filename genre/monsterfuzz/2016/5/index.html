@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Björn Famne - Vampire (private psych monster with beats breaks)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Björn Famne - Vampire [Sweden - 1975]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/4inesi">Björn Famne - Vampire [Sweden - 1975]</a>
 <br>
                         submitted <span class="muted">2016-05-10 03:36</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Museo Rosenbach - Degli Uomini (1973)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Museo Rosenbach - Degli uomini [Italy - 1973]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/4jy8zg">Museo Rosenbach - Degli uomini [Italy - 1973]</a>
 <br>
                         submitted <span class="muted">2016-05-18 18:48</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Killing Floor - Woman You Need Love (1969)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Killing Floor - Woman You Need Love [England - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/4hq44u">Killing Floor - Woman You Need Love [England - 1969]</a>
 <br>
                         submitted <span class="muted">2016-05-03 20:38</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Whistler's Mother (US)- Dark Dawn(1970)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Whistler's Mother - Dark Dawn [US - 1970]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/4kodni">Whistler's Mother - Dark Dawn [US - 1970]</a>
 <br>
                         submitted <span class="muted">2016-05-23 15:08</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Cool Feet - Mister</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Cool Feet - Mister [Luxembourg - 1974]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/4hxey8">Cool Feet - Mister [Luxembourg - 1974]</a>
 <br>
                         submitted <span class="muted">2016-05-05 00:02</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ning - Machine (1971)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Ning - Machine [UK - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/4l8hgg">Ning - Machine [UK - 1971]</a>
 <br>
                         submitted <span class="muted">2016-05-27 01:03</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Big Blue - Ridin' High / Jam-It HEAVY SALEM OHIO FUZZED BAR ROCK</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Big Blue - Ridin' High / Jam-It [US - 1970]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/4ictba">Big Blue - Ridin' High / Jam-It [US - 1970]</a>
 <br>
                         submitted <span class="muted">2016-05-08 02:04</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">PHLEGETHON - you´re no good - (heavy organ psych fuzz)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Phlegethon - You're No Good [US - 1970]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/4jus9y">Phlegethon - You're No Good [US - 1970]</a>
 <br>
                         submitted <span class="muted">2016-05-18 03:37</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Tykes Let's Dance</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">The Tykes - Let's Dance [Netherlands - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/4i46vy">The Tykes - Let's Dance [Netherlands - 1969]</a>
 <br>
                         submitted <span class="muted">2016-05-06 08:06</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Opus Alfa - Vamos Mal, Ah, No</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Opus Alfa - Vamos Mal, Ah No! [Uruguay - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/4iyw8c">Opus Alfa - Vamos Mal, Ah No! [Uruguay - 1972]</a>
 <br>
                         submitted <span class="muted">2016-05-12 03:56</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">CINCINNATI JOE - Get It Together - US 70s PRIVATE PSYCH FUNK</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Cincinnati Joe - Get It Together [US - 1970]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/4j46lm">Cincinnati Joe - Get It Together [US - 1970]</a>
 <br>
                         submitted <span class="muted">2016-05-13 02:09</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Grasshopper - My Honey</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Grasshopper - My Honey [US - 197?]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/4ictof">Grasshopper - My Honey [US - 197?]</a>
 <br>
                         submitted <span class="muted">2016-05-08 02:07</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">PROTEIN BROS Drainpipe</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Protein Bros - Drainpipe [Australia - 1973]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/4l9arx">Protein Bros - Drainpipe [Australia - 1973]</a>
 <br>
                         submitted <span class="muted">2016-05-27 05:08</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Cool - Highway Song - UK Hard Psych De Wolfe Library</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">The Cool - Highway Song [UK - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/4lrfrj">The Cool - Highway Song [UK - 1969]</a>
 <br>
                         submitted <span class="muted">2016-05-30 20:26</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Supa Chief - Animal Woman [1969 US]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Supa Chief - Animal Woman [US -1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/4hhi5b">Supa Chief - Animal Woman [US -1969]</a>
 <br>
                         submitted <span class="muted">2016-05-02 14:12</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Distant Jim - Cosmarama</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Distant Jim - Cosmarama [UK - 1970]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/4jic7n">Distant Jim - Cosmarama [UK - 1970]</a>
 <br>
                         submitted <span class="muted">2016-05-15 22:30</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">St.John and The Crew I Am a Man</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">St. John &amp; The Crew - I Am a Man [Netherlands - 1966]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/4lo33q">St. John &amp; The Crew - I Am a Man [Netherlands - 1966]</a>
 <br>
                         submitted <span class="muted">2016-05-30 05:17</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Colonel Bagshot - Oh, What a Lovely War - #02 - Lay it Down</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Colonel Bagshot - Lay It Down [UK -1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/4heuuo">Colonel Bagshot - Lay It Down [UK -1971]</a>
 <br>
                         submitted <span class="muted">2016-05-02 06:11</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">GIDIANS BIBLE - the dream - (Fab xian psych folk)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Gidians Bible - Love Is the Answer [US - 196?]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/4kccs9">Gidians Bible - Love Is the Answer [US - 196?]</a>
 <br>
                         submitted <span class="muted">2016-05-21 05:53</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
 .</p>

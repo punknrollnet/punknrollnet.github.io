@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Red Dirt - Brain Worker</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Red Dirt - Brain Worker [England - 1970]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2e44d1">Red Dirt - Brain Worker [England - 1970]</a>
 <br>
                         submitted <span class="muted">2014-08-20 20:21</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">coloured balls - god</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Coloured Balls - God [Australia - 1973]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2ek46u">Coloured Balls - God [Australia - 1973]</a>
 <br>
                         submitted <span class="muted">2014-08-25 19:47</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Valhalla- Hard Times 1969 Heavy Psych With Killer Drum Breaks</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Valhalla- Hard Times 1969 Heavy Psych With Killer Drum Breaks</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2cjv2o">Valhalla- Hard Times 1969 Heavy Psych With Killer Drum Breaks</a>
 <br>
                         submitted <span class="muted">2014-08-04 02:12</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Misunderstood - Children of the Sun</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">The Misunderstood - Children of the Sun [USA - 1966]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2dreen">The Misunderstood - Children of the Sun [USA - 1966]</a>
 <br>
                         submitted <span class="muted">2014-08-17 00:01</span> by <a href="https://www.reddit.com/user/quietalarm">/u/quietalarm</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mad River - The War Goes On</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Mad River - The War Goes On [USA - 1968]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2ef396">Mad River - The War Goes On [USA - 1968]</a>
 <br>
                         submitted <span class="muted">2014-08-24 03:49</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Snow-Song of the sirens (60's Psych/Heavy Rock)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Snow - "Song of the Sirens" [USA - 1968]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2e31mi">Snow - "Song of the Sirens" [USA - 1968]</a>
 <br>
                         submitted <span class="muted">2014-08-20 14:37</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">San ul lim - Vol 2 / Laying Silks and Satins on my Heart - 1978</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">San Ul Lim - Laying Silks and Satins on My Heart [South Korea - 1978]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2cwoer">San Ul Lim - Laying Silks and Satins on My Heart [South Korea - 1978]</a>
 <br>
                         submitted <span class="muted">2014-08-07 18:41</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Plugz- La Bamba</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">The Plugz - La Bamba [USA - 1979]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2cb0qh">The Plugz - La Bamba [USA - 1979]</a>
 <br>
                         submitted <span class="muted">2014-08-01 03:55</span> by <a href="https://www.reddit.com/user/j3434">/u/j3434</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Fire - Flames ( Heavy Pscyh Fuzz Monster from Ex Yugoslavia)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Fire - Flamescc -- 1973 (Yugoslavia)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2ch5r0">Fire - Flamescc -- 1973 (Yugoslavia)</a>
 <br>
                         submitted <span class="muted">2014-08-03 03:51</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">LEFT END Spoiled Rotten 1974</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Left End - Spoiled Rotten [USA - 1974]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2dqjq1">Left End - Spoiled Rotten [USA - 1974]</a>
 <br>
                         submitted <span class="muted">2014-08-16 18:05</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Los Jaivas  -   los caminos que se abren</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Los Jaivas - "Los Caminos que se Abren" [Chile - 1973]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2e341g">Los Jaivas - "Los Caminos que se Abren" [Chile - 1973]</a>
 <br>
                         submitted <span class="muted">2014-08-20 15:01</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ultimo dia Los Jaivas</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Los Jaivas - "Ultimo Dia" [Chile - 1970]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2d37td">Los Jaivas - "Ultimo Dia" [Chile - 1970]</a>
 <br>
                         submitted <span class="muted">2014-08-09 19:10</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">MX-80 Sound - Man On The Move</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">MX-80 Sound - Man on the Move [USA - 1977]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2d5pkd">MX-80 Sound - Man on the Move [USA - 1977]</a>
 <br>
                         submitted <span class="muted">2014-08-10 17:04</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Los Jockers - Reaccion psicotica</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Los Jockers - "Reaccion Psicotica" [Chile - 1967]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2dgjgq">Los Jockers - "Reaccion Psicotica" [Chile - 1967]</a>
 <br>
                         submitted <span class="muted">2014-08-13 18:12</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Zomby Woof - Suicide</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Zomby Woof - "Suicide" [Germany - 1977]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2dhtk6">Zomby Woof - "Suicide" [Germany - 1977]</a>
 <br>
                         submitted <span class="muted">2014-08-14 01:11</span> by <a href="https://www.reddit.com/user/SED1SED2">/u/SED1SED2</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Los Trapos - Atucka (1978 - Rock Chileno)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Los Trapos - Atucka [Chile - 1978]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2cik6m">Los Trapos - Atucka [Chile - 1978]</a>
 <br>
                         submitted <span class="muted">2014-08-03 17:36</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Clear Blue Sky - 1971 - You Mystify</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Clear Blue Sky - "You Mystify" [England - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2d3579">Clear Blue Sky - "You Mystify" [England - 1971]</a>
 <br>
                         submitted <span class="muted">2014-08-09 18:40</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Aguaturbia- Erotica</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Aguaturbia - "Erótica" [Chile - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2d38yt">Aguaturbia - "Erótica" [Chile - 1969]</a>
 <br>
                         submitted <span class="muted">2014-08-09 19:23</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Rufus Zuphall-Prickel Pit(Farewell! Live Aachen 1972).wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Rufus Zuphall - "Prickel Pit" [Holland - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2d3hja">Rufus Zuphall - "Prickel Pit" [Holland - 1972]</a>
 <br>
                         submitted <span class="muted">2014-08-09 21:01</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Amigos de María - California Blues</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Amigos de María - "California Blues" [Chile - 1972]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2d8fdt">Amigos de María - "California Blues" [Chile - 1972]</a>
 <br>
                         submitted <span class="muted">2014-08-11 13:47</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">LOS MASTERS : Sueno Electricio CHILE 1969 HEAVY FUZZ PSYCH</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Los Masters - "Sueno Electricio" [Chile - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2e3099">Los Masters - "Sueno Electricio" [Chile - 1969]</a>
 <br>
                         submitted <span class="muted">2014-08-20 14:24</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Pax - Pig Pen Boogie</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Pax - Pig Pen Boogie</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2emm11">Pax - Pig Pen Boogie</a>
 <br>
                         submitted <span class="muted">2014-08-26 14:11</span> by <a href="https://www.reddit.com/user/jummyjim">/u/jummyjim</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Stonehouse Ain't no game</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Stonehouse - Ain't No Game [England - 1971]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2ey3b0">Stonehouse - Ain't No Game [England - 1971]</a>
 <br>
                         submitted <span class="muted">2014-08-29 19:49</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">CLEAR BLUE SKY - BIRDCATCHER - 1970</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Clear Blue Sky - Birdcatcher [England - 1970]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2cg1rm">Clear Blue Sky - Birdcatcher [England - 1970]</a>
 <br>
                         submitted <span class="muted">2014-08-02 19:40</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Crossroad - Dreamworld [1970 Netherlands]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Crossroad - Dreamworld [Netherlands - 1970]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2dczwo">Crossroad - Dreamworld [Netherlands - 1970]</a>
 <br>
                         submitted <span class="muted">2014-08-12 18:58</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">SOUND EXPEDITION ultimate power (killer heavy psych fuzz)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Sound Expedition - "Ultimate Power" [USA - 1969]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2e31bp">Sound Expedition - "Ultimate Power" [USA - 1969]</a>
 <br>
                         submitted <span class="muted">2014-08-20 14:34</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">The Telescopes - Anticipating nowhere</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">The Telescopes - Anticipating nowhere</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2d1vja">The Telescopes - Anticipating nowhere</a>
 <br>
                         submitted <span class="muted">2014-08-09 06:26</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Caleb-Baby  Your Phrasing Is Bad</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Caleb - Baby You Phrasing is Bad [England - 1967]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2dtbxj">Caleb - Baby You Phrasing is Bad [England - 1967]</a>
 <br>
                         submitted <span class="muted">2014-08-17 17:56</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>

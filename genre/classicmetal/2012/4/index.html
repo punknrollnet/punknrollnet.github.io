@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Blind Guardian - Valhalla</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/">Blind Guardian - Valhalla (SM,'89)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/rviar">Blind Guardian - Valhalla (SM,'89)</a>
 <br>
                         submitted <span class="muted">2012-04-06 00:26</span> by <a href="https://www.reddit.com/user/LoveBeingLoved">/u/LoveBeingLoved</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Atomic Rooster - Death Walks Behind You</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/">Atomic Rooster - Death Walks Behind You (1970)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/rx746">Atomic Rooster - Death Walks Behind You (1970)</a>
 <br>
                         submitted <span class="muted">2012-04-07 00:59</span> by <a href="https://www.reddit.com/user/CzarUnanswerable">/u/CzarUnanswerable</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Mythra - Death and Destiny EP</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Mythra - Death and Destiny EP (NWOBHM, '79 - full EP)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/rq5p4">Mythra - Death and Destiny EP (NWOBHM, '79 - full EP)</a>
 <br>
                         submitted <span class="muted">2012-04-02 21:55</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Marquis de Sade - Black Angel</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Marquis de Sade - "Black Angel" (NWOBHM. '81)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/sdd29">Marquis de Sade - "Black Angel" (NWOBHM. '81)</a>
 <br>
                         submitted <span class="muted">2012-04-17 00:45</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Wishbone Ash - Warrior</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Wishbone Ash – Warrior (1972 - can I call this proto-metal?)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/s2uyo">Wishbone Ash – Warrior (1972 - can I call this proto-metal?)</a>
 <br>
                         submitted <span class="muted">2012-04-10 17:55</span> by <a href="https://www.reddit.com/user/everflow">/u/everflow</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Raven - Lambs To The Slaughter</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Raven – Lambs to the Slaughter (NWOBHM)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/s9ds3">Raven – Lambs to the Slaughter (NWOBHM)</a>
 <br>
                         submitted <span class="muted">2012-04-14 11:46</span> by <a href="https://www.reddit.com/user/everflow">/u/everflow</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Shok Paris - Go Down Fighting</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/">Shok Paris- Go Down Fighting</a>
+                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/sjs6g">Shok Paris- Go Down Fighting</a>
 <br>
                         submitted <span class="muted">2012-04-20 15:33</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Angel Dust - Atomic Roar</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/">Angel Dust - "Atomic Roar" (speed/thrash, '86)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/rq5w0">Angel Dust - "Atomic Roar" (speed/thrash, '86)</a>
 <br>
                         submitted <span class="muted">2012-04-02 21:58</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -181,7 +189,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Ritual  Never for Evil</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Ritual - Never For Evil [NWOBHM - 1983]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/sesko">Ritual - Never For Evil [NWOBHM - 1983]</a>
 <br>
                         submitted <span class="muted">2012-04-17 20:45</span> by <a href="https://www.reddit.com/user/SPna15">/u/SPna15</a>
 .</p>
@@ -195,7 +203,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Apocalypse - Stormchild (NWOBHM)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/">Apocalypse - Stormchild (1982)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/sk6fz">Apocalypse - Stormchild (1982)</a>
 <br>
                         submitted <span class="muted">2012-04-20 19:31</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -209,7 +217,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">High Tension - Stiletto Heels</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">High Tension- Stiletto Heels</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/ryo1g">High Tension- Stiletto Heels</a>
 <br>
                         submitted <span class="muted">2012-04-08 01:49</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -223,7 +231,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Kraken (Can) - The curse (1983)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Kraken - The Curse (1983) [Canadian heavy metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/sgodg">Kraken - The Curse (1983) [Canadian heavy metal]</a>
 <br>
                         submitted <span class="muted">2012-04-18 21:19</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -237,7 +245,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dead Conspiracy - The Immortal Strife</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Dead Conspiracy - The Immortal Strife (1987) - [Early US death metal]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/si302">Dead Conspiracy - The Immortal Strife (1987) - [Early US death metal]</a>
 <br>
                         submitted <span class="muted">2012-04-19 17:17</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -251,7 +259,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Bashful Alley - Running Blind</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Bashful Alley - "Running Blind" (NWOBHM, '82)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/sklvi">Bashful Alley - "Running Blind" (NWOBHM, '82)</a>
 <br>
                         submitted <span class="muted">2012-04-21 00:32</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -265,7 +273,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Yog Sothots - Torture In The Catacombs</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">Yog Sothots - "Torture in the Catacombs" ('87, dirty speed/thrash)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/ssjc9">Yog Sothots - "Torture in the Catacombs" ('87, dirty speed/thrash)</a>
 <br>
                         submitted <span class="muted">2012-04-25 22:34</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -279,7 +287,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Iron Maiden -  I Live My Way</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/">I Live My Way - Iron Maiden [1995] "Rare-ish"</a>
+                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/sw45l">I Live My Way - Iron Maiden [1995] "Rare-ish"</a>
 <br>
                         submitted <span class="muted">2012-04-28 00:13</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -293,7 +301,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lizzy Borden - Dirty Pictures</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Lizzy Borden- Dirty Pictures</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/rrq4h">Lizzy Borden- Dirty Pictures</a>
 <br>
                         submitted <span class="muted">2012-04-03 20:43</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -307,7 +315,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Master's Hammer- Pad Modly.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Master's Hammer - "Pád Modly" (BM, '91)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/s8gi4">Master's Hammer - "Pád Modly" (BM, '91)</a>
 <br>
                         submitted <span class="muted">2012-04-13 20:10</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -321,7 +329,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Blasphème - Territoire Des Hommes</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Blasphème - "Territoire des Hommes" (HM, '85)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/sdd6m">Blasphème - "Territoire des Hommes" (HM, '85)</a>
 <br>
                         submitted <span class="muted">2012-04-17 00:47</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -335,7 +343,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Second Hell (HOL) - Homicide</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Second Hell - Homicide [Killer Dutch speed/thrash] - 1986</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/sn4yx">Second Hell - Homicide [Killer Dutch speed/thrash] - 1986</a>
 <br>
                         submitted <span class="muted">2012-04-22 21:39</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -349,7 +357,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Randy - Shadows are Falling</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Randy - Shadows are Falling (Danish Heavy Metal '86)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/sq5ox">Randy - Shadows are Falling (Danish Heavy Metal '86)</a>
 <br>
                         submitted <span class="muted">2012-04-24 16:33</span> by <a href="https://www.reddit.com/user/saturnine">/u/saturnine</a>
 .</p>
@@ -363,7 +371,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Breaker (US) - 10 seconds in (1987)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Breaker - "Ten Seconds In" (HM, '87)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/sqsyf">Breaker - "Ten Seconds In" (HM, '87)</a>
 <br>
                         submitted <span class="muted">2012-04-24 23:33</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -377,7 +385,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Damien (Sweden) - Onslaught without Mercy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Damien - Onslaught Without Mercy [Swedish thrash] - 1986</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/susr6">Damien - Onslaught Without Mercy [Swedish thrash] - 1986</a>
 <br>
                         submitted <span class="muted">2012-04-27 04:15</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -391,7 +399,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Pestilence - Commandments</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Pestilence - "Commandments" (thrash, '88)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/szyb4">Pestilence - "Commandments" (thrash, '88)</a>
 <br>
                         submitted <span class="muted">2012-04-30 16:49</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -405,7 +413,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Lordian Guard - Lost Archangel (1995)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Lordian Guard - "Lost Archangel" (ex-Warlord, HM, '95)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/szyg2">Lordian Guard - "Lost Archangel" (ex-Warlord, HM, '95)</a>
 <br>
                         submitted <span class="muted">2012-04-30 16:52</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -419,7 +427,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Torture - Storm Alert</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">Torture - "Storm Alert" (thrash, '89)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/s103r">Torture - "Storm Alert" (thrash, '89)</a>
 <br>
                         submitted <span class="muted">2012-04-09 16:50</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -433,7 +441,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">D.D.T. - Metal on Ashes</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">DDT - "Metal on Ashes" (HM, '84)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/s10gq">DDT - "Metal on Ashes" (HM, '84)</a>
 <br>
                         submitted <span class="muted">2012-04-09 16:57</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
 .</p>
@@ -447,7 +455,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Krokus - She's Got Everything</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Krokus - She's Got Everything (1981) [You're goddamn right, Krokus.]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/sfovg">Krokus - She's Got Everything (1981) [You're goddamn right, Krokus.]</a>
 <br>
                         submitted <span class="muted">2012-04-18 07:21</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -461,7 +469,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Witch Cross - Fight The Fire</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/">Witch Cross - Fit for Fight, 1984</a>
+                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/sk97r">Witch Cross - Fit for Fight, 1984</a>
 <br>
                         submitted <span class="muted">2012-04-20 20:20</span> by <a href="https://www.reddit.com/user/noreallyimgoodthanks">/u/noreallyimgoodthanks</a>
 .</p>

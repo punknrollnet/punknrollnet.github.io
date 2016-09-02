@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="/img/punknroll-logo-50x50.png">
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="/rss.xml">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.1.0/milligram.min.css" rel="stylesheet">
     <link href="/compiled/style.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="navbar">
             <a href="/" title="Punk'r'Roll Home"><img src="/img/punknroll-icon.png" alt="Punk'n'Roll logo" class="logo float-left"></a>
-            <ul class="nav">
+            <ul class="nav inline">
                 <li class="dropdown"><a>Genres</a>
                     <ul>
                         <li><a href="/genre/garagepunk/">Garage Punk</a></li>
@@ -31,6 +30,10 @@
                 </li>
                 <li><a href="/playlist/">Playlists</a></li>
             </ul>
+            <form action="/search/" class="inline float-right">
+                <input id="search" name="q" type="search">
+                <button class="button" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </section>
@@ -45,6 +48,11 @@
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
         <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
+        <span v-if="genre">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        </span>
+
     </div>
 
     <div v-if="current" class="current voffset">
@@ -69,7 +77,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Faust - It's a Rainy Day (Sunshine Girl) 1972</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/">Faust - It's a Rainy Day (Sunshine Girl)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/30tu07">Faust - It's a Rainy Day (Sunshine Girl)</a>
 <br>
                         submitted <span class="muted">2015-03-30 17:40</span> by <a href="https://www.reddit.com/user/Laetans">/u/Laetans</a>
 .</p>
@@ -83,7 +91,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Harmonia 76 - Vamos Companeros</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/">Harmonia '76 (Brian Eno + Harmonia) - Vamos Companeros</a>
+                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/30wpvs">Harmonia '76 (Brian Eno + Harmonia) - Vamos Companeros</a>
 <br>
                         submitted <span class="muted">2015-03-31 09:24</span> by <a href="https://www.reddit.com/user/expensive-shit">/u/expensive-shit</a>
 .</p>
@@ -97,7 +105,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Agitation Free - Malesch (1972) Full Album.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/">Agitation Free - Malesch (1972, Full Album) [40:06]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/30f4jq">Agitation Free - Malesch (1972, Full Album) [40:06]</a>
 <br>
                         submitted <span class="muted">2015-03-26 21:26</span> by <a href="https://www.reddit.com/user/thefriendcatcher">/u/thefriendcatcher</a>
 .</p>
@@ -111,7 +119,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Auf Der Bahn Zum Uranus - Gaa (1974) Full album.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/">Auf Der Bahn Zum Uranus - Gaa (1974)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/30umjh">Auf Der Bahn Zum Uranus - Gaa (1974)</a>
 <br>
                         submitted <span class="muted">2015-03-30 21:08</span> by <a href="https://www.reddit.com/user/fuckutrevor">/u/fuckutrevor</a>
 .</p>
@@ -125,7 +133,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Faust - Sur le ventre (official)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/">New Faust! - Sur le ventre [5:03]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2xwgnd">New Faust! - Sur le ventre [5:03]</a>
 <br>
                         submitted <span class="muted">2015-03-04 12:43</span> by <a href="https://www.reddit.com/user/Keeror">/u/Keeror</a>
 .</p>
@@ -139,7 +147,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Soffplaneten - Minnenas Trädgård EP (2015)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/">Soffplaneten - Minnenas Trädgård EP (2015)</a>
+                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2xy7i4">Soffplaneten - Minnenas Trädgård EP (2015)</a>
 <br>
                         submitted <span class="muted">2015-03-04 21:20</span> by <a href="https://www.reddit.com/user/melting_pixels">/u/melting_pixels</a>
 .</p>
@@ -153,7 +161,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Znachor - Entropy Unveiled [Rehearsal Recording] [Visuals]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/">Znachor - Entropy Unveiled [Rehearsal Recording] [Visuals]</a>
+                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2y4ker">Znachor - Entropy Unveiled [Rehearsal Recording] [Visuals]</a>
 <br>
                         submitted <span class="muted">2015-03-06 11:14</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
 .</p>
@@ -167,7 +175,7 @@
                     </div>
                 <div class="column">
                     <h2 class="yt-title">Dzyan - Back to Where We Come From</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/">Dzyan - Back to Where We Come From</a>
+                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/30vjio">Dzyan - Back to Where We Come From</a>
 <br>
                         submitted <span class="muted">2015-03-31 01:21</span> by <a href="https://www.reddit.com/user/Rustain">/u/Rustain</a>
 .</p>
