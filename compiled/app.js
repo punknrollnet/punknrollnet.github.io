@@ -1,0 +1,1 @@
+"use strict";function onYouTubeIframeAPIReady(){vm.initPlayer()}var vm=new PlayerBase({data:{current:null,bbox:null,records:null,sort_order:"new",video_ids:[]},created:function(){this.loadGenre(genre)}});
