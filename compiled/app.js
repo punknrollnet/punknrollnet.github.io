@@ -1,1 +1,1 @@
-let vm=new PlayerBase({data:{current:null,bbox:null,records:null,sort_order:'new',video_ids:[]},created:function(){this.loadGenre(genre)}});function onYouTubeIframeAPIReady(){vm.initPlayer()}
+let vm=new PlayerBase({data:{current:null,bbox:null,records:null,reset:!1,sort_order:'new',video_ids:[]},created:function(){this.loadGenre(genre)}});function onYouTubeIframeAPIReady(){vm.initPlayer()}
