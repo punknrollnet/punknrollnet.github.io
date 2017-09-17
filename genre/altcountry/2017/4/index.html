@@ -46,862 +46,272 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="MchWI3sLUQo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/MchWI3sLUQo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Flying Burrito Brothers "Wild Horses"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">31</span> - <a href="https://www.reddit.com/66m1os">The Flying Burrito Brothers -- Wild Horses</a>
-<br>
-                        submitted <span class="muted">2017-04-21 01:04</span> by <a href="https://www.reddit.com/user/As_Gopher_As_A_Sober">/u/As_Gopher_As_A_Sober</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="vf9lvU8_JUo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/vf9lvU8_JUo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Justin Townes Earle - Harlem River Blues - album version</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">30</span> - <a href="https://www.reddit.com/66ckk5">Justin Townes Earle - Harlem River Blues</a>
-<br>
-                        submitted <span class="muted">2017-04-19 19:40</span> by <a href="https://www.reddit.com/user/wasneusbeer">/u/wasneusbeer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7NqB1uMvtY0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7NqB1uMvtY0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Oh Sarah by Sturgill Simpson and Sunday Valley HD</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/64obyk">Sunday Valley (Sturgill Simpson) - Oh Sarah [Live]</a>
-<br>
-                        submitted <span class="muted">2017-04-11 03:02</span> by <a href="https://www.reddit.com/user/Trainwreck92">/u/Trainwreck92</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="RuCaTAV-nK0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/RuCaTAV-nK0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Hayes Carll - Drunken Poet’s Dream (eTown webisode #955)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">23</span> - <a href="https://www.reddit.com/684vhd">Hayes Carll - "Drunken Poet’s Dream" (eTown webisode #955)</a>
-<br>
-                        submitted <span class="muted">2017-04-28 19:31</span> by <a href="https://www.reddit.com/user/22_ucko__">/u/22_ucko__</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="OSs-Pitom4s">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/OSs-Pitom4s/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Deer Tick 'White Freight Liner Blues' (Townes Van Zandt Cover) // BeatCast Live Series</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/67ppt3">Deer Tick ~ 'White Freight Liner Blues' (Townes Van Zandt Cover) // BeatCast Live Series</a>
-<br>
-                        submitted <span class="muted">2017-04-26 17:36</span> by <a href="https://www.reddit.com/user/22_ucko__">/u/22_ucko__</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="FXdMqHfDV28">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/FXdMqHfDV28/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">John Moreland | Cataclysm Blues No. 4 | Afterhours Session #81</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/68dwwh">How have I not heard this John Moreland until now?! Cataclysm Blues No. 4</a>
-<br>
-                        submitted <span class="muted">2017-04-30 05:21</span> by <a href="https://www.reddit.com/user/FIRExNECK">/u/FIRExNECK</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="j_8cSljATH4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/j_8cSljATH4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Old 97's - Barrier Reef</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/648o07">Old 97's - "Barrier Reef"</a>
-<br>
-                        submitted <span class="muted">2017-04-08 18:47</span> by <a href="https://www.reddit.com/user/22_ucko__">/u/22_ucko__</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Tyxx85q00QI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Tyxx85q00QI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Justin Townes Earle covers Bruce Springsteen</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/65ff4t">Justin Townes Earle covers Atlantic City</a>
-<br>
-                        submitted <span class="muted">2017-04-14 21:40</span> by <a href="https://www.reddit.com/user/As_Gopher_As_A_Sober">/u/As_Gopher_As_A_Sober</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_QzcrflqDCg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_QzcrflqDCg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Tyler Childers - Nose On The Grindstone | OurVinyl Sessions</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/6655oo">Tyler Childers - Nose On The Grindstone</a>
-<br>
-                        submitted <span class="muted">2017-04-18 19:39</span> by <a href="https://www.reddit.com/user/chadridesabike">/u/chadridesabike</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="doCpKMAcYv0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/doCpKMAcYv0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">John Prine with Bruce Springsteen - 'TAKE A LOOK AT MY HEART'.avi</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/66epwj">John Prine with Bruce Springsteen - "TAKE A LOOK AT MY HEART"</a>
-<br>
-                        submitted <span class="muted">2017-04-20 01:48</span> by <a href="https://www.reddit.com/user/22_ucko__">/u/22_ucko__</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="VVAE_S9_iBY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/VVAE_S9_iBY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Wheeler Walker Jr. - Living Legend (Ol' Wheeler Album Trailer)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/632gzc">Wheeler Walker Jr. - Living Legend (Ol' Wheeler Album Trailer)</a>
-<br>
-                        submitted <span class="muted">2017-04-02 21:44</span> by <a href="https://www.reddit.com/user/LoveLampara">/u/LoveLampara</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="tbmEuTP2U4o">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/tbmEuTP2U4o/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Northeast Texas Woman</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/65q20a">Jerry Jeff Walker - "Northeast Texas Women", A. W. Ramsey, cover by a master song interpreter.</a>
-<br>
-                        submitted <span class="muted">2017-04-16 16:49</span> by <a href="https://www.reddit.com/user/22_ucko__">/u/22_ucko__</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="B9FzVhw8_bY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/B9FzVhw8_bY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Dead South - In Hell I'll Be In Good Company [Official Music Video]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/6320fw">"The Dead South - In Hell I'll Be In Good Company [Official Music Video]" on YouTube</a>
-<br>
-                        submitted <span class="muted">2017-04-02 20:25</span> by <a href="https://www.reddit.com/user/DR2015UT">/u/DR2015UT</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="k8c2GvomZ5o">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/k8c2GvomZ5o/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jonny Fritz - Stadium Inn (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/63q595">Jonny Fritz - Stadium Inn (Official Video)</a>
-<br>
-                        submitted <span class="muted">2017-04-06 02:11</span> by <a href="https://www.reddit.com/user/blaze_foley">/u/blaze_foley</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ECzWpnKOrew">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ECzWpnKOrew/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Honey Honey - Marry Rich</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/641j0i">Honey Honey - Marry Rich</a>
-<br>
-                        submitted <span class="muted">2017-04-07 16:43</span> by <a href="https://www.reddit.com/user/chadridesabike">/u/chadridesabike</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bi9iBKa0Xtw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bi9iBKa0Xtw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Chris Stapleton - Last Thing I Needed, First Thing This Morning (Audio)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/66ptsh">Chris Stapleton - "Last Thing I Needed, First Thing This Morning" (New song)</a>
-<br>
-                        submitted <span class="muted">2017-04-21 15:17</span> by <a href="https://www.reddit.com/user/chuckarmstrong">/u/chuckarmstrong</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="k51U77YNx2w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/k51U77YNx2w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Son Volt - "Graveyard Shift" (Uncle Tupelo cover) - First Avenue - Minneapolis - March 29, 2017</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/64jc28">Son Volt - "Graveyard Shift" (3/29/17)</a>
-<br>
-                        submitted <span class="muted">2017-04-10 12:42</span> by <a href="https://www.reddit.com/user/chuckarmstrong">/u/chuckarmstrong</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="KxvKjy7LRsU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/KxvKjy7LRsU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Todd Snider "Play a Train Song"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/65ffk1">Todd Snider -- Play a Train Song (best version of this song imo)</a>
-<br>
-                        submitted <span class="muted">2017-04-14 21:42</span> by <a href="https://www.reddit.com/user/As_Gopher_As_A_Sober">/u/As_Gopher_As_A_Sober</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="A2XygtCR9ak">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/A2XygtCR9ak/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lera Lynn ""Wolf Like Me"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/64wzor">Lera Lynn ""Wolf Like Me" (TV On The Radio cover)</a>
-<br>
-                        submitted <span class="muted">2017-04-12 08:52</span> by <a href="https://www.reddit.com/user/AstroWorldSecurity">/u/AstroWorldSecurity</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ISDXB9RGL_E">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ISDXB9RGL_E/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Chris Stapleton - Second One To Know (Audio)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/68338r">Chris Stapleton - "Second One to Know" (New song)</a>
-<br>
-                        submitted <span class="muted">2017-04-28 14:50</span> by <a href="https://www.reddit.com/user/chuckarmstrong">/u/chuckarmstrong</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="QvfGZ_B-KyQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/QvfGZ_B-KyQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ryan Bingham "To Live Is To Fly" // SiriusXM // Outlaw Country</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/68cdzi">Ryan Bingham singing Townes Van Zandt's 'To Live is to Fly' (Great Version!)</a>
-<br>
-                        submitted <span class="muted">2017-04-29 23:23</span> by <a href="https://www.reddit.com/user/Vowell33">/u/Vowell33</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="qqzQRgfVaes">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/qqzQRgfVaes/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Kathleen Edwards - Hockey Skates (Live)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/63nb8s">Kathleen Edwards - "Hockey Skates" (Live)</a>
-<br>
-                        submitted <span class="muted">2017-04-05 18:12</span> by <a href="https://www.reddit.com/user/22_ucko__">/u/22_ucko__</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="6eR5D_hEQ4Y">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/6eR5D_hEQ4Y/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Dave Alvin and Phil Alvin - "World's In A Bad Condition" (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/672t48">The Alvin Brothers together again</a>
-<br>
-                        submitted <span class="muted">2017-04-23 15:30</span> by <a href="https://www.reddit.com/user/SnakebitCowboyRebel">/u/SnakebitCowboyRebel</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="iteIiF5uKQU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/iteIiF5uKQU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Saturday Sessions: Nikki Lane performs "Jackpot"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/68b3fw">Nikki Lane performs "Jackpot" on CBS This Morning's 'Saturday Sessions.'</a>
-<br>
-                        submitted <span class="muted">2017-04-29 19:09</span> by <a href="https://www.reddit.com/user/chuckarmstrong">/u/chuckarmstrong</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="wDeyfHYX7rY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/wDeyfHYX7rY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cortez the Killer  DBTs Slobberbone sxsw</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/68cvfq">DBT &amp; Slobberbone - "Cortez the Killer" sxsw</a>
-<br>
-                        submitted <span class="muted">2017-04-30 01:05</span> by <a href="https://www.reddit.com/user/22_ucko__">/u/22_ucko__</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="MMGwxiEpMfA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/MMGwxiEpMfA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Brewery Session – Colter Wall "Kate McCannon"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/65yfto">Colter Wall - Kate McCannon</a>
-<br>
-                        submitted <span class="muted">2017-04-17 21:19</span> by <a href="https://www.reddit.com/user/wasneusbeer">/u/wasneusbeer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="hM2OW2T_MPg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/hM2OW2T_MPg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">A Kiss Before I Go</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/660uee">Ryan Adams - A Kiss Before I Go</a>
-<br>
-                        submitted <span class="muted">2017-04-18 04:58</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="weL8HTY1NJU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/weL8HTY1NJU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pinegrove: NPR Music Tiny Desk Concert</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/63exiq">Pinegrove: Country? Emo? What genre would you say they are?</a>
-<br>
-                        submitted <span class="muted">2017-04-04 15:49</span> by <a href="https://www.reddit.com/user/texan-in-tn">/u/texan-in-tn</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="XapuTEkTw6M">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XapuTEkTw6M/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">James McMurtry - You Got To Me (eTown webisode #818)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/64sr2s">James McMurtry - "You Got To Me" - (eTown webisode #818)</a>
-<br>
-                        submitted <span class="muted">2017-04-11 18:36</span> by <a href="https://www.reddit.com/user/22_ucko__">/u/22_ucko__</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="PkfFyX_1Kog">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/PkfFyX_1Kog/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">South First Blvd</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/64dwjs">Mike and the Moonpies - South First Blvd</a>
-<br>
-                        submitted <span class="muted">2017-04-09 16:29</span> by <a href="https://www.reddit.com/user/ncolombo">/u/ncolombo</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bgIpTozbVOI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bgIpTozbVOI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Flatland Cavalry - A Life Where We Work Out Lyric Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/67kxoe">Flatland Cavalry - A Life Where We Work Out (Lyric Video)</a>
-<br>
-                        submitted <span class="muted">2017-04-26 01:15</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_V5vLfmNPMw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_V5vLfmNPMw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Justin Townes Earle - "Champagne Corolla" [Lyric Video]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/66drrj">Justin Townes Earle - Champagne Corolla</a>
-<br>
-                        submitted <span class="muted">2017-04-19 22:53</span> by <a href="https://www.reddit.com/user/samwe">/u/samwe</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="HmBbkkt-LIs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/HmBbkkt-LIs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Brewery Sessions - Colter Wall - "Sleeping on the blacktop"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/66pp3k">Colter Wall, ya'll.</a>
-<br>
-                        submitted <span class="muted">2017-04-21 14:57</span> by <a href="https://www.reddit.com/user/FiveAgainst01">/u/FiveAgainst01</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="uDTTnXfsMus">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/uDTTnXfsMus/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Goddamn Gallows - 7 Devils</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/62zuub">The Goddamn Gallows - 7 Devils</a>
-<br>
-                        submitted <span class="muted">2017-04-02 14:18</span> by <a href="https://www.reddit.com/user/Lolastic_">/u/Lolastic_</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Kt-xJ7bu2Fs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Kt-xJ7bu2Fs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">To Live Is To Fly</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/63blna">Cowboy Junkies - "To Live Is To Fly"</a>
-<br>
-                        submitted <span class="muted">2017-04-04 02:57</span> by <a href="https://www.reddit.com/user/22_ucko__">/u/22_ucko__</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="AfjA8DtDGGc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/AfjA8DtDGGc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Charles Wesley Godwin "Sorry for the Wait"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/667o2q">Charles Godwin of Union Sound Treaty - Sorry For The Wait</a>
-<br>
-                        submitted <span class="muted">2017-04-19 03:05</span> by <a href="https://www.reddit.com/user/ncolombo">/u/ncolombo</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="oOIJecsnaWg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/oOIJecsnaWg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Tyler Childers - White House Road | OurVinyl Sessions</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/66pgi3">Tyler Childers - White House Road | OurVinyl Sessions</a>
-<br>
-                        submitted <span class="muted">2017-04-21 14:17</span> by <a href="https://www.reddit.com/user/chadridesabike">/u/chadridesabike</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="81Ayax5NEdU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/81Ayax5NEdU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Some New Town</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/63hhfu">Slobberbone - "Some New Town"</a>
-<br>
-                        submitted <span class="muted">2017-04-04 22:19</span> by <a href="https://www.reddit.com/user/22_ucko__">/u/22_ucko__</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="LzIboq1qEa8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/LzIboq1qEa8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Asylum Street Spankers - Beer</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/65vnzm">Asylum Street Spankers - Beer</a>
-<br>
-                        submitted <span class="muted">2017-04-17 13:53</span> by <a href="https://www.reddit.com/user/Texassman">/u/Texassman</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2Z9C6Z2Wm1Y">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2Z9C6Z2Wm1Y/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Eno Mountain Boys - Dixie</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/66w3kk">Eno Mountain Boys - Dixie (2017)</a>
-<br>
-                        submitted <span class="muted">2017-04-22 14:02</span> by <a href="https://www.reddit.com/user/sandyravage_">/u/sandyravage_</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5w7WJPywrY4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5w7WJPywrY4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Daniel Romano - When I Learned Your Name [OFFICIAL] 2017</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/67ozo7">Daniel Romano - "When I Learned Your Name"</a>
-<br>
-                        submitted <span class="muted">2017-04-26 15:49</span> by <a href="https://www.reddit.com/user/chuckarmstrong">/u/chuckarmstrong</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="CvJRJb6rYgk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/CvJRJb6rYgk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lillie Mae - “Over The Hill and Through The Woods” (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/68h4vj">Lillie Mae - "Over The Hill and Through the Woods"</a>
-<br>
-                        submitted <span class="muted">2017-04-30 18:57</span> by <a href="https://www.reddit.com/user/chuckarmstrong">/u/chuckarmstrong</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="DQhWgmfY634">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/DQhWgmfY634/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Stoned Traveler</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/667529">There's a thin line between praying and a crazy man talking to himself.</a>
-<br>
-                        submitted <span class="muted">2017-04-19 01:21</span> by <a href="https://www.reddit.com/user/murphy365">/u/murphy365</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="j6Q65yNStcM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/j6Q65yNStcM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">High Noon in Killville - Angry Johnny and the Killbillies</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/62zs5e">High Noon in Killville - Angry Johnny and the Killbillies</a>
-<br>
-                        submitted <span class="muted">2017-04-02 14:03</span> by <a href="https://www.reddit.com/user/Lolastic_">/u/Lolastic_</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-HHORlHNzdc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-HHORlHNzdc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">She Don't Like Me Clean</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/665ntx">She Don't Like Me Clean -- Jason Callahan</a>
-<br>
-                        submitted <span class="muted">2017-04-18 20:59</span> by <a href="https://www.reddit.com/user/As_Gopher_As_A_Sober">/u/As_Gopher_As_A_Sober</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="mn86ErvEftk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/mn86ErvEftk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Get Up by Caitlin Canty from Reckless Skyline</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/66r66w">Get Up by Caitlin Canty</a>
-<br>
-                        submitted <span class="muted">2017-04-21 18:44</span> by <a href="https://www.reddit.com/user/FIRExNECK">/u/FIRExNECK</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_LAYH9E-Bac">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_LAYH9E-Bac/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Alcoa - Cab Rides And Cigarettes</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/67so51">Alcoa - Cab Rides And Cigarettes</a>
-<br>
-                        submitted <span class="muted">2017-04-27 01:50</span> by <a href="https://www.reddit.com/user/Keoni9">/u/Keoni9</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="MsObv4b-qYg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/MsObv4b-qYg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">GHOULTOWN - Drink With The Living Dead (SUBTITLED)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/63vjgy">GHOULTOWN - Drink With The Living Dead</a>
-<br>
-                        submitted <span class="muted">2017-04-06 20:18</span> by <a href="https://www.reddit.com/user/Lolastic_">/u/Lolastic_</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="wN2Cavkes-w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/wN2Cavkes-w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Blame Me by Hugh Bob and The Hustle</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/66ec91">Hugh Bob and the Hustle (Hugh Masterson) - "Blame Me"</a>
-<br>
-                        submitted <span class="muted">2017-04-20 00:36</span> by <a href="https://www.reddit.com/user/chuckarmstrong">/u/chuckarmstrong</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="tDcePAi6yIA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/tDcePAi6yIA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mipso - Hurt So Good (Official)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/67dt6q">Mipso - Hurt So Good</a>
-<br>
-                        submitted <span class="muted">2017-04-25 02:31</span> by <a href="https://www.reddit.com/user/JessiesPinkman">/u/JessiesPinkman</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jzWYUomBpwg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jzWYUomBpwg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mazzy Star - Halah</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/63ep4z">Halah - Mazzy Star</a>
-<br>
-                        submitted <span class="muted">2017-04-04 15:13</span> by <a href="https://www.reddit.com/user/lonesomecountry">/u/lonesomecountry</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jDmT1zKnfyA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jDmT1zKnfyA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jamestown Revival - Journeyman (Audio)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/659tjk">Jamestown Revival - Journeyman</a>
-<br>
-                        submitted <span class="muted">2017-04-14 01:48</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="rqs1MQYM3fo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/rqs1MQYM3fo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Andrew Combs - "Bourgeois King" [Audio Only]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/66hs7c">Andrew Combs - Bourgeois King</a>
-<br>
-                        submitted <span class="muted">2017-04-20 13:47</span> by <a href="https://www.reddit.com/user/chadridesabike">/u/chadridesabike</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="NkpYJAati6g">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/NkpYJAati6g/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Come On Baby Let's Go Downtown</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/66nl2n">Neil Young - Come On Baby Let's Go Downtown</a>
-<br>
-                        submitted <span class="muted">2017-04-21 06:43</span> by <a href="https://www.reddit.com/user/Darkstar68">/u/Darkstar68</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7z3QDkxXrvY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7z3QDkxXrvY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Chick Singer Badass Rockin by Ray Wylie Hubbard (with Carson McHone)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/684ufb">"Chick Singer Badass Rockin" by Ray Wylie Hubbard (with Carson McHone)</a>
-<br>
-                        submitted <span class="muted">2017-04-28 19:27</span> by <a href="https://www.reddit.com/user/22_ucko__">/u/22_ucko__</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ZUfrviRJ_3g">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ZUfrviRJ_3g/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Dylan Earl:::"Blessing In Disguise" :::LIVE @ Normaltown Hall</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/63y9tf">Dylan Earl - Blessings In Disguise (LIVE @ Normaltown Hall)</a>
-<br>
-                        submitted <span class="muted">2017-04-07 04:27</span> by <a href="https://www.reddit.com/user/frontstreetpush">/u/frontstreetpush</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="0Pyy2SlYj0w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/0Pyy2SlYj0w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Dylan Earl @ The Flicker  3-8-16</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/64phfe">Dylan Earl - My failing life</a>
-<br>
-                        submitted <span class="muted">2017-04-11 07:49</span> by <a href="https://www.reddit.com/user/frontstreetpush">/u/frontstreetpush</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="KVwwcgpz1GY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/KVwwcgpz1GY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Bobby Bare Jr. "Visit Me In Music City"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/67l6wo">Bobby Bare Jr. - "Visit Me In Music City"</a>
-<br>
-                        submitted <span class="muted">2017-04-26 02:04</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ylYDQ0LsdIk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ylYDQ0LsdIk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SaVile Row + Erol</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/64kmqy">Erol - SaVile Row</a>
-<br>
-                        submitted <span class="muted">2017-04-10 16:30</span> by <a href="https://www.reddit.com/user/Che1616">/u/Che1616</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="MchWI3sLUQo">
+                    <td><img src="https://i.ytimg.com/vi/MchWI3sLUQo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Flying Burrito Brothers "Wild Horses"</td>
+                </tr>
+                <tr class="record" id="vf9lvU8_JUo">
+                    <td><img src="https://i.ytimg.com/vi/vf9lvU8_JUo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Justin Townes Earle - Harlem River Blues - album version</td>
+                </tr>
+                <tr class="record" id="7NqB1uMvtY0">
+                    <td><img src="https://i.ytimg.com/vi/7NqB1uMvtY0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Oh Sarah by Sturgill Simpson and Sunday Valley HD</td>
+                </tr>
+                <tr class="record" id="RuCaTAV-nK0">
+                    <td><img src="https://i.ytimg.com/vi/RuCaTAV-nK0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Hayes Carll - Drunken Poet’s Dream (eTown webisode #955)</td>
+                </tr>
+                <tr class="record" id="OSs-Pitom4s">
+                    <td><img src="https://i.ytimg.com/vi/OSs-Pitom4s/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Deer Tick 'White Freight Liner Blues' (Townes Van Zandt Cover) // BeatCast Live Series</td>
+                </tr>
+                <tr class="record" id="FXdMqHfDV28">
+                    <td><img src="https://i.ytimg.com/vi/FXdMqHfDV28/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">John Moreland | Cataclysm Blues No. 4 | Afterhours Session #81</td>
+                </tr>
+                <tr class="record" id="j_8cSljATH4">
+                    <td><img src="https://i.ytimg.com/vi/j_8cSljATH4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Old 97's - Barrier Reef</td>
+                </tr>
+                <tr class="record" id="Tyxx85q00QI">
+                    <td><img src="https://i.ytimg.com/vi/Tyxx85q00QI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Justin Townes Earle covers Bruce Springsteen</td>
+                </tr>
+                <tr class="record" id="_QzcrflqDCg">
+                    <td><img src="https://i.ytimg.com/vi/_QzcrflqDCg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Tyler Childers - Nose On The Grindstone | OurVinyl Sessions</td>
+                </tr>
+                <tr class="record" id="doCpKMAcYv0">
+                    <td><img src="https://i.ytimg.com/vi/doCpKMAcYv0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">John Prine with Bruce Springsteen - 'TAKE A LOOK AT MY HEART'.avi</td>
+                </tr>
+                <tr class="record" id="VVAE_S9_iBY">
+                    <td><img src="https://i.ytimg.com/vi/VVAE_S9_iBY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Wheeler Walker Jr. - Living Legend (Ol' Wheeler Album Trailer)</td>
+                </tr>
+                <tr class="record" id="tbmEuTP2U4o">
+                    <td><img src="https://i.ytimg.com/vi/tbmEuTP2U4o/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Northeast Texas Woman</td>
+                </tr>
+                <tr class="record" id="B9FzVhw8_bY">
+                    <td><img src="https://i.ytimg.com/vi/B9FzVhw8_bY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Dead South - In Hell I'll Be In Good Company [Official Music Video]</td>
+                </tr>
+                <tr class="record" id="k8c2GvomZ5o">
+                    <td><img src="https://i.ytimg.com/vi/k8c2GvomZ5o/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jonny Fritz - Stadium Inn (Official Video)</td>
+                </tr>
+                <tr class="record" id="ECzWpnKOrew">
+                    <td><img src="https://i.ytimg.com/vi/ECzWpnKOrew/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Honey Honey - Marry Rich</td>
+                </tr>
+                <tr class="record" id="bi9iBKa0Xtw">
+                    <td><img src="https://i.ytimg.com/vi/bi9iBKa0Xtw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Chris Stapleton - Last Thing I Needed, First Thing This Morning (Audio)</td>
+                </tr>
+                <tr class="record" id="k51U77YNx2w">
+                    <td><img src="https://i.ytimg.com/vi/k51U77YNx2w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Son Volt - "Graveyard Shift" (Uncle Tupelo cover) - First Avenue - Minneapolis - March 29, 2017</td>
+                </tr>
+                <tr class="record" id="KxvKjy7LRsU">
+                    <td><img src="https://i.ytimg.com/vi/KxvKjy7LRsU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Todd Snider "Play a Train Song"</td>
+                </tr>
+                <tr class="record" id="A2XygtCR9ak">
+                    <td><img src="https://i.ytimg.com/vi/A2XygtCR9ak/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lera Lynn ""Wolf Like Me"</td>
+                </tr>
+                <tr class="record" id="ISDXB9RGL_E">
+                    <td><img src="https://i.ytimg.com/vi/ISDXB9RGL_E/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Chris Stapleton - Second One To Know (Audio)</td>
+                </tr>
+                <tr class="record" id="QvfGZ_B-KyQ">
+                    <td><img src="https://i.ytimg.com/vi/QvfGZ_B-KyQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ryan Bingham "To Live Is To Fly" // SiriusXM // Outlaw Country</td>
+                </tr>
+                <tr class="record" id="qqzQRgfVaes">
+                    <td><img src="https://i.ytimg.com/vi/qqzQRgfVaes/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Kathleen Edwards - Hockey Skates (Live)</td>
+                </tr>
+                <tr class="record" id="6eR5D_hEQ4Y">
+                    <td><img src="https://i.ytimg.com/vi/6eR5D_hEQ4Y/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Dave Alvin and Phil Alvin - "World's In A Bad Condition" (Official Video)</td>
+                </tr>
+                <tr class="record" id="iteIiF5uKQU">
+                    <td><img src="https://i.ytimg.com/vi/iteIiF5uKQU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Saturday Sessions: Nikki Lane performs "Jackpot"</td>
+                </tr>
+                <tr class="record" id="wDeyfHYX7rY">
+                    <td><img src="https://i.ytimg.com/vi/wDeyfHYX7rY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cortez the Killer  DBTs Slobberbone sxsw</td>
+                </tr>
+                <tr class="record" id="MMGwxiEpMfA">
+                    <td><img src="https://i.ytimg.com/vi/MMGwxiEpMfA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Brewery Session – Colter Wall "Kate McCannon"</td>
+                </tr>
+                <tr class="record" id="hM2OW2T_MPg">
+                    <td><img src="https://i.ytimg.com/vi/hM2OW2T_MPg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">A Kiss Before I Go</td>
+                </tr>
+                <tr class="record" id="weL8HTY1NJU">
+                    <td><img src="https://i.ytimg.com/vi/weL8HTY1NJU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pinegrove: NPR Music Tiny Desk Concert</td>
+                </tr>
+                <tr class="record" id="XapuTEkTw6M">
+                    <td><img src="https://i.ytimg.com/vi/XapuTEkTw6M/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">James McMurtry - You Got To Me (eTown webisode #818)</td>
+                </tr>
+                <tr class="record" id="PkfFyX_1Kog">
+                    <td><img src="https://i.ytimg.com/vi/PkfFyX_1Kog/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">South First Blvd</td>
+                </tr>
+                <tr class="record" id="bgIpTozbVOI">
+                    <td><img src="https://i.ytimg.com/vi/bgIpTozbVOI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Flatland Cavalry - A Life Where We Work Out Lyric Video</td>
+                </tr>
+                <tr class="record" id="_V5vLfmNPMw">
+                    <td><img src="https://i.ytimg.com/vi/_V5vLfmNPMw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Justin Townes Earle - "Champagne Corolla" [Lyric Video]</td>
+                </tr>
+                <tr class="record" id="HmBbkkt-LIs">
+                    <td><img src="https://i.ytimg.com/vi/HmBbkkt-LIs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Brewery Sessions - Colter Wall - "Sleeping on the blacktop"</td>
+                </tr>
+                <tr class="record" id="uDTTnXfsMus">
+                    <td><img src="https://i.ytimg.com/vi/uDTTnXfsMus/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Goddamn Gallows - 7 Devils</td>
+                </tr>
+                <tr class="record" id="Kt-xJ7bu2Fs">
+                    <td><img src="https://i.ytimg.com/vi/Kt-xJ7bu2Fs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">To Live Is To Fly</td>
+                </tr>
+                <tr class="record" id="AfjA8DtDGGc">
+                    <td><img src="https://i.ytimg.com/vi/AfjA8DtDGGc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Charles Wesley Godwin "Sorry for the Wait"</td>
+                </tr>
+                <tr class="record" id="oOIJecsnaWg">
+                    <td><img src="https://i.ytimg.com/vi/oOIJecsnaWg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Tyler Childers - White House Road | OurVinyl Sessions</td>
+                </tr>
+                <tr class="record" id="81Ayax5NEdU">
+                    <td><img src="https://i.ytimg.com/vi/81Ayax5NEdU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Some New Town</td>
+                </tr>
+                <tr class="record" id="LzIboq1qEa8">
+                    <td><img src="https://i.ytimg.com/vi/LzIboq1qEa8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Asylum Street Spankers - Beer</td>
+                </tr>
+                <tr class="record" id="2Z9C6Z2Wm1Y">
+                    <td><img src="https://i.ytimg.com/vi/2Z9C6Z2Wm1Y/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Eno Mountain Boys - Dixie</td>
+                </tr>
+                <tr class="record" id="5w7WJPywrY4">
+                    <td><img src="https://i.ytimg.com/vi/5w7WJPywrY4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Daniel Romano - When I Learned Your Name [OFFICIAL] 2017</td>
+                </tr>
+                <tr class="record" id="CvJRJb6rYgk">
+                    <td><img src="https://i.ytimg.com/vi/CvJRJb6rYgk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lillie Mae - “Over The Hill and Through The Woods” (Official Video)</td>
+                </tr>
+                <tr class="record" id="DQhWgmfY634">
+                    <td><img src="https://i.ytimg.com/vi/DQhWgmfY634/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Stoned Traveler</td>
+                </tr>
+                <tr class="record" id="j6Q65yNStcM">
+                    <td><img src="https://i.ytimg.com/vi/j6Q65yNStcM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">High Noon in Killville - Angry Johnny and the Killbillies</td>
+                </tr>
+                <tr class="record" id="-HHORlHNzdc">
+                    <td><img src="https://i.ytimg.com/vi/-HHORlHNzdc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">She Don't Like Me Clean</td>
+                </tr>
+                <tr class="record" id="mn86ErvEftk">
+                    <td><img src="https://i.ytimg.com/vi/mn86ErvEftk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Get Up by Caitlin Canty from Reckless Skyline</td>
+                </tr>
+                <tr class="record" id="_LAYH9E-Bac">
+                    <td><img src="https://i.ytimg.com/vi/_LAYH9E-Bac/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Alcoa - Cab Rides And Cigarettes</td>
+                </tr>
+                <tr class="record" id="MsObv4b-qYg">
+                    <td><img src="https://i.ytimg.com/vi/MsObv4b-qYg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">GHOULTOWN - Drink With The Living Dead (SUBTITLED)</td>
+                </tr>
+                <tr class="record" id="wN2Cavkes-w">
+                    <td><img src="https://i.ytimg.com/vi/wN2Cavkes-w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Blame Me by Hugh Bob and The Hustle</td>
+                </tr>
+                <tr class="record" id="tDcePAi6yIA">
+                    <td><img src="https://i.ytimg.com/vi/tDcePAi6yIA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mipso - Hurt So Good (Official)</td>
+                </tr>
+                <tr class="record" id="jzWYUomBpwg">
+                    <td><img src="https://i.ytimg.com/vi/jzWYUomBpwg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mazzy Star - Halah</td>
+                </tr>
+                <tr class="record" id="jDmT1zKnfyA">
+                    <td><img src="https://i.ytimg.com/vi/jDmT1zKnfyA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jamestown Revival - Journeyman (Audio)</td>
+                </tr>
+                <tr class="record" id="rqs1MQYM3fo">
+                    <td><img src="https://i.ytimg.com/vi/rqs1MQYM3fo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Andrew Combs - "Bourgeois King" [Audio Only]</td>
+                </tr>
+                <tr class="record" id="NkpYJAati6g">
+                    <td><img src="https://i.ytimg.com/vi/NkpYJAati6g/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Come On Baby Let's Go Downtown</td>
+                </tr>
+                <tr class="record" id="7z3QDkxXrvY">
+                    <td><img src="https://i.ytimg.com/vi/7z3QDkxXrvY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Chick Singer Badass Rockin by Ray Wylie Hubbard (with Carson McHone)</td>
+                </tr>
+                <tr class="record" id="ZUfrviRJ_3g">
+                    <td><img src="https://i.ytimg.com/vi/ZUfrviRJ_3g/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Dylan Earl:::"Blessing In Disguise" :::LIVE @ Normaltown Hall</td>
+                </tr>
+                <tr class="record" id="0Pyy2SlYj0w">
+                    <td><img src="https://i.ytimg.com/vi/0Pyy2SlYj0w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Dylan Earl @ The Flicker  3-8-16</td>
+                </tr>
+                <tr class="record" id="KVwwcgpz1GY">
+                    <td><img src="https://i.ytimg.com/vi/KVwwcgpz1GY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Bobby Bare Jr. "Visit Me In Music City"</td>
+                </tr>
+                <tr class="record" id="ylYDQ0LsdIk">
+                    <td><img src="https://i.ytimg.com/vi/ylYDQ0LsdIk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SaVile Row + Erol</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/altcountry/">Alt Country</a> archive:
     <a href="/genre/altcountry/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/altcountry/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/altcountry/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/altcountry/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/altcountry/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/altcountry/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/altcountry/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -910,12 +320,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'altcountry';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

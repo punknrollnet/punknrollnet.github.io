@@ -46,92 +46,52 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="Vzlv7LFmLMg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Vzlv7LFmLMg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Birth Control - "Gamma Ray" (1972)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3adyka">Birth Control - Gamma Ray ('72)</a>
-<br>
-                        submitted <span class="muted">2015-06-19 09:52</span> by <a href="https://www.reddit.com/user/expensive-shit">/u/expensive-shit</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2dNl1YPAjww">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2dNl1YPAjww/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">CAN HALEN</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/38rpqm">Can Halen</a>
-<br>
-                        submitted <span class="muted">2015-06-06 06:12</span> by <a href="https://www.reddit.com/user/DMurdockT">/u/DMurdockT</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="BBdjTgKEVvA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/BBdjTgKEVvA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Föllakzoid - Arabic Hash</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3bfdgo">Föllakzoid - Arabic Hash (Chilean Krautrock)</a>
-<br>
-                        submitted <span class="muted">2015-06-28 18:58</span> by <a href="https://www.reddit.com/user/lightningp4w">/u/lightningp4w</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="DJ5Fi6IQC7s">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/DJ5Fi6IQC7s/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Virus- King Heroin.wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3bjfmb">virus - king heroin (1971)</a>
-<br>
-                        submitted <span class="muted">2015-06-29 18:44</span> by <a href="https://www.reddit.com/user/miba">/u/miba</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="Vzlv7LFmLMg">
+                    <td><img src="https://i.ytimg.com/vi/Vzlv7LFmLMg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Birth Control - "Gamma Ray" (1972)</td>
+                </tr>
+                <tr class="record" id="2dNl1YPAjww">
+                    <td><img src="https://i.ytimg.com/vi/2dNl1YPAjww/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">CAN HALEN</td>
+                </tr>
+                <tr class="record" id="BBdjTgKEVvA">
+                    <td><img src="https://i.ytimg.com/vi/BBdjTgKEVvA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Föllakzoid - Arabic Hash</td>
+                </tr>
+                <tr class="record" id="DJ5Fi6IQC7s">
+                    <td><img src="https://i.ytimg.com/vi/DJ5Fi6IQC7s/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Virus- King Heroin.wmv</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/krautrock/">Krautrock</a> archive:
     <a href="/genre/krautrock/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/krautrock/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/krautrock/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/krautrock/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/krautrock/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/krautrock/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -140,12 +100,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'krautrock';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

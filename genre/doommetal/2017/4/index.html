@@ -46,1086 +46,336 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="S0C1p5pL01I">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/S0C1p5pL01I/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Type O Negative - Everything Dies</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">103</span> - <a href="https://www.reddit.com/65d195">Type O Negative - Everything Dies (7 years ago today we lost Peter Steele)</a>
-<br>
-                        submitted <span class="muted">2017-04-14 15:05</span> by <a href="https://www.reddit.com/user/ConradtheMagnificent">/u/ConradtheMagnificent</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="wEiRKpflgQA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/wEiRKpflgQA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Earth - The Bees Made Honey In The Lion's Skull</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">97</span> - <a href="https://www.reddit.com/687io5">Earth - The bees made honey in the lion's skull. [full album|doom]</a>
-<br>
-                        submitted <span class="muted">2017-04-29 04:17</span> by <a href="https://www.reddit.com/user/xognitx">/u/xognitx</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="4mhIw-xD1xU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/4mhIw-xD1xU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pentagram - What's in My Bag?</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">70</span> - <a href="https://www.reddit.com/6628fz">Bobby Liebling featured in Amoeba's What's in My Bag? Seems to be doing well and picks out some great records.</a>
-<br>
-                        submitted <span class="muted">2017-04-18 11:27</span> by <a href="https://www.reddit.com/user/GurgelBrannare">/u/GurgelBrannare</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="THivyGAERCo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/THivyGAERCo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Electric Wizard - Weird Tales... (Lyrics & Subtitulado al Español)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">70</span> - <a href="https://www.reddit.com/66kkdj">Weird Tales: Electric Frost / Golgotha / Altar of Melektaus by Electric Wizard [Doom / Deep Space | 15:08 | 2000 🇬🇧]</a>
-<br>
-                        submitted <span class="muted">2017-04-20 20:48</span> by <a href="https://www.reddit.com/user/SoUglyEveryoneDied">/u/SoUglyEveryoneDied</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="YBWVi1GB2Ls">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/YBWVi1GB2Ls/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">WINDHAND - "Amaranth"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">47</span> - <a href="https://www.reddit.com/65hvg1">Windhand - Amaranth</a>
-<br>
-                        submitted <span class="muted">2017-04-15 07:03</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="OmcdscUN_28">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/OmcdscUN_28/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Toner Low III</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">46</span> - <a href="https://www.reddit.com/65wd9w">Toner Low - III</a>
-<br>
-                        submitted <span class="muted">2017-04-17 15:53</span> by <a href="https://www.reddit.com/user/the_muppets_took_me">/u/the_muppets_took_me</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="G6S25Sx8Um0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/G6S25Sx8Um0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">High On Fire the yeti</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">44</span> - <a href="https://www.reddit.com/63e9kz">High On Fire - The Yeti</a>
-<br>
-                        submitted <span class="muted">2017-04-04 14:00</span> by <a href="https://www.reddit.com/user/SemiHollowCarrot">/u/SemiHollowCarrot</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Vm6f4ba_hes">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Vm6f4ba_hes/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">CONAN - Altar of Grief</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">43</span> - <a href="https://www.reddit.com/631a8n">Altar of Grief by Conan. Inbound to avenge us This beast of wrath [Sludge/Doom/Stoner | 9:06 | `14 UK]</a>
-<br>
-                        submitted <span class="muted">2017-04-02 18:27</span> by <a href="https://www.reddit.com/user/SoUglyEveryoneDied">/u/SoUglyEveryoneDied</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8VxaZ3FZAho">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8VxaZ3FZAho/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Talisman</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">41</span> - <a href="https://www.reddit.com/6384tk">Boris - Talisman [Noise/Sludge/Doom | One of the best, and doomiest, tracks added in the delux edition of Pink]</a>
-<br>
-                        submitted <span class="muted">2017-04-03 17:10</span> by <a href="https://www.reddit.com/user/GrooseMoose">/u/GrooseMoose</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Z2kL80Cc-Yo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Z2kL80Cc-Yo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Isis - Hand Of Doom</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">40</span> - <a href="https://www.reddit.com/65ldsz">Isis - Hand of Doom (Black Sabbath Cover)</a>
-<br>
-                        submitted <span class="muted">2017-04-15 20:56</span> by <a href="https://www.reddit.com/user/Saxonyphone">/u/Saxonyphone</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zefQ5SNzUVM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zefQ5SNzUVM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">AHAB - The Thing That Made Search</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">36</span> - <a href="https://www.reddit.com/63vq4q">Anybody looking for some great funeral doom? Ahab - The Thing That Made Search</a>
-<br>
-                        submitted <span class="muted">2017-04-06 20:47</span> by <a href="https://www.reddit.com/user/sleeping_druid">/u/sleeping_druid</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="uQMvzDQw3wY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/uQMvzDQw3wY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Boris - Just Abandoned Myself</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">32</span> - <a href="https://www.reddit.com/64l5q1">Boris - Just Abandoned My-Self (2005) [Not doom but kind of doom-adjacent]</a>
-<br>
-                        submitted <span class="muted">2017-04-10 17:54</span> by <a href="https://www.reddit.com/user/saltyplumsoda">/u/saltyplumsoda</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Xjrv5UzO_fQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Xjrv5UzO_fQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">EYEHATEGOD live at Saint Vitus Bar, Apr. 25, 2016 (FULL SET)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">31</span> - <a href="https://www.reddit.com/66wubt">{LIVE} EYEHATEGOD 100 minute long set at Saint Vitus Bar [4/25/16]</a>
-<br>
-                        submitted <span class="muted">2017-04-22 16:27</span> by <a href="https://www.reddit.com/user/SoUglyEveryoneDied">/u/SoUglyEveryoneDied</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="GcTp8UPeAfg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/GcTp8UPeAfg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">FISTER - LIFE IS SHORT LIFE IS SHIT AND SOON IT WILL BE OVER</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">28</span> - <a href="https://www.reddit.com/636ta6">FISTER - LIFE IS SHORT LIFE IS SHIT AND SOON IT WILL BE OVER(FFO: Conan, Primitive Man)</a>
-<br>
-                        submitted <span class="muted">2017-04-03 13:39</span> by <a href="https://www.reddit.com/user/sleeping_druid">/u/sleeping_druid</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2bo8x78-ghc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2bo8x78-ghc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Electric Wizard - Live@Close-Up"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/63fmnb">Black Mass by Electric Wizard LIVE. Great atmosphere and crowd [6:03 | 4 days ago]</a>
-<br>
-                        submitted <span class="muted">2017-04-04 17:34</span> by <a href="https://www.reddit.com/user/SoUglyEveryoneDied">/u/SoUglyEveryoneDied</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="SYCLDLyjWWc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/SYCLDLyjWWc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Reverend Bizarre - Doomsower</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/66cocm">Reverend Bizarre - Doomsower</a>
-<br>
-                        submitted <span class="muted">2017-04-19 19:56</span> by <a href="https://www.reddit.com/user/edddyee">/u/edddyee</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="9-3HipcpANA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/9-3HipcpANA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Godflesh - Life Giver Life Taker</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/66vw9d">Godflesh - Life Giver Life Taker</a>
-<br>
-                        submitted <span class="muted">2017-04-22 13:15</span> by <a href="https://www.reddit.com/user/that_spacegoat">/u/that_spacegoat</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7uIlE7yzgT8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7uIlE7yzgT8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Day 02 07 Conan @ Heavy Days In Doomtown 2013</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/659aif">Conan LIVE at Doomtown 2013. Their loudest, most fuzzed out set on Youtube [Doom/Sludge/Stoner | HD 38:00 | UK]</a>
-<br>
-                        submitted <span class="muted">2017-04-14 00:03</span> by <a href="https://www.reddit.com/user/SoUglyEveryoneDied">/u/SoUglyEveryoneDied</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="IcrEJ01zv7U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/IcrEJ01zv7U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Saint Vitus Dying Inside</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/65fds7">Saint Vitus - Dying Inside</a>
-<br>
-                        submitted <span class="muted">2017-04-14 21:33</span> by <a href="https://www.reddit.com/user/mburakerman">/u/mburakerman</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7l2MXNpmvdI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7l2MXNpmvdI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Beast In The Field: The Sacred Above The Sacred Below (full-length DOOM)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/65vm50">Beast In The Field: The Sacred Above The Sacred Below (Full Album)</a>
-<br>
-                        submitted <span class="muted">2017-04-17 13:43</span> by <a href="https://www.reddit.com/user/mark0210">/u/mark0210</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="HYHb42yTIqo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/HYHb42yTIqo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Church of Misery "Brother Bishop" (OFFICIAL VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/67vm9l">Church of Misery - Brother Bishop</a>
-<br>
-                        submitted <span class="muted">2017-04-27 13:33</span> by <a href="https://www.reddit.com/user/mark0210">/u/mark0210</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="3rM3QysoB78">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/3rM3QysoB78/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SEVEN SISTERS OF SLEEP - "War Master" (Official Music Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/63kep1">SEVEN SISTERS OF SLEEP - "War Master" (Official Music Video)</a>
-<br>
-                        submitted <span class="muted">2017-04-05 09:03</span> by <a href="https://www.reddit.com/user/hviezdosz">/u/hviezdosz</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8zFIt6OAjG8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8zFIt6OAjG8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">EYEHATEGOD live at Brooklyn Bazaar, Apr. 16th, 2017 (FULL SET)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/66air2">MIKE IX is back!</a>
-<br>
-                        submitted <span class="muted">2017-04-19 14:27</span> by <a href="https://www.reddit.com/user/Ebheirt">/u/Ebheirt</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ehSEvB8YhKQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ehSEvB8YhKQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Slomatics - Electric Breath</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/649hem">Slomatics - Electric Breath</a>
-<br>
-                        submitted <span class="muted">2017-04-08 21:24</span> by <a href="https://www.reddit.com/user/5486324656234">/u/5486324656234</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="EemF_7ShJU0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/EemF_7ShJU0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Earth - 'Phase 3: Thrones and Dominions' (Full Album)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/673ml3">Earth – Phase 3: Thrones and Dominions [Full Album | Drone/Doom/Minimalism | 1995]</a>
-<br>
-                        submitted <span class="muted">2017-04-23 17:56</span> by <a href="https://www.reddit.com/user/GrooseMoose">/u/GrooseMoose</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="0ruKDDqdCQI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/0ruKDDqdCQI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">King Crimson - 21st Century Schizoid Man - Providence (1974) HQ</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/675lat">{LIVE} 21st Century Schizoid Man by King Crimson live in Providence [Prog/Psych Rock | HQ 8:18 | 1969;1974]</a>
-<br>
-                        submitted <span class="muted">2017-04-23 23:47</span> by <a href="https://www.reddit.com/user/SoUglyEveryoneDied">/u/SoUglyEveryoneDied</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ncGoPcgLZSk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ncGoPcgLZSk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">AsbestosDeath - Dejection, Unclean [Full EP]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/65x6m2">Asbestosdeath - Dejection, Unclean [Full EP] (Al Cisneros, Matt Pike, and Chris Hakius Pre-Sleep)</a>
-<br>
-                        submitted <span class="muted">2017-04-17 17:59</span> by <a href="https://www.reddit.com/user/aimlow_flyhigh">/u/aimlow_flyhigh</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="LhcZA-8vcDg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/LhcZA-8vcDg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Carnivore - Macho Man (Village People Cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/67g9op">Carnivore - Macho Man (Village People Cover, live)</a>
-<br>
-                        submitted <span class="muted">2017-04-25 12:39</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="KSshvakqEfA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/KSshvakqEfA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">High Priest of Saturn - The Warming Moon</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/6607z0">High Priest of Saturn - The Warming Moon</a>
-<br>
-                        submitted <span class="muted">2017-04-18 02:43</span> by <a href="https://www.reddit.com/user/PenetratorHammer">/u/PenetratorHammer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="n7GHmEs7TBI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/n7GHmEs7TBI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">1. Ice Dragon - Squares Inside Squares</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/6651xb">Yeah, Ice Dragon is fucking sick! recently found out about them! (Ice Dragon - The Burl, the Earth, the Aether)</a>
-<br>
-                        submitted <span class="muted">2017-04-18 19:23</span> by <a href="https://www.reddit.com/user/Layschipswater">/u/Layschipswater</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="N92cHo7m8aQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/N92cHo7m8aQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Church of Misery - Ripping Into Pieces</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/63qpyl">Church of Misery - Ripping Into Pieces</a>
-<br>
-                        submitted <span class="muted">2017-04-06 04:08</span> by <a href="https://www.reddit.com/user/Bro_Hockey">/u/Bro_Hockey</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="KBP0AX0au48">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/KBP0AX0au48/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Doom tone on budget Strat</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/67c9ee">Doom tone on budget Strat</a>
-<br>
-                        submitted <span class="muted">2017-04-24 21:52</span> by <a href="https://www.reddit.com/user/PokeyAraya">/u/PokeyAraya</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zy9NT2UzBDw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zy9NT2UzBDw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Hidden Hand - Mother Teacher Destroyer (2004) (Full Album)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/65iuh6">The Hidden Hand - Mother Teacher Destroyer (2004)</a>
-<br>
-                        submitted <span class="muted">2017-04-15 12:29</span> by <a href="https://www.reddit.com/user/Dhaan">/u/Dhaan</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="c2nJK_6idQM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/c2nJK_6idQM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">TROUBLE - R.I.P.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/683jin">Trouble- RIP</a>
-<br>
-                        submitted <span class="muted">2017-04-28 16:02</span> by <a href="https://www.reddit.com/user/yobotomy">/u/yobotomy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Ruv1MuJ4LvI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Ruv1MuJ4LvI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Butterfly</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/63m2ry">Earth Witch - Butterfly</a>
-<br>
-                        submitted <span class="muted">2017-04-05 15:06</span> by <a href="https://www.reddit.com/user/JerFTW">/u/JerFTW</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="iMxiafweCGI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/iMxiafweCGI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">diSEMBOWELMENT- Cerulean Transience of All My Imagined Shores</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/63md5a">Disembowelment - Cerulean Transience of All My Imagined Shores</a>
-<br>
-                        submitted <span class="muted">2017-04-05 15:51</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="wwnbz0IQGvc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/wwnbz0IQGvc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Author & Punisher -  Shame (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/62qug3">Author &amp; Punisher - Shame</a>
-<br>
-                        submitted <span class="muted">2017-04-01 05:21</span> by <a href="https://www.reddit.com/user/g2g4m10">/u/g2g4m10</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2QtgKH1qifA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2QtgKH1qifA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Swan</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/63pg5f">Body Void -- Swan [Blackened Doom] (2017)</a>
-<br>
-                        submitted <span class="muted">2017-04-06 00:01</span> by <a href="https://www.reddit.com/user/unmaskthespectre">/u/unmaskthespectre</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7DX5_NgwZUs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7DX5_NgwZUs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Revelation - Poets & Paupers</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/64662x">Revelation - Poets &amp; Paupers</a>
-<br>
-                        submitted <span class="muted">2017-04-08 09:13</span> by <a href="https://www.reddit.com/user/grindmonkey">/u/grindmonkey</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="s8KgNuanP_4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/s8KgNuanP_4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Swallow the Sun - April 14th (2012)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/65f95z">Swallow The Sun - April 14th</a>
-<br>
-                        submitted <span class="muted">2017-04-14 21:11</span> by <a href="https://www.reddit.com/user/Helbrann">/u/Helbrann</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="CYyQcqInAUc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/CYyQcqInAUc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Godchilla - Sparkling Void</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/66aowc">Godchilla - Sparkling Void</a>
-<br>
-                        submitted <span class="muted">2017-04-19 14:54</span> by <a href="https://www.reddit.com/user/cordazar">/u/cordazar</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="IHK6gSeA_Us">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/IHK6gSeA_Us/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Thy Grief Eternal - Swathed In Black</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/65ybr1">Thy Grief Eternal - Swathed In Black</a>
-<br>
-                        submitted <span class="muted">2017-04-17 21:00</span> by <a href="https://www.reddit.com/user/apedap">/u/apedap</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="DYpYEstU3i8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/DYpYEstU3i8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SATURNALIA TEMPLE - GOLACHAB</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/64t3j5">Golachab by Saturnalia Temple. Magickal abrasive Swedish doom [Doom/Stoner/Occult | 11:28 | '13 SWE]</a>
-<br>
-                        submitted <span class="muted">2017-04-11 19:27</span> by <a href="https://www.reddit.com/user/SoUglyEveryoneDied">/u/SoUglyEveryoneDied</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="JJ7FJmzpwv4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/JJ7FJmzpwv4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Lamp of Thoth - I Love The Lamp</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/65mdb7">The Lamp of Thoth - I Love The Lamp</a>
-<br>
-                        submitted <span class="muted">2017-04-16 00:17</span> by <a href="https://www.reddit.com/user/thechosenstick">/u/thechosenstick</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="S9tKlPIPQUs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/S9tKlPIPQUs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Northless - Empty Home</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/67cj7t">Northless - Empty Home (as underrated as they are heavy)</a>
-<br>
-                        submitted <span class="muted">2017-04-24 22:38</span> by <a href="https://www.reddit.com/user/CosmicDruid">/u/CosmicDruid</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="vra-N-_F0oI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/vra-N-_F0oI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Katatonia- Funeral Wedding</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/62pm5h">Katatonia- Funeral Wedding [Go to album for a shitty rainy day like today]</a>
-<br>
-                        submitted <span class="muted">2017-04-01 01:10</span> by <a href="https://www.reddit.com/user/chronically_trill">/u/chronically_trill</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="kxWnzp83bOc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/kxWnzp83bOc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Kurokuma - Radioactivity [Kraftwerk cover]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/6550xm">Kurokuma - Radioactivity [Kraftwerk cover] [Music Video]</a>
-<br>
-                        submitted <span class="muted">2017-04-13 12:02</span> by <a href="https://www.reddit.com/user/Gltchrp">/u/Gltchrp</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ImMvlp9ZtgU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ImMvlp9ZtgU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">My Little Darling</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/65ijrw">Dunbarrow - My Little Darling</a>
-<br>
-                        submitted <span class="muted">2017-04-15 11:00</span> by <a href="https://www.reddit.com/user/JohnyQuesticle">/u/JohnyQuesticle</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="C8YPNwcgo-w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/C8YPNwcgo-w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Agalloch - This Old Cabin</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/65o1tc">Agalloch, This Old Cabin</a>
-<br>
-                        submitted <span class="muted">2017-04-16 07:39</span> by <a href="https://www.reddit.com/user/knifekld">/u/knifekld</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="thihDV6RFpU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/thihDV6RFpU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Paradise Lost- 10. Return To The Sun ( The Plague Within-2015)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/66dk1z">Paradise Lost - Return To The Sun</a>
-<br>
-                        submitted <span class="muted">2017-04-19 22:17</span> by <a href="https://www.reddit.com/user/cryolithic">/u/cryolithic</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5fdBL5gwkr4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5fdBL5gwkr4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">MOUNTAINS "Dust In The Glare" (New Full Album) 2017</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/66p6r7">[Full Album] MOUNTAINS - Dust In The Glare</a>
-<br>
-                        submitted <span class="muted">2017-04-21 13:30</span> by <a href="https://www.reddit.com/user/Chernobi11">/u/Chernobi11</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="wDfZtrt3DgI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/wDfZtrt3DgI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SUMOKEM - Warning (single)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/67o3pt">SUMOKEM - Warning</a>
-<br>
-                        submitted <span class="muted">2017-04-26 13:26</span> by <a href="https://www.reddit.com/user/abqsensfan">/u/abqsensfan</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="oGsduXD0F0E">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/oGsduXD0F0E/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SAOLA "The Deep"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/67c65v">Saola - The Deep</a>
-<br>
-                        submitted <span class="muted">2017-04-24 21:38</span> by <a href="https://www.reddit.com/user/SLOTH_POTATO_PIRATE">/u/SLOTH_POTATO_PIRATE</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="U39cSr9JbtE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/U39cSr9JbtE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">HEAVY LORD - Dieselweed (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/685tr7">HEAVY LORD - Dieselweed [sludge doom, Netherlands, 2011]</a>
-<br>
-                        submitted <span class="muted">2017-04-28 22:14</span> by <a href="https://www.reddit.com/user/solitude-prod">/u/solitude-prod</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="CDq9jX2Zwlo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/CDq9jX2Zwlo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Maze Of Roots: Joyless Reward</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/6896pf">Maze Of Roots - "Joyless Reward" (2010)</a>
-<br>
-                        submitted <span class="muted">2017-04-29 12:52</span> by <a href="https://www.reddit.com/user/PenetratorHammer">/u/PenetratorHammer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2W8USNXzZx0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2W8USNXzZx0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Elder - Spires Burn (HD Video + Full Sound Quality)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/65jknh">Spires Burn LIVE by Elder [Rock/Doom/Psych | 10:45 | 2014]</a>
-<br>
-                        submitted <span class="muted">2017-04-15 15:17</span> by <a href="https://www.reddit.com/user/SoUglyEveryoneDied">/u/SoUglyEveryoneDied</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="RVbeHv9kSjU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/RVbeHv9kSjU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Highgraves - Casket Of Saints (Full EP 2016)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/667off">Highgraves - Casket of Saints EP</a>
-<br>
-                        submitted <span class="muted">2017-04-19 03:07</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="IpCl5y9-d5s">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/IpCl5y9-d5s/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">UN - Through the Luminous Dusk - Live @ Big Name Recording Studio April 2017</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/66xw44">UN - Through the Luminous Dusk - Live @ Big Name Recording Studio April 2017</a>
-<br>
-                        submitted <span class="muted">2017-04-22 19:37</span> by <a href="https://www.reddit.com/user/captain-spaghetti">/u/captain-spaghetti</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="yw_bz7TDaLc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/yw_bz7TDaLc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Suma, Pyramido - Suma / Pyramido - split 12" (full album)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/63y392">Suma / Pyramido Split, Pretty Heavy Shit</a>
-<br>
-                        submitted <span class="muted">2017-04-07 03:48</span> by <a href="https://www.reddit.com/user/beelzebubblish">/u/beelzebubblish</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="OxHEyN3xxlI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/OxHEyN3xxlI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Gloson - Cringe (Official Live Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/64kvdf">Gloson - Cringe (Live video)</a>
-<br>
-                        submitted <span class="muted">2017-04-10 17:08</span> by <a href="https://www.reddit.com/user/angel_dusted">/u/angel_dusted</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zGA9T93yU9w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zGA9T93yU9w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Brunt - St Felix of Nola [Instrumental]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/65xfpo">Brunt - St Felix of Nola [Instrumental]</a>
-<br>
-                        submitted <span class="muted">2017-04-17 18:38</span> by <a href="https://www.reddit.com/user/mburakerman">/u/mburakerman</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="W34AlAxYklk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/W34AlAxYklk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Dopethrone live at Blitz july 25th 2016</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/6732mm">{LIVE SET} DOPETHRONE in Norway. Excellent sound! [42:41 | 6/25/16 CAN]</a>
-<br>
-                        submitted <span class="muted">2017-04-23 16:18</span> by <a href="https://www.reddit.com/user/SoUglyEveryoneDied">/u/SoUglyEveryoneDied</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="e584q7SCVJw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/e584q7SCVJw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Decayor - Veil of Despair</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/68agpc">Decayor - Veil of Despair (2009)</a>
-<br>
-                        submitted <span class="muted">2017-04-29 17:14</span> by <a href="https://www.reddit.com/user/PenetratorHammer">/u/PenetratorHammer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="EMOep0dDHhU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/EMOep0dDHhU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Stephen O'malley - shock therapy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/62zwad">Stephen O'malley - shock therapy</a>
-<br>
-                        submitted <span class="muted">2017-04-02 14:27</span> by <a href="https://www.reddit.com/user/avivi_">/u/avivi_</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="87JeEKUtuOM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/87JeEKUtuOM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Witchfinder - Snowy Grave</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/64kc4z">Witchfinder - Snowy Grave (New 2017)</a>
-<br>
-                        submitted <span class="muted">2017-04-10 15:42</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="vju0ELPacEY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/vju0ELPacEY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">OMMADON, Sonic Mass, Bannerman's, Edinburgh, February 2015</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/65j7dj">{LIVE SET} OMMADON at Bannerman's. The heaviest two-piece in doom [45:28 | 2/15]</a>
-<br>
-                        submitted <span class="muted">2017-04-15 14:01</span> by <a href="https://www.reddit.com/user/SoUglyEveryoneDied">/u/SoUglyEveryoneDied</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Waw6bct4buU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Waw6bct4buU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Last One Left</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/664csv">The Last One Left</a>
-<br>
-                        submitted <span class="muted">2017-04-18 17:37</span> by <a href="https://www.reddit.com/user/moolkilger">/u/moolkilger</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Tm1xqRWhZ9c">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Tm1xqRWhZ9c/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Flesh Martyr - Echoes of a Distant Weeping (EP 2017)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/62rj0h">Flesh Martyr - Echoes of a Distant Weeping (EP 2017)</a>
-<br>
-                        submitted <span class="muted">2017-04-01 08:24</span> by <a href="https://www.reddit.com/user/OmarJlassi">/u/OmarJlassi</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5x84MgF8RrY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5x84MgF8RrY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sourvein live</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/63p14m">Sourvein LIVE going absolutely wild [Doom/Sludge/Thrash | 8:53 | ´11 USA]</a>
-<br>
-                        submitted <span class="muted">2017-04-05 22:45</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8TDH5OWA2tg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8TDH5OWA2tg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Fox 45 at The Doom Room 3/10/17</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/64shqj">Fox 45 at The Doom Room 3/10/17</a>
-<br>
-                        submitted <span class="muted">2017-04-11 17:58</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8_JreN_viOg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8_JreN_viOg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Day 04 09 Moss @ Heavy Days In Doomtown 2013</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/64tdd0">Olly of Moss asks the crowd for a joint halfway through their hour-long set at Doomtown 2013 [1080p full set]</a>
-<br>
-                        submitted <span class="muted">2017-04-11 20:09</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="fiaY_9WYYdg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/fiaY_9WYYdg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Fly, Wyvern - Original Song</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/661eyy">Fly Wyvern - A song my old high school band wrote. We fucked up towards the end.</a>
-<br>
-                        submitted <span class="muted">2017-04-18 07:32</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Z937cNfYhFs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Z937cNfYhFs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">EVOKE THY LORDS - Lifestories (2017) Full Album Official</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/674qdr">EVOKE THY LORDS - Lifestories (2017) Full Album Official</a>
-<br>
-                        submitted <span class="muted">2017-04-23 21:07</span> by <a href="https://www.reddit.com/user/solitude-prod">/u/solitude-prod</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_Ez-3tJF3Ng">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_Ez-3tJF3Ng/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Bottom of the Ocean</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/68dguq">Netherlands -- The Bottom of the Ocean (2016)</a>
-<br>
-                        submitted <span class="muted">2017-04-30 03:23</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="kMDxcZnVVHs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/kMDxcZnVVHs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Burial At Sea</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/63maff">Goatsnake - Burial At Sea [Saint Vitus cover]</a>
-<br>
-                        submitted <span class="muted">2017-04-05 15:39</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="S0C1p5pL01I">
+                    <td><img src="https://i.ytimg.com/vi/S0C1p5pL01I/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Type O Negative - Everything Dies</td>
+                </tr>
+                <tr class="record" id="wEiRKpflgQA">
+                    <td><img src="https://i.ytimg.com/vi/wEiRKpflgQA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Earth - The Bees Made Honey In The Lion's Skull</td>
+                </tr>
+                <tr class="record" id="4mhIw-xD1xU">
+                    <td><img src="https://i.ytimg.com/vi/4mhIw-xD1xU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pentagram - What's in My Bag?</td>
+                </tr>
+                <tr class="record" id="THivyGAERCo">
+                    <td><img src="https://i.ytimg.com/vi/THivyGAERCo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Electric Wizard - Weird Tales... (Lyrics & Subtitulado al Español)</td>
+                </tr>
+                <tr class="record" id="YBWVi1GB2Ls">
+                    <td><img src="https://i.ytimg.com/vi/YBWVi1GB2Ls/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">WINDHAND - "Amaranth"</td>
+                </tr>
+                <tr class="record" id="OmcdscUN_28">
+                    <td><img src="https://i.ytimg.com/vi/OmcdscUN_28/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Toner Low III</td>
+                </tr>
+                <tr class="record" id="G6S25Sx8Um0">
+                    <td><img src="https://i.ytimg.com/vi/G6S25Sx8Um0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">High On Fire the yeti</td>
+                </tr>
+                <tr class="record" id="Vm6f4ba_hes">
+                    <td><img src="https://i.ytimg.com/vi/Vm6f4ba_hes/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">CONAN - Altar of Grief</td>
+                </tr>
+                <tr class="record" id="8VxaZ3FZAho">
+                    <td><img src="https://i.ytimg.com/vi/8VxaZ3FZAho/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Talisman</td>
+                </tr>
+                <tr class="record" id="Z2kL80Cc-Yo">
+                    <td><img src="https://i.ytimg.com/vi/Z2kL80Cc-Yo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Isis - Hand Of Doom</td>
+                </tr>
+                <tr class="record" id="zefQ5SNzUVM">
+                    <td><img src="https://i.ytimg.com/vi/zefQ5SNzUVM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">AHAB - The Thing That Made Search</td>
+                </tr>
+                <tr class="record" id="uQMvzDQw3wY">
+                    <td><img src="https://i.ytimg.com/vi/uQMvzDQw3wY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Boris - Just Abandoned Myself</td>
+                </tr>
+                <tr class="record" id="Xjrv5UzO_fQ">
+                    <td><img src="https://i.ytimg.com/vi/Xjrv5UzO_fQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">EYEHATEGOD live at Saint Vitus Bar, Apr. 25, 2016 (FULL SET)</td>
+                </tr>
+                <tr class="record" id="GcTp8UPeAfg">
+                    <td><img src="https://i.ytimg.com/vi/GcTp8UPeAfg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">FISTER - LIFE IS SHORT LIFE IS SHIT AND SOON IT WILL BE OVER</td>
+                </tr>
+                <tr class="record" id="2bo8x78-ghc">
+                    <td><img src="https://i.ytimg.com/vi/2bo8x78-ghc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Electric Wizard - Live@Close-Up"</td>
+                </tr>
+                <tr class="record" id="SYCLDLyjWWc">
+                    <td><img src="https://i.ytimg.com/vi/SYCLDLyjWWc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Reverend Bizarre - Doomsower</td>
+                </tr>
+                <tr class="record" id="9-3HipcpANA">
+                    <td><img src="https://i.ytimg.com/vi/9-3HipcpANA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Godflesh - Life Giver Life Taker</td>
+                </tr>
+                <tr class="record" id="7uIlE7yzgT8">
+                    <td><img src="https://i.ytimg.com/vi/7uIlE7yzgT8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Day 02 07 Conan @ Heavy Days In Doomtown 2013</td>
+                </tr>
+                <tr class="record" id="IcrEJ01zv7U">
+                    <td><img src="https://i.ytimg.com/vi/IcrEJ01zv7U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Saint Vitus Dying Inside</td>
+                </tr>
+                <tr class="record" id="7l2MXNpmvdI">
+                    <td><img src="https://i.ytimg.com/vi/7l2MXNpmvdI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Beast In The Field: The Sacred Above The Sacred Below (full-length DOOM)</td>
+                </tr>
+                <tr class="record" id="HYHb42yTIqo">
+                    <td><img src="https://i.ytimg.com/vi/HYHb42yTIqo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Church of Misery "Brother Bishop" (OFFICIAL VIDEO)</td>
+                </tr>
+                <tr class="record" id="3rM3QysoB78">
+                    <td><img src="https://i.ytimg.com/vi/3rM3QysoB78/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SEVEN SISTERS OF SLEEP - "War Master" (Official Music Video)</td>
+                </tr>
+                <tr class="record" id="8zFIt6OAjG8">
+                    <td><img src="https://i.ytimg.com/vi/8zFIt6OAjG8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">EYEHATEGOD live at Brooklyn Bazaar, Apr. 16th, 2017 (FULL SET)</td>
+                </tr>
+                <tr class="record" id="ehSEvB8YhKQ">
+                    <td><img src="https://i.ytimg.com/vi/ehSEvB8YhKQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Slomatics - Electric Breath</td>
+                </tr>
+                <tr class="record" id="EemF_7ShJU0">
+                    <td><img src="https://i.ytimg.com/vi/EemF_7ShJU0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Earth - 'Phase 3: Thrones and Dominions' (Full Album)</td>
+                </tr>
+                <tr class="record" id="0ruKDDqdCQI">
+                    <td><img src="https://i.ytimg.com/vi/0ruKDDqdCQI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">King Crimson - 21st Century Schizoid Man - Providence (1974) HQ</td>
+                </tr>
+                <tr class="record" id="ncGoPcgLZSk">
+                    <td><img src="https://i.ytimg.com/vi/ncGoPcgLZSk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">AsbestosDeath - Dejection, Unclean [Full EP]</td>
+                </tr>
+                <tr class="record" id="LhcZA-8vcDg">
+                    <td><img src="https://i.ytimg.com/vi/LhcZA-8vcDg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Carnivore - Macho Man (Village People Cover)</td>
+                </tr>
+                <tr class="record" id="KSshvakqEfA">
+                    <td><img src="https://i.ytimg.com/vi/KSshvakqEfA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">High Priest of Saturn - The Warming Moon</td>
+                </tr>
+                <tr class="record" id="n7GHmEs7TBI">
+                    <td><img src="https://i.ytimg.com/vi/n7GHmEs7TBI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">1. Ice Dragon - Squares Inside Squares</td>
+                </tr>
+                <tr class="record" id="N92cHo7m8aQ">
+                    <td><img src="https://i.ytimg.com/vi/N92cHo7m8aQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Church of Misery - Ripping Into Pieces</td>
+                </tr>
+                <tr class="record" id="KBP0AX0au48">
+                    <td><img src="https://i.ytimg.com/vi/KBP0AX0au48/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Doom tone on budget Strat</td>
+                </tr>
+                <tr class="record" id="zy9NT2UzBDw">
+                    <td><img src="https://i.ytimg.com/vi/zy9NT2UzBDw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Hidden Hand - Mother Teacher Destroyer (2004) (Full Album)</td>
+                </tr>
+                <tr class="record" id="c2nJK_6idQM">
+                    <td><img src="https://i.ytimg.com/vi/c2nJK_6idQM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">TROUBLE - R.I.P.</td>
+                </tr>
+                <tr class="record" id="Ruv1MuJ4LvI">
+                    <td><img src="https://i.ytimg.com/vi/Ruv1MuJ4LvI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Butterfly</td>
+                </tr>
+                <tr class="record" id="iMxiafweCGI">
+                    <td><img src="https://i.ytimg.com/vi/iMxiafweCGI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">diSEMBOWELMENT- Cerulean Transience of All My Imagined Shores</td>
+                </tr>
+                <tr class="record" id="wwnbz0IQGvc">
+                    <td><img src="https://i.ytimg.com/vi/wwnbz0IQGvc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Author & Punisher -  Shame (Official Video)</td>
+                </tr>
+                <tr class="record" id="2QtgKH1qifA">
+                    <td><img src="https://i.ytimg.com/vi/2QtgKH1qifA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Swan</td>
+                </tr>
+                <tr class="record" id="7DX5_NgwZUs">
+                    <td><img src="https://i.ytimg.com/vi/7DX5_NgwZUs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Revelation - Poets & Paupers</td>
+                </tr>
+                <tr class="record" id="s8KgNuanP_4">
+                    <td><img src="https://i.ytimg.com/vi/s8KgNuanP_4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Swallow the Sun - April 14th (2012)</td>
+                </tr>
+                <tr class="record" id="CYyQcqInAUc">
+                    <td><img src="https://i.ytimg.com/vi/CYyQcqInAUc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Godchilla - Sparkling Void</td>
+                </tr>
+                <tr class="record" id="IHK6gSeA_Us">
+                    <td><img src="https://i.ytimg.com/vi/IHK6gSeA_Us/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Thy Grief Eternal - Swathed In Black</td>
+                </tr>
+                <tr class="record" id="DYpYEstU3i8">
+                    <td><img src="https://i.ytimg.com/vi/DYpYEstU3i8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SATURNALIA TEMPLE - GOLACHAB</td>
+                </tr>
+                <tr class="record" id="JJ7FJmzpwv4">
+                    <td><img src="https://i.ytimg.com/vi/JJ7FJmzpwv4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Lamp of Thoth - I Love The Lamp</td>
+                </tr>
+                <tr class="record" id="S9tKlPIPQUs">
+                    <td><img src="https://i.ytimg.com/vi/S9tKlPIPQUs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Northless - Empty Home</td>
+                </tr>
+                <tr class="record" id="vra-N-_F0oI">
+                    <td><img src="https://i.ytimg.com/vi/vra-N-_F0oI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Katatonia- Funeral Wedding</td>
+                </tr>
+                <tr class="record" id="kxWnzp83bOc">
+                    <td><img src="https://i.ytimg.com/vi/kxWnzp83bOc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Kurokuma - Radioactivity [Kraftwerk cover]</td>
+                </tr>
+                <tr class="record" id="ImMvlp9ZtgU">
+                    <td><img src="https://i.ytimg.com/vi/ImMvlp9ZtgU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">My Little Darling</td>
+                </tr>
+                <tr class="record" id="C8YPNwcgo-w">
+                    <td><img src="https://i.ytimg.com/vi/C8YPNwcgo-w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Agalloch - This Old Cabin</td>
+                </tr>
+                <tr class="record" id="thihDV6RFpU">
+                    <td><img src="https://i.ytimg.com/vi/thihDV6RFpU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Paradise Lost- 10. Return To The Sun ( The Plague Within-2015)</td>
+                </tr>
+                <tr class="record" id="5fdBL5gwkr4">
+                    <td><img src="https://i.ytimg.com/vi/5fdBL5gwkr4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">MOUNTAINS "Dust In The Glare" (New Full Album) 2017</td>
+                </tr>
+                <tr class="record" id="wDfZtrt3DgI">
+                    <td><img src="https://i.ytimg.com/vi/wDfZtrt3DgI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SUMOKEM - Warning (single)</td>
+                </tr>
+                <tr class="record" id="oGsduXD0F0E">
+                    <td><img src="https://i.ytimg.com/vi/oGsduXD0F0E/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SAOLA "The Deep"</td>
+                </tr>
+                <tr class="record" id="U39cSr9JbtE">
+                    <td><img src="https://i.ytimg.com/vi/U39cSr9JbtE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">HEAVY LORD - Dieselweed (Official Video)</td>
+                </tr>
+                <tr class="record" id="CDq9jX2Zwlo">
+                    <td><img src="https://i.ytimg.com/vi/CDq9jX2Zwlo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Maze Of Roots: Joyless Reward</td>
+                </tr>
+                <tr class="record" id="2W8USNXzZx0">
+                    <td><img src="https://i.ytimg.com/vi/2W8USNXzZx0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Elder - Spires Burn (HD Video + Full Sound Quality)</td>
+                </tr>
+                <tr class="record" id="RVbeHv9kSjU">
+                    <td><img src="https://i.ytimg.com/vi/RVbeHv9kSjU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Highgraves - Casket Of Saints (Full EP 2016)</td>
+                </tr>
+                <tr class="record" id="IpCl5y9-d5s">
+                    <td><img src="https://i.ytimg.com/vi/IpCl5y9-d5s/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">UN - Through the Luminous Dusk - Live @ Big Name Recording Studio April 2017</td>
+                </tr>
+                <tr class="record" id="yw_bz7TDaLc">
+                    <td><img src="https://i.ytimg.com/vi/yw_bz7TDaLc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Suma, Pyramido - Suma / Pyramido - split 12" (full album)</td>
+                </tr>
+                <tr class="record" id="OxHEyN3xxlI">
+                    <td><img src="https://i.ytimg.com/vi/OxHEyN3xxlI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Gloson - Cringe (Official Live Video)</td>
+                </tr>
+                <tr class="record" id="zGA9T93yU9w">
+                    <td><img src="https://i.ytimg.com/vi/zGA9T93yU9w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Brunt - St Felix of Nola [Instrumental]</td>
+                </tr>
+                <tr class="record" id="W34AlAxYklk">
+                    <td><img src="https://i.ytimg.com/vi/W34AlAxYklk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Dopethrone live at Blitz july 25th 2016</td>
+                </tr>
+                <tr class="record" id="e584q7SCVJw">
+                    <td><img src="https://i.ytimg.com/vi/e584q7SCVJw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Decayor - Veil of Despair</td>
+                </tr>
+                <tr class="record" id="EMOep0dDHhU">
+                    <td><img src="https://i.ytimg.com/vi/EMOep0dDHhU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Stephen O'malley - shock therapy</td>
+                </tr>
+                <tr class="record" id="87JeEKUtuOM">
+                    <td><img src="https://i.ytimg.com/vi/87JeEKUtuOM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Witchfinder - Snowy Grave</td>
+                </tr>
+                <tr class="record" id="vju0ELPacEY">
+                    <td><img src="https://i.ytimg.com/vi/vju0ELPacEY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">OMMADON, Sonic Mass, Bannerman's, Edinburgh, February 2015</td>
+                </tr>
+                <tr class="record" id="Waw6bct4buU">
+                    <td><img src="https://i.ytimg.com/vi/Waw6bct4buU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Last One Left</td>
+                </tr>
+                <tr class="record" id="Tm1xqRWhZ9c">
+                    <td><img src="https://i.ytimg.com/vi/Tm1xqRWhZ9c/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Flesh Martyr - Echoes of a Distant Weeping (EP 2017)</td>
+                </tr>
+                <tr class="record" id="5x84MgF8RrY">
+                    <td><img src="https://i.ytimg.com/vi/5x84MgF8RrY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sourvein live</td>
+                </tr>
+                <tr class="record" id="8TDH5OWA2tg">
+                    <td><img src="https://i.ytimg.com/vi/8TDH5OWA2tg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Fox 45 at The Doom Room 3/10/17</td>
+                </tr>
+                <tr class="record" id="8_JreN_viOg">
+                    <td><img src="https://i.ytimg.com/vi/8_JreN_viOg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Day 04 09 Moss @ Heavy Days In Doomtown 2013</td>
+                </tr>
+                <tr class="record" id="fiaY_9WYYdg">
+                    <td><img src="https://i.ytimg.com/vi/fiaY_9WYYdg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Fly, Wyvern - Original Song</td>
+                </tr>
+                <tr class="record" id="Z937cNfYhFs">
+                    <td><img src="https://i.ytimg.com/vi/Z937cNfYhFs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">EVOKE THY LORDS - Lifestories (2017) Full Album Official</td>
+                </tr>
+                <tr class="record" id="_Ez-3tJF3Ng">
+                    <td><img src="https://i.ytimg.com/vi/_Ez-3tJF3Ng/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Bottom of the Ocean</td>
+                </tr>
+                <tr class="record" id="kMDxcZnVVHs">
+                    <td><img src="https://i.ytimg.com/vi/kMDxcZnVVHs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Burial At Sea</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/doommetal/">Doom Metal</a> archive:
     <a href="/genre/doommetal/2010/">2010</a>&nbsp;•&nbsp;    <a href="/genre/doommetal/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/doommetal/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/doommetal/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/doommetal/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/doommetal/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/doommetal/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/doommetal/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -1134,12 +384,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'doommetal';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -46,106 +46,56 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="jE7Zv6d-HUA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jE7Zv6d-HUA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Monster Magnet - Powertrip</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/o103p">Monster Magnet - Powertrip</a>
-<br>
-                        submitted <span class="muted">2012-01-03 11:43</span> by <a href="https://www.reddit.com/user/exposur3">/u/exposur3</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Hp-49mnp36w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Hp-49mnp36w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Three Days Grace - The Chain '2011' [HQ]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/ovdu4">Three Days Grace - The Chain '2011' [HQ]</a>
-<br>
-                        submitted <span class="muted">2012-01-25 01:52</span> by <a href="https://www.reddit.com/user/snowleoskyrim">/u/snowleoskyrim</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="N5yK33PfZAQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/N5yK33PfZAQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Fjallabræður-Thunderstruck</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/osp2p">Icelandic men's choir singing "Thunderstruck"!</a>
-<br>
-                        submitted <span class="muted">2012-01-23 09:25</span> by <a href="https://www.reddit.com/user/bennibent">/u/bennibent</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="iJHXMpdUtVQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/iJHXMpdUtVQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Tarbox Ramblers Already Gone</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/o5ha6">Tarbox Ramblers - Already Gone</a>
-<br>
-                        submitted <span class="muted">2012-01-06 15:17</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="YEGsxNFCu1Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/YEGsxNFCu1Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jorn spirit Black.wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/oz52u">Jorn - Spirit Black (live)</a>
-<br>
-                        submitted <span class="muted">2012-01-27 14:36</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="jE7Zv6d-HUA">
+                    <td><img src="https://i.ytimg.com/vi/jE7Zv6d-HUA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Monster Magnet - Powertrip</td>
+                </tr>
+                <tr class="record" id="Hp-49mnp36w">
+                    <td><img src="https://i.ytimg.com/vi/Hp-49mnp36w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Three Days Grace - The Chain '2011' [HQ]</td>
+                </tr>
+                <tr class="record" id="N5yK33PfZAQ">
+                    <td><img src="https://i.ytimg.com/vi/N5yK33PfZAQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Fjallabræður-Thunderstruck</td>
+                </tr>
+                <tr class="record" id="iJHXMpdUtVQ">
+                    <td><img src="https://i.ytimg.com/vi/iJHXMpdUtVQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Tarbox Ramblers Already Gone</td>
+                </tr>
+                <tr class="record" id="YEGsxNFCu1Q">
+                    <td><img src="https://i.ytimg.com/vi/YEGsxNFCu1Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jorn spirit Black.wmv</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/hardrock/">Hard Rock</a> archive:
     <a href="/genre/hardrock/2010/">2010</a>&nbsp;•&nbsp;    <a href="/genre/hardrock/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/hardrock/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/hardrock/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/hardrock/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/hardrock/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/hardrock/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/hardrock/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -154,12 +104,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'hardrock';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

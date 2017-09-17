@@ -46,386 +46,136 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="R8qIseFg77Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/R8qIseFg77Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Chris Thile & Michael Daves - "Sleep with One Eye Open"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/odfb4">Christ Thile &amp; Michael Daves - Sleep with one eye open. [3:26]</a>
-<br>
-                        submitted <span class="muted">2012-01-12 03:52</span> by <a href="https://www.reddit.com/user/Ransomnia">/u/Ransomnia</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-7ZNOsP-kcs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-7ZNOsP-kcs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Grisman, Thile, Rice, Anger, Marshall, Watkins, Austin - Dawgs Bull - Floydfest 2003</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">23</span> - <a href="https://www.reddit.com/o0eef">Figured r/Bluegrass would appreciate this more than r/Music did.  Dawgs Bull - Floydfest 2003 - Grisman, Thile, Rice, Anger and more!</a>
-<br>
-                        submitted <span class="muted">2012-01-03 00:06</span> by <a href="https://www.reddit.com/user/mandolin_mania">/u/mandolin_mania</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="vlIFpqnVi5I">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/vlIFpqnVi5I/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Same Ol' River - Sam Bush</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/ofr8h">Sam Bush - Same 'Ol River [Bluegrass] one of my favorites!</a>
-<br>
-                        submitted <span class="muted">2012-01-13 18:50</span> by <a href="https://www.reddit.com/user/SoonerDead">/u/SoonerDead</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="1qahZ-whM6o">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/1qahZ-whM6o/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Old Enough [featuring Ricky Skaggs and Ashley Monroe] (video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/of7ws">The Raconteurs (Jack White) ft. Ricky Skaggs and Ashley Monroe- Old Enough [Bluegrass/Folk Rock]</a>
-<br>
-                        submitted <span class="muted">2012-01-13 07:57</span> by <a href="https://www.reddit.com/user/SoonerDead">/u/SoonerDead</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="XEne36YxyKI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XEne36YxyKI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">"Sailin' Shoes" - Sam Bush - One-Take</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/oinlj">Sam Bush - Sailin' Shoes</a>
-<br>
-                        submitted <span class="muted">2012-01-16 01:31</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2rWzVhDQquI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2rWzVhDQquI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Bluegrass Diva with Steve Martin, Ed Helms and Noam Pikelny</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/omhnh">a great short documentary on Noam Pikelny</a>
-<br>
-                        submitted <span class="muted">2012-01-19 01:48</span> by <a href="https://www.reddit.com/user/larvesenx4">/u/larvesenx4</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="rVl1ibykWZU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/rVl1ibykWZU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mark O'Connor, Tony Rice, Bela Fleck - "Freeborn Man"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/o3m6f">"Freeborn Man" Done by Rice, Bush, Bela, Douglas, etc. I love how J Dougie latched on to the worst fashion trends of all eras.</a>
-<br>
-                        submitted <span class="muted">2012-01-05 05:54</span> by <a href="https://www.reddit.com/user/FartsMcMasters">/u/FartsMcMasters</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="QQOjuzBS5ug">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/QQOjuzBS5ug/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Marty Riemer Show - Abby Mae and The Homeschool Boys (Caleb Meyer)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/p2l1t">Abby Mae and the Homeschool Boys - Caleb Meyer</a>
-<br>
-                        submitted <span class="muted">2012-01-30 04:32</span> by <a href="https://www.reddit.com/user/LWJR2552">/u/LWJR2552</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7N79a_gC7N0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7N79a_gC7N0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Southern Skye - Oh Caroline & Daybreak In Dixie</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/p37bx">This is a band I used to play with in Gatlinburg, Tn.</a>
-<br>
-                        submitted <span class="muted">2012-01-30 17:26</span> by <a href="https://www.reddit.com/user/banjo_boy77">/u/banjo_boy77</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="qhRFVB5gI_8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/qhRFVB5gI_8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Dead Milkmen - "If I Had a Gun" - punk bluegrass cover</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/p46cz">My band doing a punk bluegrass cover of "If I Had a Gun" by The Dead Milkmen</a>
-<br>
-                        submitted <span class="muted">2012-01-31 05:18</span> by <a href="https://www.reddit.com/user/icculus20">/u/icculus20</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="oMKBtLFtoXU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/oMKBtLFtoXU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sam Bush Bananas-Whipping Post -Bananas</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/o6a1u">The Bush you should have voted for.</a>
-<br>
-                        submitted <span class="muted">2012-01-07 02:47</span> by <a href="https://www.reddit.com/user/crane_operator">/u/crane_operator</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="uMhSxXEbmv8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/uMhSxXEbmv8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Parks and Recreation - Chris Goes Banjo Crazy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/oc50k">How I felt hearing Bill Monroe for the first time</a>
-<br>
-                        submitted <span class="muted">2012-01-11 08:36</span> by <a href="https://www.reddit.com/user/Phisherman89">/u/Phisherman89</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="E_MnKh9of60">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/E_MnKh9of60/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Old Tire Swingers play "Something About Life" on the Great Day show</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/nyycx">My old timey band was on a TV show a couple days ago.  Here's a song from it!</a>
-<br>
-                        submitted <span class="muted">2012-01-01 21:48</span> by <a href="https://www.reddit.com/user/HaxleRose">/u/HaxleRose</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8MnU7mpO_-o">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8MnU7mpO_-o/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">06 Greensky Bluegrass 2011-03-11 Old Barns</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/p3eot">Old Barns - Greensky Bluegrass</a>
-<br>
-                        submitted <span class="muted">2012-01-30 19:59</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5yJpgE5hFLs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5yJpgE5hFLs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Shadow Of A Man-Henhouse Prowlers</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/oz3w0">Shadow of a Man - Henhouse Prowlers</a>
-<br>
-                        submitted <span class="muted">2012-01-27 13:57</span> by <a href="https://www.reddit.com/user/LaunchPad_DC">/u/LaunchPad_DC</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="XVquD4l4z6I">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XVquD4l4z6I/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pert Near Sandstone - Okanagan Valley (Live on 89.3 The Current)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/p2omn">Pert Near Sandstone - Okanagan Valley</a>
-<br>
-                        submitted <span class="muted">2012-01-30 06:02</span> by <a href="https://www.reddit.com/user/LWJR2552">/u/LWJR2552</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="xRXNeASjLw8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/xRXNeASjLw8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Clifftop 2011 The Fish From Within- Nancy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/o8piq">The Fish From Within - Nancy (winners of Clifftop's neo-traditional band contest)</a>
-<br>
-                        submitted <span class="muted">2012-01-09 02:16</span> by <a href="https://www.reddit.com/user/icculus20">/u/icculus20</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7vBo0ptYJNs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7vBo0ptYJNs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Josh Williams - Mordecai</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/or48e">Bird flies onstage during a bluegrass show.   Crosspost from r/videos</a>
-<br>
-                        submitted <span class="muted">2012-01-22 05:02</span> by <a href="https://www.reddit.com/user/fuzzwell">/u/fuzzwell</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bWp57YZLD1M">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bWp57YZLD1M/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Bill Cheatham on the Banjo</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/owr7s">Me playing Bill Cheatham on the banjo</a>
-<br>
-                        submitted <span class="muted">2012-01-25 23:26</span> by <a href="https://www.reddit.com/user/FeatsDontFailMeNow">/u/FeatsDontFailMeNow</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="sYrVvEL0pK4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/sYrVvEL0pK4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Chatham County Line - "Chip of a Star" - NRK Radio</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/nypcb">Chatham County Line on Norwegian radio — "Chip of a Star"</a>
-<br>
-                        submitted <span class="muted">2012-01-01 17:40</span> by <a href="https://www.reddit.com/user/WardenclyffeTower">/u/WardenclyffeTower</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="CuAkPFS0Y1Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/CuAkPFS0Y1Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Honest Mort and His Gentlemen of Industry - Lawsuit Society Blues</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/o84y0">Honest Mort and His Gentlemen of Industry - Lawsuit Society Blues</a>
-<br>
-                        submitted <span class="muted">2012-01-08 18:06</span> by <a href="https://www.reddit.com/user/10061520">/u/10061520</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="EFTFsWuFI3o">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/EFTFsWuFI3o/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Seldom Scene - appalachian rain</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/og01o">Appalachian Train- Seldom Scene</a>
-<br>
-                        submitted <span class="muted">2012-01-13 22:00</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="sh7q4CG074A">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/sh7q4CG074A/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Making of Stars and Satellites:  Recording - Trampled by Turtles</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/ouvgd">Trampled By Turtles, Making of stars and satellites featuring "Alone"</a>
-<br>
-                        submitted <span class="muted">2012-01-24 19:52</span> by <a href="https://www.reddit.com/user/s0cia11y_awkward">/u/s0cia11y_awkward</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="9zwy3O6bNNU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/9zwy3O6bNNU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cahalen Morrison & Eli West - All for the Sake of Day - Pickathon Beardy Session</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/oxovn">Cahalen Morrison &amp; Eli West</a>
-<br>
-                        submitted <span class="muted">2012-01-26 16:04</span> by <a href="https://www.reddit.com/user/F-Holes">/u/F-Holes</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="1HBnaY7LZYw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/1HBnaY7LZYw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">DelFest 2012 Lineup: Top Ten Reasons You Should Attend</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/oohbj">2012 DelFest lineup announced - Del Yeah! Who's in?</a>
-<br>
-                        submitted <span class="muted">2012-01-20 05:25</span> by <a href="https://www.reddit.com/user/bhlow601">/u/bhlow601</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="R8qIseFg77Q">
+                    <td><img src="https://i.ytimg.com/vi/R8qIseFg77Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Chris Thile & Michael Daves - "Sleep with One Eye Open"</td>
+                </tr>
+                <tr class="record" id="-7ZNOsP-kcs">
+                    <td><img src="https://i.ytimg.com/vi/-7ZNOsP-kcs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Grisman, Thile, Rice, Anger, Marshall, Watkins, Austin - Dawgs Bull - Floydfest 2003</td>
+                </tr>
+                <tr class="record" id="vlIFpqnVi5I">
+                    <td><img src="https://i.ytimg.com/vi/vlIFpqnVi5I/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Same Ol' River - Sam Bush</td>
+                </tr>
+                <tr class="record" id="1qahZ-whM6o">
+                    <td><img src="https://i.ytimg.com/vi/1qahZ-whM6o/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Old Enough [featuring Ricky Skaggs and Ashley Monroe] (video</td>
+                </tr>
+                <tr class="record" id="XEne36YxyKI">
+                    <td><img src="https://i.ytimg.com/vi/XEne36YxyKI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">"Sailin' Shoes" - Sam Bush - One-Take</td>
+                </tr>
+                <tr class="record" id="2rWzVhDQquI">
+                    <td><img src="https://i.ytimg.com/vi/2rWzVhDQquI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Bluegrass Diva with Steve Martin, Ed Helms and Noam Pikelny</td>
+                </tr>
+                <tr class="record" id="rVl1ibykWZU">
+                    <td><img src="https://i.ytimg.com/vi/rVl1ibykWZU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mark O'Connor, Tony Rice, Bela Fleck - "Freeborn Man"</td>
+                </tr>
+                <tr class="record" id="QQOjuzBS5ug">
+                    <td><img src="https://i.ytimg.com/vi/QQOjuzBS5ug/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Marty Riemer Show - Abby Mae and The Homeschool Boys (Caleb Meyer)</td>
+                </tr>
+                <tr class="record" id="7N79a_gC7N0">
+                    <td><img src="https://i.ytimg.com/vi/7N79a_gC7N0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Southern Skye - Oh Caroline & Daybreak In Dixie</td>
+                </tr>
+                <tr class="record" id="qhRFVB5gI_8">
+                    <td><img src="https://i.ytimg.com/vi/qhRFVB5gI_8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Dead Milkmen - "If I Had a Gun" - punk bluegrass cover</td>
+                </tr>
+                <tr class="record" id="oMKBtLFtoXU">
+                    <td><img src="https://i.ytimg.com/vi/oMKBtLFtoXU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sam Bush Bananas-Whipping Post -Bananas</td>
+                </tr>
+                <tr class="record" id="uMhSxXEbmv8">
+                    <td><img src="https://i.ytimg.com/vi/uMhSxXEbmv8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Parks and Recreation - Chris Goes Banjo Crazy</td>
+                </tr>
+                <tr class="record" id="E_MnKh9of60">
+                    <td><img src="https://i.ytimg.com/vi/E_MnKh9of60/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Old Tire Swingers play "Something About Life" on the Great Day show</td>
+                </tr>
+                <tr class="record" id="8MnU7mpO_-o">
+                    <td><img src="https://i.ytimg.com/vi/8MnU7mpO_-o/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">06 Greensky Bluegrass 2011-03-11 Old Barns</td>
+                </tr>
+                <tr class="record" id="5yJpgE5hFLs">
+                    <td><img src="https://i.ytimg.com/vi/5yJpgE5hFLs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Shadow Of A Man-Henhouse Prowlers</td>
+                </tr>
+                <tr class="record" id="XVquD4l4z6I">
+                    <td><img src="https://i.ytimg.com/vi/XVquD4l4z6I/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pert Near Sandstone - Okanagan Valley (Live on 89.3 The Current)</td>
+                </tr>
+                <tr class="record" id="xRXNeASjLw8">
+                    <td><img src="https://i.ytimg.com/vi/xRXNeASjLw8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Clifftop 2011 The Fish From Within- Nancy</td>
+                </tr>
+                <tr class="record" id="7vBo0ptYJNs">
+                    <td><img src="https://i.ytimg.com/vi/7vBo0ptYJNs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Josh Williams - Mordecai</td>
+                </tr>
+                <tr class="record" id="bWp57YZLD1M">
+                    <td><img src="https://i.ytimg.com/vi/bWp57YZLD1M/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Bill Cheatham on the Banjo</td>
+                </tr>
+                <tr class="record" id="sYrVvEL0pK4">
+                    <td><img src="https://i.ytimg.com/vi/sYrVvEL0pK4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Chatham County Line - "Chip of a Star" - NRK Radio</td>
+                </tr>
+                <tr class="record" id="CuAkPFS0Y1Q">
+                    <td><img src="https://i.ytimg.com/vi/CuAkPFS0Y1Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Honest Mort and His Gentlemen of Industry - Lawsuit Society Blues</td>
+                </tr>
+                <tr class="record" id="EFTFsWuFI3o">
+                    <td><img src="https://i.ytimg.com/vi/EFTFsWuFI3o/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Seldom Scene - appalachian rain</td>
+                </tr>
+                <tr class="record" id="sh7q4CG074A">
+                    <td><img src="https://i.ytimg.com/vi/sh7q4CG074A/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Making of Stars and Satellites:  Recording - Trampled by Turtles</td>
+                </tr>
+                <tr class="record" id="9zwy3O6bNNU">
+                    <td><img src="https://i.ytimg.com/vi/9zwy3O6bNNU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cahalen Morrison & Eli West - All for the Sake of Day - Pickathon Beardy Session</td>
+                </tr>
+                <tr class="record" id="1HBnaY7LZYw">
+                    <td><img src="https://i.ytimg.com/vi/1HBnaY7LZYw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">DelFest 2012 Lineup: Top Ten Reasons You Should Attend</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/bluegrass/">Bluegrass</a> archive:
     <a href="/genre/bluegrass/2008/">2008</a>&nbsp;•&nbsp;    <a href="/genre/bluegrass/2010/">2010</a>&nbsp;•&nbsp;    <a href="/genre/bluegrass/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/bluegrass/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/bluegrass/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/bluegrass/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/bluegrass/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/bluegrass/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/bluegrass/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -434,12 +184,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'bluegrass';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

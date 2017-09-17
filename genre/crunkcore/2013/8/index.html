@@ -46,92 +46,52 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="GkxBRYHXPMs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/GkxBRYHXPMs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SnapKracklePop- 'Agent Orange'</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1kvpy1">SnapKracklePop! - Agent Orange</a>
-<br>
-                        submitted <span class="muted">2013-08-22 16:00</span> by <a href="https://www.reddit.com/user/chesterthesquirrel">/u/chesterthesquirrel</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Yf-TdeTyYFs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Yf-TdeTyYFs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Dot Dot Curve:) - Freakin Freak (Bass Boosted)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1kpweo">Dot Dot Curve - Freakin Freak (Bass Boosted)</a>
-<br>
-                        submitted <span class="muted">2013-08-20 06:23</span> by <a href="https://www.reddit.com/user/meat_wagon_man1">/u/meat_wagon_man1</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="rb5y4-zE2Ts">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/rb5y4-zE2Ts/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Nightclub Fight Club - Dopeshit</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1ku0td">Nightclub Fight Club - Dopeshit</a>
-<br>
-                        submitted <span class="muted">2013-08-21 22:08</span> by <a href="https://www.reddit.com/user/chesterthesquirrel">/u/chesterthesquirrel</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="J_X8uoXOIpg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/J_X8uoXOIpg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">BROKENCYDE - GERONIMO [NEW 06/2013]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1l44ur">New brokeNCYDE song! - Geronimo</a>
-<br>
-                        submitted <span class="muted">2013-08-26 13:06</span> by <a href="https://www.reddit.com/user/gDAnother">/u/gDAnother</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="GkxBRYHXPMs">
+                    <td><img src="https://i.ytimg.com/vi/GkxBRYHXPMs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SnapKracklePop- 'Agent Orange'</td>
+                </tr>
+                <tr class="record" id="Yf-TdeTyYFs">
+                    <td><img src="https://i.ytimg.com/vi/Yf-TdeTyYFs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Dot Dot Curve:) - Freakin Freak (Bass Boosted)</td>
+                </tr>
+                <tr class="record" id="rb5y4-zE2Ts">
+                    <td><img src="https://i.ytimg.com/vi/rb5y4-zE2Ts/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Nightclub Fight Club - Dopeshit</td>
+                </tr>
+                <tr class="record" id="J_X8uoXOIpg">
+                    <td><img src="https://i.ytimg.com/vi/J_X8uoXOIpg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">BROKENCYDE - GERONIMO [NEW 06/2013]</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/crunkcore/">Crunkcore</a> archive:
     <a href="/genre/crunkcore/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/crunkcore/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/crunkcore/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/crunkcore/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/crunkcore/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/crunkcore/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/crunkcore/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -140,12 +100,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'crunkcore';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

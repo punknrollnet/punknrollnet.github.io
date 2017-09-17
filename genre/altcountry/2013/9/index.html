@@ -46,974 +46,304 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="2LcwafD7xmg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2LcwafD7xmg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Kathleen Edwards - Back to Me.mp4</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/1m4nbw">Kathleen Edwards - Back to Me</a>
-<br>
-                        submitted <span class="muted">2013-09-10 20:42</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="WdwnGG29Upw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/WdwnGG29Upw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jason Isbell - Cover Me Up (w/ Lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/1n4hrb">Jason Isbell - Cover Me Up</a>
-<br>
-                        submitted <span class="muted">2013-09-25 19:32</span> by <a href="https://www.reddit.com/user/chadridesabike">/u/chadridesabike</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="If8F9hx5TnU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/If8F9hx5TnU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">John Moreland "Nobody Gives A Damn About Songs Anymore"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/1lq3su">John Moreland "Nobody Gives A Damn About Songs Anymore" -[3:09]</a>
-<br>
-                        submitted <span class="muted">2013-09-04 17:02</span> by <a href="https://www.reddit.com/user/Dieselfred">/u/Dieselfred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="tDq1_rnJVE4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/tDq1_rnJVE4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lydia Loveless - Steve Earle</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/1lt7m9">Lydia Loveless - Steve Earle [5:02]</a>
-<br>
-                        submitted <span class="muted">2013-09-05 21:31</span> by <a href="https://www.reddit.com/user/Dieselfred">/u/Dieselfred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="D4LDjo8ltl4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/D4LDjo8ltl4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jason Isbell and the 400 Unit "Goddamn Lonely Love"  live from WorkPlay August 17, 2012</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/1lttgv">Jason Isbell and the 400 Unit "Goddamn Lonely Love" live from WorkPlay August 17, 2012</a>
-<br>
-                        submitted <span class="muted">2013-09-06 02:22</span> by <a href="https://www.reddit.com/user/madcowga">/u/madcowga</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="EPxFRzs6egM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/EPxFRzs6egM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">FIRST AID KIT | Emmylou - Live @ The Workmans Club, Dublin.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/1m7kws">First Aid Kit - Emmylou - Live @ The Workmans Club, Dublin. Very cool video.</a>
-<br>
-                        submitted <span class="muted">2013-09-11 23:29</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="AEMaNs955vw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/AEMaNs955vw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ben Nichols - I Can't Stand to Leave You / God's Medicine (John Moreland)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/1myjmi">Ben Nichols - I Can't Stand to Leave You / God's Medicine (John Moreland)</a>
-<br>
-                        submitted <span class="muted">2013-09-23 14:10</span> by <a href="https://www.reddit.com/user/romeosidvicious">/u/romeosidvicious</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="B38pNFM9a3k">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/B38pNFM9a3k/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Reckless Kelly - Wicked Twisted Road.wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/1n3lhb">Reckless Kelly - Wicked Twisted Road</a>
-<br>
-                        submitted <span class="muted">2013-09-25 12:48</span> by <a href="https://www.reddit.com/user/chadridesabike">/u/chadridesabike</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="iW84oHXkpTE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/iW84oHXkpTE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">"Drown" - Son Volt (VH1 Crossroads)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/1mosfi">"Drown" - Son Volt (VH1 Crossroads); Live Acoustic Version</a>
-<br>
-                        submitted <span class="muted">2013-09-19 03:10</span> by <a href="https://www.reddit.com/user/HGFantomas">/u/HGFantomas</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="AoKMXwBpsAM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/AoKMXwBpsAM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Chris Knight "Hell Ain't Half Full"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/1mz2og">Chris Knight - Hell Ain't Half Full [3:29]</a>
-<br>
-                        submitted <span class="muted">2013-09-23 18:10</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="0qeodtXcO1U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/0qeodtXcO1U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Eat Your Brains - Prison Book Club, Live at Trackside</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/1lv80c">Prison Book Club - Eat Your Brains</a>
-<br>
-                        submitted <span class="muted">2013-09-06 18:12</span> by <a href="https://www.reddit.com/user/romeosidvicious">/u/romeosidvicious</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="U11QfYEwr3o">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/U11QfYEwr3o/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Kentucky Knife Fight, "Always a Bribe, never a Bride", live at Hush Hush Cd Release</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/1mfsfm">So, these guys hit KC last night and I was second in line for them. They may not be everybody's cup of tea (they're more bluesy/punk than anything) but they're certainly worth a look: Kentucky Knife Fight - Always a Bribe, Never a Bride [3:53]</a>
-<br>
-                        submitted <span class="muted">2013-09-15 16:15</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="HfOxvn8lZ5k">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/HfOxvn8lZ5k/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Band Of Heathens "Nine Steps Down"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/1mwdtr">The Band of Heathens - Nine Steps Down [4:03]</a>
-<br>
-                        submitted <span class="muted">2013-09-22 16:14</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jOAa8MERgaw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jOAa8MERgaw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Son Volt - Medication.mp4</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/1nbjzt">One of my favorites: Son Volt - Medication (live)[6:57]</a>
-<br>
-                        submitted <span class="muted">2013-09-28 17:16</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2ncaiymxARU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2ncaiymxARU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Justin Townes Earle: "Someday I'll Be Forgiven For This"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/1nc64b">Justin Townes Earle: "Someday I'll Be Forgiven For This"</a>
-<br>
-                        submitted <span class="muted">2013-09-28 22:27</span> by <a href="https://www.reddit.com/user/Dieselfred">/u/Dieselfred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="rdoTlSoqAlk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/rdoTlSoqAlk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mud The Movie Soundtrack (2012) 04  Take You Away</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/1lmpdl">Hey r/altcountry, I'm new here and I'm digging this song. What albums by Lucero and other bands should I listen to that's similar to this sound?</a>
-<br>
-                        submitted <span class="muted">2013-09-03 07:08</span> by <a href="https://www.reddit.com/user/das_gregor">/u/das_gregor</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="4foq4HcQdpg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/4foq4HcQdpg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Dwight Yoakam // Guitars Cadillacs</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/1madpu">Do you consider this Alt-Country? Dwight Yoakam- Guitars,Cadillacs (Austin City Limits) [3:02]</a>
-<br>
-                        submitted <span class="muted">2013-09-13 01:37</span> by <a href="https://www.reddit.com/user/Dieselfred">/u/Dieselfred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="cbPtQZaZZlQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/cbPtQZaZZlQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ben Nichols - Shelter (Sleepover Shows)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/1mfkun">Ben Nichols - Shelter (Sleepover Shows)[3:33]</a>
-<br>
-                        submitted <span class="muted">2013-09-15 14:04</span> by <a href="https://www.reddit.com/user/Dieselfred">/u/Dieselfred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="CLrL-CWQ51g">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/CLrL-CWQ51g/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lucero - Blue and the Grey - Winston Salem, Nc Ziggy's 27DEC2011</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/1ml8t4">One of, if not, my favorite Lucero songs: The Blue and The Grey (Live)[6:27]</a>
-<br>
-                        submitted <span class="muted">2013-09-17 18:59</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="M6g7i5naTrk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/M6g7i5naTrk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">"The Closer You Get" - Lucero (From High Cotton : a Tribute to Alabama)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/1mrtxh">Lucero - "The Closer You Get" (From High Cotton : a Tribute to Alabama)</a>
-<br>
-                        submitted <span class="muted">2013-09-20 12:07</span> by <a href="https://www.reddit.com/user/chadridesabike">/u/chadridesabike</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="GQFppLauXzg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/GQFppLauXzg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Justin Townes Earle - Lone Pine Hill (Live in Sydney) | Moshcam</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/1mu6e0">Justin Townes Earle - Lone Pine Hill (Live @ The Annandale)[3:32]</a>
-<br>
-                        submitted <span class="muted">2013-09-21 14:13</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="0p92GDrZfk4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/0p92GDrZfk4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Warm Up: Austin Lucas - "Run Around"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/1mwrzf">The Warm Up: Austin Lucas - "Run Around" [3:25]</a>
-<br>
-                        submitted <span class="muted">2013-09-22 19:31</span> by <a href="https://www.reddit.com/user/Dieselfred">/u/Dieselfred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="H1WYCSshf6s">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/H1WYCSshf6s/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">John Fullbright - Gawd Above</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/1n8twq">John Fullbright - Gawd Above</a>
-<br>
-                        submitted <span class="muted">2013-09-27 12:59</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="XQsf0ND4CNw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XQsf0ND4CNw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Reckless Kelly - Seven Nights in Eire.wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1lku15">Reckless Kelly - Seven Nights in Eire [5:49]</a>
-<br>
-                        submitted <span class="muted">2013-09-02 14:45</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="xPLE3ynzu7s">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/xPLE3ynzu7s/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Felice Brothers - 'love me tenderly'</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1lsr2b">For everyone out there feeling good today. The Felice Brothers - 'love me tenderly'</a>
-<br>
-                        submitted <span class="muted">2013-09-05 18:09</span> by <a href="https://www.reddit.com/user/wakezoola">/u/wakezoola</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="xZk9ymbXst4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/xZk9ymbXst4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sunday Valley: Goodbye</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1m33ij">Sunday Valley - Goodbye</a>
-<br>
-                        submitted <span class="muted">2013-09-10 04:36</span> by <a href="https://www.reddit.com/user/Trainwreck92">/u/Trainwreck92</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="08OHUBV3ZCs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/08OHUBV3ZCs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lydia Loveless - Bad Way to Go (Sleepover Shows)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1mev16">Lydia Loveless - Bad Way to Go (Sleepover Shows)[3:06]</a>
-<br>
-                        submitted <span class="muted">2013-09-15 02:34</span> by <a href="https://www.reddit.com/user/Dieselfred">/u/Dieselfred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="PbYqqNeBZ90">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/PbYqqNeBZ90/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jonny Fritz - Ain't it Your Birthday?</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1mipqw">Jonny Fritz (Jonny Corndawg) - Ain't it Your Birthday? (Acoustic while driving on the highway)</a>
-<br>
-                        submitted <span class="muted">2013-09-16 19:11</span> by <a href="https://www.reddit.com/user/chadridesabike">/u/chadridesabike</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="uE7RUXKT3bc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/uE7RUXKT3bc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Matt Woods "Johnny Ray Dupree"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1mkowz">Matt Woods - Johnny Ray Dupree</a>
-<br>
-                        submitted <span class="muted">2013-09-17 14:43</span> by <a href="https://www.reddit.com/user/romeosidvicious">/u/romeosidvicious</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8rSzWxdJ7i4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8rSzWxdJ7i4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lydia Loveless - More Like Them (Sleepover Shows)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1mws9x">Lydia Loveless - More Like Them (Sleepover Shows)[5:17]</a>
-<br>
-                        submitted <span class="muted">2013-09-22 19:35</span> by <a href="https://www.reddit.com/user/Dieselfred">/u/Dieselfred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="6QU_fBRLks4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/6QU_fBRLks4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Stoney LaRue - Look At Me Fly</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1n07r7">Stoney LaRue - Look At Me Fly</a>
-<br>
-                        submitted <span class="muted">2013-09-24 02:46</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Z63Z5KkHtzM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Z63Z5KkHtzM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jason Boland, The Stragglers - Tulsa Time</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1n2oq9">Jason Boland &amp; The Stragglers - Tulsa Time</a>
-<br>
-                        submitted <span class="muted">2013-09-25 02:04</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ZZorZ7PQGvc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ZZorZ7PQGvc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Uncle Tupelo - Sin City</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1n69i2">Throwback Thursday: Uncle Tupelo - Sin City (a Flying Burrito Brothers cover from the 2003 re-issue of 1990's No Depression)[3:54]</a>
-<br>
-                        submitted <span class="muted">2013-09-26 13:02</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="P7H6d8SrAgM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/P7H6d8SrAgM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Justin Townes Earle - Ghost Of Virginia (Live in Sydney) | Moshcam</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1lv7sk">Justin Townes Earle - The Ghost of Virginia (Live @ The Annandale)[3:13]</a>
-<br>
-                        submitted <span class="muted">2013-09-06 18:08</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="euVyT0Qbl0k">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/euVyT0Qbl0k/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jason Isbell - Dress Blues (Live at Saxon Pub)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1lx1zn">The rising tensions with Syria along with having three close friends in the military (two of whom already did a tour in Afghanistan), makes me hope, more than ever, that I don't hear this song some day and have to think about any of them: Jason Isbell - Dress Blues [5:56]</a>
-<br>
-                        submitted <span class="muted">2013-09-07 15:36</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="cWuZQx6HnFw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/cWuZQx6HnFw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Austin Lucas - Shoulders</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1m2hda">Austin Lucas - Shoulders [4:21]</a>
-<br>
-                        submitted <span class="muted">2013-09-09 23:40</span> by <a href="https://www.reddit.com/user/Dieselfred">/u/Dieselfred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Qyi6mFZv9SI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Qyi6mFZv9SI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Steve Earle - Someday</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1ma8zl">Throwback Thursday: Steve Earle - Someday [3:51]</a>
-<br>
-                        submitted <span class="muted">2013-09-13 00:31</span> by <a href="https://www.reddit.com/user/Dieselfred">/u/Dieselfred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="qGrYnKA-30Y">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/qGrYnKA-30Y/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Weary Boys Sweet Pauline</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1mbvsz">The Weary Boys - Pauline [4:37]</a>
-<br>
-                        submitted <span class="muted">2013-09-13 18:31</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="M8BRV2USwUw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/M8BRV2USwUw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Deer Tick -Friday XIII</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1mciz0">Deer Tick - Friday XIII</a>
-<br>
-                        submitted <span class="muted">2013-09-13 23:38</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="WGE0ZZH96b0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/WGE0ZZH96b0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Del McCoury Band - All Aboard</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1mgdns">The Del McCoury Band - All Aboard</a>
-<br>
-                        submitted <span class="muted">2013-09-15 21:09</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8koS9tHo2i4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8koS9tHo2i4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Slaid Cleaves: Drinkin Days</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1ndnrk">Slaid Cleaves - Drinkin Days</a>
-<br>
-                        submitted <span class="muted">2013-09-29 15:37</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Bk1bzczVGUQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Bk1bzczVGUQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jeffrey Foucault - "Train to Jackson" (songs from the second floor)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1mme32">Jeffrey Foucault - "Train to Jackson"</a>
-<br>
-                        submitted <span class="muted">2013-09-18 04:04</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ECQ72yB4vHc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ECQ72yB4vHc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Houndmouth - Comin' Around Again</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1mpsqr">Houndmouth - Comin' Around Again</a>
-<br>
-                        submitted <span class="muted">2013-09-19 15:43</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7MDvbIRrP0U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7MDvbIRrP0U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Justin Townes Earle - Movin' On (Live on KEXP)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1ndsje">Justin Townes Earle - Movin' On (Live on KEXP)</a>
-<br>
-                        submitted <span class="muted">2013-09-29 16:46</span> by <a href="https://www.reddit.com/user/Dieselfred">/u/Dieselfred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ESywxweIR7A">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ESywxweIR7A/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Middle Brother - Middle brother (Live on 89.3 The Current)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1nfpvw">Middle Brother - Middle brother (Live on 89.3 The Current)</a>
-<br>
-                        submitted <span class="muted">2013-09-30 12:57</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="w-JHoaWlg70">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/w-JHoaWlg70/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Kat's Song (What I Can't Have) - K. Phillips</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1lkslu">K. Phillips - Kat's Song (What I Can't Have)</a>
-<br>
-                        submitted <span class="muted">2013-09-02 14:21</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="X2NsyCDCyU8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/X2NsyCDCyU8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Austin Lucas "Alone in Memphis" CXCW 2013</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1lmbp0">Austin Lucas - Alone in Memphis CXCW [4:21]</a>
-<br>
-                        submitted <span class="muted">2013-09-03 02:57</span> by <a href="https://www.reddit.com/user/Dieselfred">/u/Dieselfred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ZyWxr__0osU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ZyWxr__0osU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Charlie Shafter & The Gnomes - Big City Baby</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1lpnbb">Charlie Shafter &amp; The Gnomes - Big City Baby</a>
-<br>
-                        submitted <span class="muted">2013-09-04 13:09</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="W3tzAYE1z8A">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/W3tzAYE1z8A/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Other Shoe by The Mastersons</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1lr532">The Mastersons - The Other Shoe [4:15]</a>
-<br>
-                        submitted <span class="muted">2013-09-05 00:58</span> by <a href="https://www.reddit.com/user/Dieselfred">/u/Dieselfred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bsftw2Jdbdk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bsftw2Jdbdk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Laughing_River_GB.mov</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1ls3ts">Throwback Thursday: Greg Brown - Laughing River</a>
-<br>
-                        submitted <span class="muted">2013-09-05 12:40</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="y2hf096CFc4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/y2hf096CFc4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Blanche - O Death, Where Is Thy Sting?</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1m2q54">Blanche - O Death, Where is thy Sting? [2:57]</a>
-<br>
-                        submitted <span class="muted">2013-09-10 01:34</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="q7x1Qt0Wh7U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/q7x1Qt0Wh7U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Paul Burch - Sparks Fly Out</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1m2see">Paul Burch - Sparks Fly Out</a>
-<br>
-                        submitted <span class="muted">2013-09-10 02:02</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5tIFk4mkxyk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5tIFk4mkxyk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lucinda Williams - Lucinda Williams - The Night's Too Long</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1m8q0u">Throwback Thursday: Lucinda Williams - The Night's Too Long [4:17]</a>
-<br>
-                        submitted <span class="muted">2013-09-12 12:18</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="rULOnBOOVU8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/rULOnBOOVU8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Steve Earle - Thinking About Burning Wal-Mart Down</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1mm15o">Steve Earle - Burning it down [3:17]</a>
-<br>
-                        submitted <span class="muted">2013-09-18 01:01</span> by <a href="https://www.reddit.com/user/Dieselfred">/u/Dieselfred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="edN0VXQ8YKY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/edN0VXQ8YKY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Filthy Still - Out of the Ashes</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1mmyug">One of my favorites in the Farmageddon Records stable: Filthy Still - Out of the Ashes [3:49]</a>
-<br>
-                        submitted <span class="muted">2013-09-18 12:22</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jJBAl61jnsk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jJBAl61jnsk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Week Thus Far - May 15th, 2013 - JD Edwards</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1moupj">JD Edwards - The Stranger (Live on The Week Thus Far)</a>
-<br>
-                        submitted <span class="muted">2013-09-19 03:47</span> by <a href="https://www.reddit.com/user/HalfTime_show">/u/HalfTime_show</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="opqRbnlfaaY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/opqRbnlfaaY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jerry Jeff Walker - Jaded Lover</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1mqwtg">Throwback: Jerry Jeff Walker - Jaded Lover</a>
-<br>
-                        submitted <span class="muted">2013-09-20 00:31</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Dd8ScY6QKHE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Dd8ScY6QKHE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Chris Stapleton - Never Wanted Nothing More | Beaver 100.3 Songwriter Showcase</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1n7u7d">You won't listen to the song the same anymore --&gt; Chris Stapleton</a>
-<br>
-                        submitted <span class="muted">2013-09-27 01:11</span> by <a href="https://www.reddit.com/user/taytaysmiff">/u/taytaysmiff</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="GzzlsbI8Kk0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/GzzlsbI8Kk0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">American Aquarium - Water In the Well</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1ljhan">X-post from r/reddirtmusic: American Aquarium - Water in the Well [5:31]</a>
-<br>
-                        submitted <span class="muted">2013-09-01 22:25</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5-vXXKP2VBI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5-vXXKP2VBI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Johnny Cash - Any Old Wind That Blows</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1mahdu">Throwback on the 10th anniversary of his death: Johnny Cash - Any Old Wind That Blows</a>
-<br>
-                        submitted <span class="muted">2013-09-13 02:27</span> by <a href="https://www.reddit.com/user/CrustyCaballero">/u/CrustyCaballero</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="QgJkYpukzBc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/QgJkYpukzBc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Those Poor Bastards - I Walk The Line (Johnny Cash cover).wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1mixon">Those Poor Bastards - I Walk The Line (Johnny Cash cover)</a>
-<br>
-                        submitted <span class="muted">2013-09-16 20:46</span> by <a href="https://www.reddit.com/user/SingularisMalefactor">/u/SingularisMalefactor</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7hIMoVqEIbM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7hIMoVqEIbM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Graham Lindsey - If I Ever Make It Home</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1mixzi">Graham Lindsey - If I Ever Make it Home [4:10]</a>
-<br>
-                        submitted <span class="muted">2013-09-16 20:49</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="E1TTfWsCMIA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/E1TTfWsCMIA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Desolation Row by Chris Smither</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1mre8r">Desolation Row by Chris Smither [7:35]</a>
-<br>
-                        submitted <span class="muted">2013-09-20 05:08</span> by <a href="https://www.reddit.com/user/Pagophagia">/u/Pagophagia</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Byo1yNAeIiQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Byo1yNAeIiQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Revival Tour - Bloody Shells</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1ms1tt">I've been listening to the album Bristle Ridge a lot lately and this song is a big part of the reasons why: Austin Lucas/Chuck Ragan - Bloody Shells [5:05]</a>
-<br>
-                        submitted <span class="muted">2013-09-20 14:28</span> by <a href="https://www.reddit.com/user/DistributorOfPain">/u/DistributorOfPain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Y3wzERXMtqY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Y3wzERXMtqY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Austin Lucas - Live at 128:A in Gothenburg (2013-04-16)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1lwvi1">Austin Lucas - Live at 128:A in Gothenburg (2013-04-16) [27:04]</a>
-<br>
-                        submitted <span class="muted">2013-09-07 13:26</span> by <a href="https://www.reddit.com/user/Dieselfred">/u/Dieselfred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="CMUh39ThbIU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/CMUh39ThbIU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Austin Lucas Live at Euclid Records New Orleans - Small Town Heart - 2/4/12</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1m2gum">Austin Lucas Live at Euclid Records New Orleans - Small Town Heart - 2/4/12</a>
-<br>
-                        submitted <span class="muted">2013-09-09 23:34</span> by <a href="https://www.reddit.com/user/Dieselfred">/u/Dieselfred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_9Plr5bYnnE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_9Plr5bYnnE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Frac Sand Blues by Corey Koehler - Environmental Song</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1nfycp">Check Out "Frac Sand Blues"</a>
-<br>
-                        submitted <span class="muted">2013-09-30 15:04</span> by <a href="https://www.reddit.com/user/CoreyKoehlerMusic">/u/CoreyKoehlerMusic</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="2LcwafD7xmg">
+                    <td><img src="https://i.ytimg.com/vi/2LcwafD7xmg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Kathleen Edwards - Back to Me.mp4</td>
+                </tr>
+                <tr class="record" id="WdwnGG29Upw">
+                    <td><img src="https://i.ytimg.com/vi/WdwnGG29Upw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jason Isbell - Cover Me Up (w/ Lyrics)</td>
+                </tr>
+                <tr class="record" id="If8F9hx5TnU">
+                    <td><img src="https://i.ytimg.com/vi/If8F9hx5TnU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">John Moreland "Nobody Gives A Damn About Songs Anymore"</td>
+                </tr>
+                <tr class="record" id="tDq1_rnJVE4">
+                    <td><img src="https://i.ytimg.com/vi/tDq1_rnJVE4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lydia Loveless - Steve Earle</td>
+                </tr>
+                <tr class="record" id="D4LDjo8ltl4">
+                    <td><img src="https://i.ytimg.com/vi/D4LDjo8ltl4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jason Isbell and the 400 Unit "Goddamn Lonely Love"  live from WorkPlay August 17, 2012</td>
+                </tr>
+                <tr class="record" id="EPxFRzs6egM">
+                    <td><img src="https://i.ytimg.com/vi/EPxFRzs6egM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">FIRST AID KIT | Emmylou - Live @ The Workmans Club, Dublin.</td>
+                </tr>
+                <tr class="record" id="AEMaNs955vw">
+                    <td><img src="https://i.ytimg.com/vi/AEMaNs955vw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ben Nichols - I Can't Stand to Leave You / God's Medicine (John Moreland)</td>
+                </tr>
+                <tr class="record" id="B38pNFM9a3k">
+                    <td><img src="https://i.ytimg.com/vi/B38pNFM9a3k/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Reckless Kelly - Wicked Twisted Road.wmv</td>
+                </tr>
+                <tr class="record" id="iW84oHXkpTE">
+                    <td><img src="https://i.ytimg.com/vi/iW84oHXkpTE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">"Drown" - Son Volt (VH1 Crossroads)</td>
+                </tr>
+                <tr class="record" id="AoKMXwBpsAM">
+                    <td><img src="https://i.ytimg.com/vi/AoKMXwBpsAM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Chris Knight "Hell Ain't Half Full"</td>
+                </tr>
+                <tr class="record" id="0qeodtXcO1U">
+                    <td><img src="https://i.ytimg.com/vi/0qeodtXcO1U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Eat Your Brains - Prison Book Club, Live at Trackside</td>
+                </tr>
+                <tr class="record" id="U11QfYEwr3o">
+                    <td><img src="https://i.ytimg.com/vi/U11QfYEwr3o/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Kentucky Knife Fight, "Always a Bribe, never a Bride", live at Hush Hush Cd Release</td>
+                </tr>
+                <tr class="record" id="HfOxvn8lZ5k">
+                    <td><img src="https://i.ytimg.com/vi/HfOxvn8lZ5k/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Band Of Heathens "Nine Steps Down"</td>
+                </tr>
+                <tr class="record" id="jOAa8MERgaw">
+                    <td><img src="https://i.ytimg.com/vi/jOAa8MERgaw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Son Volt - Medication.mp4</td>
+                </tr>
+                <tr class="record" id="2ncaiymxARU">
+                    <td><img src="https://i.ytimg.com/vi/2ncaiymxARU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Justin Townes Earle: "Someday I'll Be Forgiven For This"</td>
+                </tr>
+                <tr class="record" id="rdoTlSoqAlk">
+                    <td><img src="https://i.ytimg.com/vi/rdoTlSoqAlk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mud The Movie Soundtrack (2012) 04  Take You Away</td>
+                </tr>
+                <tr class="record" id="4foq4HcQdpg">
+                    <td><img src="https://i.ytimg.com/vi/4foq4HcQdpg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Dwight Yoakam // Guitars Cadillacs</td>
+                </tr>
+                <tr class="record" id="cbPtQZaZZlQ">
+                    <td><img src="https://i.ytimg.com/vi/cbPtQZaZZlQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ben Nichols - Shelter (Sleepover Shows)</td>
+                </tr>
+                <tr class="record" id="CLrL-CWQ51g">
+                    <td><img src="https://i.ytimg.com/vi/CLrL-CWQ51g/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lucero - Blue and the Grey - Winston Salem, Nc Ziggy's 27DEC2011</td>
+                </tr>
+                <tr class="record" id="M6g7i5naTrk">
+                    <td><img src="https://i.ytimg.com/vi/M6g7i5naTrk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">"The Closer You Get" - Lucero (From High Cotton : a Tribute to Alabama)</td>
+                </tr>
+                <tr class="record" id="GQFppLauXzg">
+                    <td><img src="https://i.ytimg.com/vi/GQFppLauXzg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Justin Townes Earle - Lone Pine Hill (Live in Sydney) | Moshcam</td>
+                </tr>
+                <tr class="record" id="0p92GDrZfk4">
+                    <td><img src="https://i.ytimg.com/vi/0p92GDrZfk4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Warm Up: Austin Lucas - "Run Around"</td>
+                </tr>
+                <tr class="record" id="H1WYCSshf6s">
+                    <td><img src="https://i.ytimg.com/vi/H1WYCSshf6s/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">John Fullbright - Gawd Above</td>
+                </tr>
+                <tr class="record" id="XQsf0ND4CNw">
+                    <td><img src="https://i.ytimg.com/vi/XQsf0ND4CNw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Reckless Kelly - Seven Nights in Eire.wmv</td>
+                </tr>
+                <tr class="record" id="xPLE3ynzu7s">
+                    <td><img src="https://i.ytimg.com/vi/xPLE3ynzu7s/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Felice Brothers - 'love me tenderly'</td>
+                </tr>
+                <tr class="record" id="xZk9ymbXst4">
+                    <td><img src="https://i.ytimg.com/vi/xZk9ymbXst4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sunday Valley: Goodbye</td>
+                </tr>
+                <tr class="record" id="08OHUBV3ZCs">
+                    <td><img src="https://i.ytimg.com/vi/08OHUBV3ZCs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lydia Loveless - Bad Way to Go (Sleepover Shows)</td>
+                </tr>
+                <tr class="record" id="PbYqqNeBZ90">
+                    <td><img src="https://i.ytimg.com/vi/PbYqqNeBZ90/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jonny Fritz - Ain't it Your Birthday?</td>
+                </tr>
+                <tr class="record" id="uE7RUXKT3bc">
+                    <td><img src="https://i.ytimg.com/vi/uE7RUXKT3bc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Matt Woods "Johnny Ray Dupree"</td>
+                </tr>
+                <tr class="record" id="8rSzWxdJ7i4">
+                    <td><img src="https://i.ytimg.com/vi/8rSzWxdJ7i4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lydia Loveless - More Like Them (Sleepover Shows)</td>
+                </tr>
+                <tr class="record" id="6QU_fBRLks4">
+                    <td><img src="https://i.ytimg.com/vi/6QU_fBRLks4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Stoney LaRue - Look At Me Fly</td>
+                </tr>
+                <tr class="record" id="Z63Z5KkHtzM">
+                    <td><img src="https://i.ytimg.com/vi/Z63Z5KkHtzM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jason Boland, The Stragglers - Tulsa Time</td>
+                </tr>
+                <tr class="record" id="ZZorZ7PQGvc">
+                    <td><img src="https://i.ytimg.com/vi/ZZorZ7PQGvc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Uncle Tupelo - Sin City</td>
+                </tr>
+                <tr class="record" id="P7H6d8SrAgM">
+                    <td><img src="https://i.ytimg.com/vi/P7H6d8SrAgM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Justin Townes Earle - Ghost Of Virginia (Live in Sydney) | Moshcam</td>
+                </tr>
+                <tr class="record" id="euVyT0Qbl0k">
+                    <td><img src="https://i.ytimg.com/vi/euVyT0Qbl0k/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jason Isbell - Dress Blues (Live at Saxon Pub)</td>
+                </tr>
+                <tr class="record" id="cWuZQx6HnFw">
+                    <td><img src="https://i.ytimg.com/vi/cWuZQx6HnFw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Austin Lucas - Shoulders</td>
+                </tr>
+                <tr class="record" id="Qyi6mFZv9SI">
+                    <td><img src="https://i.ytimg.com/vi/Qyi6mFZv9SI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Steve Earle - Someday</td>
+                </tr>
+                <tr class="record" id="qGrYnKA-30Y">
+                    <td><img src="https://i.ytimg.com/vi/qGrYnKA-30Y/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Weary Boys Sweet Pauline</td>
+                </tr>
+                <tr class="record" id="M8BRV2USwUw">
+                    <td><img src="https://i.ytimg.com/vi/M8BRV2USwUw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Deer Tick -Friday XIII</td>
+                </tr>
+                <tr class="record" id="WGE0ZZH96b0">
+                    <td><img src="https://i.ytimg.com/vi/WGE0ZZH96b0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Del McCoury Band - All Aboard</td>
+                </tr>
+                <tr class="record" id="8koS9tHo2i4">
+                    <td><img src="https://i.ytimg.com/vi/8koS9tHo2i4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Slaid Cleaves: Drinkin Days</td>
+                </tr>
+                <tr class="record" id="Bk1bzczVGUQ">
+                    <td><img src="https://i.ytimg.com/vi/Bk1bzczVGUQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jeffrey Foucault - "Train to Jackson" (songs from the second floor)</td>
+                </tr>
+                <tr class="record" id="ECQ72yB4vHc">
+                    <td><img src="https://i.ytimg.com/vi/ECQ72yB4vHc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Houndmouth - Comin' Around Again</td>
+                </tr>
+                <tr class="record" id="7MDvbIRrP0U">
+                    <td><img src="https://i.ytimg.com/vi/7MDvbIRrP0U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Justin Townes Earle - Movin' On (Live on KEXP)</td>
+                </tr>
+                <tr class="record" id="ESywxweIR7A">
+                    <td><img src="https://i.ytimg.com/vi/ESywxweIR7A/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Middle Brother - Middle brother (Live on 89.3 The Current)</td>
+                </tr>
+                <tr class="record" id="w-JHoaWlg70">
+                    <td><img src="https://i.ytimg.com/vi/w-JHoaWlg70/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Kat's Song (What I Can't Have) - K. Phillips</td>
+                </tr>
+                <tr class="record" id="X2NsyCDCyU8">
+                    <td><img src="https://i.ytimg.com/vi/X2NsyCDCyU8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Austin Lucas "Alone in Memphis" CXCW 2013</td>
+                </tr>
+                <tr class="record" id="ZyWxr__0osU">
+                    <td><img src="https://i.ytimg.com/vi/ZyWxr__0osU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Charlie Shafter & The Gnomes - Big City Baby</td>
+                </tr>
+                <tr class="record" id="W3tzAYE1z8A">
+                    <td><img src="https://i.ytimg.com/vi/W3tzAYE1z8A/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Other Shoe by The Mastersons</td>
+                </tr>
+                <tr class="record" id="bsftw2Jdbdk">
+                    <td><img src="https://i.ytimg.com/vi/bsftw2Jdbdk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Laughing_River_GB.mov</td>
+                </tr>
+                <tr class="record" id="y2hf096CFc4">
+                    <td><img src="https://i.ytimg.com/vi/y2hf096CFc4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Blanche - O Death, Where Is Thy Sting?</td>
+                </tr>
+                <tr class="record" id="q7x1Qt0Wh7U">
+                    <td><img src="https://i.ytimg.com/vi/q7x1Qt0Wh7U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Paul Burch - Sparks Fly Out</td>
+                </tr>
+                <tr class="record" id="5tIFk4mkxyk">
+                    <td><img src="https://i.ytimg.com/vi/5tIFk4mkxyk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lucinda Williams - Lucinda Williams - The Night's Too Long</td>
+                </tr>
+                <tr class="record" id="rULOnBOOVU8">
+                    <td><img src="https://i.ytimg.com/vi/rULOnBOOVU8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Steve Earle - Thinking About Burning Wal-Mart Down</td>
+                </tr>
+                <tr class="record" id="edN0VXQ8YKY">
+                    <td><img src="https://i.ytimg.com/vi/edN0VXQ8YKY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Filthy Still - Out of the Ashes</td>
+                </tr>
+                <tr class="record" id="jJBAl61jnsk">
+                    <td><img src="https://i.ytimg.com/vi/jJBAl61jnsk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Week Thus Far - May 15th, 2013 - JD Edwards</td>
+                </tr>
+                <tr class="record" id="opqRbnlfaaY">
+                    <td><img src="https://i.ytimg.com/vi/opqRbnlfaaY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jerry Jeff Walker - Jaded Lover</td>
+                </tr>
+                <tr class="record" id="Dd8ScY6QKHE">
+                    <td><img src="https://i.ytimg.com/vi/Dd8ScY6QKHE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Chris Stapleton - Never Wanted Nothing More | Beaver 100.3 Songwriter Showcase</td>
+                </tr>
+                <tr class="record" id="GzzlsbI8Kk0">
+                    <td><img src="https://i.ytimg.com/vi/GzzlsbI8Kk0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">American Aquarium - Water In the Well</td>
+                </tr>
+                <tr class="record" id="5-vXXKP2VBI">
+                    <td><img src="https://i.ytimg.com/vi/5-vXXKP2VBI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Johnny Cash - Any Old Wind That Blows</td>
+                </tr>
+                <tr class="record" id="QgJkYpukzBc">
+                    <td><img src="https://i.ytimg.com/vi/QgJkYpukzBc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Those Poor Bastards - I Walk The Line (Johnny Cash cover).wmv</td>
+                </tr>
+                <tr class="record" id="7hIMoVqEIbM">
+                    <td><img src="https://i.ytimg.com/vi/7hIMoVqEIbM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Graham Lindsey - If I Ever Make It Home</td>
+                </tr>
+                <tr class="record" id="E1TTfWsCMIA">
+                    <td><img src="https://i.ytimg.com/vi/E1TTfWsCMIA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Desolation Row by Chris Smither</td>
+                </tr>
+                <tr class="record" id="Byo1yNAeIiQ">
+                    <td><img src="https://i.ytimg.com/vi/Byo1yNAeIiQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Revival Tour - Bloody Shells</td>
+                </tr>
+                <tr class="record" id="Y3wzERXMtqY">
+                    <td><img src="https://i.ytimg.com/vi/Y3wzERXMtqY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Austin Lucas - Live at 128:A in Gothenburg (2013-04-16)</td>
+                </tr>
+                <tr class="record" id="CMUh39ThbIU">
+                    <td><img src="https://i.ytimg.com/vi/CMUh39ThbIU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Austin Lucas Live at Euclid Records New Orleans - Small Town Heart - 2/4/12</td>
+                </tr>
+                <tr class="record" id="_9Plr5bYnnE">
+                    <td><img src="https://i.ytimg.com/vi/_9Plr5bYnnE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Frac Sand Blues by Corey Koehler - Environmental Song</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/altcountry/">Alt Country</a> archive:
     <a href="/genre/altcountry/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/altcountry/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/altcountry/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/altcountry/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/altcountry/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/altcountry/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/altcountry/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -1022,12 +352,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'altcountry';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

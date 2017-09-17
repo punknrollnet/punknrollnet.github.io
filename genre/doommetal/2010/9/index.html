@@ -46,106 +46,56 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="Im2u8YzTsNg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Im2u8YzTsNg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">My Dying Bride -  The Forever People</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/de6qh">My Dying Bride - The Forever People [old school death/doom!]</a>
-<br>
-                        submitted <span class="muted">2010-09-15 14:15</span> by <a href="https://www.reddit.com/user/this_time_i_mean_it">/u/this_time_i_mean_it</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="LM0vMNL6Y30">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/LM0vMNL6Y30/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Draconian - Morphine Cloud (lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/dbcca">Draconian - Morphine Cloud</a>
-<br>
-                        submitted <span class="muted">2010-09-08 23:31</span> by <a href="https://www.reddit.com/user/20kj202d">/u/20kj202d</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="0dOFLcQ1BE8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/0dOFLcQ1BE8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Evoken - Quietus</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/de391">Evoken - Quietus</a>
-<br>
-                        submitted <span class="muted">2010-09-15 08:29</span> by <a href="https://www.reddit.com/user/xerogod">/u/xerogod</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="macG2rKTQnw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/macG2rKTQnw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ocean - Salt (Part 1)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/dhdv5">Ocean - Salt, pt. 1&amp;2 (molasses slow doom that's surprisingly pretty)</a>
-<br>
-                        submitted <span class="muted">2010-09-22 15:42</span> by <a href="https://www.reddit.com/user/shiveringking">/u/shiveringking</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="uh6irmFRpGU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/uh6irmFRpGU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jex Thoth - The Banishment</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/db5ha">Jex Thoth - The Banishment</a>
-<br>
-                        submitted <span class="muted">2010-09-08 16:00</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="Im2u8YzTsNg">
+                    <td><img src="https://i.ytimg.com/vi/Im2u8YzTsNg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">My Dying Bride -  The Forever People</td>
+                </tr>
+                <tr class="record" id="LM0vMNL6Y30">
+                    <td><img src="https://i.ytimg.com/vi/LM0vMNL6Y30/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Draconian - Morphine Cloud (lyrics)</td>
+                </tr>
+                <tr class="record" id="0dOFLcQ1BE8">
+                    <td><img src="https://i.ytimg.com/vi/0dOFLcQ1BE8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Evoken - Quietus</td>
+                </tr>
+                <tr class="record" id="macG2rKTQnw">
+                    <td><img src="https://i.ytimg.com/vi/macG2rKTQnw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ocean - Salt (Part 1)</td>
+                </tr>
+                <tr class="record" id="uh6irmFRpGU">
+                    <td><img src="https://i.ytimg.com/vi/uh6irmFRpGU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jex Thoth - The Banishment</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/doommetal/">Doom Metal</a> archive:
     <a href="/genre/doommetal/2010/">2010</a>&nbsp;•&nbsp;    <a href="/genre/doommetal/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/doommetal/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/doommetal/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/doommetal/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/doommetal/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/doommetal/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/doommetal/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -154,12 +104,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'doommetal';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

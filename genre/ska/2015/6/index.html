@@ -46,1366 +46,416 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="6pWfSdMyh9o">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/6pWfSdMyh9o/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Less Than Jake - Scott Farcas Takes It On The Chin</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">116</span> - <a href="https://www.reddit.com/3b5yc7">Less Than Jake - Scott Farcas Takes It On The Chin</a>
-<br>
-                        submitted <span class="muted">2015-06-26 06:15</span> by <a href="https://www.reddit.com/user/Spiral0Architect">/u/Spiral0Architect</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="26IOww0gO1w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/26IOww0gO1w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">That's Your Horoscope For Today</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">98</span> - <a href="https://www.reddit.com/3a094s">TIL Weird Al made a ska song, and it's actually pretty awesome.</a>
-<br>
-                        submitted <span class="muted">2015-06-16 05:26</span> by <a href="https://www.reddit.com/user/JeringtonBear">/u/JeringtonBear</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="cvULT8GLqmc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/cvULT8GLqmc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lock and Roll Forever</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">78</span> - <a href="https://www.reddit.com/3bkfwu">Here's a Japanese ska-punk movie musical starring Oreskaband. It's 95% in English. Enjoy.</a>
-<br>
-                        submitted <span class="muted">2015-06-29 23:14</span> by <a href="https://www.reddit.com/user/kobun04">/u/kobun04</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Eh65JlH3vq4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Eh65JlH3vq4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Suckers</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">73</span> - <a href="https://www.reddit.com/3ag214">Reel Big Fish | Suckers | This song got me through my first puppy love heartbreak- still good ten years later</a>
-<br>
-                        submitted <span class="muted">2015-06-19 21:12</span> by <a href="https://www.reddit.com/user/conandy">/u/conandy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="mcx5wEqzf2A">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/mcx5wEqzf2A/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">On Distant Shores - Five Iron Frenzy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">64</span> - <a href="https://www.reddit.com/39j7uk">I'm no longer a religious person. This song got me into ska, and still brings tears to my eyes. On Distant Shores - Five Iron Frenzy.</a>
-<br>
-                        submitted <span class="muted">2015-06-12 02:34</span> by <a href="https://www.reddit.com/user/roastymctoasty">/u/roastymctoasty</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="XINAJ7jgg6Y">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XINAJ7jgg6Y/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sublime - Same in the End</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">63</span> - <a href="https://www.reddit.com/39l15b">Sublime - Same in the End</a>
-<br>
-                        submitted <span class="muted">2015-06-12 13:51</span> by <a href="https://www.reddit.com/user/GeladodeBenuron">/u/GeladodeBenuron</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="0zmIR1aAGYE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/0zmIR1aAGYE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Tim Armstrong - Into Action</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">51</span> - <a href="https://www.reddit.com/3aee6w">Tim Armstrong - Into Action</a>
-<br>
-                        submitted <span class="muted">2015-06-19 13:13</span> by <a href="https://www.reddit.com/user/ChaliceBurn">/u/ChaliceBurn</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="S_fwqYDNYxg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/S_fwqYDNYxg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">東京スカパラダイスオーケストラ / All Good Ska is One</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">48</span> - <a href="https://www.reddit.com/3aj3it">Tokyo ska paradise - All good ska is one</a>
-<br>
-                        submitted <span class="muted">2015-06-20 18:09</span> by <a href="https://www.reddit.com/user/mencret">/u/mencret</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="KqTx6TVoQQ8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/KqTx6TVoQQ8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SKA REVIVAL TOUR 2015  - ANNOUNCEMENT</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">47</span> - <a href="https://www.reddit.com/38pkba">Ska Revival Tour 2015 Announced</a>
-<br>
-                        submitted <span class="muted">2015-06-05 19:31</span> by <a href="https://www.reddit.com/user/mswanco">/u/mswanco</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="p81Lqx3t24k">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/p81Lqx3t24k/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Less than jake - Good enough</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">46</span> - <a href="https://www.reddit.com/38g4ki">Less Than Jake- Good Enough, one of my favourites</a>
-<br>
-                        submitted <span class="muted">2015-06-04 00:05</span> by <a href="https://www.reddit.com/user/c00ner">/u/c00ner</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="lIQ87l1Y_CQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/lIQ87l1Y_CQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Troubadour - Streetlight Manifesto</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">40</span> - <a href="https://www.reddit.com/39ob4t">"The Troubadour - Streetlight Manifesto"</a>
-<br>
-                        submitted <span class="muted">2015-06-13 05:07</span> by <a href="https://www.reddit.com/user/zaketyzak">/u/zaketyzak</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="KK640dPPhXE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/KK640dPPhXE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Fishbone - Ma and Pa</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">39</span> - <a href="https://www.reddit.com/381lmx">Fishbone - Ma and Pa</a>
-<br>
-                        submitted <span class="muted">2015-06-01 04:50</span> by <a href="https://www.reddit.com/user/kobun04">/u/kobun04</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="DJ1dpnDMjkg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/DJ1dpnDMjkg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Big D and the Kids Table - Modern American Gypsy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">39</span> - <a href="https://www.reddit.com/39t8ts">Big D &amp; the Kids Table - Modern American Gypsy</a>
-<br>
-                        submitted <span class="muted">2015-06-14 15:32</span> by <a href="https://www.reddit.com/user/sweeppick09">/u/sweeppick09</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7OZCK5bzAhw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7OZCK5bzAhw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Be Like Max - "Sin City Rude Kids" (Music Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">38</span> - <a href="https://www.reddit.com/3artqx">Be Like Max - "Sin City Rude Kids" (Music Video)</a>
-<br>
-                        submitted <span class="muted">2015-06-23 00:15</span> by <a href="https://www.reddit.com/user/NoFaithInPeopleAnyMo">/u/NoFaithInPeopleAnyMo</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="kfBy_me9ij4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/kfBy_me9ij4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sonic Boom Six - Sound of a Revolution</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">36</span> - <a href="https://www.reddit.com/39r4sj">Sonic Boom Six. Interesting mix of musical fusion but I gotta say, I'm inpressed</a>
-<br>
-                        submitted <span class="muted">2015-06-13 23:06</span> by <a href="https://www.reddit.com/user/xXlm2lXx">/u/xXlm2lXx</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ka21UZUBgSY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ka21UZUBgSY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Save Ferris - Spam</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">30</span> - <a href="https://www.reddit.com/38lkgp">As a result of recent events, the song "Spam" by Save Ferris took on a whole new meaning</a>
-<br>
-                        submitted <span class="muted">2015-06-05 00:23</span> by <a href="https://www.reddit.com/user/All_is_an_innuendo">/u/All_is_an_innuendo</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="OmjE571pqe4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/OmjE571pqe4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SUBURBAN LEGENDS -- 1. DOING IT WITH YOU -- FOREVER IN THE FRIENDZONE</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">28</span> - <a href="https://www.reddit.com/387qi2">Suburban Legends - Forever in the Friendzone (New Album)</a>
-<br>
-                        submitted <span class="muted">2015-06-02 13:25</span> by <a href="https://www.reddit.com/user/SympleJack">/u/SympleJack</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="b53WaK71sMM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/b53WaK71sMM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Arthur theme song (full length)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/38bgm8">So, apparently, the Arthur theme song is ska, kind of. (Actual link this time, hopefully, my computer's been acting up.)</a>
-<br>
-                        submitted <span class="muted">2015-06-03 03:23</span> by <a href="https://www.reddit.com/user/perrythebari">/u/perrythebari</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="suEaQwqoEBA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/suEaQwqoEBA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ghost Town (Re-Recorded)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/39log1">The Specials re-recorded Ghost Town. Love the original, but this is fantastic</a>
-<br>
-                        submitted <span class="muted">2015-06-12 16:38</span> by <a href="https://www.reddit.com/user/slidewriter">/u/slidewriter</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_WMEmKALRq0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_WMEmKALRq0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Reel Big Fish - The Kids Don't Like It (Live) Island Lake, IL 6/13/2015</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/39ugry">Reel Big Fish - The Kids Don't Like It (Live) from rainy Rock Island, IL last night.</a>
-<br>
-                        submitted <span class="muted">2015-06-14 21:50</span> by <a href="https://www.reddit.com/user/Zebrahead13">/u/Zebrahead13</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="9eUTOPOuXSw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/9eUTOPOuXSw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Bumpin Uglies -- Grass is Greener</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/38ddtj">Bumpin Uglies -- Grass is Greener</a>
-<br>
-                        submitted <span class="muted">2015-06-03 14:16</span> by <a href="https://www.reddit.com/user/bumpinugliesmusic">/u/bumpinugliesmusic</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="DF6UGvGQHfA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/DF6UGvGQHfA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Duppies - Pale Rider</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/3a7tp3">The Duppies - Pale Rider</a>
-<br>
-                        submitted <span class="muted">2015-06-17 22:20</span> by <a href="https://www.reddit.com/user/TheBigPinetree">/u/TheBigPinetree</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="6JIbH92ahC0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/6JIbH92ahC0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jaya The Cat - Unconditional Love</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/39buys">Unconditional Love - Jaya The Cat</a>
-<br>
-                        submitted <span class="muted">2015-06-10 18:38</span> by <a href="https://www.reddit.com/user/Diabeticus">/u/Diabeticus</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Yz8Jf8A_r3Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Yz8Jf8A_r3Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Bo on the Go - Bo and the String Snatcher 1/2</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/38wlu7">Any other parents of young kids in /r/ska? "Bo On The Go" is a cute kids' show whose soundtrack is all ska music!</a>
-<br>
-                        submitted <span class="muted">2015-06-07 13:22</span> by <a href="https://www.reddit.com/user/DontFuckWithMyMoney">/u/DontFuckWithMyMoney</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Om_dwUQAo9U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Om_dwUQAo9U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Not the Nine O'Clock News - I Like Bouncing 1981</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/3agiuj">Ska parody featuring Rowan Atkinson on vocals - from the show 'Not the Nine O'Clock News'</a>
-<br>
-                        submitted <span class="muted">2015-06-19 23:36</span> by <a href="https://www.reddit.com/user/djfsdkjflksjdflsj">/u/djfsdkjflksjdflsj</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Q6gekGZTK7U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Q6gekGZTK7U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Llama Tsunami - 60 Minutes (Live at Particle Accelerator 6-13-2015)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/3amfg3">Llama Tsunami - 60 Minutes (Live at Particle Accelerator 6-13-2015)</a>
-<br>
-                        submitted <span class="muted">2015-06-21 17:39</span> by <a href="https://www.reddit.com/user/nathanahogg">/u/nathanahogg</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ucgg3Lm9v6U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ucgg3Lm9v6U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">BEER BONG - The A-OKs</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/3agdsm">The A-OKs - BEER BONG!</a>
-<br>
-                        submitted <span class="muted">2015-06-19 22:50</span> by <a href="https://www.reddit.com/user/mswanco">/u/mswanco</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Ok7bDTknGW0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Ok7bDTknGW0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Upstanding Youth - 451</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/3bd5u5">Upstanding Youth - 451</a>
-<br>
-                        submitted <span class="muted">2015-06-28 02:31</span> by <a href="https://www.reddit.com/user/peggiep9pm">/u/peggiep9pm</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ErI9AkiNzQ8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ErI9AkiNzQ8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">All Star by Smash Mouth (Ska Acoustic Cover by Half Past Two)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/38xc10">Half Past Two - Skacoustic Cover of Smash Mouth's "All Star"</a>
-<br>
-                        submitted <span class="muted">2015-06-07 17:18</span> by <a href="https://www.reddit.com/user/kingotterpop">/u/kingotterpop</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="y9GTeGE6U88">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/y9GTeGE6U88/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Me First And The Gimme Gimmes - Linda Linda</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/38zvbt">Linda Linda - Me First &amp; The Gimme Gimmes doing a ska cover of J-Punk band The Blue Hearts.</a>
-<br>
-                        submitted <span class="muted">2015-06-08 05:47</span> by <a href="https://www.reddit.com/user/kobun04">/u/kobun04</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="VxsaL30acpw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/VxsaL30acpw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Desmond Dekker & Derrick Morgan - What A Revenge</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/38u2fy">Desmond Dekker &amp; Derrick Morgan - What A Revenge</a>
-<br>
-                        submitted <span class="muted">2015-06-06 20:47</span> by <a href="https://www.reddit.com/user/TheGspotTornado">/u/TheGspotTornado</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="VCkWeGkokW0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/VCkWeGkokW0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">KEMURI「O-zora」Music Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/3aqwaz">Kemuri - O-zora</a>
-<br>
-                        submitted <span class="muted">2015-06-22 19:55</span> by <a href="https://www.reddit.com/user/IAmTheNick">/u/IAmTheNick</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="DjAJTyfogpI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/DjAJTyfogpI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mark Foggo's Skasters - Ska Pig (with lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/386016">Mark Foggo's Skasters - Ska Pig</a>
-<br>
-                        submitted <span class="muted">2015-06-02 02:29</span> by <a href="https://www.reddit.com/user/Billy_Lo">/u/Billy_Lo</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="dKVh5FiOM_w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/dKVh5FiOM_w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Half Past Two - Not Enough (Official Lyric Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/39tebr">Half Past Two - Not Enough (Official Lyric Video)</a>
-<br>
-                        submitted <span class="muted">2015-06-14 16:23</span> by <a href="https://www.reddit.com/user/kingotterpop">/u/kingotterpop</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="FjCAKofLf-w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/FjCAKofLf-w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Skankin Pickle - Racist world</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/3arjug">Skankin' Pickle-Racist World, this song is beautifully relevant at this moment in time.</a>
-<br>
-                        submitted <span class="muted">2015-06-22 22:52</span> by <a href="https://www.reddit.com/user/kamikazeska">/u/kamikazeska</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5vCE4xt8YmQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5vCE4xt8YmQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Go Jimmy Go - Don't Stop Everything</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/38yb44">Go Jimmy Go - Don't Stop Everything</a>
-<br>
-                        submitted <span class="muted">2015-06-07 21:47</span> by <a href="https://www.reddit.com/user/goofballl">/u/goofballl</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="eLoLzunkmbE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/eLoLzunkmbE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Suffers - A Message To You Rudy (Cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/39enm6">The Suffers - A Message To You, Rudy (Cover) - Live in Memphis at Lafayette's Music Room</a>
-<br>
-                        submitted <span class="muted">2015-06-11 05:42</span> by <a href="https://www.reddit.com/user/SkaTroma">/u/SkaTroma</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="pVVzidSdRXE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/pVVzidSdRXE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">She's Drunk All The Time - Tim Timebomb and Friends</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/3aee26">Tim Timebomb and Friends- She's Drunk All The Time</a>
-<br>
-                        submitted <span class="muted">2015-06-19 13:12</span> by <a href="https://www.reddit.com/user/ChaliceBurn">/u/ChaliceBurn</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="EnKAJP2osRw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/EnKAJP2osRw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Chris DeMakes of LTJ at Ska Goes Solo in Punta Gorda, FL 12/26 (1/2)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/38temp">Chris DeMakes of LTJ at Ska Goes Solo in Punta Gorda, FL 12/26 (1/2)</a>
-<br>
-                        submitted <span class="muted">2015-06-06 17:37</span> by <a href="https://www.reddit.com/user/SKAspot">/u/SKAspot</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="yioJC0B4mA4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/yioJC0B4mA4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Half Past Two - Mastering Karate (Official Music Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/3bov1t">Half Past Two - Mastering Karate (Music Video)</a>
-<br>
-                        submitted <span class="muted">2015-06-30 23:07</span> by <a href="https://www.reddit.com/user/kingotterpop">/u/kingotterpop</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5woGMW49NnU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5woGMW49NnU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Truth Or Dare - Official Music Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/3863lo">Truth Or Dare - May Weather, great new song released today</a>
-<br>
-                        submitted <span class="muted">2015-06-02 02:56</span> by <a href="https://www.reddit.com/user/Dweezill">/u/Dweezill</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Uo_7imRHqhY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Uo_7imRHqhY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Toasters - Sweet Home Town Jamaica</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/38ved7">The Toasters - Sweet Home Town Jamaica</a>
-<br>
-                        submitted <span class="muted">2015-06-07 03:54</span> by <a href="https://www.reddit.com/user/Hereticalnerd">/u/Hereticalnerd</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="n_QIujCjBEM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/n_QIujCjBEM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Steady Legend - Mirrors</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/39mfx5">Steady Legend - Mirrors</a>
-<br>
-                        submitted <span class="muted">2015-06-12 19:43</span> by <a href="https://www.reddit.com/user/drpiefinger">/u/drpiefinger</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="DtHbxkASFmc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/DtHbxkASFmc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Laurel Aitken and The Skatalites - Rude Boy Dreams</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/38fu7b">Laurel Aitken and The Skatalites - Rude Boy Dreams</a>
-<br>
-                        submitted <span class="muted">2015-06-03 22:56</span> by <a href="https://www.reddit.com/user/madness408">/u/madness408</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="sTp1Axm_3mU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/sTp1Axm_3mU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Get Up Edina - Desmond Dekker</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3a0vkl">Get Up Edina - Desmond Dekker</a>
-<br>
-                        submitted <span class="muted">2015-06-16 10:23</span> by <a href="https://www.reddit.com/user/Mizuru">/u/Mizuru</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="s8qpHyplXyo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/s8qpHyplXyo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Where Did You Go?</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3aelxl">Woke up with this stuck in my head: Where Did You Go by the Skints</a>
-<br>
-                        submitted <span class="muted">2015-06-19 14:23</span> by <a href="https://www.reddit.com/user/slidewriter">/u/slidewriter</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="06UQs9ojmBk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/06UQs9ojmBk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Less Than Jake at the Gillioz in Springfield, MO on 6-2-2015</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3azylf">Between Song Banter with Less Than Jake!</a>
-<br>
-                        submitted <span class="muted">2015-06-24 21:25</span> by <a href="https://www.reddit.com/user/peesheets">/u/peesheets</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="odfnQBSbaAc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/odfnQBSbaAc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ленинград — Отпускная</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/38ghae">Leningrad- Buyout</a>
-<br>
-                        submitted <span class="muted">2015-06-04 01:24</span> by <a href="https://www.reddit.com/user/Boomation">/u/Boomation</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_83BK6wIA_U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_83BK6wIA_U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Fire by Reel Big Fish w/lyrics!!</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/3990os">Is the bassist using a five string in this song? The Fire - Reel Big Fish</a>
-<br>
-                        submitted <span class="muted">2015-06-10 03:10</span> by <a href="https://www.reddit.com/user/funkmasterjambo666">/u/funkmasterjambo666</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="oK0O9N7bZTk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/oK0O9N7bZTk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">"Riot!" by The Kings: B-side on the 45 vinyl record</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/39epnp">"Riot!" by The Kings [Seattle Ska Band]: B-side on the 45 vinyl record on YouTube</a>
-<br>
-                        submitted <span class="muted">2015-06-11 06:00</span> by <a href="https://www.reddit.com/user/urgentlyrelaxed">/u/urgentlyrelaxed</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="CQ-N_PnxlYk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/CQ-N_PnxlYk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cumbia Ninja | "Ceviche" - VIDEO CLIP (VERSIÓN ORIGINAL)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/3bn1qh">Was searching for a cumbia song and happened across this. Cumbia Ninja - Ceviche</a>
-<br>
-                        submitted <span class="muted">2015-06-30 15:18</span> by <a href="https://www.reddit.com/user/Clarrington">/u/Clarrington</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bupg9LkpiAs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bupg9LkpiAs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Kings at the Seattle Rendezvous | JewelBox Theater, Friday, October, 17, 2014</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/38b6ct">Check out The Kings [Seattle Ska Band]--Let us know what you think!</a>
-<br>
-                        submitted <span class="muted">2015-06-03 02:08</span> by <a href="https://www.reddit.com/user/urgentlyrelaxed">/u/urgentlyrelaxed</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zuaIRQN6SnM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zuaIRQN6SnM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Hey Little Rich Girl - Amy Winehouse</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3ah05m">Amy Winehouse - Hey Little Rich Girl (The Specials Cover)</a>
-<br>
-                        submitted <span class="muted">2015-06-20 02:29</span> by <a href="https://www.reddit.com/user/Arkaega">/u/Arkaega</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ggnzVA9KyTk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ggnzVA9KyTk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">GOLLBETTY「99%」</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/39375m">Gollbetty, Japanese Ska-Punk</a>
-<br>
-                        submitted <span class="muted">2015-06-08 22:47</span> by <a href="https://www.reddit.com/user/unusuallytallgnome">/u/unusuallytallgnome</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="6bLVdKbPHHY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/6bLVdKbPHHY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Skatalites - Rock Fort Rock</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/396qtl">The Skatalites - Rock Fort Rock</a>
-<br>
-                        submitted <span class="muted">2015-06-09 17:35</span> by <a href="https://www.reddit.com/user/ChaliceBurn">/u/ChaliceBurn</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="J5DXxbT1d7U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/J5DXxbT1d7U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Propaganda</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3a2k2r">Propaganda</a>
-<br>
-                        submitted <span class="muted">2015-06-16 18:55</span> by <a href="https://www.reddit.com/user/cj5">/u/cj5</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="XAwLwouiQp8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XAwLwouiQp8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Expendables - Right Time</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3ab05q">The Expendables - Right Time</a>
-<br>
-                        submitted <span class="muted">2015-06-18 17:14</span> by <a href="https://www.reddit.com/user/Sticcia">/u/Sticcia</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="NZF5Cxrie5M">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/NZF5Cxrie5M/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Heavyball - Black Eye Friday (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3aeea8">Heavyball - Black Eye Friday</a>
-<br>
-                        submitted <span class="muted">2015-06-19 13:14</span> by <a href="https://www.reddit.com/user/Dion_Tryphon">/u/Dion_Tryphon</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8XFYam4t2lk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8XFYam4t2lk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Feel Alright -  Earl Cole & The Movers -  Studio One - Ska</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3b6j34">[First Wave Friday] Feel Alright - Earl Cole &amp; The Movers (1964)</a>
-<br>
-                        submitted <span class="muted">2015-06-26 11:09</span> by <a href="https://www.reddit.com/user/sleepwhatsthat">/u/sleepwhatsthat</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="1506QNPxWX4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/1506QNPxWX4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Boss Capone - Count Me Money (Why You Still Call Me Honey) aka Call Me Honey - OFFICIAL VIDEO</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3bghzo">Boss Capone - Count Me Money (Why You Still Call Me Honey?) from the 2015 album "'69 Reggae Bonanza"</a>
-<br>
-                        submitted <span class="muted">2015-06-29 00:46</span> by <a href="https://www.reddit.com/user/MarmadukeHammerhead">/u/MarmadukeHammerhead</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="uCEi3m4dc9E">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/uCEi3m4dc9E/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">NC Thirteens - Free For All</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/387lr1">NC Thirteens - Free For All</a>
-<br>
-                        submitted <span class="muted">2015-06-02 12:45</span> by <a href="https://www.reddit.com/user/free_range_veal">/u/free_range_veal</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bNjqZrpi53o">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bNjqZrpi53o/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Delroy Wilson - Won't You Come Home</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/38rnm1">Delroy Wilson-Won't You Come Home Now</a>
-<br>
-                        submitted <span class="muted">2015-06-06 05:47</span> by <a href="https://www.reddit.com/user/NeverRembersPassword">/u/NeverRembersPassword</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ZF0ggdrWzoY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ZF0ggdrWzoY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Highlights of The Slackers in Cape Coral (5/15/15)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/38tdpq">Highlights of The Slackers in Cape Coral (5/15/15)</a>
-<br>
-                        submitted <span class="muted">2015-06-06 17:29</span> by <a href="https://www.reddit.com/user/SKAspot">/u/SKAspot</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="LjhDiCP5DOY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/LjhDiCP5DOY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Freecoasters at Dixie Roadhouse (3-14-2015)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/38tdu8">The Freecoasters at Dixie Roadhouse (3-14-2015)</a>
-<br>
-                        submitted <span class="muted">2015-06-06 17:31</span> by <a href="https://www.reddit.com/user/SKAspot">/u/SKAspot</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5rhXiYvciUE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5rhXiYvciUE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Skunkadelics - I Know</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/39qkhv">The Skunkadelics- I Know</a>
-<br>
-                        submitted <span class="muted">2015-06-13 20:02</span> by <a href="https://www.reddit.com/user/NeverRembersPassword">/u/NeverRembersPassword</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ZRIfc8q5c3s">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ZRIfc8q5c3s/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Popes Of Chillitown - Wisdom Teeth (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3agh31">This is great - Popes of Chillitown from London, England</a>
-<br>
-                        submitted <span class="muted">2015-06-19 23:19</span> by <a href="https://www.reddit.com/user/MarvinHeemeyer">/u/MarvinHeemeyer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="vuPm9hQ9W2E">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/vuPm9hQ9W2E/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Broke$ "I've Almost Had Enough"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/38fphs">The Broke$ DFW Ska, at Three Links in Deep Ellum, Sat. May 30th 2015. "I've Almost had Enough." Ska/Punk.</a>
-<br>
-                        submitted <span class="muted">2015-06-03 22:25</span> by <a href="https://www.reddit.com/user/LouChaos">/u/LouChaos</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="B_gQdB0OTHI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/B_gQdB0OTHI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jay Tea at Ska Goes Solo in Punta Gorda, FL 12/26 (3/3)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/38teki">Jay Tea at Ska Goes Solo in Punta Gorda, FL 12/26 (3/3)</a>
-<br>
-                        submitted <span class="muted">2015-06-06 17:36</span> by <a href="https://www.reddit.com/user/SKAspot">/u/SKAspot</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="d93wNebdcFo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/d93wNebdcFo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">I Want Justice</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/396chq">Ruder Than You - I Want Justice</a>
-<br>
-                        submitted <span class="muted">2015-06-09 16:00</span> by <a href="https://www.reddit.com/user/Amahoney77">/u/Amahoney77</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="I4Pd6z80Ebo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/I4Pd6z80Ebo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Heptones - Black Is Black ( full album ) studio 1 records 1970</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/39sg1e">The Heptones - Black is Black (Full Album)</a>
-<br>
-                        submitted <span class="muted">2015-06-14 08:52</span> by <a href="https://www.reddit.com/user/Drudeboy">/u/Drudeboy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="qv4SC_sSeHk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/qv4SC_sSeHk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Shootin' Goon - MTV</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3ahr63">Shootin' Goon - MTV</a>
-<br>
-                        submitted <span class="muted">2015-06-20 08:04</span> by <a href="https://www.reddit.com/user/jimi_77">/u/jimi_77</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="J-VkxPrz970">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/J-VkxPrz970/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Banner Year by Five Iron Frenzy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3b19kg">Not to discount the current debate going on across the Union, but just a reminder that indeed flags are hurtful and that too often history goes to the victors. Banner Year [Five Iron Frenzy]</a>
-<br>
-                        submitted <span class="muted">2015-06-25 03:55</span> by <a href="https://www.reddit.com/user/mc_ha_ha_hales_ale">/u/mc_ha_ha_hales_ale</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="QZy_fAedyUA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/QZy_fAedyUA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Brooks Was Here</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/38bnk1">Half Beat -- Brooks Was Here (ska rock reggae) let us know what you think!</a>
-<br>
-                        submitted <span class="muted">2015-06-03 04:18</span> by <a href="https://www.reddit.com/user/d_le_b">/u/d_le_b</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="NeV58HJrTBE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/NeV58HJrTBE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">THE CLARENDONIANS - MEY BIEN ( MY FRIEND ).wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/38pkxr">[First Wave Friday] The Clarendonians -- Mey Bien (My Friend) (1965)</a>
-<br>
-                        submitted <span class="muted">2015-06-05 19:35</span> by <a href="https://www.reddit.com/user/nubsonaplane">/u/nubsonaplane</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="hcnITf-549Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/hcnITf-549Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ryan Eldred of Catch 22 at Ska Goes Solo in Punta Gorda, FL 12/26</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/38tef7">Ryan Eldred of Catch 22 at Ska Goes Solo in Punta Gorda, FL 12/26</a>
-<br>
-                        submitted <span class="muted">2015-06-06 17:35</span> by <a href="https://www.reddit.com/user/SKAspot">/u/SKAspot</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2dzxYRmAA0Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2dzxYRmAA0Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Skunks - The Odd Couple</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/38v1xn">The Skunks - The Odd Couple</a>
-<br>
-                        submitted <span class="muted">2015-06-07 01:56</span> by <a href="https://www.reddit.com/user/hypoboxer">/u/hypoboxer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="FsKIwzaptH8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/FsKIwzaptH8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Esta noche (letra) Panteon Rococo</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3933tc">Panteón Rococó - Esta Noche [Rock-Ska]</a>
-<br>
-                        submitted <span class="muted">2015-06-08 22:22</span> by <a href="https://www.reddit.com/user/Apollo505">/u/Apollo505</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="iKb7f2368e8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/iKb7f2368e8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SkaDaddyZ - Let's Get Together</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/39drcg">Ska Daddyz Lets Get Together.</a>
-<br>
-                        submitted <span class="muted">2015-06-11 02:01</span> by <a href="https://www.reddit.com/user/crouchska">/u/crouchska</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="srqGX6YnCzs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/srqGX6YnCzs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Good Skamaritans - You'll See</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/39edjs">The Good Skamaritans - You'll See</a>
-<br>
-                        submitted <span class="muted">2015-06-11 04:25</span> by <a href="https://www.reddit.com/user/TJWH">/u/TJWH</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="nLotcXVdW58">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/nLotcXVdW58/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">"Frigid" by The Kings: A-side on the 45 vinyl record</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/39en25">"Frigid" by The Kings [Seattle Ska Band]: A-side on the 45 vinyl record on YouTube</a>
-<br>
-                        submitted <span class="muted">2015-06-11 05:37</span> by <a href="https://www.reddit.com/user/urgentlyrelaxed">/u/urgentlyrelaxed</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="PJKZj0MCOeA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/PJKZj0MCOeA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lord Tanamo - Mattie Rag</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3afevr">[First Wave Friday] Lord Tanamo -- Mattie Rag (1965)</a>
-<br>
-                        submitted <span class="muted">2015-06-19 18:11</span> by <a href="https://www.reddit.com/user/nubsonaplane">/u/nubsonaplane</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-d9v7gPSLEs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-d9v7gPSLEs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Dandy LivingStone - Think About That</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3ag1pa">Dandy Livingstone - Think About That</a>
-<br>
-                        submitted <span class="muted">2015-06-19 21:10</span> by <a href="https://www.reddit.com/user/RANKINFullStop">/u/RANKINFullStop</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-dK2soZ05Ac">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-dK2soZ05Ac/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Undercover SKA - Come on in Sin</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3b08q5">Undercover S.K.A. - Come on in Sin</a>
-<br>
-                        submitted <span class="muted">2015-06-24 22:43</span> by <a href="https://www.reddit.com/user/Hereticalnerd">/u/Hereticalnerd</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2QUTtRvU1Bo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2QUTtRvU1Bo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Let's Get Dangerous Teaser</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/38orbp">Backyard Superheroes just released a 'teaser trailer' announcing our new EP July 3rd - "Let's Get Dangerous"</a>
-<br>
-                        submitted <span class="muted">2015-06-05 16:31</span> by <a href="https://www.reddit.com/user/skaguyy">/u/skaguyy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jDsJJENY6rE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jDsJJENY6rE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Duppies performing "What A Shame" in Cape Coral, FL (5/15/15)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/38tdye">The Duppies performing "What A Shame" in Cape Coral, FL (5/15/15)</a>
-<br>
-                        submitted <span class="muted">2015-06-06 17:31</span> by <a href="https://www.reddit.com/user/SKAspot">/u/SKAspot</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="4TmlcSrI8p0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/4TmlcSrI8p0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Scotch Bonnets - The Good One</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/39dub7">"The Good One" by The Scotch Bonnets. You may have heard them on the recent "Hooligans United" Rancid tribute.</a>
-<br>
-                        submitted <span class="muted">2015-06-11 02:19</span> by <a href="https://www.reddit.com/user/RANKINFullStop">/u/RANKINFullStop</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="oRaM1MTX8v4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/oRaM1MTX8v4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Kapelle Vorwärts! - El Pueblo Unido</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/39icgk">Kapelle Vorwärts! - El Pueblo Unido</a>
-<br>
-                        submitted <span class="muted">2015-06-11 22:34</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="AIzZqCgbFDY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/AIzZqCgbFDY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">English Beat - whine and grine/stand down margaret</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3aulsy">English Beat - Whine and Grine/Stand Down Margaret</a>
-<br>
-                        submitted <span class="muted">2015-06-23 17:12</span> by <a href="https://www.reddit.com/user/cake4chu">/u/cake4chu</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Ujj2vSWOYao">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Ujj2vSWOYao/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">LaBrassBanda - "Intermailand"  - Reeperbahn - Festival - NDR</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/38fruu">LaBrassBanda - "Intermailand"</a>
-<br>
-                        submitted <span class="muted">2015-06-03 22:41</span> by <a href="https://www.reddit.com/user/TJWH">/u/TJWH</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="87ohihxTJkk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/87ohihxTJkk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Overweight - I want it you got it</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/38w447">Overweight - I want it you got it</a>
-<br>
-                        submitted <span class="muted">2015-06-07 09:18</span> by <a href="https://www.reddit.com/user/bulletblight">/u/bulletblight</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="0sPA4g4hveA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/0sPA4g4hveA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Easy In - Dance Rudy Dance</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/3avd1x">The Easy In, first time seeing them this weekend. I like these guys.</a>
-<br>
-                        submitted <span class="muted">2015-06-23 20:22</span> by <a href="https://www.reddit.com/user/bobjr94">/u/bobjr94</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7irfbDUpVjI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7irfbDUpVjI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sublime- Santeria</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/3b904n">This is my cover of Sublime's "Santeria". I'm not sure if this is pure "ska" but I wasn't sure where else to post it. Either way, enjoy! :D</a>
-<br>
-                        submitted <span class="muted">2015-06-26 23:15</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="f-SY3NFJIro">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/f-SY3NFJIro/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SKAspot Radio Station ID Montage and Promo</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/38tdm7">SKAspot Radio Station ID Montage and Promo</a>
-<br>
-                        submitted <span class="muted">2015-06-06 17:29</span> by <a href="https://www.reddit.com/user/SKAspot">/u/SKAspot</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5li9c2aSPc4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5li9c2aSPc4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jay Tea at Ska Goes Solo in Punta Gorda, FL 12/26 (1/3)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/38teh1">Jay Tea at Ska Goes Solo in Punta Gorda, FL 12/26 (1/3)</a>
-<br>
-                        submitted <span class="muted">2015-06-06 17:35</span> by <a href="https://www.reddit.com/user/SKAspot">/u/SKAspot</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="l2uZV6GpA5o">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/l2uZV6GpA5o/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jay Tea at Ska Goes Solo in Punta Gorda, FL 12/26 (2/3)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/38teiv">Jay Tea at Ska Goes Solo in Punta Gorda, FL 12/26 (2/3)</a>
-<br>
-                        submitted <span class="muted">2015-06-06 17:36</span> by <a href="https://www.reddit.com/user/SKAspot">/u/SKAspot</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="6pWfSdMyh9o">
+                    <td><img src="https://i.ytimg.com/vi/6pWfSdMyh9o/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Less Than Jake - Scott Farcas Takes It On The Chin</td>
+                </tr>
+                <tr class="record" id="26IOww0gO1w">
+                    <td><img src="https://i.ytimg.com/vi/26IOww0gO1w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">That's Your Horoscope For Today</td>
+                </tr>
+                <tr class="record" id="cvULT8GLqmc">
+                    <td><img src="https://i.ytimg.com/vi/cvULT8GLqmc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lock and Roll Forever</td>
+                </tr>
+                <tr class="record" id="Eh65JlH3vq4">
+                    <td><img src="https://i.ytimg.com/vi/Eh65JlH3vq4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Suckers</td>
+                </tr>
+                <tr class="record" id="mcx5wEqzf2A">
+                    <td><img src="https://i.ytimg.com/vi/mcx5wEqzf2A/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">On Distant Shores - Five Iron Frenzy</td>
+                </tr>
+                <tr class="record" id="XINAJ7jgg6Y">
+                    <td><img src="https://i.ytimg.com/vi/XINAJ7jgg6Y/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sublime - Same in the End</td>
+                </tr>
+                <tr class="record" id="0zmIR1aAGYE">
+                    <td><img src="https://i.ytimg.com/vi/0zmIR1aAGYE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Tim Armstrong - Into Action</td>
+                </tr>
+                <tr class="record" id="S_fwqYDNYxg">
+                    <td><img src="https://i.ytimg.com/vi/S_fwqYDNYxg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">東京スカパラダイスオーケストラ / All Good Ska is One</td>
+                </tr>
+                <tr class="record" id="KqTx6TVoQQ8">
+                    <td><img src="https://i.ytimg.com/vi/KqTx6TVoQQ8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SKA REVIVAL TOUR 2015  - ANNOUNCEMENT</td>
+                </tr>
+                <tr class="record" id="p81Lqx3t24k">
+                    <td><img src="https://i.ytimg.com/vi/p81Lqx3t24k/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Less than jake - Good enough</td>
+                </tr>
+                <tr class="record" id="lIQ87l1Y_CQ">
+                    <td><img src="https://i.ytimg.com/vi/lIQ87l1Y_CQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Troubadour - Streetlight Manifesto</td>
+                </tr>
+                <tr class="record" id="KK640dPPhXE">
+                    <td><img src="https://i.ytimg.com/vi/KK640dPPhXE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Fishbone - Ma and Pa</td>
+                </tr>
+                <tr class="record" id="DJ1dpnDMjkg">
+                    <td><img src="https://i.ytimg.com/vi/DJ1dpnDMjkg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Big D and the Kids Table - Modern American Gypsy</td>
+                </tr>
+                <tr class="record" id="7OZCK5bzAhw">
+                    <td><img src="https://i.ytimg.com/vi/7OZCK5bzAhw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Be Like Max - "Sin City Rude Kids" (Music Video)</td>
+                </tr>
+                <tr class="record" id="kfBy_me9ij4">
+                    <td><img src="https://i.ytimg.com/vi/kfBy_me9ij4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sonic Boom Six - Sound of a Revolution</td>
+                </tr>
+                <tr class="record" id="ka21UZUBgSY">
+                    <td><img src="https://i.ytimg.com/vi/ka21UZUBgSY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Save Ferris - Spam</td>
+                </tr>
+                <tr class="record" id="OmjE571pqe4">
+                    <td><img src="https://i.ytimg.com/vi/OmjE571pqe4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SUBURBAN LEGENDS -- 1. DOING IT WITH YOU -- FOREVER IN THE FRIENDZONE</td>
+                </tr>
+                <tr class="record" id="b53WaK71sMM">
+                    <td><img src="https://i.ytimg.com/vi/b53WaK71sMM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Arthur theme song (full length)</td>
+                </tr>
+                <tr class="record" id="suEaQwqoEBA">
+                    <td><img src="https://i.ytimg.com/vi/suEaQwqoEBA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ghost Town (Re-Recorded)</td>
+                </tr>
+                <tr class="record" id="_WMEmKALRq0">
+                    <td><img src="https://i.ytimg.com/vi/_WMEmKALRq0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Reel Big Fish - The Kids Don't Like It (Live) Island Lake, IL 6/13/2015</td>
+                </tr>
+                <tr class="record" id="9eUTOPOuXSw">
+                    <td><img src="https://i.ytimg.com/vi/9eUTOPOuXSw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Bumpin Uglies -- Grass is Greener</td>
+                </tr>
+                <tr class="record" id="DF6UGvGQHfA">
+                    <td><img src="https://i.ytimg.com/vi/DF6UGvGQHfA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Duppies - Pale Rider</td>
+                </tr>
+                <tr class="record" id="6JIbH92ahC0">
+                    <td><img src="https://i.ytimg.com/vi/6JIbH92ahC0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jaya The Cat - Unconditional Love</td>
+                </tr>
+                <tr class="record" id="Yz8Jf8A_r3Q">
+                    <td><img src="https://i.ytimg.com/vi/Yz8Jf8A_r3Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Bo on the Go - Bo and the String Snatcher 1/2</td>
+                </tr>
+                <tr class="record" id="Om_dwUQAo9U">
+                    <td><img src="https://i.ytimg.com/vi/Om_dwUQAo9U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Not the Nine O'Clock News - I Like Bouncing 1981</td>
+                </tr>
+                <tr class="record" id="Q6gekGZTK7U">
+                    <td><img src="https://i.ytimg.com/vi/Q6gekGZTK7U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Llama Tsunami - 60 Minutes (Live at Particle Accelerator 6-13-2015)</td>
+                </tr>
+                <tr class="record" id="ucgg3Lm9v6U">
+                    <td><img src="https://i.ytimg.com/vi/ucgg3Lm9v6U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">BEER BONG - The A-OKs</td>
+                </tr>
+                <tr class="record" id="Ok7bDTknGW0">
+                    <td><img src="https://i.ytimg.com/vi/Ok7bDTknGW0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Upstanding Youth - 451</td>
+                </tr>
+                <tr class="record" id="ErI9AkiNzQ8">
+                    <td><img src="https://i.ytimg.com/vi/ErI9AkiNzQ8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">All Star by Smash Mouth (Ska Acoustic Cover by Half Past Two)</td>
+                </tr>
+                <tr class="record" id="y9GTeGE6U88">
+                    <td><img src="https://i.ytimg.com/vi/y9GTeGE6U88/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Me First And The Gimme Gimmes - Linda Linda</td>
+                </tr>
+                <tr class="record" id="VxsaL30acpw">
+                    <td><img src="https://i.ytimg.com/vi/VxsaL30acpw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Desmond Dekker & Derrick Morgan - What A Revenge</td>
+                </tr>
+                <tr class="record" id="VCkWeGkokW0">
+                    <td><img src="https://i.ytimg.com/vi/VCkWeGkokW0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">KEMURI「O-zora」Music Video</td>
+                </tr>
+                <tr class="record" id="DjAJTyfogpI">
+                    <td><img src="https://i.ytimg.com/vi/DjAJTyfogpI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mark Foggo's Skasters - Ska Pig (with lyrics)</td>
+                </tr>
+                <tr class="record" id="dKVh5FiOM_w">
+                    <td><img src="https://i.ytimg.com/vi/dKVh5FiOM_w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Half Past Two - Not Enough (Official Lyric Video)</td>
+                </tr>
+                <tr class="record" id="FjCAKofLf-w">
+                    <td><img src="https://i.ytimg.com/vi/FjCAKofLf-w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Skankin Pickle - Racist world</td>
+                </tr>
+                <tr class="record" id="5vCE4xt8YmQ">
+                    <td><img src="https://i.ytimg.com/vi/5vCE4xt8YmQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Go Jimmy Go - Don't Stop Everything</td>
+                </tr>
+                <tr class="record" id="eLoLzunkmbE">
+                    <td><img src="https://i.ytimg.com/vi/eLoLzunkmbE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Suffers - A Message To You Rudy (Cover)</td>
+                </tr>
+                <tr class="record" id="pVVzidSdRXE">
+                    <td><img src="https://i.ytimg.com/vi/pVVzidSdRXE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">She's Drunk All The Time - Tim Timebomb and Friends</td>
+                </tr>
+                <tr class="record" id="EnKAJP2osRw">
+                    <td><img src="https://i.ytimg.com/vi/EnKAJP2osRw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Chris DeMakes of LTJ at Ska Goes Solo in Punta Gorda, FL 12/26 (1/2)</td>
+                </tr>
+                <tr class="record" id="yioJC0B4mA4">
+                    <td><img src="https://i.ytimg.com/vi/yioJC0B4mA4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Half Past Two - Mastering Karate (Official Music Video)</td>
+                </tr>
+                <tr class="record" id="5woGMW49NnU">
+                    <td><img src="https://i.ytimg.com/vi/5woGMW49NnU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Truth Or Dare - Official Music Video</td>
+                </tr>
+                <tr class="record" id="Uo_7imRHqhY">
+                    <td><img src="https://i.ytimg.com/vi/Uo_7imRHqhY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Toasters - Sweet Home Town Jamaica</td>
+                </tr>
+                <tr class="record" id="n_QIujCjBEM">
+                    <td><img src="https://i.ytimg.com/vi/n_QIujCjBEM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Steady Legend - Mirrors</td>
+                </tr>
+                <tr class="record" id="DtHbxkASFmc">
+                    <td><img src="https://i.ytimg.com/vi/DtHbxkASFmc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Laurel Aitken and The Skatalites - Rude Boy Dreams</td>
+                </tr>
+                <tr class="record" id="sTp1Axm_3mU">
+                    <td><img src="https://i.ytimg.com/vi/sTp1Axm_3mU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Get Up Edina - Desmond Dekker</td>
+                </tr>
+                <tr class="record" id="s8qpHyplXyo">
+                    <td><img src="https://i.ytimg.com/vi/s8qpHyplXyo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Where Did You Go?</td>
+                </tr>
+                <tr class="record" id="06UQs9ojmBk">
+                    <td><img src="https://i.ytimg.com/vi/06UQs9ojmBk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Less Than Jake at the Gillioz in Springfield, MO on 6-2-2015</td>
+                </tr>
+                <tr class="record" id="odfnQBSbaAc">
+                    <td><img src="https://i.ytimg.com/vi/odfnQBSbaAc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ленинград — Отпускная</td>
+                </tr>
+                <tr class="record" id="_83BK6wIA_U">
+                    <td><img src="https://i.ytimg.com/vi/_83BK6wIA_U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Fire by Reel Big Fish w/lyrics!!</td>
+                </tr>
+                <tr class="record" id="oK0O9N7bZTk">
+                    <td><img src="https://i.ytimg.com/vi/oK0O9N7bZTk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">"Riot!" by The Kings: B-side on the 45 vinyl record</td>
+                </tr>
+                <tr class="record" id="CQ-N_PnxlYk">
+                    <td><img src="https://i.ytimg.com/vi/CQ-N_PnxlYk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cumbia Ninja | "Ceviche" - VIDEO CLIP (VERSIÓN ORIGINAL)</td>
+                </tr>
+                <tr class="record" id="bupg9LkpiAs">
+                    <td><img src="https://i.ytimg.com/vi/bupg9LkpiAs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Kings at the Seattle Rendezvous | JewelBox Theater, Friday, October, 17, 2014</td>
+                </tr>
+                <tr class="record" id="zuaIRQN6SnM">
+                    <td><img src="https://i.ytimg.com/vi/zuaIRQN6SnM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Hey Little Rich Girl - Amy Winehouse</td>
+                </tr>
+                <tr class="record" id="ggnzVA9KyTk">
+                    <td><img src="https://i.ytimg.com/vi/ggnzVA9KyTk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">GOLLBETTY「99%」</td>
+                </tr>
+                <tr class="record" id="6bLVdKbPHHY">
+                    <td><img src="https://i.ytimg.com/vi/6bLVdKbPHHY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Skatalites - Rock Fort Rock</td>
+                </tr>
+                <tr class="record" id="J5DXxbT1d7U">
+                    <td><img src="https://i.ytimg.com/vi/J5DXxbT1d7U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Propaganda</td>
+                </tr>
+                <tr class="record" id="XAwLwouiQp8">
+                    <td><img src="https://i.ytimg.com/vi/XAwLwouiQp8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Expendables - Right Time</td>
+                </tr>
+                <tr class="record" id="NZF5Cxrie5M">
+                    <td><img src="https://i.ytimg.com/vi/NZF5Cxrie5M/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Heavyball - Black Eye Friday (Official Video)</td>
+                </tr>
+                <tr class="record" id="8XFYam4t2lk">
+                    <td><img src="https://i.ytimg.com/vi/8XFYam4t2lk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Feel Alright -  Earl Cole & The Movers -  Studio One - Ska</td>
+                </tr>
+                <tr class="record" id="1506QNPxWX4">
+                    <td><img src="https://i.ytimg.com/vi/1506QNPxWX4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Boss Capone - Count Me Money (Why You Still Call Me Honey) aka Call Me Honey - OFFICIAL VIDEO</td>
+                </tr>
+                <tr class="record" id="uCEi3m4dc9E">
+                    <td><img src="https://i.ytimg.com/vi/uCEi3m4dc9E/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">NC Thirteens - Free For All</td>
+                </tr>
+                <tr class="record" id="bNjqZrpi53o">
+                    <td><img src="https://i.ytimg.com/vi/bNjqZrpi53o/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Delroy Wilson - Won't You Come Home</td>
+                </tr>
+                <tr class="record" id="ZF0ggdrWzoY">
+                    <td><img src="https://i.ytimg.com/vi/ZF0ggdrWzoY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Highlights of The Slackers in Cape Coral (5/15/15)</td>
+                </tr>
+                <tr class="record" id="LjhDiCP5DOY">
+                    <td><img src="https://i.ytimg.com/vi/LjhDiCP5DOY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Freecoasters at Dixie Roadhouse (3-14-2015)</td>
+                </tr>
+                <tr class="record" id="5rhXiYvciUE">
+                    <td><img src="https://i.ytimg.com/vi/5rhXiYvciUE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Skunkadelics - I Know</td>
+                </tr>
+                <tr class="record" id="ZRIfc8q5c3s">
+                    <td><img src="https://i.ytimg.com/vi/ZRIfc8q5c3s/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Popes Of Chillitown - Wisdom Teeth (Official Video)</td>
+                </tr>
+                <tr class="record" id="vuPm9hQ9W2E">
+                    <td><img src="https://i.ytimg.com/vi/vuPm9hQ9W2E/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Broke$ "I've Almost Had Enough"</td>
+                </tr>
+                <tr class="record" id="B_gQdB0OTHI">
+                    <td><img src="https://i.ytimg.com/vi/B_gQdB0OTHI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jay Tea at Ska Goes Solo in Punta Gorda, FL 12/26 (3/3)</td>
+                </tr>
+                <tr class="record" id="d93wNebdcFo">
+                    <td><img src="https://i.ytimg.com/vi/d93wNebdcFo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">I Want Justice</td>
+                </tr>
+                <tr class="record" id="I4Pd6z80Ebo">
+                    <td><img src="https://i.ytimg.com/vi/I4Pd6z80Ebo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Heptones - Black Is Black ( full album ) studio 1 records 1970</td>
+                </tr>
+                <tr class="record" id="qv4SC_sSeHk">
+                    <td><img src="https://i.ytimg.com/vi/qv4SC_sSeHk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Shootin' Goon - MTV</td>
+                </tr>
+                <tr class="record" id="J-VkxPrz970">
+                    <td><img src="https://i.ytimg.com/vi/J-VkxPrz970/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Banner Year by Five Iron Frenzy</td>
+                </tr>
+                <tr class="record" id="QZy_fAedyUA">
+                    <td><img src="https://i.ytimg.com/vi/QZy_fAedyUA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Brooks Was Here</td>
+                </tr>
+                <tr class="record" id="NeV58HJrTBE">
+                    <td><img src="https://i.ytimg.com/vi/NeV58HJrTBE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">THE CLARENDONIANS - MEY BIEN ( MY FRIEND ).wmv</td>
+                </tr>
+                <tr class="record" id="hcnITf-549Q">
+                    <td><img src="https://i.ytimg.com/vi/hcnITf-549Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ryan Eldred of Catch 22 at Ska Goes Solo in Punta Gorda, FL 12/26</td>
+                </tr>
+                <tr class="record" id="2dzxYRmAA0Q">
+                    <td><img src="https://i.ytimg.com/vi/2dzxYRmAA0Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Skunks - The Odd Couple</td>
+                </tr>
+                <tr class="record" id="FsKIwzaptH8">
+                    <td><img src="https://i.ytimg.com/vi/FsKIwzaptH8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Esta noche (letra) Panteon Rococo</td>
+                </tr>
+                <tr class="record" id="iKb7f2368e8">
+                    <td><img src="https://i.ytimg.com/vi/iKb7f2368e8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SkaDaddyZ - Let's Get Together</td>
+                </tr>
+                <tr class="record" id="srqGX6YnCzs">
+                    <td><img src="https://i.ytimg.com/vi/srqGX6YnCzs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Good Skamaritans - You'll See</td>
+                </tr>
+                <tr class="record" id="nLotcXVdW58">
+                    <td><img src="https://i.ytimg.com/vi/nLotcXVdW58/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">"Frigid" by The Kings: A-side on the 45 vinyl record</td>
+                </tr>
+                <tr class="record" id="PJKZj0MCOeA">
+                    <td><img src="https://i.ytimg.com/vi/PJKZj0MCOeA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lord Tanamo - Mattie Rag</td>
+                </tr>
+                <tr class="record" id="-d9v7gPSLEs">
+                    <td><img src="https://i.ytimg.com/vi/-d9v7gPSLEs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Dandy LivingStone - Think About That</td>
+                </tr>
+                <tr class="record" id="-dK2soZ05Ac">
+                    <td><img src="https://i.ytimg.com/vi/-dK2soZ05Ac/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Undercover SKA - Come on in Sin</td>
+                </tr>
+                <tr class="record" id="2QUTtRvU1Bo">
+                    <td><img src="https://i.ytimg.com/vi/2QUTtRvU1Bo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Let's Get Dangerous Teaser</td>
+                </tr>
+                <tr class="record" id="jDsJJENY6rE">
+                    <td><img src="https://i.ytimg.com/vi/jDsJJENY6rE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Duppies performing "What A Shame" in Cape Coral, FL (5/15/15)</td>
+                </tr>
+                <tr class="record" id="4TmlcSrI8p0">
+                    <td><img src="https://i.ytimg.com/vi/4TmlcSrI8p0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Scotch Bonnets - The Good One</td>
+                </tr>
+                <tr class="record" id="oRaM1MTX8v4">
+                    <td><img src="https://i.ytimg.com/vi/oRaM1MTX8v4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Kapelle Vorwärts! - El Pueblo Unido</td>
+                </tr>
+                <tr class="record" id="AIzZqCgbFDY">
+                    <td><img src="https://i.ytimg.com/vi/AIzZqCgbFDY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">English Beat - whine and grine/stand down margaret</td>
+                </tr>
+                <tr class="record" id="Ujj2vSWOYao">
+                    <td><img src="https://i.ytimg.com/vi/Ujj2vSWOYao/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">LaBrassBanda - "Intermailand"  - Reeperbahn - Festival - NDR</td>
+                </tr>
+                <tr class="record" id="87ohihxTJkk">
+                    <td><img src="https://i.ytimg.com/vi/87ohihxTJkk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Overweight - I want it you got it</td>
+                </tr>
+                <tr class="record" id="0sPA4g4hveA">
+                    <td><img src="https://i.ytimg.com/vi/0sPA4g4hveA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Easy In - Dance Rudy Dance</td>
+                </tr>
+                <tr class="record" id="7irfbDUpVjI">
+                    <td><img src="https://i.ytimg.com/vi/7irfbDUpVjI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sublime- Santeria</td>
+                </tr>
+                <tr class="record" id="f-SY3NFJIro">
+                    <td><img src="https://i.ytimg.com/vi/f-SY3NFJIro/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SKAspot Radio Station ID Montage and Promo</td>
+                </tr>
+                <tr class="record" id="5li9c2aSPc4">
+                    <td><img src="https://i.ytimg.com/vi/5li9c2aSPc4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jay Tea at Ska Goes Solo in Punta Gorda, FL 12/26 (1/3)</td>
+                </tr>
+                <tr class="record" id="l2uZV6GpA5o">
+                    <td><img src="https://i.ytimg.com/vi/l2uZV6GpA5o/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jay Tea at Ska Goes Solo in Punta Gorda, FL 12/26 (2/3)</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/ska/">Ska</a> archive:
     <a href="/genre/ska/2009/">2009</a>&nbsp;•&nbsp;    <a href="/genre/ska/2010/">2010</a>&nbsp;•&nbsp;    <a href="/genre/ska/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/ska/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/ska/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/ska/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/ska/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/ska/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/ska/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -1414,12 +464,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'ska';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

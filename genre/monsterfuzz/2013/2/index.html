@@ -46,1031 +46,320 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="6k9oPZ1adO0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/6k9oPZ1adO0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Felt - World (1971)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/17qytd">Felt - World (USA 1971)</a>
-<br>
-                        submitted <span class="muted">2013-02-02 10:30</span> by <a href="https://www.reddit.com/user/sfcharger">/u/sfcharger</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="xVBtRUVphx0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/xVBtRUVphx0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Cramps (demo 1976)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/18yfnp">The Cramps - I Was a Teenage Werewolf (USA demo 1976)</a>
-<br>
-                        submitted <span class="muted">2013-02-21 15:04</span> by <a href="https://www.reddit.com/user/artman">/u/artman</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="aHdDrbhI1hM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/aHdDrbhI1hM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Minh Xuân & Phượng Hoàng - Mặt Trời Đen (Black Sun)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/18lul3">Minh Xuân &amp; Phượng Hoàng - "Mặt Trời Đen (Black Sun)" [Vietnam - ~1968-1974]</a>
-<br>
-                        submitted <span class="muted">2013-02-15 22:47</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="woCG1jF-7wY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/woCG1jF-7wY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Amon Duul II - Archangel Thunderbird</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/18wpm2">Amon Duul II - "Archangels Thunderbird" [Germany - 1970]</a>
-<br>
-                        submitted <span class="muted">2013-02-20 20:57</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="d4Ag-LNWyFI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/d4Ag-LNWyFI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">cbc band - tinh yeu tuyet voi.wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/18d3ez">CBC Band-Tinh Yêu Tuyệt Vời (The Greatest Love)[Vietnam-196?/7?]</a>
-<br>
-                        submitted <span class="muted">2013-02-12 06:03</span> by <a href="https://www.reddit.com/user/mrpoopypantsmcdoodoo">/u/mrpoopypantsmcdoodoo</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="KcRAIXE2x84">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/KcRAIXE2x84/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Weed - Weed 1971 track 6</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/19f8it">Weed - "Weed" [Germany/UK - 1971]</a>
-<br>
-                        submitted <span class="muted">2013-02-28 22:13</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="NNccOtwaP2U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/NNccOtwaP2U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Elves - Buckingham Blues</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/17rczx">The Elves - Buckingham Blues [USA - 1971]</a>
-<br>
-                        submitted <span class="muted">2013-02-02 17:17</span> by <a href="https://www.reddit.com/user/Pappenheimer">/u/Pappenheimer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="vcohFXXM3PU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/vcohFXXM3PU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Macabre-  Be Forwarned</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/1865jb">Macabre - Be Forewarned [USA - 1972]</a>
-<br>
-                        submitted <span class="muted">2013-02-09 02:15</span> by <a href="https://www.reddit.com/user/maxwell_stupid">/u/maxwell_stupid</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="agrPViMqwvQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/agrPViMqwvQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Krokodil - Odyssey In Om</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/18rkzr">Krokodil - "Odyssey In Om" [Switzerland - 1971] (Starting after the nearly 6 minute song intro)</a>
-<br>
-                        submitted <span class="muted">2013-02-18 19:08</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="XEBLeu4hJfE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XEBLeu4hJfE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Primevil - Tell Me If You Can</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/18gbdm">Primevil - Tell me if You Can (US - 1974)</a>
-<br>
-                        submitted <span class="muted">2013-02-13 16:57</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="h1jli9L1gyI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/h1jli9L1gyI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Simply Saucer-Illegal Bodies</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/18u0wa">Simply Saucer-Illegal Bodies</a>
-<br>
-                        submitted <span class="muted">2013-02-19 19:13</span> by <a href="https://www.reddit.com/user/tiredhippo">/u/tiredhippo</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-1A74KJhQS0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-1A74KJhQS0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Giuliano Sorgini - Under Pompelmo</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/18m498">Giuliano Sorgini - "Under Pompelmo" [Italy - 1973] (Space/Krautrock/Psych/Jazz/Exotica/Soundtrack/Pop)</a>
-<br>
-                        submitted <span class="muted">2013-02-16 01:18</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="69Qr2HWy7j8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/69Qr2HWy7j8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ya Ho Wha 13 - Ho (1974)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/18z5xb">Ya Ho Wha 13 - "Ho" [US - 1974]</a>
-<br>
-                        submitted <span class="muted">2013-02-21 20:57</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="w_e4SifkxaY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/w_e4SifkxaY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">WATERLOO - why may i not know (Belg. 1971)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/17ouu3">Waterloo - Why May I Not Know (Belgium 1971)</a>
-<br>
-                        submitted <span class="muted">2013-02-01 11:54</span> by <a href="https://www.reddit.com/user/sfcharger">/u/sfcharger</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ZBbhjunbSos">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ZBbhjunbSos/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Hillow Hammet - Hammer (1969)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/18gbl5">Hillow Hammet - Hammer (US - 1969)</a>
-<br>
-                        submitted <span class="muted">2013-02-13 17:00</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Di9HLIiehsY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Di9HLIiehsY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Los Dug Dugs - No Somos Malos</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/18l6mw">Los Dug Dugs - No Somos Malos [Mexico - 1972]</a>
-<br>
-                        submitted <span class="muted">2013-02-15 17:08</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="W-x5b0JEnYM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/W-x5b0JEnYM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pink Fairies Walk Don't Run</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/18ns1n">Pink Fairies  - Walk Don't Run (UK, 1972). Cover of The Ventures</a>
-<br>
-                        submitted <span class="muted">2013-02-16 22:40</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7sSDrDQ0VEU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7sSDrDQ0VEU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Billy Thorpe & The Aztecs - Mama live on GTK</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/18ohas">Billy Thorpe &amp; The Aztecs - "Momma" [Australia - 1972] (live on GTK)</a>
-<br>
-                        submitted <span class="muted">2013-02-17 05:42</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="MG09ubu2MBo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/MG09ubu2MBo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Medusa First Step Beyond</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/19ehfg">Medusa - First Step Beyond [USA - 1975]</a>
-<br>
-                        submitted <span class="muted">2013-02-28 16:24</span> by <a href="https://www.reddit.com/user/juqjoint">/u/juqjoint</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8E-zN2-y2t4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8E-zN2-y2t4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Strawberry Window - Tobacco Road</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/17vgdm">Strawberry Window - Tobacco Road (USA-1967)</a>
-<br>
-                        submitted <span class="muted">2013-02-04 16:49</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="sPASgqT7oLE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/sPASgqT7oLE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mouse and the traps- lie beg borrow and steal</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/185nmk">Mouse and the Traps- "Lie, Beg, Borrow, and Steal" [US - 1968]</a>
-<br>
-                        submitted <span class="muted">2013-02-08 21:58</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="alVcN8TvxI4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/alVcN8TvxI4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pacific Sound: The drug just told me (Switzerland 1970)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/18c67j">Pacific Sound - "The Drug Just Told Me" [Switzerland 1970]</a>
-<br>
-                        submitted <span class="muted">2013-02-11 22:52</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="U4il05Pt5Nk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/U4il05Pt5Nk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Las Grecas - Te estoy amando locamente</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/18j7xa">Las Grecas - Te estoy amando locamente [Spain - 1974]</a>
-<br>
-                        submitted <span class="muted">2013-02-14 19:52</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ONganacNxfs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ONganacNxfs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Firebirds - Free Fuzz Gypsy Fire</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/18ukou">The Firebirds - "Free Fuzz Gypsy Fire" [USA - 1969] (AKA The 31 Flavors)</a>
-<br>
-                        submitted <span class="muted">2013-02-19 23:19</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="e8odGVx2sIs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/e8odGVx2sIs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Wind - 01 What Do We Do Now (Seasons)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/1945qb">Wind - "What Do We Do Now" [Germany - 1971]</a>
-<br>
-                        submitted <span class="muted">2013-02-24 03:37</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="OMuutyePOKA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/OMuutyePOKA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Undertakers - Unchain My Heart (Ray Charles Cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/181cyo">The Undertakers - "Unchain My Heart" [US - 1966]</a>
-<br>
-                        submitted <span class="muted">2013-02-07 01:44</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="K8eA2_7jZWQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/K8eA2_7jZWQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">A Euphonious Wail - F#</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/18ccfi">A Euphonious Wail - "F#" [US - 1973]</a>
-<br>
-                        submitted <span class="muted">2013-02-12 00:10</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="dwoG-JnEYSo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/dwoG-JnEYSo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Brush - Mother Natures Sun (1971)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/18gdoa">Brush!? - Mother Natures Sun (Japan - 1971)</a>
-<br>
-                        submitted <span class="muted">2013-02-13 17:29</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="IKweOoIF_eY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/IKweOoIF_eY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Soho Orange - Nightmare</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/18inuc">Soho Orange - Nightmare (Scotland - 1971)</a>
-<br>
-                        submitted <span class="muted">2013-02-14 15:36</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2GkIW4hvK0o">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2GkIW4hvK0o/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Skogen Brinner - Pundarvarning (OFFICIAL MUSIC VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/18r13r">Skogen Brinner - Pundarvarning</a>
-<br>
-                        submitted <span class="muted">2013-02-18 14:13</span> by <a href="https://www.reddit.com/user/rabbithole">/u/rabbithole</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="XMnnp2I1TuM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XMnnp2I1TuM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Frog - Witch Hunt</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/192ash">Frog - Witch Hunt [UK - 1973]</a>
-<br>
-                        submitted <span class="muted">2013-02-23 04:04</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="v63XEDrKHOI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/v63XEDrKHOI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Public Nuisnace - 5 Holy Man</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/193w2k">Public Nuisance-Holy Man[US-1966?]</a>
-<br>
-                        submitted <span class="muted">2013-02-24 00:50</span> by <a href="https://www.reddit.com/user/mrpoopypantsmcdoodoo">/u/mrpoopypantsmcdoodoo</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="pKFj7YC6qyU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/pKFj7YC6qyU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Highway Robbery - Mystery Rider</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/197177">Highway Robbery - Mystery Rider (US - 1972)</a>
-<br>
-                        submitted <span class="muted">2013-02-25 15:27</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="XtUMtp0zXMA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XtUMtp0zXMA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Slaves - Panic</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1811qh">The Slaves - "Panic" [Switzerland - 1966]</a>
-<br>
-                        submitted <span class="muted">2013-02-06 23:08</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="s99lNYpeLRk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/s99lNYpeLRk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">J.A. Caesar - Echigo Tsutsuishi Oyashirazu</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/182f64">J.A. Caesar - Echigo Tsutsuishi Oyashirazu [Japan - 1973]</a>
-<br>
-                        submitted <span class="muted">2013-02-07 15:08</span> by <a href="https://www.reddit.com/user/juqjoint">/u/juqjoint</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="wOkGRG0DYd8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/wOkGRG0DYd8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mainhorse - Such a Beautiful Day</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/184raz">Mainhorse - Such a Beautiful Day [Switzerland/England, UK - 1971]</a>
-<br>
-                        submitted <span class="muted">2013-02-08 14:28</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="yY66bd1XT2s">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/yY66bd1XT2s/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Fanatics - I Will Not Be Lonely.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/185w2s">The Fanatics - "I Will Not Be Lonely" [US - 1965]</a>
-<br>
-                        submitted <span class="muted">2013-02-08 23:55</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="aJLK9tCGMBI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/aJLK9tCGMBI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Claudio Gabis - Fiebre De La Ruta (1972)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/18gc0z">Claudio Gabis - Fiebre De La Ruta (Argentina - 1972)</a>
-<br>
-                        submitted <span class="muted">2013-02-13 17:06</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="lx_JtJu9T_g">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/lx_JtJu9T_g/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Blackfeather - Mango's Theme (GTK)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/18ojws">Blackfeather - "Mango's Theme" [Australia - 1971]  (Live on GTK)</a>
-<br>
-                        submitted <span class="muted">2013-02-17 06:40</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Yb7zg6bwpXQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Yb7zg6bwpXQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Master's Apprentices - Evil Woman (Live) - 1971 (HQ/HD)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/18olen">The Master's Apprentices - "Evil Woman" [Australia - 1971] (Live Spooky Tooth cover)</a>
-<br>
-                        submitted <span class="muted">2013-02-17 07:18</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="U-6Ph5yGslk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/U-6Ph5yGslk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Eruption - The Walls Of Hell (Switzerland, 197?)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/18s2cy">Eruption - "The Walls Of Hell" [Switzerland - 1971/'72]</a>
-<br>
-                        submitted <span class="muted">2013-02-18 22:46</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="qC2YhofAoRU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/qC2YhofAoRU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Tusk -  Child of my kingdom - Caroline 1970 Heavy rock</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/18u8qp">Tusk - "Child of my Kingdom" [Switzerland - 1970]</a>
-<br>
-                        submitted <span class="muted">2013-02-19 20:54</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="rxel45yYEu4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/rxel45yYEu4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cuby & The Blizzards - Appleknockers Flophouse</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/18ulho">Cuby &amp; The Blizzards - "Appleknockers Flophouse" [Netherlands - 1969]</a>
-<br>
-                        submitted <span class="muted">2013-02-19 23:30</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="aRH_xuz_fV8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/aRH_xuz_fV8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">You Better Know Witch Zambia</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/18wps7">Zambian fuzz Rock WITCH - You better Know</a>
-<br>
-                        submitted <span class="muted">2013-02-20 20:59</span> by <a href="https://www.reddit.com/user/NJFiend">/u/NJFiend</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="j1Dho9vUgW0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/j1Dho9vUgW0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Giant Crab - Hot Line Conversation</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/18x6q8">Giant Crab - "Hot Line Conversation" [US - 1968]</a>
-<br>
-                        submitted <span class="muted">2013-02-21 00:37</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jfvAVlFoRmg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jfvAVlFoRmg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">the bluestars - social end product - ( 1966 )</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/197vg4">The Bluestars - Social End Product [New Zealand - 1966]</a>
-<br>
-                        submitted <span class="muted">2013-02-25 22:22</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="mTt-mCBQcJI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/mTt-mCBQcJI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">DYNAMITES TOO LATE</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1813s2">Dynamites - "Too Late" [Switzerland - 1965]</a>
-<br>
-                        submitted <span class="muted">2013-02-06 23:35</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="nR5zGo45YFQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/nR5zGo45YFQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mainhorse Airline - Blunt Needles</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/185n08">Mainhorse Airline - "Blunt Needles" [Switzerland/UK - 1969]</a>
-<br>
-                        submitted <span class="muted">2013-02-08 21:50</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="n94cPld_8OM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/n94cPld_8OM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sundance - Chico Women</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/189pjn">Sundance-Chico Women[US-1971]</a>
-<br>
-                        submitted <span class="muted">2013-02-10 22:19</span> by <a href="https://www.reddit.com/user/mrpoopypantsmcdoodoo">/u/mrpoopypantsmcdoodoo</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="muTg7spHOeY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/muTg7spHOeY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Countdowns - VACATION - 1966</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/18c9tb">The Countdowns - "Vacation" [Switzerland - 1966]</a>
-<br>
-                        submitted <span class="muted">2013-02-11 23:37</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="y83X5AmZUM0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/y83X5AmZUM0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Helping Soul - Peace For Fools [1969] ソウルの追求</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/18gcp9">The Helpful Soul - Peace for Fools (Japan - 1969)</a>
-<br>
-                        submitted <span class="muted">2013-02-13 17:16</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="qs7dJdXZ7Uo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/qs7dJdXZ7Uo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Spot - Spot 1971 -  09.Oh That a Day</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/18rh13">Spot - "Oh What a Day" [Switzerland - 1971]</a>
-<br>
-                        submitted <span class="muted">2013-02-18 18:16</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="dy_lnmWZNBI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/dy_lnmWZNBI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Frantic - Scitnarf</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/18rrs2">Frantic - Scitnarf [USA - 1970]</a>
-<br>
-                        submitted <span class="muted">2013-02-18 20:34</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="tEq6Dd-200Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/tEq6Dd-200Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">T.I.M.E. -   Morning Come</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/17yvd1">T.I.M.E. - Morning Comes [USA - 1969]</a>
-<br>
-                        submitted <span class="muted">2013-02-06 00:47</span> by <a href="https://www.reddit.com/user/toonhole">/u/toonhole</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="OF8I8bm3Lck">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/OF8I8bm3Lck/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">09. CHARLES RYDERS CORPORATION - White flames (1968)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1815a0">Charles Ryders Corporation - "White Flames" [Austria - 1967]</a>
-<br>
-                        submitted <span class="muted">2013-02-06 23:56</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zioXNHwRc6A">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zioXNHwRc6A/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Joint - Remember (Switzerland 1970)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/185xyd">Joint - "Remember" [Switzerland - 1970]</a>
-<br>
-                        submitted <span class="muted">2013-02-09 00:21</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-xyTI0V4UlA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-xyTI0V4UlA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mind Doctors - Lost Horizon Of A Lesser God</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/18g9gz">Mind Doctors - Lost Horizon of a Lesser God
-(UK - 1976)</a>
-<br>
-                        submitted <span class="muted">2013-02-13 16:30</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="SM6EN5rY-BQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/SM6EN5rY-BQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Breakout - the finest Polish rock group - Poland 1969</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/18hb3g">Breakout-Poszlabym za toba(I would follow you)[Poland-1969]</a>
-<br>
-                        submitted <span class="muted">2013-02-14 00:26</span> by <a href="https://www.reddit.com/user/mrpoopypantsmcdoodoo">/u/mrpoopypantsmcdoodoo</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="dl8xt6xk6gw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/dl8xt6xk6gw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">ELIAS HULK - Nightmare</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/18mrpe">Elias Hulk - Nightmare</a>
-<br>
-                        submitted <span class="muted">2013-02-16 09:52</span> by <a href="https://www.reddit.com/user/niffk">/u/niffk</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="PBQ1wsjc8pE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/PBQ1wsjc8pE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Aquelarre - Canto desde el fondo de las ruinas</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/18nuu6">Aquelarre - Canto desde el fondo de las ruinas (Argentina 1972)</a>
-<br>
-                        submitted <span class="muted">2013-02-16 23:24</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="g0zYbR9qS3E">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/g0zYbR9qS3E/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Perfume Azul do Sol ~ Calça Velha</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/18osds">Perfume Azul do Sol - Calça Velha [Brazil - 1974]</a>
-<br>
-                        submitted <span class="muted">2013-02-17 11:28</span> by <a href="https://www.reddit.com/user/membersonlyguy">/u/membersonlyguy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="eg2D7jsKhVk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/eg2D7jsKhVk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">ERTLIF  Ertlif  08 Walpurgis</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/18uiea">Ertlif  - "Walpurgis" [Switzerland - 1972]</a>
-<br>
-                        submitted <span class="muted">2013-02-19 22:52</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="uxomnUaSb3M">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/uxomnUaSb3M/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Alamo - Question Raised</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/18wbf5">Alamo - Question Raised [USA - 1971]</a>
-<br>
-                        submitted <span class="muted">2013-02-20 17:55</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="sf6pLMpR3s8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/sf6pLMpR3s8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pinnacle - Astral Traveller (1974) UK Hard Rock Group</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/18wujx">Pinnacle - "Astral Traveller" [UK - 1974]</a>
-<br>
-                        submitted <span class="muted">2013-02-20 21:59</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5NAXg002Eyk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5NAXg002Eyk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Attack - Mr Pinnodmy's Dilemma</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/18x94n">The Attack - "Mr Pinnodmy's Dilemma" [UK - 1968]</a>
-<br>
-                        submitted <span class="muted">2013-02-21 01:09</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="wsJdTWvtdi8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/wsJdTWvtdi8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">ACHE - Expectation (1976)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1977lx">Ache -Expectation (Denmark - 1976)</a>
-<br>
-                        submitted <span class="muted">2013-02-25 17:07</span> by <a href="https://www.reddit.com/user/Driveler">/u/Driveler</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="PwUDbu4d_MU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/PwUDbu4d_MU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Eloy - Eloy - 07 - Dillus Roady</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/198a0r">Eloy - "Dillus Roady" [Germany - 1971]</a>
-<br>
-                        submitted <span class="muted">2013-02-26 01:29</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="JjFrvm9b_NQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/JjFrvm9b_NQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Country Lane - With a Sweet Whistle to my Ears</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/18bp2q">Country Lane - "With a Sweet Whistle to my Ears" [Switzerland - 1973]</a>
-<br>
-                        submitted <span class="muted">2013-02-11 19:17</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="dIVNWN2kaqE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/dIVNWN2kaqE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Writing On The Wall - Virginia Water (1969)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/18c91s">Writing On The Wall - "Virginia Water" [Scotland - 1969]</a>
-<br>
-                        submitted <span class="muted">2013-02-11 23:27</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="63CrzkMzAw8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/63CrzkMzAw8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jade Warrior - Minnamoto's Dream</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/18pmbs">Jade Warrior - Minnamoto's Dream (UK 1971)</a>
-<br>
-                        submitted <span class="muted">2013-02-17 21:43</span> by <a href="https://www.reddit.com/user/sfcharger">/u/sfcharger</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="uPfR107fEp8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/uPfR107fEp8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">MEDUSA  - Calling You - 04</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/18iqgv">Medusa - Medusa's Calling You (Germany - 1979)</a>
-<br>
-                        submitted <span class="muted">2013-02-14 16:13</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="6k9oPZ1adO0">
+                    <td><img src="https://i.ytimg.com/vi/6k9oPZ1adO0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Felt - World (1971)</td>
+                </tr>
+                <tr class="record" id="xVBtRUVphx0">
+                    <td><img src="https://i.ytimg.com/vi/xVBtRUVphx0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Cramps (demo 1976)</td>
+                </tr>
+                <tr class="record" id="aHdDrbhI1hM">
+                    <td><img src="https://i.ytimg.com/vi/aHdDrbhI1hM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Minh Xuân & Phượng Hoàng - Mặt Trời Đen (Black Sun)</td>
+                </tr>
+                <tr class="record" id="woCG1jF-7wY">
+                    <td><img src="https://i.ytimg.com/vi/woCG1jF-7wY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Amon Duul II - Archangel Thunderbird</td>
+                </tr>
+                <tr class="record" id="d4Ag-LNWyFI">
+                    <td><img src="https://i.ytimg.com/vi/d4Ag-LNWyFI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">cbc band - tinh yeu tuyet voi.wmv</td>
+                </tr>
+                <tr class="record" id="KcRAIXE2x84">
+                    <td><img src="https://i.ytimg.com/vi/KcRAIXE2x84/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Weed - Weed 1971 track 6</td>
+                </tr>
+                <tr class="record" id="NNccOtwaP2U">
+                    <td><img src="https://i.ytimg.com/vi/NNccOtwaP2U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Elves - Buckingham Blues</td>
+                </tr>
+                <tr class="record" id="vcohFXXM3PU">
+                    <td><img src="https://i.ytimg.com/vi/vcohFXXM3PU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Macabre-  Be Forwarned</td>
+                </tr>
+                <tr class="record" id="agrPViMqwvQ">
+                    <td><img src="https://i.ytimg.com/vi/agrPViMqwvQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Krokodil - Odyssey In Om</td>
+                </tr>
+                <tr class="record" id="XEBLeu4hJfE">
+                    <td><img src="https://i.ytimg.com/vi/XEBLeu4hJfE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Primevil - Tell Me If You Can</td>
+                </tr>
+                <tr class="record" id="h1jli9L1gyI">
+                    <td><img src="https://i.ytimg.com/vi/h1jli9L1gyI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Simply Saucer-Illegal Bodies</td>
+                </tr>
+                <tr class="record" id="-1A74KJhQS0">
+                    <td><img src="https://i.ytimg.com/vi/-1A74KJhQS0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Giuliano Sorgini - Under Pompelmo</td>
+                </tr>
+                <tr class="record" id="69Qr2HWy7j8">
+                    <td><img src="https://i.ytimg.com/vi/69Qr2HWy7j8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ya Ho Wha 13 - Ho (1974)</td>
+                </tr>
+                <tr class="record" id="w_e4SifkxaY">
+                    <td><img src="https://i.ytimg.com/vi/w_e4SifkxaY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">WATERLOO - why may i not know (Belg. 1971)</td>
+                </tr>
+                <tr class="record" id="ZBbhjunbSos">
+                    <td><img src="https://i.ytimg.com/vi/ZBbhjunbSos/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Hillow Hammet - Hammer (1969)</td>
+                </tr>
+                <tr class="record" id="Di9HLIiehsY">
+                    <td><img src="https://i.ytimg.com/vi/Di9HLIiehsY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Los Dug Dugs - No Somos Malos</td>
+                </tr>
+                <tr class="record" id="W-x5b0JEnYM">
+                    <td><img src="https://i.ytimg.com/vi/W-x5b0JEnYM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pink Fairies Walk Don't Run</td>
+                </tr>
+                <tr class="record" id="7sSDrDQ0VEU">
+                    <td><img src="https://i.ytimg.com/vi/7sSDrDQ0VEU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Billy Thorpe & The Aztecs - Mama live on GTK</td>
+                </tr>
+                <tr class="record" id="MG09ubu2MBo">
+                    <td><img src="https://i.ytimg.com/vi/MG09ubu2MBo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Medusa First Step Beyond</td>
+                </tr>
+                <tr class="record" id="8E-zN2-y2t4">
+                    <td><img src="https://i.ytimg.com/vi/8E-zN2-y2t4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Strawberry Window - Tobacco Road</td>
+                </tr>
+                <tr class="record" id="sPASgqT7oLE">
+                    <td><img src="https://i.ytimg.com/vi/sPASgqT7oLE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mouse and the traps- lie beg borrow and steal</td>
+                </tr>
+                <tr class="record" id="alVcN8TvxI4">
+                    <td><img src="https://i.ytimg.com/vi/alVcN8TvxI4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pacific Sound: The drug just told me (Switzerland 1970)</td>
+                </tr>
+                <tr class="record" id="U4il05Pt5Nk">
+                    <td><img src="https://i.ytimg.com/vi/U4il05Pt5Nk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Las Grecas - Te estoy amando locamente</td>
+                </tr>
+                <tr class="record" id="ONganacNxfs">
+                    <td><img src="https://i.ytimg.com/vi/ONganacNxfs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Firebirds - Free Fuzz Gypsy Fire</td>
+                </tr>
+                <tr class="record" id="e8odGVx2sIs">
+                    <td><img src="https://i.ytimg.com/vi/e8odGVx2sIs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Wind - 01 What Do We Do Now (Seasons)</td>
+                </tr>
+                <tr class="record" id="OMuutyePOKA">
+                    <td><img src="https://i.ytimg.com/vi/OMuutyePOKA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Undertakers - Unchain My Heart (Ray Charles Cover)</td>
+                </tr>
+                <tr class="record" id="K8eA2_7jZWQ">
+                    <td><img src="https://i.ytimg.com/vi/K8eA2_7jZWQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">A Euphonious Wail - F#</td>
+                </tr>
+                <tr class="record" id="dwoG-JnEYSo">
+                    <td><img src="https://i.ytimg.com/vi/dwoG-JnEYSo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Brush - Mother Natures Sun (1971)</td>
+                </tr>
+                <tr class="record" id="IKweOoIF_eY">
+                    <td><img src="https://i.ytimg.com/vi/IKweOoIF_eY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Soho Orange - Nightmare</td>
+                </tr>
+                <tr class="record" id="2GkIW4hvK0o">
+                    <td><img src="https://i.ytimg.com/vi/2GkIW4hvK0o/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Skogen Brinner - Pundarvarning (OFFICIAL MUSIC VIDEO)</td>
+                </tr>
+                <tr class="record" id="XMnnp2I1TuM">
+                    <td><img src="https://i.ytimg.com/vi/XMnnp2I1TuM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Frog - Witch Hunt</td>
+                </tr>
+                <tr class="record" id="v63XEDrKHOI">
+                    <td><img src="https://i.ytimg.com/vi/v63XEDrKHOI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Public Nuisnace - 5 Holy Man</td>
+                </tr>
+                <tr class="record" id="pKFj7YC6qyU">
+                    <td><img src="https://i.ytimg.com/vi/pKFj7YC6qyU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Highway Robbery - Mystery Rider</td>
+                </tr>
+                <tr class="record" id="XtUMtp0zXMA">
+                    <td><img src="https://i.ytimg.com/vi/XtUMtp0zXMA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Slaves - Panic</td>
+                </tr>
+                <tr class="record" id="s99lNYpeLRk">
+                    <td><img src="https://i.ytimg.com/vi/s99lNYpeLRk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">J.A. Caesar - Echigo Tsutsuishi Oyashirazu</td>
+                </tr>
+                <tr class="record" id="wOkGRG0DYd8">
+                    <td><img src="https://i.ytimg.com/vi/wOkGRG0DYd8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mainhorse - Such a Beautiful Day</td>
+                </tr>
+                <tr class="record" id="yY66bd1XT2s">
+                    <td><img src="https://i.ytimg.com/vi/yY66bd1XT2s/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Fanatics - I Will Not Be Lonely.</td>
+                </tr>
+                <tr class="record" id="aJLK9tCGMBI">
+                    <td><img src="https://i.ytimg.com/vi/aJLK9tCGMBI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Claudio Gabis - Fiebre De La Ruta (1972)</td>
+                </tr>
+                <tr class="record" id="lx_JtJu9T_g">
+                    <td><img src="https://i.ytimg.com/vi/lx_JtJu9T_g/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Blackfeather - Mango's Theme (GTK)</td>
+                </tr>
+                <tr class="record" id="Yb7zg6bwpXQ">
+                    <td><img src="https://i.ytimg.com/vi/Yb7zg6bwpXQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Master's Apprentices - Evil Woman (Live) - 1971 (HQ/HD)</td>
+                </tr>
+                <tr class="record" id="U-6Ph5yGslk">
+                    <td><img src="https://i.ytimg.com/vi/U-6Ph5yGslk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Eruption - The Walls Of Hell (Switzerland, 197?)</td>
+                </tr>
+                <tr class="record" id="qC2YhofAoRU">
+                    <td><img src="https://i.ytimg.com/vi/qC2YhofAoRU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Tusk -  Child of my kingdom - Caroline 1970 Heavy rock</td>
+                </tr>
+                <tr class="record" id="rxel45yYEu4">
+                    <td><img src="https://i.ytimg.com/vi/rxel45yYEu4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cuby & The Blizzards - Appleknockers Flophouse</td>
+                </tr>
+                <tr class="record" id="aRH_xuz_fV8">
+                    <td><img src="https://i.ytimg.com/vi/aRH_xuz_fV8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">You Better Know Witch Zambia</td>
+                </tr>
+                <tr class="record" id="j1Dho9vUgW0">
+                    <td><img src="https://i.ytimg.com/vi/j1Dho9vUgW0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Giant Crab - Hot Line Conversation</td>
+                </tr>
+                <tr class="record" id="jfvAVlFoRmg">
+                    <td><img src="https://i.ytimg.com/vi/jfvAVlFoRmg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">the bluestars - social end product - ( 1966 )</td>
+                </tr>
+                <tr class="record" id="mTt-mCBQcJI">
+                    <td><img src="https://i.ytimg.com/vi/mTt-mCBQcJI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">DYNAMITES TOO LATE</td>
+                </tr>
+                <tr class="record" id="nR5zGo45YFQ">
+                    <td><img src="https://i.ytimg.com/vi/nR5zGo45YFQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mainhorse Airline - Blunt Needles</td>
+                </tr>
+                <tr class="record" id="n94cPld_8OM">
+                    <td><img src="https://i.ytimg.com/vi/n94cPld_8OM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sundance - Chico Women</td>
+                </tr>
+                <tr class="record" id="muTg7spHOeY">
+                    <td><img src="https://i.ytimg.com/vi/muTg7spHOeY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Countdowns - VACATION - 1966</td>
+                </tr>
+                <tr class="record" id="y83X5AmZUM0">
+                    <td><img src="https://i.ytimg.com/vi/y83X5AmZUM0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Helping Soul - Peace For Fools [1969] ソウルの追求</td>
+                </tr>
+                <tr class="record" id="qs7dJdXZ7Uo">
+                    <td><img src="https://i.ytimg.com/vi/qs7dJdXZ7Uo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Spot - Spot 1971 -  09.Oh That a Day</td>
+                </tr>
+                <tr class="record" id="dy_lnmWZNBI">
+                    <td><img src="https://i.ytimg.com/vi/dy_lnmWZNBI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Frantic - Scitnarf</td>
+                </tr>
+                <tr class="record" id="tEq6Dd-200Q">
+                    <td><img src="https://i.ytimg.com/vi/tEq6Dd-200Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">T.I.M.E. -   Morning Come</td>
+                </tr>
+                <tr class="record" id="OF8I8bm3Lck">
+                    <td><img src="https://i.ytimg.com/vi/OF8I8bm3Lck/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">09. CHARLES RYDERS CORPORATION - White flames (1968)</td>
+                </tr>
+                <tr class="record" id="zioXNHwRc6A">
+                    <td><img src="https://i.ytimg.com/vi/zioXNHwRc6A/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Joint - Remember (Switzerland 1970)</td>
+                </tr>
+                <tr class="record" id="-xyTI0V4UlA">
+                    <td><img src="https://i.ytimg.com/vi/-xyTI0V4UlA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mind Doctors - Lost Horizon Of A Lesser God</td>
+                </tr>
+                <tr class="record" id="SM6EN5rY-BQ">
+                    <td><img src="https://i.ytimg.com/vi/SM6EN5rY-BQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Breakout - the finest Polish rock group - Poland 1969</td>
+                </tr>
+                <tr class="record" id="dl8xt6xk6gw">
+                    <td><img src="https://i.ytimg.com/vi/dl8xt6xk6gw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">ELIAS HULK - Nightmare</td>
+                </tr>
+                <tr class="record" id="PBQ1wsjc8pE">
+                    <td><img src="https://i.ytimg.com/vi/PBQ1wsjc8pE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Aquelarre - Canto desde el fondo de las ruinas</td>
+                </tr>
+                <tr class="record" id="g0zYbR9qS3E">
+                    <td><img src="https://i.ytimg.com/vi/g0zYbR9qS3E/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Perfume Azul do Sol ~ Calça Velha</td>
+                </tr>
+                <tr class="record" id="eg2D7jsKhVk">
+                    <td><img src="https://i.ytimg.com/vi/eg2D7jsKhVk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">ERTLIF  Ertlif  08 Walpurgis</td>
+                </tr>
+                <tr class="record" id="uxomnUaSb3M">
+                    <td><img src="https://i.ytimg.com/vi/uxomnUaSb3M/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Alamo - Question Raised</td>
+                </tr>
+                <tr class="record" id="sf6pLMpR3s8">
+                    <td><img src="https://i.ytimg.com/vi/sf6pLMpR3s8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pinnacle - Astral Traveller (1974) UK Hard Rock Group</td>
+                </tr>
+                <tr class="record" id="5NAXg002Eyk">
+                    <td><img src="https://i.ytimg.com/vi/5NAXg002Eyk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Attack - Mr Pinnodmy's Dilemma</td>
+                </tr>
+                <tr class="record" id="wsJdTWvtdi8">
+                    <td><img src="https://i.ytimg.com/vi/wsJdTWvtdi8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">ACHE - Expectation (1976)</td>
+                </tr>
+                <tr class="record" id="PwUDbu4d_MU">
+                    <td><img src="https://i.ytimg.com/vi/PwUDbu4d_MU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Eloy - Eloy - 07 - Dillus Roady</td>
+                </tr>
+                <tr class="record" id="JjFrvm9b_NQ">
+                    <td><img src="https://i.ytimg.com/vi/JjFrvm9b_NQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Country Lane - With a Sweet Whistle to my Ears</td>
+                </tr>
+                <tr class="record" id="dIVNWN2kaqE">
+                    <td><img src="https://i.ytimg.com/vi/dIVNWN2kaqE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Writing On The Wall - Virginia Water (1969)</td>
+                </tr>
+                <tr class="record" id="63CrzkMzAw8">
+                    <td><img src="https://i.ytimg.com/vi/63CrzkMzAw8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jade Warrior - Minnamoto's Dream</td>
+                </tr>
+                <tr class="record" id="uPfR107fEp8">
+                    <td><img src="https://i.ytimg.com/vi/uPfR107fEp8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">MEDUSA  - Calling You - 04</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/monsterfuzz/">Monster Fuzz</a> archive:
     <a href="/genre/monsterfuzz/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/monsterfuzz/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/monsterfuzz/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/monsterfuzz/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/monsterfuzz/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/monsterfuzz/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -1079,12 +368,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'monsterfuzz';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

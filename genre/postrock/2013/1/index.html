@@ -46,1438 +46,436 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="hxx4fdpiYu4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/hxx4fdpiYu4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Explosions in the Sky - Your Hand In Mine - piano cover</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">153</span> - <a href="https://www.reddit.com/16ujol">It's finally done! Explosions in the Sky - Your Hand In Mine - piano cover</a>
-<br>
-                        submitted <span class="muted">2013-01-19 00:03</span> by <a href="https://www.reddit.com/user/rmadlal">/u/rmadlal</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="1g-MzVmaWZE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/1g-MzVmaWZE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Explosions in the Sky - The Only Moment We Were Alone - piano cover</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">128</span> - <a href="https://www.reddit.com/16gidm">I do covers of post-rock pieces on my keyboard, learned by ear. This is The Only Moment We Were Alone by EITS. Thanks for watching :)</a>
-<br>
-                        submitted <span class="muted">2013-01-12 22:26</span> by <a href="https://www.reddit.com/user/rmadlal">/u/rmadlal</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="0BSHAXpNey0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/0BSHAXpNey0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">This Will Destroy You - A Three Legged Workhorse</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">124</span> - <a href="https://www.reddit.com/16ec75">This Will Destroy You - A Three-Legged Workhorse</a>
-<br>
-                        submitted <span class="muted">2013-01-11 20:34</span> by <a href="https://www.reddit.com/user/rmadlal">/u/rmadlal</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="PZwQeZh6rP0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/PZwQeZh6rP0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Godspeed You! Black Emperor - Lift Your Skinny Fists Like Antennas to Heaven [FULL ALBUM]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">111</span> - <a href="https://www.reddit.com/16zv12">Godspeed You! Black Emperor - Lift Your Skinny Fists Like Antennas To Heaven (Bought myself an LP today)</a>
-<br>
-                        submitted <span class="muted">2013-01-21 16:57</span> by <a href="https://www.reddit.com/user/Cokenut">/u/Cokenut</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="73OD3SvhwdI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/73OD3SvhwdI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Russian Circles - Melee</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">87</span> - <a href="https://www.reddit.com/17iifq">I'm seeing these guys open for Coheed in March, but they seem like they'd be appreciated here. They've got a really cool metal groove - Russian Circles -- Melee [7:40]</a>
-<br>
-                        submitted <span class="muted">2013-01-29 20:03</span> by <a href="https://www.reddit.com/user/Oceat">/u/Oceat</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="9CDU6q_dG0s">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/9CDU6q_dG0s/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The New Kid</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">74</span> - <a href="https://www.reddit.com/16o7w8">The Cabbage Patch Kids present "C♯ A♯ ∞ ∞ A# G# E."</a>
-<br>
-                        submitted <span class="muted">2013-01-16 06:39</span> by <a href="https://www.reddit.com/user/danieldangerously">/u/danieldangerously</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="98iDL-lPtQo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/98iDL-lPtQo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">#sr7 2013</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">72</span> - <a href="https://www.reddit.com/177fjd">Sigur Ros preview for what's to come</a>
-<br>
-                        submitted <span class="muted">2013-01-24 19:29</span> by <a href="https://www.reddit.com/user/blinder">/u/blinder</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="RWACU1UNqvY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/RWACU1UNqvY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Trembling Hands - Explosions in the Sky (cover) feat. mom</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">63</span> - <a href="https://www.reddit.com/167hut">Explosions in the Sky - Trembling Hands (cover) feat. mom - YouTube</a>
-<br>
-                        submitted <span class="muted">2013-01-08 22:02</span> by <a href="https://www.reddit.com/user/squiresuzuki">/u/squiresuzuki</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="h6yokbJ23KY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/h6yokbJ23KY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Moving Mountains - Aphelion</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">53</span> - <a href="https://www.reddit.com/16vyji">Moving Mountains - Aphelion</a>
-<br>
-                        submitted <span class="muted">2013-01-19 18:59</span> by <a href="https://www.reddit.com/user/jaguarpaws7">/u/jaguarpaws7</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="FDhGXB-RE-w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/FDhGXB-RE-w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cloudkicker - Viceroy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">44</span> - <a href="https://www.reddit.com/15scb7">Cloudkicker-Viceroy</a>
-<br>
-                        submitted <span class="muted">2013-01-01 21:10</span> by <a href="https://www.reddit.com/user/eltostito191">/u/eltostito191</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="UiBTIqzT0JE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/UiBTIqzT0JE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Kasper Rosa | Double A-Side Teaser #1</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">44</span> - <a href="https://www.reddit.com/15xc8a">hey r/postrock, next month we might have some new music for you. Love Kasper Rosa.</a>
-<br>
-                        submitted <span class="muted">2013-01-04 02:18</span> by <a href="https://www.reddit.com/user/kasperrosa">/u/kasperrosa</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="xdhdutGV8BU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/xdhdutGV8BU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ólafur Arnalds - Tomorrow's Song (Live on KEXP)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">42</span> - <a href="https://www.reddit.com/16cueu">Ólafur Arnalds - Tomorrow's Song (LIVE)</a>
-<br>
-                        submitted <span class="muted">2013-01-11 03:04</span> by <a href="https://www.reddit.com/user/FearlessGuster">/u/FearlessGuster</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Yvtnow0I_N0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Yvtnow0I_N0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Deftones U U D D L R L R A B Select Start</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">41</span> - <a href="https://www.reddit.com/179nnt">Deftones - U U D D L R L R A B Select Start</a>
-<br>
-                        submitted <span class="muted">2013-01-25 18:29</span> by <a href="https://www.reddit.com/user/burning7planet">/u/burning7planet</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="3Te5LN8YtyU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/3Te5LN8YtyU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Maserati  - The World Outside</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">37</span> - <a href="https://www.reddit.com/16xb4p">Maserati - The World Outside</a>
-<br>
-                        submitted <span class="muted">2013-01-20 10:36</span> by <a href="https://www.reddit.com/user/charismo">/u/charismo</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="lt0Ji14Zkyk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/lt0Ji14Zkyk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Hammock - Sinking Inside Yourself</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">36</span> - <a href="https://www.reddit.com/16y3jy">Hammock - Sinking Inside Yourself</a>
-<br>
-                        submitted <span class="muted">2013-01-20 20:48</span> by <a href="https://www.reddit.com/user/jaguarpaws7">/u/jaguarpaws7</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="xqR12BvJYlk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/xqR12BvJYlk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">11. Toe - Good Bye // New Sentimentality</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">35</span> - <a href="https://www.reddit.com/17nff3">Toe - Good Bye // New Sentimentality [live]</a>
-<br>
-                        submitted <span class="muted">2013-01-31 20:47</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="B2sAkRnwbAw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/B2sAkRnwbAw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mogwai ~ Relative Hysteria</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">34</span> - <a href="https://www.reddit.com/17i6u4">Mogwai - Relative Hysteria</a>
-<br>
-                        submitted <span class="muted">2013-01-29 17:27</span> by <a href="https://www.reddit.com/user/TheGreatWildFrontier">/u/TheGreatWildFrontier</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="g9H3fEtifg8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/g9H3fEtifg8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cloudkicker - LA After Rain</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">31</span> - <a href="https://www.reddit.com/168rr4">LA After Rain - Cloudkicker (from the album 'Fade' (2012) - [6:31]</a>
-<br>
-                        submitted <span class="muted">2013-01-09 10:56</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="wXCzMmZoxhE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/wXCzMmZoxhE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">"Live At Roadrunner Studios" This Patch Of Sky</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">31</span> - <a href="https://www.reddit.com/17crsz">I play guitar in this patch of sky. here's a live recording we just did at roadrunner studios.</a>
-<br>
-                        submitted <span class="muted">2013-01-27 04:44</span> by <a href="https://www.reddit.com/user/tronburgundy">/u/tronburgundy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5gmxBRkQd70">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5gmxBRkQd70/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Godspeed You! Black Emperor - East Hastings (GREAT QUALITY, Live @ Troxy, London, 14-12-2010)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">30</span> - <a href="https://www.reddit.com/15t5bz">GY!BE-East Hastings Live</a>
-<br>
-                        submitted <span class="muted">2013-01-02 04:54</span> by <a href="https://www.reddit.com/user/Kamakazee_Smurf">/u/Kamakazee_Smurf</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="PvDhgPQZdbM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/PvDhgPQZdbM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">El Ten Eleven  - Tiger Tiger</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">30</span> - <a href="https://www.reddit.com/166dz4">El Ten Eleven - Tiger Tiger (from 'Transitions' album) - [3:30]</a>
-<br>
-                        submitted <span class="muted">2013-01-08 10:16</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bqepqIST9nU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bqepqIST9nU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Earth - Father Midnight</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">30</span> - <a href="https://www.reddit.com/1701z4">Earth - Father Midnight</a>
-<br>
-                        submitted <span class="muted">2013-01-21 18:26</span> by <a href="https://www.reddit.com/user/thebrassthief">/u/thebrassthief</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="l2lq3q48A2s">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/l2lq3q48A2s/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Aiua - Clockmaker</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/17kpsy">We're Aiua. Here's a video with some new material of ours.
-Enjoy!</a>
-<br>
-                        submitted <span class="muted">2013-01-30 18:42</span> by <a href="https://www.reddit.com/user/Aiua">/u/Aiua</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="x_-bDI5VBCE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/x_-bDI5VBCE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Crippled Black Phoenix - Faced With Complete Failure, Utter Defiance Is the Only Response</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/17lnek">Crippled Black Phoenix - Faced With Complete Failure, Utter Defiance Is the Only Response</a>
-<br>
-                        submitted <span class="muted">2013-01-31 01:46</span> by <a href="https://www.reddit.com/user/Fat_Crossing_Guard">/u/Fat_Crossing_Guard</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="JRwijpJqLUw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/JRwijpJqLUw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Hammock - Cold Front</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/166bnz">Hammock - Cold Front (Many of you may have seen this, but I can't stop watching it!)</a>
-<br>
-                        submitted <span class="muted">2013-01-08 08:57</span> by <a href="https://www.reddit.com/user/immacomputer9">/u/immacomputer9</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="KKZQL0xCqzk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/KKZQL0xCqzk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Flashbulb - We Are Alone In A City - Love As A Dark Hallway - 2011 [13/13]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/16hp7f">I had no idea The Flashbulb made post rock... My god. The Flashbulb - We Are Alone In A City</a>
-<br>
-                        submitted <span class="muted">2013-01-13 14:13</span> by <a href="https://www.reddit.com/user/Seryth">/u/Seryth</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Xj1xDH_xKBE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Xj1xDH_xKBE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Gifts From Enola - Long Weakend</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/17aqs2">Gifts From Enola - Long Weakend - YouTube</a>
-<br>
-                        submitted <span class="muted">2013-01-26 03:41</span> by <a href="https://www.reddit.com/user/mattrva">/u/mattrva</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="KYBulfbBstc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/KYBulfbBstc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">World's End Girlfriend - 100 Years of Choke [HQ]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/16yds8">World's End Girlfriend - 100 Years of Choke - [13:22]</a>
-<br>
-                        submitted <span class="muted">2013-01-20 23:19</span> by <a href="https://www.reddit.com/user/thisdream">/u/thisdream</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_lAfMT5FIZE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_lAfMT5FIZE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Clint Mansell - Moon OST #1 - Welcome to Lunar Industries</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/17j77m">"Welcome to Lunar Industries" - Clint Mansell (from the original soundtrack of "Moon")</a>
-<br>
-                        submitted <span class="muted">2013-01-30 01:34</span> by <a href="https://www.reddit.com/user/keyree">/u/keyree</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ntfyeC178Tg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ntfyeC178Tg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Evan Chapman - "Your Hand In Mine" by Explosions In The Sky (Percussion Cover) *HD*</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/17ng7y">Evan Chapman - Explosions in the Sky Your Hand in Mine percussion cover</a>
-<br>
-                        submitted <span class="muted">2013-01-31 20:57</span> by <a href="https://www.reddit.com/user/zooms">/u/zooms</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_1WPYvkj73Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_1WPYvkj73Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">[HQ] toe - past and language</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/15ujpy">toe - past and language</a>
-<br>
-                        submitted <span class="muted">2013-01-02 21:46</span> by <a href="https://www.reddit.com/user/jaguarpaws7">/u/jaguarpaws7</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-cPbYv0zpbs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-cPbYv0zpbs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">A Silver Mt. Zion - This Gentle Hearts Like Shot Bird's Fallen</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/16l67j">A Silver Mount Zion - This Gentle Hearts Like Shot Bird's Fallen</a>
-<br>
-                        submitted <span class="muted">2013-01-15 01:13</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="6ve4Z_FH8OA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/6ve4Z_FH8OA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Kuato - Schindler's Lisp</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/17l9uv">Kuato - Schindler's Lisp (The crescendo always, ALWAYS gives me chills.)</a>
-<br>
-                        submitted <span class="muted">2013-01-30 22:52</span> by <a href="https://www.reddit.com/user/jaguarpaws7">/u/jaguarpaws7</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="m6Dzd_QwSFU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/m6Dzd_QwSFU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Surgeon - Fjords ("Fjords" LP)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/15rck9">Surgeon, a post-rock band from Newfoundland, released their first full length album Fjords this week.  Recorded in one session, live from the floor!</a>
-<br>
-                        submitted <span class="muted">2013-01-01 04:48</span> by <a href="https://www.reddit.com/user/asthecryflows">/u/asthecryflows</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Zs7SouXYsV4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Zs7SouXYsV4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jaga Jazzist - Swedenborgske Rom</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/16zhn4">Jaga Jazzist : Swedenborgske Rom (One of the most beautiful and enormous builds I have ever heard)</a>
-<br>
-                        submitted <span class="muted">2013-01-21 12:26</span> by <a href="https://www.reddit.com/user/_LEWIS_IS_ALL">/u/_LEWIS_IS_ALL</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="U_i2UmRY5pA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/U_i2UmRY5pA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Gregor Samsa - The Adolescent</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/17cfom">Gregor Samsa - The Adolescent - [5:33]</a>
-<br>
-                        submitted <span class="muted">2013-01-27 01:15</span> by <a href="https://www.reddit.com/user/thisdream">/u/thisdream</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="s8EvUSJoG7U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/s8EvUSJoG7U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Thursday - In Silence</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/17l5se">Thursday - In Silence....might get some flack from this</a>
-<br>
-                        submitted <span class="muted">2013-01-30 22:02</span> by <a href="https://www.reddit.com/user/daharp">/u/daharp</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="KMQrTmcHXfY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/KMQrTmcHXfY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The End of the Ocean - We Always Think There is Going to be More Time [Live in Seattle 7-10-12]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/15y4xp">The End of the Ocean - We Always Think There is Going to be More Time [Live]</a>
-<br>
-                        submitted <span class="muted">2013-01-04 12:40</span> by <a href="https://www.reddit.com/user/kriptoner">/u/kriptoner</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="nJFEWBS1JVE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/nJFEWBS1JVE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lowercase Noises - Passage</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/16jhir">Lowercase Noises - Passage</a>
-<br>
-                        submitted <span class="muted">2013-01-14 07:31</span> by <a href="https://www.reddit.com/user/Parkwaydrive">/u/Parkwaydrive</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="X6EnUsKD5ww">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/X6EnUsKD5ww/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Obrigado (Portugal 2012)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/15vtc4">Kasper Rosa - Portugal Tour Documentary</a>
-<br>
-                        submitted <span class="muted">2013-01-03 11:00</span> by <a href="https://www.reddit.com/user/DangerQ">/u/DangerQ</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zob5O3nyqYI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zob5O3nyqYI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Spectrum Of The Sky :: Break Of Reality</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/1688vl">Break Of Reality - Spectrum Of The Sky</a>
-<br>
-                        submitted <span class="muted">2013-01-09 04:01</span> by <a href="https://www.reddit.com/user/jaguarpaws7">/u/jaguarpaws7</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="9ZCikzCV5xM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/9ZCikzCV5xM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The End Of The Ocean - One Last Goodnight</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/173y6w">The End of the Ocean - "One Last Goodnight"</a>
-<br>
-                        submitted <span class="muted">2013-01-23 06:15</span> by <a href="https://www.reddit.com/user/keyree">/u/keyree</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2HKZFfHEFfQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2HKZFfHEFfQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">NOMADS - Cleaveland on The Square - Official Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/15vjje">NOMADS - Cleaveland on The Square (Official Music Video)</a>
-<br>
-                        submitted <span class="muted">2013-01-03 06:36</span> by <a href="https://www.reddit.com/user/ABK1176">/u/ABK1176</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ea2Foy9488c">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ea2Foy9488c/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">French Open 2 - Tutorial</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/15ycao">Can anyone identify what song is this?</a>
-<br>
-                        submitted <span class="muted">2013-01-04 15:35</span> by <a href="https://www.reddit.com/user/BBoyFreakz">/u/BBoyFreakz</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="FaM7T0ECbj8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/FaM7T0ECbj8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">pg.lost - Vultures</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/166gqy">pg.lost - Vultures</a>
-<br>
-                        submitted <span class="muted">2013-01-08 11:50</span> by <a href="https://www.reddit.com/user/IHarknessI">/u/IHarknessI</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="44GYF3ChG3A">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/44GYF3ChG3A/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Black Heart Rebellion</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/16136p">Must hear: The Black Heart Rebellion - Cuts will prove me right</a>
-<br>
-                        submitted <span class="muted">2013-01-05 23:02</span> by <a href="https://www.reddit.com/user/Lord_Fapsturbate">/u/Lord_Fapsturbate</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="UUxQDlat9t8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/UUxQDlat9t8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">For A Minor Reflection - Impulse (Live on KEXP)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/16xfvp">For A Minor Reflection - Impulse (Live on KEXP)</a>
-<br>
-                        submitted <span class="muted">2013-01-20 13:44</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="I-gS8OBt-yk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/I-gS8OBt-yk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Detachment Trailer Official 2012 [HD] - Adrien Brody, Christina Hendricks</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/161zyp">Someone knows the song at 1:08 - Detachment Trailer Official 2012 [HD] ?</a>
-<br>
-                        submitted <span class="muted">2013-01-06 09:34</span> by <a href="https://www.reddit.com/user/quinh">/u/quinh</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="hQbyECRw0Sc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/hQbyECRw0Sc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Appleseed Cast - Hello Dearest Love</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/16ks8m">This band is so good, and has influenced me in an infinite number of ways</a>
-<br>
-                        submitted <span class="muted">2013-01-14 22:13</span> by <a href="https://www.reddit.com/user/bilbotoken">/u/bilbotoken</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="EM7LUsyhxUw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/EM7LUsyhxUw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">pg.lost - Weaver</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/16963f">pg.lost - Weaver</a>
-<br>
-                        submitted <span class="muted">2013-01-09 16:23</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="mYDlP4dNvBE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/mYDlP4dNvBE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SPOIWO - Years of Silence</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/16hl7x">Spoiwo - Years of Silence (short and powerful track, a bit like intense trailer music + nice video with lots of snow and slowmotion)</a>
-<br>
-                        submitted <span class="muted">2013-01-13 11:40</span> by <a href="https://www.reddit.com/user/delial_">/u/delial_</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="tKtePH2hBuM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/tKtePH2hBuM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">PRAWN "Thousand Grains Of Sand"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/16225i">PRAWN "Thousand Grains Of Sand" (appleseed cast like band)</a>
-<br>
-                        submitted <span class="muted">2013-01-06 10:59</span> by <a href="https://www.reddit.com/user/ggrove91">/u/ggrove91</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="BW14MgCVg9w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/BW14MgCVg9w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Do Make Say Think - Hooray! Hooray! Hooray!</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/16gesa">Do Make Say Think - Hooray! Hooray! Hooray!</a>
-<br>
-                        submitted <span class="muted">2013-01-12 21:31</span> by <a href="https://www.reddit.com/user/nonubiq">/u/nonubiq</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="XnxZ2D7VDB0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XnxZ2D7VDB0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Daturah - Hybrisma</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/167y55">Daturah - Hybrisma.  Don't see these guys mentioned much, but they're epic as shizz.</a>
-<br>
-                        submitted <span class="muted">2013-01-09 01:37</span> by <a href="https://www.reddit.com/user/urbangeneticist">/u/urbangeneticist</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="mPmEeuZmLBg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/mPmEeuZmLBg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">虚弱。(kyojaku.) - egoist (official music video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/16nek1">虚弱 (kyojaku) - egoist (All female japanese group)</a>
-<br>
-                        submitted <span class="muted">2013-01-15 23:42</span> by <a href="https://www.reddit.com/user/tdz">/u/tdz</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="B7j4tXYJRmQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/B7j4tXYJRmQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Silent Whale Becomes A Dream - As Walking On Canopy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/16o9ky">Silent Whale Becomes A Dream - As Walking On Canopy</a>
-<br>
-                        submitted <span class="muted">2013-01-16 07:14</span> by <a href="https://www.reddit.com/user/jaguarpaws7">/u/jaguarpaws7</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="92xjD7j1B5Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/92xjD7j1B5Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Matryoshka - Noctambulist</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/16y2og">Matryoshka - Noctumbalist</a>
-<br>
-                        submitted <span class="muted">2013-01-20 20:35</span> by <a href="https://www.reddit.com/user/jaguarpaws7">/u/jaguarpaws7</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bXxiNzZeKAc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bXxiNzZeKAc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Scraps Of Tape- Hands In The Air.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/17m80j">Scraps Of Tape- Hands In The Air. - YouTube</a>
-<br>
-                        submitted <span class="muted">2013-01-31 06:44</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="NxlEa-llfW0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/NxlEa-llfW0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Industries of the Blind - Glory At Sea - opening scene</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/15tvtx">Industries of the Blind - Glory At Sea - opening scene</a>
-<br>
-                        submitted <span class="muted">2013-01-02 15:53</span> by <a href="https://www.reddit.com/user/industriesoftheblind">/u/industriesoftheblind</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="I2rZqVfHNNE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/I2rZqVfHNNE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Youth Pictures of Florence Henderson - All I remember is punk rock</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/15ztr0">if you haven't fallen in love with Youth Pictures of Florence Henderson yet, what's taking you so long?!</a>
-<br>
-                        submitted <span class="muted">2013-01-05 05:40</span> by <a href="https://www.reddit.com/user/c_o_d_a">/u/c_o_d_a</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="WcAbjpVtgGA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/WcAbjpVtgGA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Latitudes - Antechamber</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/1773df">Latitudes - Antechamber</a>
-<br>
-                        submitted <span class="muted">2013-01-24 16:47</span> by <a href="https://www.reddit.com/user/ohdaviing">/u/ohdaviing</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="it282rK2q6U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/it282rK2q6U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Stories From The Lost - Extraordinary Ages</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/17bs5m">Stories From The Lost - Extraordinary Ages</a>
-<br>
-                        submitted <span class="muted">2013-01-26 19:08</span> by <a href="https://www.reddit.com/user/dreadu">/u/dreadu</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="XsRpajTEVkg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XsRpajTEVkg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Empire Express - A Day In The Desert</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/16b3oi">Empire Express - A Day in the Desert (from the album 'Valleyland' (2011)) - [7:40]</a>
-<br>
-                        submitted <span class="muted">2013-01-10 10:27</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="A9QaOATItFE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/A9QaOATItFE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Tides from Nebula - These Days, Glory Days</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/1715gl">Tides From Nebula - These Days, Glory Days</a>
-<br>
-                        submitted <span class="muted">2013-01-22 02:59</span> by <a href="https://www.reddit.com/user/Fireach">/u/Fireach</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="G-ELyWEUyxo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/G-ELyWEUyxo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Magyar Posse - IV</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/162r5p">Magyar Posse - IV</a>
-<br>
-                        submitted <span class="muted">2013-01-06 20:23</span> by <a href="https://www.reddit.com/user/jaguarpaws7">/u/jaguarpaws7</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_kpw7B9fSnI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_kpw7B9fSnI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sickoakes - Wedding Rings and Bullets in the Same Golden Shrine, pt. II</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/16uewg">Sickoakes - Wedding Rings and Bullets in the Same Golden Shrine, Pt. II</a>
-<br>
-                        submitted <span class="muted">2013-01-18 22:53</span> by <a href="https://www.reddit.com/user/Fat_Crossing_Guard">/u/Fat_Crossing_Guard</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="v-9w2akedRg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/v-9w2akedRg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Waves - Light & Colors (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/16vhdl">Waves - Light &amp; Colors (Official Video)</a>
-<br>
-                        submitted <span class="muted">2013-01-19 13:16</span> by <a href="https://www.reddit.com/user/exposur3">/u/exposur3</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ChDcUFMawcw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ChDcUFMawcw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">WhyOceans - Untidal</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/16xoer">WhyOceans - Untidal</a>
-<br>
-                        submitted <span class="muted">2013-01-20 16:58</span> by <a href="https://www.reddit.com/user/jaguarpaws7">/u/jaguarpaws7</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="gZSNmXeo0To">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/gZSNmXeo0To/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ninth Moon Black - Numeratio</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/167mrk">Ninth Moon Black - Numeratio</a>
-<br>
-                        submitted <span class="muted">2013-01-08 23:04</span> by <a href="https://www.reddit.com/user/kuznec82">/u/kuznec82</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="9pq2siCmi3o">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/9pq2siCmi3o/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sabled Sun - End Me</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/16f1c4">Sabled Sun - End Me - YouTube</a>
-<br>
-                        submitted <span class="muted">2013-01-12 02:47</span> by <a href="https://www.reddit.com/user/floodster">/u/floodster</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="1knh-_SYrfQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/1knh-_SYrfQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Frames - Don't Stay Here</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/16po1w">Frames - Don't Stay Here</a>
-<br>
-                        submitted <span class="muted">2013-01-16 22:43</span> by <a href="https://www.reddit.com/user/atomic_rectum">/u/atomic_rectum</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="uRcRSb7bu60">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/uRcRSb7bu60/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Hadoken  - Stations</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/173lu4">Hadoken  - Stations - YouTube</a>
-<br>
-                        submitted <span class="muted">2013-01-23 03:12</span> by <a href="https://www.reddit.com/user/bangarangin">/u/bangarangin</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="wOr64YKo2kA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/wOr64YKo2kA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">My Education | Mister 1986, VIDEO by John Aasp</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/17l4f5">MY EDUCATION - Mr. 1986</a>
-<br>
-                        submitted <span class="muted">2013-01-30 21:45</span> by <a href="https://www.reddit.com/user/scotttelles">/u/scotttelles</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="FhZPszR6cTo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/FhZPszR6cTo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Industries of the Blind - Glory At Sea - end scene</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/15u3ca">Industries of the Blind - Glory At Sea - end scene</a>
-<br>
-                        submitted <span class="muted">2013-01-02 18:01</span> by <a href="https://www.reddit.com/user/industriesoftheblind">/u/industriesoftheblind</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="fOMa3rHDFaA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/fOMa3rHDFaA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Macshire, Behold the Ancestor</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/15zya6">MOUNTAIN - One Dudes Music</a>
-<br>
-                        submitted <span class="muted">2013-01-05 07:16</span> by <a href="https://www.reddit.com/user/Philoune">/u/Philoune</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bbJREBZ68Z0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bbJREBZ68Z0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SPOIWO - Skin</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/16ddxh">Spoiwo - Skin</a>
-<br>
-                        submitted <span class="muted">2013-01-11 09:05</span> by <a href="https://www.reddit.com/user/delial_">/u/delial_</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="fejAzrd5-lA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/fejAzrd5-lA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">DIE ELECTRO VOICE - The Low Frequency In Stereo</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/16ek0s">DIE ELECTRO VOICE - The Low Frequency In Stereo</a>
-<br>
-                        submitted <span class="muted">2013-01-11 22:21</span> by <a href="https://www.reddit.com/user/Itisits">/u/Itisits</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="HuNaL74B5k4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/HuNaL74B5k4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Good Morning Kaia</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/16fbus">BT - Good Morning Kaia (one of the best and most overlooked post-rock songs ever, imho)</a>
-<br>
-                        submitted <span class="muted">2013-01-12 05:59</span> by <a href="https://www.reddit.com/user/wpnw">/u/wpnw</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="aD-eyKFNxrA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/aD-eyKFNxrA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Early Day Miners - Centralia</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/16hvh9">Early Day Miners - Centralia (slowcore/post-rock)</a>
-<br>
-                        submitted <span class="muted">2013-01-13 16:42</span> by <a href="https://www.reddit.com/user/rawrower">/u/rawrower</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="pgt3MMrMQnc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/pgt3MMrMQnc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Aphasia - Behind The River</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/16iq2s">This is so beautiful.
-Aphasia - Behind The River [7:37]</a>
-<br>
-                        submitted <span class="muted">2013-01-14 00:20</span> by <a href="https://www.reddit.com/user/Hybrismongo">/u/Hybrismongo</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="GFpmJpVPVe4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/GFpmJpVPVe4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">te' - 音の中の『痙攣的』な美は、観念を超え肉体に訪れる野生の戦慄。</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/16na5y">te' - "Convulsive" beauty in sound is the horror of the body beyond the idea to visit the wild</a>
-<br>
-                        submitted <span class="muted">2013-01-15 22:47</span> by <a href="https://www.reddit.com/user/aconner86">/u/aconner86</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="AdK0eRhw4HA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/AdK0eRhw4HA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sirdsmieru, laimi un kaut ko garšīgu - тревога</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/16otvn">Postrock from Latvia: Sirdmieru, Laimi un Kaut Ko Garšīgu - тревога</a>
-<br>
-                        submitted <span class="muted">2013-01-16 16:00</span> by <a href="https://www.reddit.com/user/put-name-here">/u/put-name-here</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2pgwZuXLaW8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2pgwZuXLaW8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Caspian - Of Foam and Wave</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/17024z">Caspian - Of Foam and Wave (from the album 'Tertia' (2009)) - [6:24]</a>
-<br>
-                        submitted <span class="muted">2013-01-21 18:28</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="wqdKXcR_Uns">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/wqdKXcR_Uns/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mono & world's end girlfriend - Palmless Prayer/ Mass Murder Refrain</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/171b2t">Mono &amp; World's End Girlfriend - Palmless Prayer / Mass Murder Refrain [Full album, HD Youtube]</a>
-<br>
-                        submitted <span class="muted">2013-01-22 04:15</span> by <a href="https://www.reddit.com/user/TMobotron">/u/TMobotron</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="gJQ2A-dbeMo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/gJQ2A-dbeMo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Dorena - "Dagsländan" [Studio Version]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/173vgn">Dorena - The Mayfly</a>
-<br>
-                        submitted <span class="muted">2013-01-23 05:29</span> by <a href="https://www.reddit.com/user/Pokesteve">/u/Pokesteve</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="eg6oam97C3g">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/eg6oam97C3g/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Kapitan Korsakov - In the Shade of the Sun (music video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1748sj">Kapitan Korsakov - In the Shade of the Sun [8:52]</a>
-<br>
-                        submitted <span class="muted">2013-01-23 11:35</span> by <a href="https://www.reddit.com/user/Cokenut">/u/Cokenut</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="j4zAMHXBgF0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/j4zAMHXBgF0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">causa sui -  red valley</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/176ib4">Causa Sui - Red Valley [9:37] (Dessert Psych)</a>
-<br>
-                        submitted <span class="muted">2013-01-24 08:06</span> by <a href="https://www.reddit.com/user/Jaraarph">/u/Jaraarph</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="k3vSC-6y0M8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/k3vSC-6y0M8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">September Malevolence - I Shut Doors And Windows</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/17g33m">September Malevolence - I Shut Doors and Windows</a>
-<br>
-                        submitted <span class="muted">2013-01-28 19:55</span> by <a href="https://www.reddit.com/user/Potaterchips">/u/Potaterchips</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="u3PeWAzbk3Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/u3PeWAzbk3Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sparrows Swarm & Sing - Untitled #1</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/17h9xj">Sparrows Swarm And Swing - Untitled #1 - (9:47)</a>
-<br>
-                        submitted <span class="muted">2013-01-29 05:01</span> by <a href="https://www.reddit.com/user/snowsoftJ4C">/u/snowsoftJ4C</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="e1mlI9BW09w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/e1mlI9BW09w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Arbor Lights - Damascus (Live, 05/12/12)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/15vxae">Arbor Lights - Damascus (New Song - Live)</a>
-<br>
-                        submitted <span class="muted">2013-01-03 13:10</span> by <a href="https://www.reddit.com/user/kingy123">/u/kingy123</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="lkkEwTOypWY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/lkkEwTOypWY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ciènega - Viva Bocashi</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/15wohr">Ciènega - Viva Bocashi</a>
-<br>
-                        submitted <span class="muted">2013-01-03 20:47</span> by <a href="https://www.reddit.com/user/itsmegoddamnit">/u/itsmegoddamnit</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="3TvLD0JE0RI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/3TvLD0JE0RI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Nisennenmondai   kyuukohan</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1602ve">Nisennenmondai -- kyuukohan (That drummer will beat your ears to death)</a>
-<br>
-                        submitted <span class="muted">2013-01-05 09:30</span> by <a href="https://www.reddit.com/user/jamir420">/u/jamir420</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-t1q0x_YQc8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-t1q0x_YQc8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Signal Hill - Our Sisters</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/16lvus">Signal Hill - Our Sisters</a>
-<br>
-                        submitted <span class="muted">2013-01-15 07:39</span> by <a href="https://www.reddit.com/user/shinfo44">/u/shinfo44</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-VwVhcqVaFc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-VwVhcqVaFc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">OVUM - Lost In Addiction</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/16nos2">Ovum - Lost In Addiction</a>
-<br>
-                        submitted <span class="muted">2013-01-16 02:01</span> by <a href="https://www.reddit.com/user/jaguarpaws7">/u/jaguarpaws7</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="u3FMWiTtMgo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/u3FMWiTtMgo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">ATOMA - Rainmen | Napalm Records</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/16oa48">ATOMA - Rainmen</a>
-<br>
-                        submitted <span class="muted">2013-01-16 07:26</span> by <a href="https://www.reddit.com/user/jaguarpaws7">/u/jaguarpaws7</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ULu9LDEHLe0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ULu9LDEHLe0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">E321 - They Call Us Human</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/16obnz">"E321 - They Call Us Human" NEW music video from swedish Post-Rock/Shoegaze trio!</a>
-<br>
-                        submitted <span class="muted">2013-01-16 08:06</span> by <a href="https://www.reddit.com/user/RobertHolm">/u/RobertHolm</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="xahlKM69FBY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/xahlKM69FBY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Antarctic -- Your Ships Are Googlin' Pretty HARD [album version]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/16usly">Their self titled album has but a single lyric and it's in this song. "WOO!" Antarctic- Your Ships are Googlin' Pretty Hard [basically auto-downvoted in r/music so I thought I'd share with you guys]</a>
-<br>
-                        submitted <span class="muted">2013-01-19 02:30</span> by <a href="https://www.reddit.com/user/dominicanlou">/u/dominicanlou</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="KqE6NkIpRZA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/KqE6NkIpRZA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Dead Texan - Taco me manque</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/17czxr">The Dead Texan. Enjoy.</a>
-<br>
-                        submitted <span class="muted">2013-01-27 07:38</span> by <a href="https://www.reddit.com/user/Sharpenhauer">/u/Sharpenhauer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="dbapKMNoUbA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/dbapKMNoUbA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">FareWell Poetry - All in the Full, Indomitable Light of HOPE (pt.II)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/17h3v1">FareWell Poetry - All in the Full, Indomitable Light of HOPE (pt.II)</a>
-<br>
-                        submitted <span class="muted">2013-01-29 03:40</span> by <a href="https://www.reddit.com/user/effortDee">/u/effortDee</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_rYP6vcWKjY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_rYP6vcWKjY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Freedom voyangers - memorial day</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/165v3p">Freedom Voyagers - Memorial Day</a>
-<br>
-                        submitted <span class="muted">2013-01-08 03:41</span> by <a href="https://www.reddit.com/user/jaguarpaws7">/u/jaguarpaws7</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="hxx4fdpiYu4">
+                    <td><img src="https://i.ytimg.com/vi/hxx4fdpiYu4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Explosions in the Sky - Your Hand In Mine - piano cover</td>
+                </tr>
+                <tr class="record" id="1g-MzVmaWZE">
+                    <td><img src="https://i.ytimg.com/vi/1g-MzVmaWZE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Explosions in the Sky - The Only Moment We Were Alone - piano cover</td>
+                </tr>
+                <tr class="record" id="0BSHAXpNey0">
+                    <td><img src="https://i.ytimg.com/vi/0BSHAXpNey0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">This Will Destroy You - A Three Legged Workhorse</td>
+                </tr>
+                <tr class="record" id="PZwQeZh6rP0">
+                    <td><img src="https://i.ytimg.com/vi/PZwQeZh6rP0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Godspeed You! Black Emperor - Lift Your Skinny Fists Like Antennas to Heaven [FULL ALBUM]</td>
+                </tr>
+                <tr class="record" id="73OD3SvhwdI">
+                    <td><img src="https://i.ytimg.com/vi/73OD3SvhwdI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Russian Circles - Melee</td>
+                </tr>
+                <tr class="record" id="9CDU6q_dG0s">
+                    <td><img src="https://i.ytimg.com/vi/9CDU6q_dG0s/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The New Kid</td>
+                </tr>
+                <tr class="record" id="98iDL-lPtQo">
+                    <td><img src="https://i.ytimg.com/vi/98iDL-lPtQo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">#sr7 2013</td>
+                </tr>
+                <tr class="record" id="RWACU1UNqvY">
+                    <td><img src="https://i.ytimg.com/vi/RWACU1UNqvY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Trembling Hands - Explosions in the Sky (cover) feat. mom</td>
+                </tr>
+                <tr class="record" id="h6yokbJ23KY">
+                    <td><img src="https://i.ytimg.com/vi/h6yokbJ23KY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Moving Mountains - Aphelion</td>
+                </tr>
+                <tr class="record" id="FDhGXB-RE-w">
+                    <td><img src="https://i.ytimg.com/vi/FDhGXB-RE-w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cloudkicker - Viceroy</td>
+                </tr>
+                <tr class="record" id="UiBTIqzT0JE">
+                    <td><img src="https://i.ytimg.com/vi/UiBTIqzT0JE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Kasper Rosa | Double A-Side Teaser #1</td>
+                </tr>
+                <tr class="record" id="xdhdutGV8BU">
+                    <td><img src="https://i.ytimg.com/vi/xdhdutGV8BU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ólafur Arnalds - Tomorrow's Song (Live on KEXP)</td>
+                </tr>
+                <tr class="record" id="Yvtnow0I_N0">
+                    <td><img src="https://i.ytimg.com/vi/Yvtnow0I_N0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Deftones U U D D L R L R A B Select Start</td>
+                </tr>
+                <tr class="record" id="3Te5LN8YtyU">
+                    <td><img src="https://i.ytimg.com/vi/3Te5LN8YtyU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Maserati  - The World Outside</td>
+                </tr>
+                <tr class="record" id="lt0Ji14Zkyk">
+                    <td><img src="https://i.ytimg.com/vi/lt0Ji14Zkyk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Hammock - Sinking Inside Yourself</td>
+                </tr>
+                <tr class="record" id="xqR12BvJYlk">
+                    <td><img src="https://i.ytimg.com/vi/xqR12BvJYlk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">11. Toe - Good Bye // New Sentimentality</td>
+                </tr>
+                <tr class="record" id="B2sAkRnwbAw">
+                    <td><img src="https://i.ytimg.com/vi/B2sAkRnwbAw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mogwai ~ Relative Hysteria</td>
+                </tr>
+                <tr class="record" id="g9H3fEtifg8">
+                    <td><img src="https://i.ytimg.com/vi/g9H3fEtifg8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cloudkicker - LA After Rain</td>
+                </tr>
+                <tr class="record" id="wXCzMmZoxhE">
+                    <td><img src="https://i.ytimg.com/vi/wXCzMmZoxhE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">"Live At Roadrunner Studios" This Patch Of Sky</td>
+                </tr>
+                <tr class="record" id="5gmxBRkQd70">
+                    <td><img src="https://i.ytimg.com/vi/5gmxBRkQd70/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Godspeed You! Black Emperor - East Hastings (GREAT QUALITY, Live @ Troxy, London, 14-12-2010)</td>
+                </tr>
+                <tr class="record" id="PvDhgPQZdbM">
+                    <td><img src="https://i.ytimg.com/vi/PvDhgPQZdbM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">El Ten Eleven  - Tiger Tiger</td>
+                </tr>
+                <tr class="record" id="bqepqIST9nU">
+                    <td><img src="https://i.ytimg.com/vi/bqepqIST9nU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Earth - Father Midnight</td>
+                </tr>
+                <tr class="record" id="l2lq3q48A2s">
+                    <td><img src="https://i.ytimg.com/vi/l2lq3q48A2s/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Aiua - Clockmaker</td>
+                </tr>
+                <tr class="record" id="x_-bDI5VBCE">
+                    <td><img src="https://i.ytimg.com/vi/x_-bDI5VBCE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Crippled Black Phoenix - Faced With Complete Failure, Utter Defiance Is the Only Response</td>
+                </tr>
+                <tr class="record" id="JRwijpJqLUw">
+                    <td><img src="https://i.ytimg.com/vi/JRwijpJqLUw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Hammock - Cold Front</td>
+                </tr>
+                <tr class="record" id="KKZQL0xCqzk">
+                    <td><img src="https://i.ytimg.com/vi/KKZQL0xCqzk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Flashbulb - We Are Alone In A City - Love As A Dark Hallway - 2011 [13/13]</td>
+                </tr>
+                <tr class="record" id="Xj1xDH_xKBE">
+                    <td><img src="https://i.ytimg.com/vi/Xj1xDH_xKBE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Gifts From Enola - Long Weakend</td>
+                </tr>
+                <tr class="record" id="KYBulfbBstc">
+                    <td><img src="https://i.ytimg.com/vi/KYBulfbBstc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">World's End Girlfriend - 100 Years of Choke [HQ]</td>
+                </tr>
+                <tr class="record" id="_lAfMT5FIZE">
+                    <td><img src="https://i.ytimg.com/vi/_lAfMT5FIZE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Clint Mansell - Moon OST #1 - Welcome to Lunar Industries</td>
+                </tr>
+                <tr class="record" id="ntfyeC178Tg">
+                    <td><img src="https://i.ytimg.com/vi/ntfyeC178Tg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Evan Chapman - "Your Hand In Mine" by Explosions In The Sky (Percussion Cover) *HD*</td>
+                </tr>
+                <tr class="record" id="_1WPYvkj73Q">
+                    <td><img src="https://i.ytimg.com/vi/_1WPYvkj73Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">[HQ] toe - past and language</td>
+                </tr>
+                <tr class="record" id="-cPbYv0zpbs">
+                    <td><img src="https://i.ytimg.com/vi/-cPbYv0zpbs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">A Silver Mt. Zion - This Gentle Hearts Like Shot Bird's Fallen</td>
+                </tr>
+                <tr class="record" id="6ve4Z_FH8OA">
+                    <td><img src="https://i.ytimg.com/vi/6ve4Z_FH8OA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Kuato - Schindler's Lisp</td>
+                </tr>
+                <tr class="record" id="m6Dzd_QwSFU">
+                    <td><img src="https://i.ytimg.com/vi/m6Dzd_QwSFU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Surgeon - Fjords ("Fjords" LP)</td>
+                </tr>
+                <tr class="record" id="Zs7SouXYsV4">
+                    <td><img src="https://i.ytimg.com/vi/Zs7SouXYsV4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jaga Jazzist - Swedenborgske Rom</td>
+                </tr>
+                <tr class="record" id="U_i2UmRY5pA">
+                    <td><img src="https://i.ytimg.com/vi/U_i2UmRY5pA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Gregor Samsa - The Adolescent</td>
+                </tr>
+                <tr class="record" id="s8EvUSJoG7U">
+                    <td><img src="https://i.ytimg.com/vi/s8EvUSJoG7U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Thursday - In Silence</td>
+                </tr>
+                <tr class="record" id="KMQrTmcHXfY">
+                    <td><img src="https://i.ytimg.com/vi/KMQrTmcHXfY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The End of the Ocean - We Always Think There is Going to be More Time [Live in Seattle 7-10-12]</td>
+                </tr>
+                <tr class="record" id="nJFEWBS1JVE">
+                    <td><img src="https://i.ytimg.com/vi/nJFEWBS1JVE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lowercase Noises - Passage</td>
+                </tr>
+                <tr class="record" id="X6EnUsKD5ww">
+                    <td><img src="https://i.ytimg.com/vi/X6EnUsKD5ww/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Obrigado (Portugal 2012)</td>
+                </tr>
+                <tr class="record" id="zob5O3nyqYI">
+                    <td><img src="https://i.ytimg.com/vi/zob5O3nyqYI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Spectrum Of The Sky :: Break Of Reality</td>
+                </tr>
+                <tr class="record" id="9ZCikzCV5xM">
+                    <td><img src="https://i.ytimg.com/vi/9ZCikzCV5xM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The End Of The Ocean - One Last Goodnight</td>
+                </tr>
+                <tr class="record" id="2HKZFfHEFfQ">
+                    <td><img src="https://i.ytimg.com/vi/2HKZFfHEFfQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">NOMADS - Cleaveland on The Square - Official Video</td>
+                </tr>
+                <tr class="record" id="ea2Foy9488c">
+                    <td><img src="https://i.ytimg.com/vi/ea2Foy9488c/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">French Open 2 - Tutorial</td>
+                </tr>
+                <tr class="record" id="FaM7T0ECbj8">
+                    <td><img src="https://i.ytimg.com/vi/FaM7T0ECbj8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">pg.lost - Vultures</td>
+                </tr>
+                <tr class="record" id="44GYF3ChG3A">
+                    <td><img src="https://i.ytimg.com/vi/44GYF3ChG3A/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Black Heart Rebellion</td>
+                </tr>
+                <tr class="record" id="UUxQDlat9t8">
+                    <td><img src="https://i.ytimg.com/vi/UUxQDlat9t8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">For A Minor Reflection - Impulse (Live on KEXP)</td>
+                </tr>
+                <tr class="record" id="I-gS8OBt-yk">
+                    <td><img src="https://i.ytimg.com/vi/I-gS8OBt-yk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Detachment Trailer Official 2012 [HD] - Adrien Brody, Christina Hendricks</td>
+                </tr>
+                <tr class="record" id="hQbyECRw0Sc">
+                    <td><img src="https://i.ytimg.com/vi/hQbyECRw0Sc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Appleseed Cast - Hello Dearest Love</td>
+                </tr>
+                <tr class="record" id="EM7LUsyhxUw">
+                    <td><img src="https://i.ytimg.com/vi/EM7LUsyhxUw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">pg.lost - Weaver</td>
+                </tr>
+                <tr class="record" id="mYDlP4dNvBE">
+                    <td><img src="https://i.ytimg.com/vi/mYDlP4dNvBE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SPOIWO - Years of Silence</td>
+                </tr>
+                <tr class="record" id="tKtePH2hBuM">
+                    <td><img src="https://i.ytimg.com/vi/tKtePH2hBuM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">PRAWN "Thousand Grains Of Sand"</td>
+                </tr>
+                <tr class="record" id="BW14MgCVg9w">
+                    <td><img src="https://i.ytimg.com/vi/BW14MgCVg9w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Do Make Say Think - Hooray! Hooray! Hooray!</td>
+                </tr>
+                <tr class="record" id="XnxZ2D7VDB0">
+                    <td><img src="https://i.ytimg.com/vi/XnxZ2D7VDB0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Daturah - Hybrisma</td>
+                </tr>
+                <tr class="record" id="mPmEeuZmLBg">
+                    <td><img src="https://i.ytimg.com/vi/mPmEeuZmLBg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">虚弱。(kyojaku.) - egoist (official music video)</td>
+                </tr>
+                <tr class="record" id="B7j4tXYJRmQ">
+                    <td><img src="https://i.ytimg.com/vi/B7j4tXYJRmQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Silent Whale Becomes A Dream - As Walking On Canopy</td>
+                </tr>
+                <tr class="record" id="92xjD7j1B5Q">
+                    <td><img src="https://i.ytimg.com/vi/92xjD7j1B5Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Matryoshka - Noctambulist</td>
+                </tr>
+                <tr class="record" id="bXxiNzZeKAc">
+                    <td><img src="https://i.ytimg.com/vi/bXxiNzZeKAc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Scraps Of Tape- Hands In The Air.</td>
+                </tr>
+                <tr class="record" id="NxlEa-llfW0">
+                    <td><img src="https://i.ytimg.com/vi/NxlEa-llfW0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Industries of the Blind - Glory At Sea - opening scene</td>
+                </tr>
+                <tr class="record" id="I2rZqVfHNNE">
+                    <td><img src="https://i.ytimg.com/vi/I2rZqVfHNNE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Youth Pictures of Florence Henderson - All I remember is punk rock</td>
+                </tr>
+                <tr class="record" id="WcAbjpVtgGA">
+                    <td><img src="https://i.ytimg.com/vi/WcAbjpVtgGA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Latitudes - Antechamber</td>
+                </tr>
+                <tr class="record" id="it282rK2q6U">
+                    <td><img src="https://i.ytimg.com/vi/it282rK2q6U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Stories From The Lost - Extraordinary Ages</td>
+                </tr>
+                <tr class="record" id="XsRpajTEVkg">
+                    <td><img src="https://i.ytimg.com/vi/XsRpajTEVkg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Empire Express - A Day In The Desert</td>
+                </tr>
+                <tr class="record" id="A9QaOATItFE">
+                    <td><img src="https://i.ytimg.com/vi/A9QaOATItFE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Tides from Nebula - These Days, Glory Days</td>
+                </tr>
+                <tr class="record" id="G-ELyWEUyxo">
+                    <td><img src="https://i.ytimg.com/vi/G-ELyWEUyxo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Magyar Posse - IV</td>
+                </tr>
+                <tr class="record" id="_kpw7B9fSnI">
+                    <td><img src="https://i.ytimg.com/vi/_kpw7B9fSnI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sickoakes - Wedding Rings and Bullets in the Same Golden Shrine, pt. II</td>
+                </tr>
+                <tr class="record" id="v-9w2akedRg">
+                    <td><img src="https://i.ytimg.com/vi/v-9w2akedRg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Waves - Light & Colors (Official Video)</td>
+                </tr>
+                <tr class="record" id="ChDcUFMawcw">
+                    <td><img src="https://i.ytimg.com/vi/ChDcUFMawcw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">WhyOceans - Untidal</td>
+                </tr>
+                <tr class="record" id="gZSNmXeo0To">
+                    <td><img src="https://i.ytimg.com/vi/gZSNmXeo0To/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ninth Moon Black - Numeratio</td>
+                </tr>
+                <tr class="record" id="9pq2siCmi3o">
+                    <td><img src="https://i.ytimg.com/vi/9pq2siCmi3o/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sabled Sun - End Me</td>
+                </tr>
+                <tr class="record" id="1knh-_SYrfQ">
+                    <td><img src="https://i.ytimg.com/vi/1knh-_SYrfQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Frames - Don't Stay Here</td>
+                </tr>
+                <tr class="record" id="uRcRSb7bu60">
+                    <td><img src="https://i.ytimg.com/vi/uRcRSb7bu60/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Hadoken  - Stations</td>
+                </tr>
+                <tr class="record" id="wOr64YKo2kA">
+                    <td><img src="https://i.ytimg.com/vi/wOr64YKo2kA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">My Education | Mister 1986, VIDEO by John Aasp</td>
+                </tr>
+                <tr class="record" id="FhZPszR6cTo">
+                    <td><img src="https://i.ytimg.com/vi/FhZPszR6cTo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Industries of the Blind - Glory At Sea - end scene</td>
+                </tr>
+                <tr class="record" id="fOMa3rHDFaA">
+                    <td><img src="https://i.ytimg.com/vi/fOMa3rHDFaA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Macshire, Behold the Ancestor</td>
+                </tr>
+                <tr class="record" id="bbJREBZ68Z0">
+                    <td><img src="https://i.ytimg.com/vi/bbJREBZ68Z0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SPOIWO - Skin</td>
+                </tr>
+                <tr class="record" id="fejAzrd5-lA">
+                    <td><img src="https://i.ytimg.com/vi/fejAzrd5-lA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">DIE ELECTRO VOICE - The Low Frequency In Stereo</td>
+                </tr>
+                <tr class="record" id="HuNaL74B5k4">
+                    <td><img src="https://i.ytimg.com/vi/HuNaL74B5k4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Good Morning Kaia</td>
+                </tr>
+                <tr class="record" id="aD-eyKFNxrA">
+                    <td><img src="https://i.ytimg.com/vi/aD-eyKFNxrA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Early Day Miners - Centralia</td>
+                </tr>
+                <tr class="record" id="pgt3MMrMQnc">
+                    <td><img src="https://i.ytimg.com/vi/pgt3MMrMQnc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Aphasia - Behind The River</td>
+                </tr>
+                <tr class="record" id="GFpmJpVPVe4">
+                    <td><img src="https://i.ytimg.com/vi/GFpmJpVPVe4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">te' - 音の中の『痙攣的』な美は、観念を超え肉体に訪れる野生の戦慄。</td>
+                </tr>
+                <tr class="record" id="AdK0eRhw4HA">
+                    <td><img src="https://i.ytimg.com/vi/AdK0eRhw4HA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sirdsmieru, laimi un kaut ko garšīgu - тревога</td>
+                </tr>
+                <tr class="record" id="2pgwZuXLaW8">
+                    <td><img src="https://i.ytimg.com/vi/2pgwZuXLaW8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Caspian - Of Foam and Wave</td>
+                </tr>
+                <tr class="record" id="wqdKXcR_Uns">
+                    <td><img src="https://i.ytimg.com/vi/wqdKXcR_Uns/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mono & world's end girlfriend - Palmless Prayer/ Mass Murder Refrain</td>
+                </tr>
+                <tr class="record" id="gJQ2A-dbeMo">
+                    <td><img src="https://i.ytimg.com/vi/gJQ2A-dbeMo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Dorena - "Dagsländan" [Studio Version]</td>
+                </tr>
+                <tr class="record" id="eg6oam97C3g">
+                    <td><img src="https://i.ytimg.com/vi/eg6oam97C3g/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Kapitan Korsakov - In the Shade of the Sun (music video)</td>
+                </tr>
+                <tr class="record" id="j4zAMHXBgF0">
+                    <td><img src="https://i.ytimg.com/vi/j4zAMHXBgF0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">causa sui -  red valley</td>
+                </tr>
+                <tr class="record" id="k3vSC-6y0M8">
+                    <td><img src="https://i.ytimg.com/vi/k3vSC-6y0M8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">September Malevolence - I Shut Doors And Windows</td>
+                </tr>
+                <tr class="record" id="u3PeWAzbk3Q">
+                    <td><img src="https://i.ytimg.com/vi/u3PeWAzbk3Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sparrows Swarm & Sing - Untitled #1</td>
+                </tr>
+                <tr class="record" id="e1mlI9BW09w">
+                    <td><img src="https://i.ytimg.com/vi/e1mlI9BW09w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Arbor Lights - Damascus (Live, 05/12/12)</td>
+                </tr>
+                <tr class="record" id="lkkEwTOypWY">
+                    <td><img src="https://i.ytimg.com/vi/lkkEwTOypWY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ciènega - Viva Bocashi</td>
+                </tr>
+                <tr class="record" id="3TvLD0JE0RI">
+                    <td><img src="https://i.ytimg.com/vi/3TvLD0JE0RI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Nisennenmondai   kyuukohan</td>
+                </tr>
+                <tr class="record" id="-t1q0x_YQc8">
+                    <td><img src="https://i.ytimg.com/vi/-t1q0x_YQc8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Signal Hill - Our Sisters</td>
+                </tr>
+                <tr class="record" id="-VwVhcqVaFc">
+                    <td><img src="https://i.ytimg.com/vi/-VwVhcqVaFc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">OVUM - Lost In Addiction</td>
+                </tr>
+                <tr class="record" id="u3FMWiTtMgo">
+                    <td><img src="https://i.ytimg.com/vi/u3FMWiTtMgo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">ATOMA - Rainmen | Napalm Records</td>
+                </tr>
+                <tr class="record" id="ULu9LDEHLe0">
+                    <td><img src="https://i.ytimg.com/vi/ULu9LDEHLe0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">E321 - They Call Us Human</td>
+                </tr>
+                <tr class="record" id="xahlKM69FBY">
+                    <td><img src="https://i.ytimg.com/vi/xahlKM69FBY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Antarctic -- Your Ships Are Googlin' Pretty HARD [album version]</td>
+                </tr>
+                <tr class="record" id="KqE6NkIpRZA">
+                    <td><img src="https://i.ytimg.com/vi/KqE6NkIpRZA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Dead Texan - Taco me manque</td>
+                </tr>
+                <tr class="record" id="dbapKMNoUbA">
+                    <td><img src="https://i.ytimg.com/vi/dbapKMNoUbA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">FareWell Poetry - All in the Full, Indomitable Light of HOPE (pt.II)</td>
+                </tr>
+                <tr class="record" id="_rYP6vcWKjY">
+                    <td><img src="https://i.ytimg.com/vi/_rYP6vcWKjY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Freedom voyangers - memorial day</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/postrock/">Post Rock</a> archive:
     <a href="/genre/postrock/2009/">2009</a>&nbsp;•&nbsp;    <a href="/genre/postrock/2010/">2010</a>&nbsp;•&nbsp;    <a href="/genre/postrock/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/postrock/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/postrock/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/postrock/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/postrock/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/postrock/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/postrock/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -1486,12 +484,15 @@ Aphasia - Behind The River [7:37]</a>
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'postrock';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

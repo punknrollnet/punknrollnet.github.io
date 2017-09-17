@@ -46,78 +46,48 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="9oEiDaANj6g">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/9oEiDaANj6g/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Calabrese - There Is An Evil Inside</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/1nw33t">Calabrese - There Is An Evil Inside</a>
-<br>
-                        submitted <span class="muted">2013-10-07 05:02</span> by <a href="https://www.reddit.com/user/Cancerslug">/u/Cancerslug</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="P6M9HRDOQ2I">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/P6M9HRDOQ2I/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Send More Cops! by Surgeon Marta (Return of the Living Dead Tribute)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1p2htg">Send More Cops - for fans of zombies, The Walking Dead, Return of the Living Dead, etc... Would love to hear your thoughts! :)</a>
-<br>
-                        submitted <span class="muted">2013-10-23 19:03</span> by <a href="https://www.reddit.com/user/vivianraine">/u/vivianraine</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8mHdF46AnHc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8mHdF46AnHc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Horror Is Dead - Dead Mans Party</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1pfude">Good friends of mine from Chicago with a Halloween treat"Horror Is Dead - Dead Mans Party"</a>
-<br>
-                        submitted <span class="muted">2013-10-29 03:15</span> by <a href="https://www.reddit.com/user/Hunchin">/u/Hunchin</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="9oEiDaANj6g">
+                    <td><img src="https://i.ytimg.com/vi/9oEiDaANj6g/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Calabrese - There Is An Evil Inside</td>
+                </tr>
+                <tr class="record" id="P6M9HRDOQ2I">
+                    <td><img src="https://i.ytimg.com/vi/P6M9HRDOQ2I/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Send More Cops! by Surgeon Marta (Return of the Living Dead Tribute)</td>
+                </tr>
+                <tr class="record" id="8mHdF46AnHc">
+                    <td><img src="https://i.ytimg.com/vi/8mHdF46AnHc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Horror Is Dead - Dead Mans Party</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/horrorpunk/">Horror Punk</a> archive:
     <a href="/genre/horrorpunk/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/horrorpunk/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/horrorpunk/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/horrorpunk/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/horrorpunk/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -126,12 +96,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'horrorpunk';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

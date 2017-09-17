@@ -46,106 +46,56 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="eyCEexG9xjw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/eyCEexG9xjw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Wall Of Voodoo - Mexican Radio</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/19i6ub">Wall Of Voodoo - Mexican Radio</a>
-<br>
-                        submitted <span class="muted">2013-03-02 03:40</span> by <a href="https://www.reddit.com/user/NoirXephon">/u/NoirXephon</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="hRzGzRqNj58">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/hRzGzRqNj58/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Roxy Music - Jealous Guy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1apeg2">Roxy Music- Jealous Guy</a>
-<br>
-                        submitted <span class="muted">2013-03-21 01:47</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="MeG-hNXXy6I">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/MeG-hNXXy6I/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Down Under  -  Men At Work  (HQ Audio)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1afaj8">Men At Work- Down Under</a>
-<br>
-                        submitted <span class="muted">2013-03-16 19:55</span> by <a href="https://www.reddit.com/user/VeganSkeptic">/u/VeganSkeptic</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="GHPr4A0JbZo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/GHPr4A0JbZo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">DAS KABINETTE - The Cabinet</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/1b8kbg">Das Kabinet.</a>
-<br>
-                        submitted <span class="muted">2013-03-29 12:08</span> by <a href="https://www.reddit.com/user/crazybob1306">/u/crazybob1306</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Mod9ob_SdJE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Mod9ob_SdJE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Vision - Lucifer's Friend</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/19iq4x">Vision - Lucifer's Friend</a>
-<br>
-                        submitted <span class="muted">2013-03-02 12:34</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="eyCEexG9xjw">
+                    <td><img src="https://i.ytimg.com/vi/eyCEexG9xjw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Wall Of Voodoo - Mexican Radio</td>
+                </tr>
+                <tr class="record" id="hRzGzRqNj58">
+                    <td><img src="https://i.ytimg.com/vi/hRzGzRqNj58/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Roxy Music - Jealous Guy</td>
+                </tr>
+                <tr class="record" id="MeG-hNXXy6I">
+                    <td><img src="https://i.ytimg.com/vi/MeG-hNXXy6I/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Down Under  -  Men At Work  (HQ Audio)</td>
+                </tr>
+                <tr class="record" id="GHPr4A0JbZo">
+                    <td><img src="https://i.ytimg.com/vi/GHPr4A0JbZo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">DAS KABINETTE - The Cabinet</td>
+                </tr>
+                <tr class="record" id="Mod9ob_SdJE">
+                    <td><img src="https://i.ytimg.com/vi/Mod9ob_SdJE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Vision - Lucifer's Friend</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/newwave/">New Wave</a> archive:
     <a href="/genre/newwave/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/newwave/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/newwave/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/newwave/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/newwave/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/newwave/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/newwave/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -154,12 +104,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'newwave';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

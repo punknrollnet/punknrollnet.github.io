@@ -46,134 +46,64 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="Ga8UxEKHc9k">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Ga8UxEKHc9k/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">TNS Records Tour, Revenge Of The Psychotronic Man, Wonk Unit, & More MPRV News</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/5z5ifa">Punk video news channel from the UK with live footage and interviews, our latest episode!</a>
-<br>
-                        submitted <span class="muted">2017-03-13 15:12</span> by <a href="https://www.reddit.com/user/lemonstarred">/u/lemonstarred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="v_D5mJA5DtU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/v_D5mJA5DtU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">WONK UNIT Live & Interview, And Info About Wonkfest 2017 - MPRV News</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/60ugcq">London punkers Wonk Unit discuss life, creating music &amp; the Wonkfest festival - plus live footage</a>
-<br>
-                        submitted <span class="muted">2017-03-22 13:02</span> by <a href="https://www.reddit.com/user/lemonstarred">/u/lemonstarred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="OrfBmwAtUWI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/OrfBmwAtUWI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">PLAYBOY MANBABY - "YOU CAN BE A FASCIST TOO"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/5xw1xt">PLAYBOY MANBABY - "YOU CAN BE A FASCIST TOO"</a>
-<br>
-                        submitted <span class="muted">2017-03-06 21:27</span> by <a href="https://www.reddit.com/user/tempestarvingartist">/u/tempestarvingartist</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="JV-W7CAL4yI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/JV-W7CAL4yI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">HEALER OF BASTARDS - Birmingham Wagon & Horses 17/3/17 - MPRV</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/61xzv6">Melodic hardcore from Birmingham, England - Healer of Bastards (live footage)</a>
-<br>
-                        submitted <span class="muted">2017-03-28 07:40</span> by <a href="https://www.reddit.com/user/lemonstarred">/u/lemonstarred</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="LpAarORbZc4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/LpAarORbZc4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Locals Live: Bad Habit</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/5yc796">Bad Habit - Locals Live Showcase</a>
-<br>
-                        submitted <span class="muted">2017-03-09 01:39</span> by <a href="https://www.reddit.com/user/baderik420">/u/baderik420</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bjcH2FcclDE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bjcH2FcclDE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">THE PORKERS CHEMICAL IMBALANCE</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/5zp1sx">The Porkers - Chemical Imbalance</a>
-<br>
-                        submitted <span class="muted">2017-03-16 06:36</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Z5N8FFCU2yw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Z5N8FFCU2yw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Best of The Worst - In My Apartment</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/60s8s9">The Best of the Worst NJ punk/ska/hardcore</a>
-<br>
-                        submitted <span class="muted">2017-03-22 03:04</span> by <a href="https://www.reddit.com/user/notawordtosay">/u/notawordtosay</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="Ga8UxEKHc9k">
+                    <td><img src="https://i.ytimg.com/vi/Ga8UxEKHc9k/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">TNS Records Tour, Revenge Of The Psychotronic Man, Wonk Unit, & More MPRV News</td>
+                </tr>
+                <tr class="record" id="v_D5mJA5DtU">
+                    <td><img src="https://i.ytimg.com/vi/v_D5mJA5DtU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">WONK UNIT Live & Interview, And Info About Wonkfest 2017 - MPRV News</td>
+                </tr>
+                <tr class="record" id="OrfBmwAtUWI">
+                    <td><img src="https://i.ytimg.com/vi/OrfBmwAtUWI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">PLAYBOY MANBABY - "YOU CAN BE A FASCIST TOO"</td>
+                </tr>
+                <tr class="record" id="JV-W7CAL4yI">
+                    <td><img src="https://i.ytimg.com/vi/JV-W7CAL4yI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">HEALER OF BASTARDS - Birmingham Wagon & Horses 17/3/17 - MPRV</td>
+                </tr>
+                <tr class="record" id="LpAarORbZc4">
+                    <td><img src="https://i.ytimg.com/vi/LpAarORbZc4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Locals Live: Bad Habit</td>
+                </tr>
+                <tr class="record" id="bjcH2FcclDE">
+                    <td><img src="https://i.ytimg.com/vi/bjcH2FcclDE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">THE PORKERS CHEMICAL IMBALANCE</td>
+                </tr>
+                <tr class="record" id="Z5N8FFCU2yw">
+                    <td><img src="https://i.ytimg.com/vi/Z5N8FFCU2yw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Best of The Worst - In My Apartment</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/punkskahardcore/">Punk Ska Hardcore</a> archive:
     <a href="/genre/punkskahardcore/2009/">2009</a>&nbsp;•&nbsp;    <a href="/genre/punkskahardcore/2010/">2010</a>&nbsp;•&nbsp;    <a href="/genre/punkskahardcore/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/punkskahardcore/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/punkskahardcore/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/punkskahardcore/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/punkskahardcore/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/punkskahardcore/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/punkskahardcore/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -182,12 +112,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'punkskahardcore';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

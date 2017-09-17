@@ -46,92 +46,52 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="zeVHwpOglx0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zeVHwpOglx0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Coffinshakers  - Phantom Of The Night</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/1lq61n">The coffinshakers - Phantoms Of The Night (not quite horrorpunk, more horrorcountry)</a>
-<br>
-                        submitted <span class="muted">2013-09-04 17:33</span> by <a href="https://www.reddit.com/user/Cancerslug">/u/Cancerslug</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="iY1SDW3AB-4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/iY1SDW3AB-4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Widow's Bane "Don't Be Afraid; It's Only Death" Official Music Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/1m0hva">The Widow's Bane "Don't Be Afraid; It's Only Death"</a>
-<br>
-                        submitted <span class="muted">2013-09-09 03:53</span> by <a href="https://www.reddit.com/user/dangerousdave_42">/u/dangerousdave_42</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ydy2j-LEC-Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ydy2j-LEC-Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">They Live - Time To Go</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/1n2n44">They Live - Time To Go (Official Video)</a>
-<br>
-                        submitted <span class="muted">2013-09-25 01:44</span> by <a href="https://www.reddit.com/user/Hunchin">/u/Hunchin</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="UZ465-QqAzE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/UZ465-QqAzE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Automatic Knives - Die Like A Dog</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1lmnvh">The Automatic Knives - Die Like A Dog</a>
-<br>
-                        submitted <span class="muted">2013-09-03 06:30</span> by <a href="https://www.reddit.com/user/dee-luxe">/u/dee-luxe</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="zeVHwpOglx0">
+                    <td><img src="https://i.ytimg.com/vi/zeVHwpOglx0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Coffinshakers  - Phantom Of The Night</td>
+                </tr>
+                <tr class="record" id="iY1SDW3AB-4">
+                    <td><img src="https://i.ytimg.com/vi/iY1SDW3AB-4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Widow's Bane "Don't Be Afraid; It's Only Death" Official Music Video</td>
+                </tr>
+                <tr class="record" id="ydy2j-LEC-Q">
+                    <td><img src="https://i.ytimg.com/vi/ydy2j-LEC-Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">They Live - Time To Go</td>
+                </tr>
+                <tr class="record" id="UZ465-QqAzE">
+                    <td><img src="https://i.ytimg.com/vi/UZ465-QqAzE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Automatic Knives - Die Like A Dog</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/horrorpunk/">Horror Punk</a> archive:
     <a href="/genre/horrorpunk/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/horrorpunk/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/horrorpunk/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/horrorpunk/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/horrorpunk/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -140,12 +100,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'horrorpunk';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

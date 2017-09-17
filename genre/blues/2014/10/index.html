@@ -46,1086 +46,336 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="4YtwZxrnfNU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/4YtwZxrnfNU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Eric Clapton, Buddy Guy, BB King, Jimmie Vaughan (Rock me baby)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">75</span> - <a href="https://www.reddit.com/2jlmsk">Watch BB King's reaction when Clapton plays one of BB's signature licks in a solo</a>
-<br>
-                        submitted <span class="muted">2014-10-18 11:41</span> by <a href="https://www.reddit.com/user/neeria">/u/neeria</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="K_DOnKJ232M">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/K_DOnKJ232M/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">R.L. Burnside: See My Jumper Hanging On the Line (1978)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">71</span> - <a href="https://www.reddit.com/2ixos2">R.L Burnside - See My Jumper Hanging On The Line. Recorded live to camera by Alan Lomax in 1978</a>
-<br>
-                        submitted <span class="muted">2014-10-11 10:11</span> by <a href="https://www.reddit.com/user/BlackJackKetchum">/u/BlackJackKetchum</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jLsye_LJ_Ks">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jLsye_LJ_Ks/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ain't No Sunshine - Matt Andersen</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">42</span> - <a href="https://www.reddit.com/2ihnl6">Ain't No Sunshine - Matt Andersen</a>
-<br>
-                        submitted <span class="muted">2014-10-06 21:35</span> by <a href="https://www.reddit.com/user/kamuli">/u/kamuli</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="gfiA_TO6qJw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/gfiA_TO6qJw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Matt''Guitar''Murphy  - Murphy's Boogie - 1963</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">42</span> - <a href="https://www.reddit.com/2j7v6l">Matt "Guitar" Murphy - Matt’s Guitar Boogie [Back in 1963 w/ Willie Dixon, Memphis Slim &amp; Bill Stepney] Song kicks off at 1:35</a>
-<br>
-                        submitted <span class="muted">2014-10-14 14:24</span> by <a href="https://www.reddit.com/user/yousickduck">/u/yousickduck</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="uEu4MhdmiOI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/uEu4MhdmiOI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Buddy Guy Imitates John Lee Hooker & Eric Clapton- "Boom Boom Boom Boom" & "Strange Brew"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">42</span> - <a href="https://www.reddit.com/2jmpes">Buddy Guy perfectly imitates John Lee Hooker and Eric Clapton, playing &amp; mannerism</a>
-<br>
-                        submitted <span class="muted">2014-10-18 19:29</span> by <a href="https://www.reddit.com/user/neeria">/u/neeria</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="yVj8Sh4phzM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/yVj8Sh4phzM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Buddy guy Ft. Rolling stones - Champagne & Reefer Live!</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">41</span> - <a href="https://www.reddit.com/2jk9ia">I love the utter shock in this when Buddy Guy starts singing.</a>
-<br>
-                        submitted <span class="muted">2014-10-17 23:19</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="3hjqqa5tq5k">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/3hjqqa5tq5k/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Buddy Guy -  Damn Right I've Got The Blues</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">38</span> - <a href="https://www.reddit.com/2ibe3o">Bored? Listen to "Damn Right I've Got The Blues" by Buddy Guy</a>
-<br>
-                        submitted <span class="muted">2014-10-04 23:36</span> by <a href="https://www.reddit.com/user/iosonofresco">/u/iosonofresco</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="xw3KxF9pxso">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/xw3KxF9pxso/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Seasick Steve So Lonesome I Could Cry</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">37</span> - <a href="https://www.reddit.com/2kr7o0">Seasick Steve - So Lonesome I Could Cry (country/blues)</a>
-<br>
-                        submitted <span class="muted">2014-10-30 05:14</span> by <a href="https://www.reddit.com/user/Ganjamandan">/u/Ganjamandan</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="qv5pagal-ls">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/qv5pagal-ls/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Bill Withers - Grandma's Hands</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">34</span> - <a href="https://www.reddit.com/2jzryz">Bill Withers - Grandma's Hands (song begins at 1:19)</a>
-<br>
-                        submitted <span class="muted">2014-10-22 14:10</span> by <a href="https://www.reddit.com/user/JayWalken">/u/JayWalken</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="AGPx-ekqZEo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/AGPx-ekqZEo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Stevie Ray Vaughan Tin Pan Alley (with Johnny Copeland)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">33</span> - <a href="https://www.reddit.com/2i6t3q">Happy 60th Birthday Stevie Ray Vaughan - Tin Pan Alley w/ Johnny Copeland</a>
-<br>
-                        submitted <span class="muted">2014-10-03 14:07</span> by <a href="https://www.reddit.com/user/yousickduck">/u/yousickduck</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="IgwD_oMttio">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/IgwD_oMttio/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Beer Bottle Blues - samuraiguitarist (Original Content)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">33</span> - <a href="https://www.reddit.com/2jdh2h">A little home-made blues for you guys, what do you think?</a>
-<br>
-                        submitted <span class="muted">2014-10-16 00:53</span> by <a href="https://www.reddit.com/user/samuraiguitarist">/u/samuraiguitarist</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="a0c-RzIQSyE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/a0c-RzIQSyE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Clay and Friends with James Potvin - Hay Stack Blues ( Feat. Marilou)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">32</span> - <a href="https://www.reddit.com/2k4owi">What if the Blues were to meet Hip Hop on the way home ?</a>
-<br>
-                        submitted <span class="muted">2014-10-23 20:33</span> by <a href="https://www.reddit.com/user/cocolaboy_13">/u/cocolaboy_13</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="6GjEh8HD3jI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/6GjEh8HD3jI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jack Bruce and his Big Blues Band - Spoonful - Birmingham 29 March 2012</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/2kapec">Jack Bruce and his Big Blues Band - Spoonful - Live March 2012 - RIP Jack</a>
-<br>
-                        submitted <span class="muted">2014-10-25 16:49</span> by <a href="https://www.reddit.com/user/JellyRollBaker">/u/JellyRollBaker</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="IPtv14q9ZDg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/IPtv14q9ZDg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">JIMI HENDRIX 12 STRING BLUES</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/2jgngh">JIMI HENDRIX 12 STRING BLUES</a>
-<br>
-                        submitted <span class="muted">2014-10-16 22:32</span> by <a href="https://www.reddit.com/user/rootboyslim">/u/rootboyslim</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="KmmCJnWx06Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/KmmCJnWx06Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">JOHN LEE HOOKER Boom Boom 1983 live!</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/2kmwqf">JOHN LEE HOOKER Boom Boom 1983 live!</a>
-<br>
-                        submitted <span class="muted">2014-10-29 02:18</span> by <a href="https://www.reddit.com/user/suaveitguy">/u/suaveitguy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jkBUXXbtYPI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jkBUXXbtYPI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jimmy Dawkins - Me, My Gitar and the Blues</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">23</span> - <a href="https://www.reddit.com/2ikwq5">Jimmy Dawkins - Me, My Gitar and the Blues</a>
-<br>
-                        submitted <span class="muted">2014-10-07 18:06</span> by <a href="https://www.reddit.com/user/theherbpuffer">/u/theherbpuffer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="GgTjuDh7dVA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/GgTjuDh7dVA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Howlin Wolf Built For Comfort</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/2kpa7o">Howlin Wolf - "Built For Comfort" from his 1969 Psychedelic Blues album.</a>
-<br>
-                        submitted <span class="muted">2014-10-29 18:57</span> by <a href="https://www.reddit.com/user/dannysguitarchannel">/u/dannysguitarchannel</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="S6V3q-djJD8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/S6V3q-djJD8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ali Farka Touré - The River</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/2jmtkc">An intersection between traditional Malian music and its cousin, North American Blues. Also, a great album.</a>
-<br>
-                        submitted <span class="muted">2014-10-18 20:10</span> by <a href="https://www.reddit.com/user/WhatTheBlazes">/u/WhatTheBlazes</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="NmCv6UOF22A">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/NmCv6UOF22A/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Incredible Blues Pianist Luca Sestak's Slow Blues Improvisation.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/2jwohr">Incredible young pianist blues improv (Luca Sestak)</a>
-<br>
-                        submitted <span class="muted">2014-10-21 17:41</span> by <a href="https://www.reddit.com/user/gvbx52">/u/gvbx52</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="W6jjNRUqPxg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/W6jjNRUqPxg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Belton Sutherland: Blues #2 (1978)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/2jf3bv">Belton Sutherland: Blues #2 (1978)</a>
-<br>
-                        submitted <span class="muted">2014-10-16 14:17</span> by <a href="https://www.reddit.com/user/rcrum8">/u/rcrum8</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="CRpOqZqlHRY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/CRpOqZqlHRY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Marcus King Band visits Norman's Rare Guitars</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/2jqne4">Markus King: Driftin' Blues cover (x-post from /r/listentothis)</a>
-<br>
-                        submitted <span class="muted">2014-10-20 00:35</span> by <a href="https://www.reddit.com/user/DarkVadek">/u/DarkVadek</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="YKE6TEkl76k">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/YKE6TEkl76k/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Blind Willie Johnson Trouble Will Soon be Over</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/2komml">Blind Willie Johnson Trouble Will Soon be Over</a>
-<br>
-                        submitted <span class="muted">2014-10-29 15:43</span> by <a href="https://www.reddit.com/user/shakyjoe">/u/shakyjoe</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="fmTS4TieO28">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/fmTS4TieO28/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Muddy Waters - I Am The Blues</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/2imocc">Muddy Waters - I am The Blues [7:03]</a>
-<br>
-                        submitted <span class="muted">2014-10-08 03:59</span> by <a href="https://www.reddit.com/user/halvesandquarters">/u/halvesandquarters</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="KSnhq0kQzHY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/KSnhq0kQzHY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">‪Lay Low - Donna Mo's Blues‬ (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/2iqwj7">‪Lay Low - Donna Mo's Blues‬</a>
-<br>
-                        submitted <span class="muted">2014-10-09 10:12</span> by <a href="https://www.reddit.com/user/ballibt">/u/ballibt</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="oGk72L652K4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/oGk72L652K4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">T-Bone Walker - Goin' to Chicago</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/2k2enc">T-Bone - Goin' to Chicago</a>
-<br>
-                        submitted <span class="muted">2014-10-23 04:09</span> by <a href="https://www.reddit.com/user/Pkimmer">/u/Pkimmer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="SaiuYKb5hrI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/SaiuYKb5hrI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Son Little - "The River"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/2k3rjt">Son Little - "The River" a Blues and roots inspired gem.</a>
-<br>
-                        submitted <span class="muted">2014-10-23 15:48</span> by <a href="https://www.reddit.com/user/RichHixson">/u/RichHixson</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="IGZkb4p6Ks8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/IGZkb4p6Ks8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">GREEN/MAYALL Great Solo Live STORMY MONDAY</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/2jww26">Here is a rare live recording of John Mayall's Bluesbreakers (featuring Peter Green) performing the blues classic "Stormy Monday".</a>
-<br>
-                        submitted <span class="muted">2014-10-21 18:43</span> by <a href="https://www.reddit.com/user/dannysguitarchannel">/u/dannysguitarchannel</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="grBmQwLSlDw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/grBmQwLSlDw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Stevie Ray Vaughan - Best Guitar Player - Sound Check - What?!</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/2i8vdy">HBD SRV I wish I could just play like you in sound check</a>
-<br>
-                        submitted <span class="muted">2014-10-04 02:35</span> by <a href="https://www.reddit.com/user/Pkimmer">/u/Pkimmer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5ym7Lsqj90c">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5ym7Lsqj90c/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cream - Wheels of Fire - 02 - Spoonful[Live]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/2jq9mh">Cream - Wheels of Fire - 02 - Spoonful[Live]</a>
-<br>
-                        submitted <span class="muted">2014-10-19 22:19</span> by <a href="https://www.reddit.com/user/rootboyslim">/u/rootboyslim</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="otNICva63mQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/otNICva63mQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">emmett miller/lovesick blues (original version)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2iqvrg">emmett miller/lovesick blues (original version)</a>
-<br>
-                        submitted <span class="muted">2014-10-09 09:57</span> by <a href="https://www.reddit.com/user/Byron3189">/u/Byron3189</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="SABAQjPFqGM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/SABAQjPFqGM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sean Rowe - "Done Calling You" (Live)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2k0lnh">Sean Rowe - Done Calling You</a>
-<br>
-                        submitted <span class="muted">2014-10-22 18:27</span> by <a href="https://www.reddit.com/user/douliego">/u/douliego</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="qLpOhok-DOc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/qLpOhok-DOc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lucky Peterson - Yer Blues</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2iu5gp">Lucky Peterson - Yer Blues</a>
-<br>
-                        submitted <span class="muted">2014-10-10 07:24</span> by <a href="https://www.reddit.com/user/theherbpuffer">/u/theherbpuffer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="gGrADAAvrkE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/gGrADAAvrkE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">John Lee Hooker & Canned Heat - Whiskey & Wimmen' [HQ]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2iy9io">John Lee Hooker &amp; Canned Heat - Whiskey &amp; Wimmen' [HQ]</a>
-<br>
-                        submitted <span class="muted">2014-10-11 15:46</span> by <a href="https://www.reddit.com/user/rosendito">/u/rosendito</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="sNdHqFh5OsE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/sNdHqFh5OsE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Spoonful</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2jou83">Hey r/blues! Im back with another cover, doin willie dixon's spoonful this time.</a>
-<br>
-                        submitted <span class="muted">2014-10-19 13:33</span> by <a href="https://www.reddit.com/user/bluesman89">/u/bluesman89</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="TZ-Ed-Bm24I">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/TZ-Ed-Bm24I/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Kenny Wayne Shepherd Feat. Cootie Stark - U-Haul - USA 2006</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2jxf4w">Kenny Wayne Shepherd w/Double Trouble, Feat. Cootie Stark - U-Haul (from 10 Days Out)</a>
-<br>
-                        submitted <span class="muted">2014-10-21 21:18</span> by <a href="https://www.reddit.com/user/GraveyardDirt">/u/GraveyardDirt</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="fw8EPOFdBVw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/fw8EPOFdBVw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jethro Tull - Stormy Monday</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2jzoae">Jethro Tull - Stormy Monday</a>
-<br>
-                        submitted <span class="muted">2014-10-22 13:32</span> by <a href="https://www.reddit.com/user/herb_puffer">/u/herb_puffer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="g_L1ksoCWXU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/g_L1ksoCWXU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">29 Blues Licks - Lick #1 Shuffle SRV Style</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2kc7fl">Starting to learn the blues, I found this guy really helpful.</a>
-<br>
-                        submitted <span class="muted">2014-10-26 02:27</span> by <a href="https://www.reddit.com/user/timtooltime">/u/timtooltime</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="pw85YF_rt8c">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/pw85YF_rt8c/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SAVOY BROWN - Tolling Bells (1969) - w. lyrics</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2kdl9w">Savoy Brown - Tolling Bells</a>
-<br>
-                        submitted <span class="muted">2014-10-26 16:06</span> by <a href="https://www.reddit.com/user/herb_puffer">/u/herb_puffer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="1Z8-Yk2C-EE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/1Z8-Yk2C-EE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Amazing African Blues: Momo Wandel Soumah - Felenko Yefe</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2kwdah">Felenko Yefe - Momo Wandel Soumah (african blues? I really don't know but it's amazing. SIMILAR ARTISTS: Early Chris Rea kinda. Its pretty played back and has a nice vibration on decent speakers.)</a>
-<br>
-                        submitted <span class="muted">2014-10-31 16:51</span> by <a href="https://www.reddit.com/user/das_hans">/u/das_hans</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ZayTpvm0Yho">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ZayTpvm0Yho/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">West Coast Blues - BLIND BLAKE (1926) Ragtime Blues Guitar Legend</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2i2h8c">" West Coast Blues " BLIND BLAKE (1926) Ragtime Blues Guitar Legend</a>
-<br>
-                        submitted <span class="muted">2014-10-02 06:09</span> by <a href="https://www.reddit.com/user/tempedrew">/u/tempedrew</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="oTFvAvsHC_Y">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/oTFvAvsHC_Y/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Boz Scaggs & Duane Allman ~ Loan Me A Dime</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2jqhcv">How about this underrated gem?</a>
-<br>
-                        submitted <span class="muted">2014-10-19 23:35</span> by <a href="https://www.reddit.com/user/BigBoss722">/u/BigBoss722</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="XoursR0OrrA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XoursR0OrrA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lattie Murrell - Wolf's At Your Door</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2krj0l">Lattie Murrell - Wolf's At Your Door</a>
-<br>
-                        submitted <span class="muted">2014-10-30 08:22</span> by <a href="https://www.reddit.com/user/Ganjamandan">/u/Ganjamandan</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="pfpLCKhye5Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/pfpLCKhye5Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Junior Wells Live in Chicago</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2kw3rj">Junior Wells - Live in Chicago</a>
-<br>
-                        submitted <span class="muted">2014-10-31 15:26</span> by <a href="https://www.reddit.com/user/shakyjoe">/u/shakyjoe</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="RIYNNkT3qi0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/RIYNNkT3qi0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Down & Out (JANIS JOPLIN)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2hzl6s">Janis - Down and Out</a>
-<br>
-                        submitted <span class="muted">2014-10-01 13:26</span> by <a href="https://www.reddit.com/user/rabbit_skulls">/u/rabbit_skulls</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5UCxwAxB7Jc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5UCxwAxB7Jc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Joe Cocker - Bye Bye Blackbird</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2ifg08">Joe Cocker - Bye Bye Blackbird</a>
-<br>
-                        submitted <span class="muted">2014-10-06 07:21</span> by <a href="https://www.reddit.com/user/miserablebastard">/u/miserablebastard</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="1vWkDT3ohU4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/1vWkDT3ohU4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mo Rodgers "Black Coffee and Cigarettes" Studio City Sound Live</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2k344s">Mighty Mo Rodgers - 'Black Coffee and Cigarettes', filmed live in the studio. One of the most creative and inventive bluesmen working, IMHO.</a>
-<br>
-                        submitted <span class="muted">2014-10-23 11:17</span> by <a href="https://www.reddit.com/user/BlackJackKetchum">/u/BlackJackKetchum</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="1HM3bZn2yFU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/1HM3bZn2yFU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">CLUTCH- Who's Been Talking</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2jflti">CLUTCH -- Who's Been Talking</a>
-<br>
-                        submitted <span class="muted">2014-10-16 17:07</span> by <a href="https://www.reddit.com/user/Heckler6">/u/Heckler6</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ELKbtFljucQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ELKbtFljucQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Paolo Nutini - Iron Sky [Abbey Road Live Session]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2jg7y3">Paolo Nutini - Iron Sky [Abbey Road Live Session]</a>
-<br>
-                        submitted <span class="muted">2014-10-16 20:16</span> by <a href="https://www.reddit.com/user/leoavalon">/u/leoavalon</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8vIhDk2qaIM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8vIhDk2qaIM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Three Kings, Wail Baby</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2k35xo">Three Kings - Wail Baby - Aussie blues - Representing Melbourne at 2015 IBC</a>
-<br>
-                        submitted <span class="muted">2014-10-23 11:49</span> by <a href="https://www.reddit.com/user/JellyRollBaker">/u/JellyRollBaker</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="TC9_c6SynBE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/TC9_c6SynBE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sean Costello - Live in Marquette, Michigan (Full Concert - June 17, 2000)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2kezkf">I uploaded a new/rare Sean Costello Bootleg - Live in Marquette, Michigan (Full Concert - June 17, 2000)</a>
-<br>
-                        submitted <span class="muted">2014-10-27 00:04</span> by <a href="https://www.reddit.com/user/spyder52">/u/spyder52</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="GYEuyOSSMQI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/GYEuyOSSMQI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jeremy Lyons & Members of Morphine - Special Rider (Skip James)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2klsg4">Jeremy Lyons &amp; Members of Morphine - Special Rider (Skip James)</a>
-<br>
-                        submitted <span class="muted">2014-10-28 20:34</span> by <a href="https://www.reddit.com/user/cjclark68">/u/cjclark68</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="hVN9ckrREWY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/hVN9ckrREWY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Gary Moore - Need Your Love So Bad (HD) traducida español - Live Montreux 1999</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2jq5ax">Gary Moore covers Need Your Love So Bad</a>
-<br>
-                        submitted <span class="muted">2014-10-19 21:37</span> by <a href="https://www.reddit.com/user/Pkimmer">/u/Pkimmer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="pdky6U9lAaQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/pdky6U9lAaQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">A Tribute to Stevie Ray Vaughan</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2k77kk">Lots of star power and a really fun watch - A Tribute to Stevie Ray Vaughan</a>
-<br>
-                        submitted <span class="muted">2014-10-24 14:48</span> by <a href="https://www.reddit.com/user/kszpara">/u/kszpara</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="YAZyjARWKzM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/YAZyjARWKzM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Deep Purple -  when a blind man Cries Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2im72d">When a blind man cries - Deep Purple</a>
-<br>
-                        submitted <span class="muted">2014-10-08 01:05</span> by <a href="https://www.reddit.com/user/Pkimmer">/u/Pkimmer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="MUpc0YNkkJ0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/MUpc0YNkkJ0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Eric Clapton - Have you ever loved a woman</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2jnfn3">Eric Clapton - Have You Ever Loved a Woman</a>
-<br>
-                        submitted <span class="muted">2014-10-19 00:04</span> by <a href="https://www.reddit.com/user/Wunobi">/u/Wunobi</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zmuEoEA_LJk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zmuEoEA_LJk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Rob Europe - Pony Blues (Wes Houston Presents) 2014</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2iacwg">Rob Europe playing Pony Blues 2014</a>
-<br>
-                        submitted <span class="muted">2014-10-04 16:56</span> by <a href="https://www.reddit.com/user/rpiRDAS">/u/rpiRDAS</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2lqwbeULlzc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2lqwbeULlzc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Delaware Slide - George Thorogood & The Destroyers</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2im9tx">George Thorogood &amp; The Destroyers - Delaware Slide</a>
-<br>
-                        submitted <span class="muted">2014-10-08 01:32</span> by <a href="https://www.reddit.com/user/elitron">/u/elitron</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="vX--sM5G52U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/vX--sM5G52U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Bob Brozman Song 1</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2jn83g">Bob brozman! the dude is on a different level!</a>
-<br>
-                        submitted <span class="muted">2014-10-18 22:41</span> by <a href="https://www.reddit.com/user/FunkyBooNutz">/u/FunkyBooNutz</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="WWvMbFXOj84">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/WWvMbFXOj84/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Eric Clapton - Tribute to Jack Bruce</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2kn3mp">In memory of Jack Bruce's recent passing, Stormy Monday with Jack and Buddy</a>
-<br>
-                        submitted <span class="muted">2014-10-29 03:24</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="LAeCF8-aCqU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/LAeCF8-aCqU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Joe Bonamassa - When The Sun Goes Down</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2kw0g9">Joe Bonamassa - When the Sun Goes Down</a>
-<br>
-                        submitted <span class="muted">2014-10-31 14:55</span> by <a href="https://www.reddit.com/user/disorder_unit">/u/disorder_unit</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="cZrGJDD7Rvg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/cZrGJDD7Rvg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Tadeusz Nalepa - Nocą puka ktoś</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2kxnfj">Polish bluesman T. Nalepa, At Night Knocks Somebody</a>
-<br>
-                        submitted <span class="muted">2014-10-31 23:36</span> by <a href="https://www.reddit.com/user/thrichs">/u/thrichs</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="XMpXxYJVVdU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XMpXxYJVVdU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mississippi John Hurt-Coffee Blues</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2ii09t">One of my favorite songs- Coffee Blues by Mississippi John Hurt</a>
-<br>
-                        submitted <span class="muted">2014-10-06 23:18</span> by <a href="https://www.reddit.com/user/starhawks">/u/starhawks</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="L7exUMHWoYE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/L7exUMHWoYE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Deep Purple - Lazy (Live in Copenhagen 1972) HD</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2ii7r4">Sum blues rock (Lazy - Deep Purple)</a>
-<br>
-                        submitted <span class="muted">2014-10-07 00:22</span> by <a href="https://www.reddit.com/user/Pkimmer">/u/Pkimmer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_h1QbKJCBMA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_h1QbKJCBMA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Peach Orchard Mama - Jackson Joe Williams</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2iic4h">Peach Orchard Mama - Jackson Joe Williams</a>
-<br>
-                        submitted <span class="muted">2014-10-07 01:01</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="JGj7hQI-3lI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/JGj7hQI-3lI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">..camel ride</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2j0p7m">What do you think of this guy right here?</a>
-<br>
-                        submitted <span class="muted">2014-10-12 11:06</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="HNOR36mPtbk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/HNOR36mPtbk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Eric Clapton - Blue Eyes Blue (Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2j5dkf">Eric Clapton - Blue Eyes Blue</a>
-<br>
-                        submitted <span class="muted">2014-10-13 20:30</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="hkUIknxbg6Y">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/hkUIknxbg6Y/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Benjamin Booker - Have You Seen My Son? (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2jkwgo">The only good example of a punk blues fusion I've been able to find Benjamin Booker- " Have you seen my son?"</a>
-<br>
-                        submitted <span class="muted">2014-10-18 03:46</span> by <a href="https://www.reddit.com/user/samwalie">/u/samwalie</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zJGsLsGBNeg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zJGsLsGBNeg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Homeless Drunk Strums the Blues - guttral voice from the gutter</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2jmi67">How much talent does this drunk homeless musician have?</a>
-<br>
-                        submitted <span class="muted">2014-10-18 18:18</span> by <a href="https://www.reddit.com/user/me_old_china">/u/me_old_china</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="nGGNryq08kU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/nGGNryq08kU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Muddy Waters - I Be's Troubled</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2jmtk6">Muddy Waters - I Be's Troubled</a>
-<br>
-                        submitted <span class="muted">2014-10-18 20:10</span> by <a href="https://www.reddit.com/user/j3434">/u/j3434</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="LO4F_0zpdEs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/LO4F_0zpdEs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Brothers - NEVER GO BACK</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2k166m">The Brothers - NEVER GO BACK</a>
-<br>
-                        submitted <span class="muted">2014-10-22 21:16</span> by <a href="https://www.reddit.com/user/izrailx">/u/izrailx</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="rBndiKxbwQU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/rBndiKxbwQU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Brothers - BROKEN HEART BLUES</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2k17r6">BROKEN HEART BLUES</a>
-<br>
-                        submitted <span class="muted">2014-10-22 21:30</span> by <a href="https://www.reddit.com/user/izrailx">/u/izrailx</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="sYrK464nIeY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/sYrK464nIeY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Black Betty by LEADBELLY, Blues Legend (1939)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2k4g6r">Black Betty by LEADBELLY, Blues Legend (1939)</a>
-<br>
-                        submitted <span class="muted">2014-10-23 19:19</span> by <a href="https://www.reddit.com/user/alhena">/u/alhena</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="HqSdCpq8-Qs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/HqSdCpq8-Qs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Moontide(live)--Lost Sols</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2k6fve">Lost Sols- Live at Lakeside Labz-- keep on keepin on everyone</a>
-<br>
-                        submitted <span class="muted">2014-10-24 07:50</span> by <a href="https://www.reddit.com/user/Lost_Sols">/u/Lost_Sols</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2Q2enkV1hus">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2Q2enkV1hus/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Arthur Crudup - My Baby Left Me</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2kqy9w">Arthur Crudup - My Baby Left Me</a>
-<br>
-                        submitted <span class="muted">2014-10-30 03:30</span> by <a href="https://www.reddit.com/user/j3434">/u/j3434</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="OCgMpKZGGJA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/OCgMpKZGGJA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Iron Mike Norton - Strawberry Crush (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/2ix416">Iron Mike Norton - Strawberry Crush (Blues)</a>
-<br>
-                        submitted <span class="muted">2014-10-11 03:54</span> by <a href="https://www.reddit.com/user/ironmikenorton">/u/ironmikenorton</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="4YtwZxrnfNU">
+                    <td><img src="https://i.ytimg.com/vi/4YtwZxrnfNU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Eric Clapton, Buddy Guy, BB King, Jimmie Vaughan (Rock me baby)</td>
+                </tr>
+                <tr class="record" id="K_DOnKJ232M">
+                    <td><img src="https://i.ytimg.com/vi/K_DOnKJ232M/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">R.L. Burnside: See My Jumper Hanging On the Line (1978)</td>
+                </tr>
+                <tr class="record" id="jLsye_LJ_Ks">
+                    <td><img src="https://i.ytimg.com/vi/jLsye_LJ_Ks/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ain't No Sunshine - Matt Andersen</td>
+                </tr>
+                <tr class="record" id="gfiA_TO6qJw">
+                    <td><img src="https://i.ytimg.com/vi/gfiA_TO6qJw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Matt''Guitar''Murphy  - Murphy's Boogie - 1963</td>
+                </tr>
+                <tr class="record" id="uEu4MhdmiOI">
+                    <td><img src="https://i.ytimg.com/vi/uEu4MhdmiOI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Buddy Guy Imitates John Lee Hooker & Eric Clapton- "Boom Boom Boom Boom" & "Strange Brew"</td>
+                </tr>
+                <tr class="record" id="yVj8Sh4phzM">
+                    <td><img src="https://i.ytimg.com/vi/yVj8Sh4phzM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Buddy guy Ft. Rolling stones - Champagne & Reefer Live!</td>
+                </tr>
+                <tr class="record" id="3hjqqa5tq5k">
+                    <td><img src="https://i.ytimg.com/vi/3hjqqa5tq5k/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Buddy Guy -  Damn Right I've Got The Blues</td>
+                </tr>
+                <tr class="record" id="xw3KxF9pxso">
+                    <td><img src="https://i.ytimg.com/vi/xw3KxF9pxso/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Seasick Steve So Lonesome I Could Cry</td>
+                </tr>
+                <tr class="record" id="qv5pagal-ls">
+                    <td><img src="https://i.ytimg.com/vi/qv5pagal-ls/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Bill Withers - Grandma's Hands</td>
+                </tr>
+                <tr class="record" id="AGPx-ekqZEo">
+                    <td><img src="https://i.ytimg.com/vi/AGPx-ekqZEo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Stevie Ray Vaughan Tin Pan Alley (with Johnny Copeland)</td>
+                </tr>
+                <tr class="record" id="IgwD_oMttio">
+                    <td><img src="https://i.ytimg.com/vi/IgwD_oMttio/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Beer Bottle Blues - samuraiguitarist (Original Content)</td>
+                </tr>
+                <tr class="record" id="a0c-RzIQSyE">
+                    <td><img src="https://i.ytimg.com/vi/a0c-RzIQSyE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Clay and Friends with James Potvin - Hay Stack Blues ( Feat. Marilou)</td>
+                </tr>
+                <tr class="record" id="6GjEh8HD3jI">
+                    <td><img src="https://i.ytimg.com/vi/6GjEh8HD3jI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jack Bruce and his Big Blues Band - Spoonful - Birmingham 29 March 2012</td>
+                </tr>
+                <tr class="record" id="IPtv14q9ZDg">
+                    <td><img src="https://i.ytimg.com/vi/IPtv14q9ZDg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">JIMI HENDRIX 12 STRING BLUES</td>
+                </tr>
+                <tr class="record" id="KmmCJnWx06Q">
+                    <td><img src="https://i.ytimg.com/vi/KmmCJnWx06Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">JOHN LEE HOOKER Boom Boom 1983 live!</td>
+                </tr>
+                <tr class="record" id="jkBUXXbtYPI">
+                    <td><img src="https://i.ytimg.com/vi/jkBUXXbtYPI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jimmy Dawkins - Me, My Gitar and the Blues</td>
+                </tr>
+                <tr class="record" id="GgTjuDh7dVA">
+                    <td><img src="https://i.ytimg.com/vi/GgTjuDh7dVA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Howlin Wolf Built For Comfort</td>
+                </tr>
+                <tr class="record" id="S6V3q-djJD8">
+                    <td><img src="https://i.ytimg.com/vi/S6V3q-djJD8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ali Farka Touré - The River</td>
+                </tr>
+                <tr class="record" id="NmCv6UOF22A">
+                    <td><img src="https://i.ytimg.com/vi/NmCv6UOF22A/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Incredible Blues Pianist Luca Sestak's Slow Blues Improvisation.</td>
+                </tr>
+                <tr class="record" id="W6jjNRUqPxg">
+                    <td><img src="https://i.ytimg.com/vi/W6jjNRUqPxg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Belton Sutherland: Blues #2 (1978)</td>
+                </tr>
+                <tr class="record" id="CRpOqZqlHRY">
+                    <td><img src="https://i.ytimg.com/vi/CRpOqZqlHRY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Marcus King Band visits Norman's Rare Guitars</td>
+                </tr>
+                <tr class="record" id="YKE6TEkl76k">
+                    <td><img src="https://i.ytimg.com/vi/YKE6TEkl76k/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Blind Willie Johnson Trouble Will Soon be Over</td>
+                </tr>
+                <tr class="record" id="fmTS4TieO28">
+                    <td><img src="https://i.ytimg.com/vi/fmTS4TieO28/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Muddy Waters - I Am The Blues</td>
+                </tr>
+                <tr class="record" id="KSnhq0kQzHY">
+                    <td><img src="https://i.ytimg.com/vi/KSnhq0kQzHY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">‪Lay Low - Donna Mo's Blues‬ (Official Video)</td>
+                </tr>
+                <tr class="record" id="oGk72L652K4">
+                    <td><img src="https://i.ytimg.com/vi/oGk72L652K4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">T-Bone Walker - Goin' to Chicago</td>
+                </tr>
+                <tr class="record" id="SaiuYKb5hrI">
+                    <td><img src="https://i.ytimg.com/vi/SaiuYKb5hrI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Son Little - "The River"</td>
+                </tr>
+                <tr class="record" id="IGZkb4p6Ks8">
+                    <td><img src="https://i.ytimg.com/vi/IGZkb4p6Ks8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">GREEN/MAYALL Great Solo Live STORMY MONDAY</td>
+                </tr>
+                <tr class="record" id="grBmQwLSlDw">
+                    <td><img src="https://i.ytimg.com/vi/grBmQwLSlDw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Stevie Ray Vaughan - Best Guitar Player - Sound Check - What?!</td>
+                </tr>
+                <tr class="record" id="5ym7Lsqj90c">
+                    <td><img src="https://i.ytimg.com/vi/5ym7Lsqj90c/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cream - Wheels of Fire - 02 - Spoonful[Live]</td>
+                </tr>
+                <tr class="record" id="otNICva63mQ">
+                    <td><img src="https://i.ytimg.com/vi/otNICva63mQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">emmett miller/lovesick blues (original version)</td>
+                </tr>
+                <tr class="record" id="SABAQjPFqGM">
+                    <td><img src="https://i.ytimg.com/vi/SABAQjPFqGM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sean Rowe - "Done Calling You" (Live)</td>
+                </tr>
+                <tr class="record" id="qLpOhok-DOc">
+                    <td><img src="https://i.ytimg.com/vi/qLpOhok-DOc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lucky Peterson - Yer Blues</td>
+                </tr>
+                <tr class="record" id="gGrADAAvrkE">
+                    <td><img src="https://i.ytimg.com/vi/gGrADAAvrkE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">John Lee Hooker & Canned Heat - Whiskey & Wimmen' [HQ]</td>
+                </tr>
+                <tr class="record" id="sNdHqFh5OsE">
+                    <td><img src="https://i.ytimg.com/vi/sNdHqFh5OsE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Spoonful</td>
+                </tr>
+                <tr class="record" id="TZ-Ed-Bm24I">
+                    <td><img src="https://i.ytimg.com/vi/TZ-Ed-Bm24I/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Kenny Wayne Shepherd Feat. Cootie Stark - U-Haul - USA 2006</td>
+                </tr>
+                <tr class="record" id="fw8EPOFdBVw">
+                    <td><img src="https://i.ytimg.com/vi/fw8EPOFdBVw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jethro Tull - Stormy Monday</td>
+                </tr>
+                <tr class="record" id="g_L1ksoCWXU">
+                    <td><img src="https://i.ytimg.com/vi/g_L1ksoCWXU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">29 Blues Licks - Lick #1 Shuffle SRV Style</td>
+                </tr>
+                <tr class="record" id="pw85YF_rt8c">
+                    <td><img src="https://i.ytimg.com/vi/pw85YF_rt8c/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SAVOY BROWN - Tolling Bells (1969) - w. lyrics</td>
+                </tr>
+                <tr class="record" id="1Z8-Yk2C-EE">
+                    <td><img src="https://i.ytimg.com/vi/1Z8-Yk2C-EE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Amazing African Blues: Momo Wandel Soumah - Felenko Yefe</td>
+                </tr>
+                <tr class="record" id="ZayTpvm0Yho">
+                    <td><img src="https://i.ytimg.com/vi/ZayTpvm0Yho/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">West Coast Blues - BLIND BLAKE (1926) Ragtime Blues Guitar Legend</td>
+                </tr>
+                <tr class="record" id="oTFvAvsHC_Y">
+                    <td><img src="https://i.ytimg.com/vi/oTFvAvsHC_Y/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Boz Scaggs & Duane Allman ~ Loan Me A Dime</td>
+                </tr>
+                <tr class="record" id="XoursR0OrrA">
+                    <td><img src="https://i.ytimg.com/vi/XoursR0OrrA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lattie Murrell - Wolf's At Your Door</td>
+                </tr>
+                <tr class="record" id="pfpLCKhye5Q">
+                    <td><img src="https://i.ytimg.com/vi/pfpLCKhye5Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Junior Wells Live in Chicago</td>
+                </tr>
+                <tr class="record" id="RIYNNkT3qi0">
+                    <td><img src="https://i.ytimg.com/vi/RIYNNkT3qi0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Down & Out (JANIS JOPLIN)</td>
+                </tr>
+                <tr class="record" id="5UCxwAxB7Jc">
+                    <td><img src="https://i.ytimg.com/vi/5UCxwAxB7Jc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Joe Cocker - Bye Bye Blackbird</td>
+                </tr>
+                <tr class="record" id="1vWkDT3ohU4">
+                    <td><img src="https://i.ytimg.com/vi/1vWkDT3ohU4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mo Rodgers "Black Coffee and Cigarettes" Studio City Sound Live</td>
+                </tr>
+                <tr class="record" id="1HM3bZn2yFU">
+                    <td><img src="https://i.ytimg.com/vi/1HM3bZn2yFU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">CLUTCH- Who's Been Talking</td>
+                </tr>
+                <tr class="record" id="ELKbtFljucQ">
+                    <td><img src="https://i.ytimg.com/vi/ELKbtFljucQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Paolo Nutini - Iron Sky [Abbey Road Live Session]</td>
+                </tr>
+                <tr class="record" id="8vIhDk2qaIM">
+                    <td><img src="https://i.ytimg.com/vi/8vIhDk2qaIM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Three Kings, Wail Baby</td>
+                </tr>
+                <tr class="record" id="TC9_c6SynBE">
+                    <td><img src="https://i.ytimg.com/vi/TC9_c6SynBE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sean Costello - Live in Marquette, Michigan (Full Concert - June 17, 2000)</td>
+                </tr>
+                <tr class="record" id="GYEuyOSSMQI">
+                    <td><img src="https://i.ytimg.com/vi/GYEuyOSSMQI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jeremy Lyons & Members of Morphine - Special Rider (Skip James)</td>
+                </tr>
+                <tr class="record" id="hVN9ckrREWY">
+                    <td><img src="https://i.ytimg.com/vi/hVN9ckrREWY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Gary Moore - Need Your Love So Bad (HD) traducida español - Live Montreux 1999</td>
+                </tr>
+                <tr class="record" id="pdky6U9lAaQ">
+                    <td><img src="https://i.ytimg.com/vi/pdky6U9lAaQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">A Tribute to Stevie Ray Vaughan</td>
+                </tr>
+                <tr class="record" id="YAZyjARWKzM">
+                    <td><img src="https://i.ytimg.com/vi/YAZyjARWKzM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Deep Purple -  when a blind man Cries Video</td>
+                </tr>
+                <tr class="record" id="MUpc0YNkkJ0">
+                    <td><img src="https://i.ytimg.com/vi/MUpc0YNkkJ0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Eric Clapton - Have you ever loved a woman</td>
+                </tr>
+                <tr class="record" id="zmuEoEA_LJk">
+                    <td><img src="https://i.ytimg.com/vi/zmuEoEA_LJk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Rob Europe - Pony Blues (Wes Houston Presents) 2014</td>
+                </tr>
+                <tr class="record" id="2lqwbeULlzc">
+                    <td><img src="https://i.ytimg.com/vi/2lqwbeULlzc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Delaware Slide - George Thorogood & The Destroyers</td>
+                </tr>
+                <tr class="record" id="vX--sM5G52U">
+                    <td><img src="https://i.ytimg.com/vi/vX--sM5G52U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Bob Brozman Song 1</td>
+                </tr>
+                <tr class="record" id="WWvMbFXOj84">
+                    <td><img src="https://i.ytimg.com/vi/WWvMbFXOj84/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Eric Clapton - Tribute to Jack Bruce</td>
+                </tr>
+                <tr class="record" id="LAeCF8-aCqU">
+                    <td><img src="https://i.ytimg.com/vi/LAeCF8-aCqU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Joe Bonamassa - When The Sun Goes Down</td>
+                </tr>
+                <tr class="record" id="cZrGJDD7Rvg">
+                    <td><img src="https://i.ytimg.com/vi/cZrGJDD7Rvg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Tadeusz Nalepa - Nocą puka ktoś</td>
+                </tr>
+                <tr class="record" id="XMpXxYJVVdU">
+                    <td><img src="https://i.ytimg.com/vi/XMpXxYJVVdU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mississippi John Hurt-Coffee Blues</td>
+                </tr>
+                <tr class="record" id="L7exUMHWoYE">
+                    <td><img src="https://i.ytimg.com/vi/L7exUMHWoYE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Deep Purple - Lazy (Live in Copenhagen 1972) HD</td>
+                </tr>
+                <tr class="record" id="_h1QbKJCBMA">
+                    <td><img src="https://i.ytimg.com/vi/_h1QbKJCBMA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Peach Orchard Mama - Jackson Joe Williams</td>
+                </tr>
+                <tr class="record" id="JGj7hQI-3lI">
+                    <td><img src="https://i.ytimg.com/vi/JGj7hQI-3lI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">..camel ride</td>
+                </tr>
+                <tr class="record" id="HNOR36mPtbk">
+                    <td><img src="https://i.ytimg.com/vi/HNOR36mPtbk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Eric Clapton - Blue Eyes Blue (Video)</td>
+                </tr>
+                <tr class="record" id="hkUIknxbg6Y">
+                    <td><img src="https://i.ytimg.com/vi/hkUIknxbg6Y/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Benjamin Booker - Have You Seen My Son? (Official Video)</td>
+                </tr>
+                <tr class="record" id="zJGsLsGBNeg">
+                    <td><img src="https://i.ytimg.com/vi/zJGsLsGBNeg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Homeless Drunk Strums the Blues - guttral voice from the gutter</td>
+                </tr>
+                <tr class="record" id="nGGNryq08kU">
+                    <td><img src="https://i.ytimg.com/vi/nGGNryq08kU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Muddy Waters - I Be's Troubled</td>
+                </tr>
+                <tr class="record" id="LO4F_0zpdEs">
+                    <td><img src="https://i.ytimg.com/vi/LO4F_0zpdEs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Brothers - NEVER GO BACK</td>
+                </tr>
+                <tr class="record" id="rBndiKxbwQU">
+                    <td><img src="https://i.ytimg.com/vi/rBndiKxbwQU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Brothers - BROKEN HEART BLUES</td>
+                </tr>
+                <tr class="record" id="sYrK464nIeY">
+                    <td><img src="https://i.ytimg.com/vi/sYrK464nIeY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Black Betty by LEADBELLY, Blues Legend (1939)</td>
+                </tr>
+                <tr class="record" id="HqSdCpq8-Qs">
+                    <td><img src="https://i.ytimg.com/vi/HqSdCpq8-Qs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Moontide(live)--Lost Sols</td>
+                </tr>
+                <tr class="record" id="2Q2enkV1hus">
+                    <td><img src="https://i.ytimg.com/vi/2Q2enkV1hus/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Arthur Crudup - My Baby Left Me</td>
+                </tr>
+                <tr class="record" id="OCgMpKZGGJA">
+                    <td><img src="https://i.ytimg.com/vi/OCgMpKZGGJA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Iron Mike Norton - Strawberry Crush (Official Video)</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/blues/">Blues</a> archive:
     <a href="/genre/blues/2010/">2010</a>&nbsp;•&nbsp;    <a href="/genre/blues/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/blues/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/blues/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/blues/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/blues/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/blues/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/blues/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -1134,12 +384,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'blues';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

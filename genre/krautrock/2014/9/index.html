@@ -46,92 +46,52 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="XzSi1qPxBIQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XzSi1qPxBIQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Amon Düül II - Archangel Thunderbird</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/2g7fx2">Amon Duul II- Archangel Thunderbird</a>
-<br>
-                        submitted <span class="muted">2014-09-12 15:13</span> by <a href="https://www.reddit.com/user/huckingfipster">/u/huckingfipster</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="V7T420v4rlo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/V7T420v4rlo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">A Meditation Mass - Yatha Sidhra (1974) Full Album.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2gwrns">Yatha Sidhra - A Meditation Mass -- Full Album</a>
-<br>
-                        submitted <span class="muted">2014-09-20 00:15</span> by <a href="https://www.reddit.com/user/FreddieFreelance">/u/FreddieFreelance</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="D2ZWXnibjfk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/D2ZWXnibjfk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Liliental -  Liliental 1978 ( Full Album ).wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2fj6ph">Liliental- S/T full album (krautrock supergroup, members of cluster/kraan with Conny Plank)</a>
-<br>
-                        submitted <span class="muted">2014-09-05 07:35</span> by <a href="https://www.reddit.com/user/coldbench">/u/coldbench</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="NcyB8jAD01Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/NcyB8jAD01Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Der Blutharsch / Jastreb: North (Live @ U Ocka, Bratislava #2 - 2013 Sept 23)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2gdwg6">Der Blutharsch + Jastreb - North (Live)</a>
-<br>
-                        submitted <span class="muted">2014-09-14 18:09</span> by <a href="https://www.reddit.com/user/GuantanaMo">/u/GuantanaMo</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="XzSi1qPxBIQ">
+                    <td><img src="https://i.ytimg.com/vi/XzSi1qPxBIQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Amon Düül II - Archangel Thunderbird</td>
+                </tr>
+                <tr class="record" id="V7T420v4rlo">
+                    <td><img src="https://i.ytimg.com/vi/V7T420v4rlo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">A Meditation Mass - Yatha Sidhra (1974) Full Album.</td>
+                </tr>
+                <tr class="record" id="D2ZWXnibjfk">
+                    <td><img src="https://i.ytimg.com/vi/D2ZWXnibjfk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Liliental -  Liliental 1978 ( Full Album ).wmv</td>
+                </tr>
+                <tr class="record" id="NcyB8jAD01Q">
+                    <td><img src="https://i.ytimg.com/vi/NcyB8jAD01Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Der Blutharsch / Jastreb: North (Live @ U Ocka, Bratislava #2 - 2013 Sept 23)</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/krautrock/">Krautrock</a> archive:
     <a href="/genre/krautrock/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/krautrock/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/krautrock/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/krautrock/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/krautrock/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/krautrock/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -140,12 +100,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'krautrock';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

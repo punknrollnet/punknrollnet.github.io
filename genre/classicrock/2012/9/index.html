@@ -46,694 +46,224 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="MYiahoYfPGk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/MYiahoYfPGk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Time - Pink Floyd + Lyrics</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">50</span> - <a href="https://www.reddit.com/103h60">Pink Floyd - Time</a>
-<br>
-                        submitted <span class="muted">2012-09-18 20:05</span> by <a href="https://www.reddit.com/user/TheZeppelin1995">/u/TheZeppelin1995</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="cpbbuaIA3Ds">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/cpbbuaIA3Ds/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Money - Pink Floyd HD (Studio Version)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">35</span> - <a href="https://www.reddit.com/zk26n">Pink Floyd - Money</a>
-<br>
-                        submitted <span class="muted">2012-09-08 15:00</span> by <a href="https://www.reddit.com/user/TheZeppelin1995">/u/TheZeppelin1995</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Mln0RciE2o0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Mln0RciE2o0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Led Zeppelin - Whole Lotta Love (HQ)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">23</span> - <a href="https://www.reddit.com/zb1mh">Led Zeppelin - Whole Lotta Love</a>
-<br>
-                        submitted <span class="muted">2012-09-03 23:33</span> by <a href="https://www.reddit.com/user/TheZeppelin1995">/u/TheZeppelin1995</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="u1xY7Heaqg8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/u1xY7Heaqg8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jethro Tull - Aqualung</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/zhftp">Jethro Tull - Aqualung</a>
-<br>
-                        submitted <span class="muted">2012-09-07 02:07</span> by <a href="https://www.reddit.com/user/dmj2010">/u/dmj2010</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="PdLIerfXuZ4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/PdLIerfXuZ4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Who - Who Are You?</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/za9dg">The Who - Who Are You?</a>
-<br>
-                        submitted <span class="muted">2012-09-03 16:05</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2VFJB-ZeVqM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2VFJB-ZeVqM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Van Halen - Van Halen - Runnin' With The Devil</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/zlprg">Van Halen - Running With The Devil</a>
-<br>
-                        submitted <span class="muted">2012-09-09 14:46</span> by <a href="https://www.reddit.com/user/TheZeppelin1995">/u/TheZeppelin1995</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="cu1UIEQ5QGs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/cu1UIEQ5QGs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Rush - A Farewell To Kings *OFFICIAL*</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/za8qc">Rush - A Farewell To Kings</a>
-<br>
-                        submitted <span class="muted">2012-09-03 15:54</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Unnh0T2Ftro">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Unnh0T2Ftro/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Thin lizzy - Dancing in the moonlight</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/za9y1">Thin lizzy - Dancing in the moonlight</a>
-<br>
-                        submitted <span class="muted">2012-09-03 16:15</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_WFLUhSym80">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_WFLUhSym80/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Deep Purple - Highway Star Lyrics</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/z77cr">Deep Purple - Highway Star.</a>
-<br>
-                        submitted <span class="muted">2012-09-01 20:53</span> by <a href="https://www.reddit.com/user/TheZeppelin1995">/u/TheZeppelin1995</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="a8ZSdicyD2Y">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/a8ZSdicyD2Y/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Scorpions-The zoo+LYRICS</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/z7ria">Scorpions - The Zoo</a>
-<br>
-                        submitted <span class="muted">2012-09-02 03:29</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bg92QpjRcJk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bg92QpjRcJk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Metallica - For Whom The Bell Tolls with lyrics</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/ziz1g">Anyone here like Metallica? For Whom the Bell Tolls.</a>
-<br>
-                        submitted <span class="muted">2012-09-07 21:44</span> by <a href="https://www.reddit.com/user/TheZeppelin1995">/u/TheZeppelin1995</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="PfAWReBmxEs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/PfAWReBmxEs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Deep Purple-Child in Time</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/zwp19">Deep Purple - Child in Time</a>
-<br>
-                        submitted <span class="muted">2012-09-15 01:51</span> by <a href="https://www.reddit.com/user/TheZeppelin1995">/u/TheZeppelin1995</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="671AgW9xSiA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/671AgW9xSiA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Grateful Dead - Ripple (Studio Version)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/10dexq">Grateful Dead - Ripple</a>
-<br>
-                        submitted <span class="muted">2012-09-24 02:19</span> by <a href="https://www.reddit.com/user/bananaman172">/u/bananaman172</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zO6D_BAuYCI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zO6D_BAuYCI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Queen - Crazy Little Thing Called Love (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/10pb1g">Queen - Crazy Little Thing Called Love</a>
-<br>
-                        submitted <span class="muted">2012-09-30 06:47</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Th3ycKQV_4k">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Th3ycKQV_4k/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Layla - Derek and the Dominos</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/10ld18">Derek and the Dominos - Layla (x-post from /r/70sMusic)</a>
-<br>
-                        submitted <span class="muted">2012-09-28 00:24</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="GrFdb0FcnhE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/GrFdb0FcnhE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Captain Beefheart and his Magic Band - Safe as Milk (Full Album)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/zd3fc">Captain Beefheart - Safe As Milk. My favourite album ever.</a>
-<br>
-                        submitted <span class="muted">2012-09-04 23:44</span> by <a href="https://www.reddit.com/user/Ibeataseal">/u/Ibeataseal</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="wbq-8FYpYPo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/wbq-8FYpYPo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Beatles - Rocky Raccoon (2009 Stereo Remaster)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/zlbw8">The Beatles - Rocky Raccoon</a>
-<br>
-                        submitted <span class="muted">2012-09-09 06:01</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="nJNMnBhf-Ds">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/nJNMnBhf-Ds/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Velvet Underground - Heroin</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/zposx">The Velvet Underground - Heroin</a>
-<br>
-                        submitted <span class="muted">2012-09-11 15:55</span> by <a href="https://www.reddit.com/user/SenorPoppy">/u/SenorPoppy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ZEY8clFcm2E">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ZEY8clFcm2E/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Creedence  -  Have You Ever Seen The Rain? ♥ღ♥</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/zxctc">Creedence Clearwater Revival - Have You Ever Seen The Rain?</a>
-<br>
-                        submitted <span class="muted">2012-09-15 14:28</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="u925g6CgKuw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/u925g6CgKuw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Neil Young - Heart of Gold/Lyrics (Full HD)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/1026su">Neil Young - Heart of Gold</a>
-<br>
-                        submitted <span class="muted">2012-09-18 03:15</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="mUFZC7uXQZc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/mUFZC7uXQZc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Boston - Smokin' (with lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/z6zqg">Boston - Smokin'</a>
-<br>
-                        submitted <span class="muted">2012-09-01 18:32</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="PUhIEEwSSSo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/PUhIEEwSSSo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Beatles - Happiness Is A Warm Gun (2009 Stereo Remaster)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/10a4f3">The Beatles - Happiness is a Warm Gun</a>
-<br>
-                        submitted <span class="muted">2012-09-22 02:21</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="nGHhqV_QhzE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/nGHhqV_QhzE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Doors - 5 to 1 (with lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/zepip">The Doors - Five to One</a>
-<br>
-                        submitted <span class="muted">2012-09-05 19:36</span> by <a href="https://www.reddit.com/user/TheZeppelin1995">/u/TheZeppelin1995</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="JTakA8jTLsA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/JTakA8jTLsA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Scorpions - Dynamite (With Lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/zfdcl">Scorpions - Dynamite</a>
-<br>
-                        submitted <span class="muted">2012-09-06 01:47</span> by <a href="https://www.reddit.com/user/TheZeppelin1995">/u/TheZeppelin1995</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="GFNiSjN4BBY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/GFNiSjN4BBY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Fingerprint File The Rolling Stones</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/zk1v4">The Rolling Stones - Fingerprint File</a>
-<br>
-                        submitted <span class="muted">2012-09-08 14:52</span> by <a href="https://www.reddit.com/user/TheZeppelin1995">/u/TheZeppelin1995</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="y6SQniO7SnU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/y6SQniO7SnU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Uriah Heep July Morning live 1973</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/10fwmq">Uriah Heep July Morning (Live in 1973)</a>
-<br>
-                        submitted <span class="muted">2012-09-25 08:27</span> by <a href="https://www.reddit.com/user/MAlshoaiby">/u/MAlshoaiby</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="UVLUFl6WO6E">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/UVLUFl6WO6E/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Chicago (Terry Kath) -  I'm A Man 1968</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/z62gi">Terry Kath and Chicago at their best.</a>
-<br>
-                        submitted <span class="muted">2012-09-01 02:26</span> by <a href="https://www.reddit.com/user/PresidentWyatt">/u/PresidentWyatt</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="b9SKxL9CnW0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/b9SKxL9CnW0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Grateful Dead - Friend of the Devil (Studio Version)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/z99zj">Grateful Dead - Friend of the Devil</a>
-<br>
-                        submitted <span class="muted">2012-09-03 01:28</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="lP94PlEtsEQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/lP94PlEtsEQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Long Cool Woman in a Black Dress - The Hollies</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/104bfg">Long Cool Woman in a Black Dress - The Hollies -</a>
-<br>
-                        submitted <span class="muted">2012-09-19 03:54</span> by <a href="https://www.reddit.com/user/dmj2010">/u/dmj2010</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="6jcFTyAPImM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/6jcFTyAPImM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Child in Time - Deep Purple [Made in Japan 1972] (Remastered Edition)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/10na4h">Deep Purple - Child in Time [Live] (Made in Japan)</a>
-<br>
-                        submitted <span class="muted">2012-09-29 00:18</span> by <a href="https://www.reddit.com/user/TheZeppelin1995">/u/TheZeppelin1995</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Q1809vqz3zA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Q1809vqz3zA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Long As I Can See The Light - Creedence Clearwater Revival</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/z7rgg">Creedence Clearwater Revival - Long As I Can See the Light</a>
-<br>
-                        submitted <span class="muted">2012-09-02 03:28</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2D175jn-3_M">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2D175jn-3_M/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Robin Trower - Bridge of Sighs - 01 - Day Of The Eagle</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/10bgn2">Robin Trower - Day of the Eagle</a>
-<br>
-                        submitted <span class="muted">2012-09-22 23:09</span> by <a href="https://www.reddit.com/user/Coltrane1967">/u/Coltrane1967</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="K13hH0pJx5s">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/K13hH0pJx5s/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Manfred Mann - Mighty Quinn</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/z7mua">Manfred Mann - The Mighty Quinn (Quinn the Eskimo)</a>
-<br>
-                        submitted <span class="muted">2012-09-02 01:54</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="YwmIV21qLzs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/YwmIV21qLzs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mind Garage- Isle Of Ely.wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/ze7qb">Mind Garage - Isle Of Ely</a>
-<br>
-                        submitted <span class="muted">2012-09-05 14:40</span> by <a href="https://www.reddit.com/user/illBiskit">/u/illBiskit</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="OxnIqM8I6f4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/OxnIqM8I6f4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mistreated - Deep Purple - Made in Europe original</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/zs8k8">Deep Purple - Mistreated [Live](Made in Europe)</a>
-<br>
-                        submitted <span class="muted">2012-09-12 20:28</span> by <a href="https://www.reddit.com/user/TheZeppelin1995">/u/TheZeppelin1995</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="b8sm8n1GoSs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/b8sm8n1GoSs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pink Floyd - Embryo - Live (Very Rare)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/10lfdt">Pink Floyd - Embryo - [10:07]</a>
-<br>
-                        submitted <span class="muted">2012-09-28 01:03</span> by <a href="https://www.reddit.com/user/IAWPS">/u/IAWPS</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="KXDf9UwHGF4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/KXDf9UwHGF4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Eric Clapton - Let It Grow</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/10molh">Eric Clapton - Let it grow</a>
-<br>
-                        submitted <span class="muted">2012-09-28 18:10</span> by <a href="https://www.reddit.com/user/liveeasy">/u/liveeasy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="e5MAg_yWsq8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/e5MAg_yWsq8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Styx - Come Sail Away</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/10p7al">Styx - Come Sail Away (x-post from /r/70sMusic)</a>
-<br>
-                        submitted <span class="muted">2012-09-30 04:57</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="gCXQycyN_Vs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/gCXQycyN_Vs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Marshall Tucker Band - Can't You See</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/zca52">The Marshall Tucker Band - Can't You See</a>
-<br>
-                        submitted <span class="muted">2012-09-04 16:07</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="r3ubLOKbx-Y">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/r3ubLOKbx-Y/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Queen - I Want It All (Lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/10asgl">I was gonna post Have a Cigar, but atticus138 beat me to it. So instead here's I Want it All by Queen.</a>
-<br>
-                        submitted <span class="muted">2012-09-22 15:22</span> by <a href="https://www.reddit.com/user/TheZeppelin1995">/u/TheZeppelin1995</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="XAVjiGL7ePI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XAVjiGL7ePI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Edgar Broughton Band 07 Love in The Rain  Wasa Wasa</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/10gjz1">Edgar Broughton Band - Love in The Rain</a>
-<br>
-                        submitted <span class="muted">2012-09-25 17:30</span> by <a href="https://www.reddit.com/user/juqjoint">/u/juqjoint</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="AE1ct5yEuVY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/AE1ct5yEuVY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Jam - Going Underground</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/10kkom">The Jam - Going Underground</a>
-<br>
-                        submitted <span class="muted">2012-09-27 17:10</span> by <a href="https://www.reddit.com/user/19peter96r">/u/19peter96r</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="atxUuldUcfI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/atxUuldUcfI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Journey - Any Way You Want It</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/10p91x">Journey - Any Way You Want It</a>
-<br>
-                        submitted <span class="muted">2012-09-30 05:43</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ErxAbqsBnFM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ErxAbqsBnFM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sir Lord Baltimore - Helium Head</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/zwb8b">Sir Lord Baltimore - Helium Head</a>
-<br>
-                        submitted <span class="muted">2012-09-14 21:32</span> by <a href="https://www.reddit.com/user/The_Kittu">/u/The_Kittu</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2tAE2K3YT_A">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2tAE2K3YT_A/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cream Farewell Concert</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1013i2">Cream Farewell Concert Royal Albert Hall, 26 November 1968</a>
-<br>
-                        submitted <span class="muted">2012-09-17 17:04</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="lUv-4dNX6Jw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/lUv-4dNX6Jw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Rory Gallagher : A Million Miles Away</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/zupmf">Rory Gallagher - A Million Miles Away</a>
-<br>
-                        submitted <span class="muted">2012-09-14 01:04</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="u8FS2LxdmVc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/u8FS2LxdmVc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Taste-Sugar Mama -1969</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/10grxi">Taste – Sugar Mama (Live in 1969; Rory Gallagher's first band)</a>
-<br>
-                        submitted <span class="muted">2012-09-25 19:30</span> by <a href="https://www.reddit.com/user/MAlshoaiby">/u/MAlshoaiby</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="MYiahoYfPGk">
+                    <td><img src="https://i.ytimg.com/vi/MYiahoYfPGk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Time - Pink Floyd + Lyrics</td>
+                </tr>
+                <tr class="record" id="cpbbuaIA3Ds">
+                    <td><img src="https://i.ytimg.com/vi/cpbbuaIA3Ds/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Money - Pink Floyd HD (Studio Version)</td>
+                </tr>
+                <tr class="record" id="Mln0RciE2o0">
+                    <td><img src="https://i.ytimg.com/vi/Mln0RciE2o0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Led Zeppelin - Whole Lotta Love (HQ)</td>
+                </tr>
+                <tr class="record" id="u1xY7Heaqg8">
+                    <td><img src="https://i.ytimg.com/vi/u1xY7Heaqg8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jethro Tull - Aqualung</td>
+                </tr>
+                <tr class="record" id="PdLIerfXuZ4">
+                    <td><img src="https://i.ytimg.com/vi/PdLIerfXuZ4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Who - Who Are You?</td>
+                </tr>
+                <tr class="record" id="2VFJB-ZeVqM">
+                    <td><img src="https://i.ytimg.com/vi/2VFJB-ZeVqM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Van Halen - Van Halen - Runnin' With The Devil</td>
+                </tr>
+                <tr class="record" id="cu1UIEQ5QGs">
+                    <td><img src="https://i.ytimg.com/vi/cu1UIEQ5QGs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Rush - A Farewell To Kings *OFFICIAL*</td>
+                </tr>
+                <tr class="record" id="Unnh0T2Ftro">
+                    <td><img src="https://i.ytimg.com/vi/Unnh0T2Ftro/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Thin lizzy - Dancing in the moonlight</td>
+                </tr>
+                <tr class="record" id="_WFLUhSym80">
+                    <td><img src="https://i.ytimg.com/vi/_WFLUhSym80/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Deep Purple - Highway Star Lyrics</td>
+                </tr>
+                <tr class="record" id="a8ZSdicyD2Y">
+                    <td><img src="https://i.ytimg.com/vi/a8ZSdicyD2Y/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Scorpions-The zoo+LYRICS</td>
+                </tr>
+                <tr class="record" id="bg92QpjRcJk">
+                    <td><img src="https://i.ytimg.com/vi/bg92QpjRcJk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Metallica - For Whom The Bell Tolls with lyrics</td>
+                </tr>
+                <tr class="record" id="PfAWReBmxEs">
+                    <td><img src="https://i.ytimg.com/vi/PfAWReBmxEs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Deep Purple-Child in Time</td>
+                </tr>
+                <tr class="record" id="671AgW9xSiA">
+                    <td><img src="https://i.ytimg.com/vi/671AgW9xSiA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Grateful Dead - Ripple (Studio Version)</td>
+                </tr>
+                <tr class="record" id="zO6D_BAuYCI">
+                    <td><img src="https://i.ytimg.com/vi/zO6D_BAuYCI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Queen - Crazy Little Thing Called Love (Official Video)</td>
+                </tr>
+                <tr class="record" id="Th3ycKQV_4k">
+                    <td><img src="https://i.ytimg.com/vi/Th3ycKQV_4k/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Layla - Derek and the Dominos</td>
+                </tr>
+                <tr class="record" id="GrFdb0FcnhE">
+                    <td><img src="https://i.ytimg.com/vi/GrFdb0FcnhE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Captain Beefheart and his Magic Band - Safe as Milk (Full Album)</td>
+                </tr>
+                <tr class="record" id="wbq-8FYpYPo">
+                    <td><img src="https://i.ytimg.com/vi/wbq-8FYpYPo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Beatles - Rocky Raccoon (2009 Stereo Remaster)</td>
+                </tr>
+                <tr class="record" id="nJNMnBhf-Ds">
+                    <td><img src="https://i.ytimg.com/vi/nJNMnBhf-Ds/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Velvet Underground - Heroin</td>
+                </tr>
+                <tr class="record" id="ZEY8clFcm2E">
+                    <td><img src="https://i.ytimg.com/vi/ZEY8clFcm2E/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Creedence  -  Have You Ever Seen The Rain? ♥ღ♥</td>
+                </tr>
+                <tr class="record" id="u925g6CgKuw">
+                    <td><img src="https://i.ytimg.com/vi/u925g6CgKuw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Neil Young - Heart of Gold/Lyrics (Full HD)</td>
+                </tr>
+                <tr class="record" id="mUFZC7uXQZc">
+                    <td><img src="https://i.ytimg.com/vi/mUFZC7uXQZc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Boston - Smokin' (with lyrics)</td>
+                </tr>
+                <tr class="record" id="PUhIEEwSSSo">
+                    <td><img src="https://i.ytimg.com/vi/PUhIEEwSSSo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Beatles - Happiness Is A Warm Gun (2009 Stereo Remaster)</td>
+                </tr>
+                <tr class="record" id="nGHhqV_QhzE">
+                    <td><img src="https://i.ytimg.com/vi/nGHhqV_QhzE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Doors - 5 to 1 (with lyrics)</td>
+                </tr>
+                <tr class="record" id="JTakA8jTLsA">
+                    <td><img src="https://i.ytimg.com/vi/JTakA8jTLsA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Scorpions - Dynamite (With Lyrics)</td>
+                </tr>
+                <tr class="record" id="GFNiSjN4BBY">
+                    <td><img src="https://i.ytimg.com/vi/GFNiSjN4BBY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Fingerprint File The Rolling Stones</td>
+                </tr>
+                <tr class="record" id="y6SQniO7SnU">
+                    <td><img src="https://i.ytimg.com/vi/y6SQniO7SnU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Uriah Heep July Morning live 1973</td>
+                </tr>
+                <tr class="record" id="UVLUFl6WO6E">
+                    <td><img src="https://i.ytimg.com/vi/UVLUFl6WO6E/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Chicago (Terry Kath) -  I'm A Man 1968</td>
+                </tr>
+                <tr class="record" id="b9SKxL9CnW0">
+                    <td><img src="https://i.ytimg.com/vi/b9SKxL9CnW0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Grateful Dead - Friend of the Devil (Studio Version)</td>
+                </tr>
+                <tr class="record" id="lP94PlEtsEQ">
+                    <td><img src="https://i.ytimg.com/vi/lP94PlEtsEQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Long Cool Woman in a Black Dress - The Hollies</td>
+                </tr>
+                <tr class="record" id="6jcFTyAPImM">
+                    <td><img src="https://i.ytimg.com/vi/6jcFTyAPImM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Child in Time - Deep Purple [Made in Japan 1972] (Remastered Edition)</td>
+                </tr>
+                <tr class="record" id="Q1809vqz3zA">
+                    <td><img src="https://i.ytimg.com/vi/Q1809vqz3zA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Long As I Can See The Light - Creedence Clearwater Revival</td>
+                </tr>
+                <tr class="record" id="2D175jn-3_M">
+                    <td><img src="https://i.ytimg.com/vi/2D175jn-3_M/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Robin Trower - Bridge of Sighs - 01 - Day Of The Eagle</td>
+                </tr>
+                <tr class="record" id="K13hH0pJx5s">
+                    <td><img src="https://i.ytimg.com/vi/K13hH0pJx5s/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Manfred Mann - Mighty Quinn</td>
+                </tr>
+                <tr class="record" id="YwmIV21qLzs">
+                    <td><img src="https://i.ytimg.com/vi/YwmIV21qLzs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mind Garage- Isle Of Ely.wmv</td>
+                </tr>
+                <tr class="record" id="OxnIqM8I6f4">
+                    <td><img src="https://i.ytimg.com/vi/OxnIqM8I6f4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mistreated - Deep Purple - Made in Europe original</td>
+                </tr>
+                <tr class="record" id="b8sm8n1GoSs">
+                    <td><img src="https://i.ytimg.com/vi/b8sm8n1GoSs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pink Floyd - Embryo - Live (Very Rare)</td>
+                </tr>
+                <tr class="record" id="KXDf9UwHGF4">
+                    <td><img src="https://i.ytimg.com/vi/KXDf9UwHGF4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Eric Clapton - Let It Grow</td>
+                </tr>
+                <tr class="record" id="e5MAg_yWsq8">
+                    <td><img src="https://i.ytimg.com/vi/e5MAg_yWsq8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Styx - Come Sail Away</td>
+                </tr>
+                <tr class="record" id="gCXQycyN_Vs">
+                    <td><img src="https://i.ytimg.com/vi/gCXQycyN_Vs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Marshall Tucker Band - Can't You See</td>
+                </tr>
+                <tr class="record" id="r3ubLOKbx-Y">
+                    <td><img src="https://i.ytimg.com/vi/r3ubLOKbx-Y/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Queen - I Want It All (Lyrics)</td>
+                </tr>
+                <tr class="record" id="XAVjiGL7ePI">
+                    <td><img src="https://i.ytimg.com/vi/XAVjiGL7ePI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Edgar Broughton Band 07 Love in The Rain  Wasa Wasa</td>
+                </tr>
+                <tr class="record" id="AE1ct5yEuVY">
+                    <td><img src="https://i.ytimg.com/vi/AE1ct5yEuVY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Jam - Going Underground</td>
+                </tr>
+                <tr class="record" id="atxUuldUcfI">
+                    <td><img src="https://i.ytimg.com/vi/atxUuldUcfI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Journey - Any Way You Want It</td>
+                </tr>
+                <tr class="record" id="ErxAbqsBnFM">
+                    <td><img src="https://i.ytimg.com/vi/ErxAbqsBnFM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sir Lord Baltimore - Helium Head</td>
+                </tr>
+                <tr class="record" id="2tAE2K3YT_A">
+                    <td><img src="https://i.ytimg.com/vi/2tAE2K3YT_A/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cream Farewell Concert</td>
+                </tr>
+                <tr class="record" id="lUv-4dNX6Jw">
+                    <td><img src="https://i.ytimg.com/vi/lUv-4dNX6Jw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Rory Gallagher : A Million Miles Away</td>
+                </tr>
+                <tr class="record" id="u8FS2LxdmVc">
+                    <td><img src="https://i.ytimg.com/vi/u8FS2LxdmVc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Taste-Sugar Mama -1969</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/classicrock/">Classic Rock</a> archive:
     <a href="/genre/classicrock/2009/">2009</a>&nbsp;•&nbsp;    <a href="/genre/classicrock/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/classicrock/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/classicrock/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/classicrock/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/classicrock/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/classicrock/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/classicrock/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -742,12 +272,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'classicrock';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

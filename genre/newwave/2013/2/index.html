@@ -46,106 +46,56 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="N1Hs2AQwDgA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/N1Hs2AQwDgA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Peter Schilling - Major Tom</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">23</span> - <a href="https://www.reddit.com/19epuv">Peter Schilling - Major Tom (Coming Home)</a>
-<br>
-                        submitted <span class="muted">2013-02-28 18:17</span> by <a href="https://www.reddit.com/user/NoirXephon">/u/NoirXephon</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="4efhE4cNaGw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/4efhE4cNaGw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Imavizion Direq - The Fatal Day</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/17psgt">Imavizion Direq - The Fatal Day [Post-Punk / Darkwave / Cover]</a>
-<br>
-                        submitted <span class="muted">2013-02-01 21:05</span> by <a href="https://www.reddit.com/user/mutual_slump">/u/mutual_slump</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8a_1IDJ856o">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8a_1IDJ856o/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">80'S NEW WAVE VS SPANISH NEW WAVE</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/18umqv">80s New Wave versus Spanish New Wave in Video</a>
-<br>
-                        submitted <span class="muted">2013-02-19 23:45</span> by <a href="https://www.reddit.com/user/sellermar">/u/sellermar</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="gLdx_BexPgg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/gLdx_BexPgg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Le Syndicat Electronique /// En Partance</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/190q7c">Le Syndicat Electronique /// En Partance</a>
-<br>
-                        submitted <span class="muted">2013-02-22 13:47</span> by <a href="https://www.reddit.com/user/crazybob1306">/u/crazybob1306</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_Kf4p738j80">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_Kf4p738j80/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Talking Heads - Mind (HQ)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/19d8ar">Talking Heads - Mind</a>
-<br>
-                        submitted <span class="muted">2013-02-28 01:38</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="N1Hs2AQwDgA">
+                    <td><img src="https://i.ytimg.com/vi/N1Hs2AQwDgA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Peter Schilling - Major Tom</td>
+                </tr>
+                <tr class="record" id="4efhE4cNaGw">
+                    <td><img src="https://i.ytimg.com/vi/4efhE4cNaGw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Imavizion Direq - The Fatal Day</td>
+                </tr>
+                <tr class="record" id="8a_1IDJ856o">
+                    <td><img src="https://i.ytimg.com/vi/8a_1IDJ856o/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">80'S NEW WAVE VS SPANISH NEW WAVE</td>
+                </tr>
+                <tr class="record" id="gLdx_BexPgg">
+                    <td><img src="https://i.ytimg.com/vi/gLdx_BexPgg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Le Syndicat Electronique /// En Partance</td>
+                </tr>
+                <tr class="record" id="_Kf4p738j80">
+                    <td><img src="https://i.ytimg.com/vi/_Kf4p738j80/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Talking Heads - Mind (HQ)</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/newwave/">New Wave</a> archive:
     <a href="/genre/newwave/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/newwave/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/newwave/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/newwave/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/newwave/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/newwave/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/newwave/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -154,12 +104,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'newwave';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

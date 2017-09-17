@@ -46,92 +46,52 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="mCBeoChZig0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/mCBeoChZig0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Atlantic City- Levon Helm- Merlefest 2008</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2c4088">Atlantic City - the Levon Helm Band &amp; friends [Live]</a>
-<br>
-                        submitted <span class="muted">2014-07-30 03:59</span> by <a href="https://www.reddit.com/user/terker">/u/terker</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="praUaqWWLyk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/praUaqWWLyk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mark Knopfler - Speedway at Nazareth + lyrics</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2c92me">Mark Knopfler — Speedway at Nazareth</a>
-<br>
-                        submitted <span class="muted">2014-07-31 16:36</span> by <a href="https://www.reddit.com/user/Vranak">/u/Vranak</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="wTUF1khnUBg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/wTUF1khnUBg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Flunk - Cigarette Burns</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2b43u8">Flunk - Cigarette Burns</a>
-<br>
-                        submitted <span class="muted">2014-07-19 05:56</span> by <a href="https://www.reddit.com/user/tempedrew">/u/tempedrew</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="3s70CtGc43A">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/3s70CtGc43A/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mark Knopfler - Marbletown + lyrics</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/2aycql">Mark Knopfler — Marbletown</a>
-<br>
-                        submitted <span class="muted">2014-07-17 13:58</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="mCBeoChZig0">
+                    <td><img src="https://i.ytimg.com/vi/mCBeoChZig0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Atlantic City- Levon Helm- Merlefest 2008</td>
+                </tr>
+                <tr class="record" id="praUaqWWLyk">
+                    <td><img src="https://i.ytimg.com/vi/praUaqWWLyk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mark Knopfler - Speedway at Nazareth + lyrics</td>
+                </tr>
+                <tr class="record" id="wTUF1khnUBg">
+                    <td><img src="https://i.ytimg.com/vi/wTUF1khnUBg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Flunk - Cigarette Burns</td>
+                </tr>
+                <tr class="record" id="3s70CtGc43A">
+                    <td><img src="https://i.ytimg.com/vi/3s70CtGc43A/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mark Knopfler - Marbletown + lyrics</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/folkrock/">Folk Rock</a> archive:
     <a href="/genre/folkrock/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/folkrock/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/folkrock/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/folkrock/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/folkrock/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -140,12 +100,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'folkrock';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

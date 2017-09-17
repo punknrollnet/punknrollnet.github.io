@@ -46,1338 +46,408 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="p0bRmpYqvmY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/p0bRmpYqvmY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Andrew Jackson Jihad - The Michael Jordan of Drunk Driving</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">110</span> - <a href="https://www.reddit.com/3ywkdy">I know it's less than 30 seconds long, but this might be one of the saddest songs I know; The Michael Jordan of Drunk Driving- AJJ</a>
-<br>
-                        submitted <span class="muted">2015-12-31 12:02</span> by <a href="https://www.reddit.com/user/Supermartinguy">/u/Supermartinguy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Vr7gRZ5A1NE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Vr7gRZ5A1NE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pat The Bunny - "Never Coming Home (Song For The Guilty)" (A Fistful Of Vinyl Sessions) on KXLU 88.9</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">91</span> - <a href="https://www.reddit.com/3wrcen">Pat The Bunny - "Never Coming Home" (A Fistful Of Vinyl Sessions)</a>
-<br>
-                        submitted <span class="muted">2015-12-14 07:51</span> by <a href="https://www.reddit.com/user/KnottyRuca">/u/KnottyRuca</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="46mO7jx3JEw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/46mO7jx3JEw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Do Re Mi - Woody Guthrie</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">66</span> - <a href="https://www.reddit.com/3vhaft">Fans of Andrew Jackson Jihad may recognize this one "Do Re Mi - Woody Guthrie"</a>
-<br>
-                        submitted <span class="muted">2015-12-04 23:41</span> by <a href="https://www.reddit.com/user/Qking7">/u/Qking7</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="gepRry-K8Fg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/gepRry-K8Fg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jeff Rosenstock - Beers Again, Alone</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">64</span> - <a href="https://www.reddit.com/3wl2ut">Jeff Rosenstock - Beers Again Alone</a>
-<br>
-                        submitted <span class="muted">2015-12-13 00:37</span> by <a href="https://www.reddit.com/user/idealwatercup">/u/idealwatercup</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-Po1Lg-qpfk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-Po1Lg-qpfk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ramshackle Glory - From Here to Utopia (Song for the Desperate)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">61</span> - <a href="https://www.reddit.com/3v4z7j">Been feeling a bit down lately, Pat is great: From Here 'Til Utopia (Song for the Desperate)</a>
-<br>
-                        submitted <span class="muted">2015-12-02 13:06</span> by <a href="https://www.reddit.com/user/i_like_frootloops">/u/i_like_frootloops</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="aKpgb2WrGo0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/aKpgb2WrGo0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Gogol Bordello - Immigraniada (We Comin' Rougher)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">60</span> - <a href="https://www.reddit.com/3vvhpg">Gogol Bordello - Immigraniada (We Comin' Rougher)</a>
-<br>
-                        submitted <span class="muted">2015-12-08 02:18</span> by <a href="https://www.reddit.com/user/SerTinfoil">/u/SerTinfoil</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="GeRrS-o7twk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/GeRrS-o7twk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Johnny Hobo And The Freight Trains - I Want Cancer For Christmas</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">60</span> - <a href="https://www.reddit.com/3y56ko">Merry Christmas /r/FolkPunk!</a>
-<br>
-                        submitted <span class="muted">2015-12-25 02:35</span> by <a href="https://www.reddit.com/user/indigoiceboats">/u/indigoiceboats</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="NrAwK9juhhY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/NrAwK9juhhY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Pogues and Kirsty MacColl - Fairytale of New York</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">58</span> - <a href="https://www.reddit.com/3vkdui">The Pogues and Kirsty MacColl - Fairytale of New York</a>
-<br>
-                        submitted <span class="muted">2015-12-05 18:30</span> by <a href="https://www.reddit.com/user/_Chill_Winston_">/u/_Chill_Winston_</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="3gxGH5pKt_E">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/3gxGH5pKt_E/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Andrew Jackson Jihad - Lady Liberty</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">58</span> - <a href="https://www.reddit.com/3vznze">Andrew Jackson Jihad-"Lady Liberty"</a>
-<br>
-                        submitted <span class="muted">2015-12-08 22:17</span> by <a href="https://www.reddit.com/user/thekiduknow">/u/thekiduknow</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-fRFMkFbH8I">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-fRFMkFbH8I/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">MeWithoutYou - The Fox, The Crow And The Cookie</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">56</span> - <a href="https://www.reddit.com/3xpoag">The fox, the crow and the cookie - MeWithoutYou</a>
-<br>
-                        submitted <span class="muted">2015-12-21 15:38</span> by <a href="https://www.reddit.com/user/Shubb">/u/Shubb</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ENJx3aMxZzo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ENJx3aMxZzo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Paul Baribeau - Falling in Love with your Best Friend</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">54</span> - <a href="https://www.reddit.com/3x1qgt">Falling in Love With Your Best Friend - Paul Baribeau</a>
-<br>
-                        submitted <span class="muted">2015-12-16 06:13</span> by <a href="https://www.reddit.com/user/Brennybro">/u/Brennybro</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jKVnur5DkdI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jKVnur5DkdI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Tear the fascist down - Woody Guthrie</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">45</span> - <a href="https://www.reddit.com/3wgv23">Folk Roots Friday! Woody Guthrie (1912-1967)- Tear the Fascist Down</a>
-<br>
-                        submitted <span class="muted">2015-12-12 03:21</span> by <a href="https://www.reddit.com/user/TheMarxistMango">/u/TheMarxistMango</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="i5FTRZYdxAw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/i5FTRZYdxAw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">nana grizol - will we [8/11]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">45</span> - <a href="https://www.reddit.com/3wv8mv">Will We - Nana Grizol</a>
-<br>
-                        submitted <span class="muted">2015-12-15 01:40</span> by <a href="https://www.reddit.com/user/Brennybro">/u/Brennybro</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="0dnBK-7BLYM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/0dnBK-7BLYM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Andrew Jackson Jihad @ Revolver Records - RSD 2015</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">45</span> - <a href="https://www.reddit.com/3xogjx">Andrew Jackson Jihad @ Revolver Records - RSD 2015</a>
-<br>
-                        submitted <span class="muted">2015-12-21 07:57</span> by <a href="https://www.reddit.com/user/Squee-">/u/Squee-</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="sCgn35z91EM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/sCgn35z91EM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Andrew Jackson Jihad - I Love You - Ukulele Cover</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">39</span> - <a href="https://www.reddit.com/3uzt02">Searching through Andrew Jackson Jihad covers and found this, I Love You - Ukulele Cover</a>
-<br>
-                        submitted <span class="muted">2015-12-01 13:22</span> by <a href="https://www.reddit.com/user/iwasaround">/u/iwasaround</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="KTowji9Mo6U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/KTowji9Mo6U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Paul Baribeau - Christmas Lights</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">38</span> - <a href="https://www.reddit.com/3xjnwb">"Sometimes I Just Miss My Old Friends...", Paul Baribeau - Christmas Lights</a>
-<br>
-                        submitted <span class="muted">2015-12-20 04:41</span> by <a href="https://www.reddit.com/user/iwasaround">/u/iwasaround</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="o8VXnvbc1c0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/o8VXnvbc1c0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">All By Myself (Hidden Track) Green Day</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">37</span> - <a href="https://www.reddit.com/3ydw9f">All By Myself -- Green Day. My girlfriend has been searching for this song for months now under the impression it was by Kyle Hall or Jeffery Lewis. Never thought of it that way before.</a>
-<br>
-                        submitted <span class="muted">2015-12-27 10:02</span> by <a href="https://www.reddit.com/user/Tattered_Colours">/u/Tattered_Colours</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8Fwwf1PH3-0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8Fwwf1PH3-0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mississippi John Hurt - It Ain't Nobody's Business</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">35</span> - <a href="https://www.reddit.com/3x1u5b">Folkpunkers we need to remember not just our punk roots but our folk roots to.</a>
-<br>
-                        submitted <span class="muted">2015-12-16 06:50</span> by <a href="https://www.reddit.com/user/PuppyHolocaust">/u/PuppyHolocaust</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="NDsP8Wew3vA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/NDsP8Wew3vA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">o Bardo e o Banjo - Ace of Spades (Motörhead cover bluegrass)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">34</span> - <a href="https://www.reddit.com/3ymrwe">Folk punkish cover of Ace of Spades. RIP Lemmy.</a>
-<br>
-                        submitted <span class="muted">2015-12-29 07:39</span> by <a href="https://www.reddit.com/user/AnarchyinPA">/u/AnarchyinPA</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="z5EUSGXtwCk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/z5EUSGXtwCk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">St James Infirmary - Deep in Cider (The Delousing Sessions)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">32</span> - <a href="https://www.reddit.com/3wyusn">St James Infirmary - Deep in Cider (The Delousing Sessions)</a>
-<br>
-                        submitted <span class="muted">2015-12-15 18:06</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="b2V8hw1tg5A">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/b2V8hw1tg5A/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">I love you like an alcoholic - the taxpayers cover</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">32</span> - <a href="https://www.reddit.com/3x9xzl">Threw up a cover of "I love you like an alcoholic" by The taxpayers today.</a>
-<br>
-                        submitted <span class="muted">2015-12-17 23:10</span> by <a href="https://www.reddit.com/user/LunaticSuave">/u/LunaticSuave</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7OuJQ0dg3Mc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7OuJQ0dg3Mc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ani DiFranco - Every State Line</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">31</span> - <a href="https://www.reddit.com/3y9by3">Feminist Folkpunk from about 20 years ago</a>
-<br>
-                        submitted <span class="muted">2015-12-26 05:45</span> by <a href="https://www.reddit.com/user/xxjosephchristxx">/u/xxjosephchristxx</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="R_3vx3mnFtU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/R_3vx3mnFtU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ghost Mice - This Heart Of Mine</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">31</span> - <a href="https://www.reddit.com/3ytxps">Ghost Mice-"This Heart of Mine"</a>
-<br>
-                        submitted <span class="muted">2015-12-30 21:20</span> by <a href="https://www.reddit.com/user/thekiduknow">/u/thekiduknow</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="P8JE2wppSOg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/P8JE2wppSOg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Defiance Ohio/Ghost Mice Split</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">28</span> - <a href="https://www.reddit.com/3yfxy8">Defiance Ohio/Ghost Mice Split</a>
-<br>
-                        submitted <span class="muted">2015-12-27 21:50</span> by <a href="https://www.reddit.com/user/Squee-">/u/Squee-</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="z6hXud0liXk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/z6hXud0liXk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Beans on Toast - Robin Hood Costume</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">26</span> - <a href="https://www.reddit.com/3va39a">Beans on Toast - Robin Hood Costume (From New Album that just came out)</a>
-<br>
-                        submitted <span class="muted">2015-12-03 13:54</span> by <a href="https://www.reddit.com/user/SerTinfoil">/u/SerTinfoil</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="VP8Tx_10N7A">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/VP8Tx_10N7A/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Daniel Johnston - Big Business Monkey</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/3xnys7">I just watched the documentary The Devil and Daniel Johnston for the first time and you should too! Here is his song - Big Business Monkey</a>
-<br>
-                        submitted <span class="muted">2015-12-21 05:01</span> by <a href="https://www.reddit.com/user/HeyYoPaul">/u/HeyYoPaul</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="vFAOP9CWq4s">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/vFAOP9CWq4s/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jeffrey Lewis & Los Bolts - Sad Screaming Old Man</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/3v12x9">Sad Screaming Old Man - Jeffrey Lewis</a>
-<br>
-                        submitted <span class="muted">2015-12-01 18:32</span> by <a href="https://www.reddit.com/user/Ub3rpwnag3">/u/Ub3rpwnag3</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Cf7b7Leqg00">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Cf7b7Leqg00/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Young Adults - Can't Stop (Red Hot Chili Peppers cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/3vrx8l">Russian Uke-Core, Young Adults - Can't Stop (Red Hot Chili Peppers Cover)</a>
-<br>
-                        submitted <span class="muted">2015-12-07 10:14</span> by <a href="https://www.reddit.com/user/iwasaround">/u/iwasaround</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="eFJ2jxIe4CQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/eFJ2jxIe4CQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Barbecue - Emmet Otter's Jugband Christmas - The Jim Henson Company</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/3y6v7p">A Very Folk-Punk Christmas Special | Emmet Otter's Jugband Christmas</a>
-<br>
-                        submitted <span class="muted">2015-12-25 16:02</span> by <a href="https://www.reddit.com/user/iwasaround">/u/iwasaround</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="BuovwftllrQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/BuovwftllrQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Pussywarmers - My Pussy Belongs To Daddy (Voodoo Rhythm) [Full Album]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/3vosdw">The pussywarmers</a>
-<br>
-                        submitted <span class="muted">2015-12-06 18:49</span> by <a href="https://www.reddit.com/user/SaltySocks">/u/SaltySocks</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="FLPMmSWDWmk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/FLPMmSWDWmk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mischief Brew - City Of Black Fridays [Official Music Video]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/3v7xio">Mischief Brew - City Of Black Fridays [Official Music Video]</a>
-<br>
-                        submitted <span class="muted">2015-12-03 01:03</span> by <a href="https://www.reddit.com/user/AJ7861">/u/AJ7861</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="m5lQPf2hkuc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/m5lQPf2hkuc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Porch Cat - Man of Few Words (A Fistful Of Vinyl sessions) on KXLU 88.9 FM Los Angeles</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/3xmd8v">Porch Cat - Man of Few Words (the very first A Fistful Of Vinyl session we ever produced! With members of The Ragshakers)</a>
-<br>
-                        submitted <span class="muted">2015-12-20 21:19</span> by <a href="https://www.reddit.com/user/AFistfulOfVinylKXLU">/u/AFistfulOfVinylKXLU</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="3nK0I9CyRyY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/3nK0I9CyRyY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Days N Daze~ Little Blue Pills Pt. 2</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/3vgcpf">Days N Daze - Little Blue Pills Pt. 2</a>
-<br>
-                        submitted <span class="muted">2015-12-04 19:46</span> by <a href="https://www.reddit.com/user/KnottyRuca">/u/KnottyRuca</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Q71NgNgoZm4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Q71NgNgoZm4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Wingnut Dishwashers Union - Picking Sides - 2/14/09</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/3ymy4u">Wingnut Dishwashers Union - Picking Sides - 2/14/09</a>
-<br>
-                        submitted <span class="muted">2015-12-29 08:56</span> by <a href="https://www.reddit.com/user/JewsUpHoesDown">/u/JewsUpHoesDown</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="sOWdXCOaWQ8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/sOWdXCOaWQ8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Folk Song Army</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/3w5m2h">Recently Started Listening to Folk Punk and It Reminded Me of a Classic Tom Lehrer Song I Think You'd All Enjoy</a>
-<br>
-                        submitted <span class="muted">2015-12-10 01:24</span> by <a href="https://www.reddit.com/user/KevCar518">/u/KevCar518</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="G0yiVvlvOdo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/G0yiVvlvOdo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">the thing that only eats hippies</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/3y1zl3">Dead Milkmen--early folk punk?</a>
-<br>
-                        submitted <span class="muted">2015-12-24 06:08</span> by <a href="https://www.reddit.com/user/Calicook138">/u/Calicook138</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="j7-S4tZSlUk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/j7-S4tZSlUk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Paul Baribeau @ Berea Fest 2011</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/3ya016">Cool Paul Baribea live set</a>
-<br>
-                        submitted <span class="muted">2015-12-26 11:25</span> by <a href="https://www.reddit.com/user/sgtfiddler">/u/sgtfiddler</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="rOAwHMXx0O4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/rOAwHMXx0O4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">"Weird Al" Yankovic - Take Me Down (SLO Grown LP)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/3yfwps">Weird Al wrote a song about my hometown in 1978 and I think you guys would like it</a>
-<br>
-                        submitted <span class="muted">2015-12-27 21:41</span> by <a href="https://www.reddit.com/user/rubb3rch1cken">/u/rubb3rch1cken</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="u5He4SMF7yg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/u5He4SMF7yg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Leftöver Crack - 8. Last Legs</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/3vcgb6">Leftöver Crack - Last Legs from the new album</a>
-<br>
-                        submitted <span class="muted">2015-12-03 23:35</span> by <a href="https://www.reddit.com/user/kelnoky">/u/kelnoky</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-r7acKX0ODw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-r7acKX0ODw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">I Am Disappeared (Frank Turner Cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/3xtof7">I Am Disappeared (Frank Turner Cover) - I recorded this back in July and completely forgot about it</a>
-<br>
-                        submitted <span class="muted">2015-12-22 11:25</span> by <a href="https://www.reddit.com/user/BrodyGreg">/u/BrodyGreg</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="tXiwH2MyN6Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/tXiwH2MyN6Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Reckless Demure - "The Poltergeists of 159" Live @</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/3vpn4u">This sub basically created my project so I wanted to share my first stage performance with you. (another in comments).</a>
-<br>
-                        submitted <span class="muted">2015-12-06 22:13</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="h8aPNbaHXU0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/h8aPNbaHXU0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Wild (Atl) in the studio for our third record</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/3x0aj4">The Wild (Atl) in the studio for our third record</a>
-<br>
-                        submitted <span class="muted">2015-12-15 23:32</span> by <a href="https://www.reddit.com/user/Banjostevethewild">/u/Banjostevethewild</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="NJ2QOwQdHL8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/NJ2QOwQdHL8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Billy Bragg/ Help Save The Youth Of America.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/3ylo5k">2016 is fast approaching. Let's make it a year of change for the better -- Help Save the Youth of America by Billy Bragg</a>
-<br>
-                        submitted <span class="muted">2015-12-29 02:16</span> by <a href="https://www.reddit.com/user/MyUsernameIsRedacted">/u/MyUsernameIsRedacted</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="UYRBHpW2GBA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/UYRBHpW2GBA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Phil Ochs:Power And Glory</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/3wcoof">Folk Roots Friday! Phil Ochs: Power And Glory</a>
-<br>
-                        submitted <span class="muted">2015-12-11 08:45</span> by <a href="https://www.reddit.com/user/cocoscoffee">/u/cocoscoffee</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="9Ch4ErYmCcM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/9Ch4ErYmCcM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">House on the Hill (Original Song) - Empty Disco</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/3x1c3b">Empty Disco - House on the Hill</a>
-<br>
-                        submitted <span class="muted">2015-12-16 04:11</span> by <a href="https://www.reddit.com/user/girlofthenorth">/u/girlofthenorth</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2ev_jaPES70">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2ev_jaPES70/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">We The Heathens - We The Heathens [Full Album]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/3wq1it">One of my favorite folk punk records. I really feel it does not get the credit it deserves. We the Heathens - We The Heathens</a>
-<br>
-                        submitted <span class="muted">2015-12-14 01:27</span> by <a href="https://www.reddit.com/user/dullweasel">/u/dullweasel</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jSA1gtUCH8c">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jSA1gtUCH8c/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pat 'The Bunny' Schneeweis - Take Me By The Hand And Lead Me Through This Disaster</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/3xpfns">My anthem for finals</a>
-<br>
-                        submitted <span class="muted">2015-12-21 14:31</span> by <a href="https://www.reddit.com/user/sajattack">/u/sajattack</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="502PjwscKXI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/502PjwscKXI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Solo jam at the blockade of Imperial Metals</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/3x7f8p">Something a little different, Solo Jam at Red Chris Mine Blockade, Northern BC.</a>
-<br>
-                        submitted <span class="muted">2015-12-17 12:08</span> by <a href="https://www.reddit.com/user/GoddamnGallow">/u/GoddamnGallow</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zNBHf_3SSAc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zNBHf_3SSAc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Hi Ho Silver, Away! - Alvarado Sleepwalker</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/3xggyg">Hi Ho Silver, Away! - Alvarado Sleepwalker</a>
-<br>
-                        submitted <span class="muted">2015-12-19 11:45</span> by <a href="https://www.reddit.com/user/Squee-">/u/Squee-</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="yeCcZccLZrk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/yeCcZccLZrk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Homeless Gospel Choir - With God on Our Side</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/3xzjks">The Homeless Gospel Choir - With God on Our Side</a>
-<br>
-                        submitted <span class="muted">2015-12-23 18:03</span> by <a href="https://www.reddit.com/user/irunfromknives">/u/irunfromknives</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bKL4_sRiTbs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bKL4_sRiTbs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Kind Of Like Spitting - Worker Bee #7438-F87904</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/3x0k0p">Never see anything about Kind of Like Spitting on here.</a>
-<br>
-                        submitted <span class="muted">2015-12-16 00:39</span> by <a href="https://www.reddit.com/user/Devinomega">/u/Devinomega</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ioietuQw3Po">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ioietuQw3Po/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SAINT PATIO- Rock & Roll Romance (Frank Turner Cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/3xwf8e">My favorite under-appreciated Frank Turner tune- "Rock N' Roll Romance" cover</a>
-<br>
-                        submitted <span class="muted">2015-12-23 00:09</span> by <a href="https://www.reddit.com/user/DrunkbackWhale">/u/DrunkbackWhale</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jpVYNxo2jT0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jpVYNxo2jT0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Volatile Heart</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3v30je">These are some friends of mine, and we're going on a tour of Phoenix, Tucson, Las Cruces, and Albuquerque. A Bunch of other great acts are playing too, you should come out and support!</a>
-<br>
-                        submitted <span class="muted">2015-12-02 01:58</span> by <a href="https://www.reddit.com/user/AsaMartin">/u/AsaMartin</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="86zPNU3hZ20">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/86zPNU3hZ20/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jeffrey Lewis and the Jitters - Full Concert - 02/29/08 - Bimbo's 365 (OFFICIAL)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3vft67">Jeffrey Lewis and the Jitters - Full Concert - 02/29/08 - Bimbo's 365 (OFFICIAL)</a>
-<br>
-                        submitted <span class="muted">2015-12-04 17:36</span> by <a href="https://www.reddit.com/user/_Chill_Winston_">/u/_Chill_Winston_</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="e5dP31gYCrw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/e5dP31gYCrw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">CHAD FONTAINE - Liquor and Whores (cover) raw clip</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3xlhhe">CHAD FONTAINE - Liquor and Whores</a>
-<br>
-                        submitted <span class="muted">2015-12-20 17:27</span> by <a href="https://www.reddit.com/user/Squee-">/u/Squee-</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="TpeiAA1Xqfo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/TpeiAA1Xqfo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Your Heart Is A Muscle The Size Of Your Fist (Ramshackle Glory Cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3y8cdj">Your Heart Is A Muscle The Size Of Your Fist (Ramshackle Glory Cover)</a>
-<br>
-                        submitted <span class="muted">2015-12-26 00:07</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Y4IeQI7pemM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Y4IeQI7pemM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">True Colors by Boris Smile</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/3x8qvx">Boris Smile - True Colors</a>
-<br>
-                        submitted <span class="muted">2015-12-17 18:14</span> by <a href="https://www.reddit.com/user/LotusCobra">/u/LotusCobra</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="eCqMaRenTvU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/eCqMaRenTvU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pint of No Return - Half n' Half</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3vusuy">Song we did a while ago. Pint of No Return - Half n' Half</a>
-<br>
-                        submitted <span class="muted">2015-12-07 23:21</span> by <a href="https://www.reddit.com/user/rubbyrobbins">/u/rubbyrobbins</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="NUTzdSLYuN0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/NUTzdSLYuN0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Tinto De Verano</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3v1nxk">Bicoastal emo folk punk. FFO: Against Me!, The Front Bottoms, Ramshackle Glory, Just Nick</a>
-<br>
-                        submitted <span class="muted">2015-12-01 20:34</span> by <a href="https://www.reddit.com/user/haventbeensedated">/u/haventbeensedated</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="IXI5aU0Nbt8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/IXI5aU0Nbt8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Convulsia Darklove - "Pinch of Disaster"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3y74xg">here's short song that I wrote exactly on Solstice.</a>
-<br>
-                        submitted <span class="muted">2015-12-25 17:36</span> by <a href="https://www.reddit.com/user/rzonkil">/u/rzonkil</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="lhqW8CCB9kM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/lhqW8CCB9kM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Irish Rebel Songs Battering Ram - 'Dungannon '57' Irish folk</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3yevx9">Too early for folk punk, but the spirit is there. Dungannon '57,</a>
-<br>
-                        submitted <span class="muted">2015-12-27 17:07</span> by <a href="https://www.reddit.com/user/Laid_Low_Ludlow">/u/Laid_Low_Ludlow</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7MkrFUz5xFQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7MkrFUz5xFQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">New year's eve - mal blum</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3yxusi">New Year's Eve - Mal Blum</a>
-<br>
-                        submitted <span class="muted">2015-12-31 18:56</span> by <a href="https://www.reddit.com/user/gunstone42">/u/gunstone42</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="9uHNdA1cPQI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/9uHNdA1cPQI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">"Paper Planes," by Amar Ahmad</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3wxncr">"Paper Planes," by Amar Ahmad</a>
-<br>
-                        submitted <span class="muted">2015-12-15 13:03</span> by <a href="https://www.reddit.com/user/hierarchyhitmann">/u/hierarchyhitmann</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="oz7oguguIZE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/oz7oguguIZE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Woody Guthrie - 1913 Massacre</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3y6zlx">Celebrate Folk Roots Friday with the story of a Christmas Massacre! Woody Guthrie - 1913 Massacre</a>
-<br>
-                        submitted <span class="muted">2015-12-25 16:47</span> by <a href="https://www.reddit.com/user/TheMarxistMango">/u/TheMarxistMango</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bjSEesNF-p0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bjSEesNF-p0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jeffrey Lewis- End Result</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3uxt6a">Jeffrey Lewis - End Result (Crass cover)</a>
-<br>
-                        submitted <span class="muted">2015-12-01 01:57</span> by <a href="https://www.reddit.com/user/abigfatphoney">/u/abigfatphoney</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="hwDNnPJALxw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/hwDNnPJALxw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Dylan Sizemore - Hate Song</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3vql7q">Dylan Sizemore - Hate Song</a>
-<br>
-                        submitted <span class="muted">2015-12-07 02:26</span> by <a href="https://www.reddit.com/user/null_radix">/u/null_radix</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="j5CVyXd2fCY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/j5CVyXd2fCY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Bombs and Beating Hearts - Love Is Freedom</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3w26f3">Bombs and Beating Hearts - Love Is Freedom</a>
-<br>
-                        submitted <span class="muted">2015-12-09 10:56</span> by <a href="https://www.reddit.com/user/Shaun_The_Sheep_V1">/u/Shaun_The_Sheep_V1</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Tdz1RW5TtCo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Tdz1RW5TtCo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">A Poor Man's Christmas live on a moving bus, by The Sunnyside Social Club</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3ykx8j">Can you guys tolerate one more Christmas song? The Sunnyside Social Club - A Poor Man's Christmas</a>
-<br>
-                        submitted <span class="muted">2015-12-28 23:01</span> by <a href="https://www.reddit.com/user/_Chill_Winston_">/u/_Chill_Winston_</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="gvJg23UFILw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/gvJg23UFILw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Stoop Dog LIVE</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3vavna">My project, Stoop Dog! Thoughts?</a>
-<br>
-                        submitted <span class="muted">2015-12-03 17:22</span> by <a href="https://www.reddit.com/user/SpatchGanker">/u/SpatchGanker</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Gre9Mb4gstA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Gre9Mb4gstA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jake Mckelvie and The Countertops @ Flywheel Easthampton MA 4/15/15</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3vitxq">Just found this on youtube and figured I'd put it here; Jake McKelvie and the Countertops full set in Easthampton MA 4/15/15.</a>
-<br>
-                        submitted <span class="muted">2015-12-05 08:40</span> by <a href="https://www.reddit.com/user/blurple222">/u/blurple222</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="trCUG7OWBt4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/trCUG7OWBt4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Chodus- Flowers (Official Audio)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3vqwrm">teenage punk from new england</a>
-<br>
-                        submitted <span class="muted">2015-12-07 03:55</span> by <a href="https://www.reddit.com/user/fachodusyo">/u/fachodusyo</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2S4DDxpTHWs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2S4DDxpTHWs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">David Peel & The Lower East Side - Mother where is my father?</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3wcrws">David Peele and the Lower East Side - Mother where is my father?</a>
-<br>
-                        submitted <span class="muted">2015-12-11 09:21</span> by <a href="https://www.reddit.com/user/DirtnapDaniel">/u/DirtnapDaniel</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="FEyZIrbySSI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/FEyZIrbySSI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Way We Move by Langhorne Slim & The Law</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3xtnsr">The Way We Move by Langhorne Slim &amp; The Law</a>
-<br>
-                        submitted <span class="muted">2015-12-22 11:16</span> by <a href="https://www.reddit.com/user/Dimestoresaint">/u/Dimestoresaint</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="OZaHXjMwcHs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/OZaHXjMwcHs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Frank Turner - Undeveloped Film - Cosmopolitan Quartet Session Ont Sofa</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3yfty0">Does anyone know if there is a recorded version of this song? Undeveloped film by Frank Turner</a>
-<br>
-                        submitted <span class="muted">2015-12-27 21:22</span> by <a href="https://www.reddit.com/user/elpata123">/u/elpata123</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="XZJi4g5pjMY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XZJi4g5pjMY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">HOBOMOUTH - The Shelter Demo(s)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3yy1k0">HOBOMOUTH - The Shelter Demo(s)</a>
-<br>
-                        submitted <span class="muted">2015-12-31 19:47</span> by <a href="https://www.reddit.com/user/HOBOMOUTH">/u/HOBOMOUTH</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2nqv_i0x-2w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2nqv_i0x-2w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Bobby's Oar - Broken Man (acoustic)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3uxs7f">Hey r/FolkPunk I think ya might dig this! Bobby's Oar - Broken Man (acoustic)</a>
-<br>
-                        submitted <span class="muted">2015-12-01 01:50</span> by <a href="https://www.reddit.com/user/ghughes9">/u/ghughes9</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="rsWh48acgkY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/rsWh48acgkY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Davey and the Loose Screws-Blue Suede Shoes</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3w5k4a">Davey and the Loose Screws-Blue Suede shoes crazy banjo kazoo-core from cleveland</a>
-<br>
-                        submitted <span class="muted">2015-12-10 01:10</span> by <a href="https://www.reddit.com/user/daveyskittlebop">/u/daveyskittlebop</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_u2q1a9eigY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_u2q1a9eigY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">"Punks With Clean Kitchens," - Evan Greer</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3wvwfs">Evan Greer - Punks with Clean Kitchens</a>
-<br>
-                        submitted <span class="muted">2015-12-15 04:17</span> by <a href="https://www.reddit.com/user/CosmicHorror1">/u/CosmicHorror1</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="BsPqYrcsR4A">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/BsPqYrcsR4A/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Casual Terrorist , If You Want Peace =; -)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3xtlmd">The Casual Terrorist , If You Want Peace</a>
-<br>
-                        submitted <span class="muted">2015-12-22 10:49</span> by <a href="https://www.reddit.com/user/Squee-">/u/Squee-</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="MApq9K51WSI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/MApq9K51WSI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cyanide breath mint - Beck cover</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3y7nj9">My cover of Cyanide Breathmint by Beck. This song has been covered by AJJ too so I hope it fits in here.</a>
-<br>
-                        submitted <span class="muted">2015-12-25 20:27</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="TKwa3g3gRos">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/TKwa3g3gRos/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">GG Allin Carmelita</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/3vfcre">GG Allin - Carmelita -- He was a fucking scumbag but this album is killer.</a>
-<br>
-                        submitted <span class="muted">2015-12-04 15:42</span> by <a href="https://www.reddit.com/user/Boyblunder">/u/Boyblunder</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="H_MANS3KYvs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/H_MANS3KYvs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jimmie Rodgers "Waiting for a Train" Folk Music (1929)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/3weh4n">Jimmie Rodgers "Waiting for a Train" Folk Music (1929)</a>
-<br>
-                        submitted <span class="muted">2015-12-11 17:37</span> by <a href="https://www.reddit.com/user/chrisjeffries240">/u/chrisjeffries240</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="udlLebHViL0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/udlLebHViL0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Andrew Jackson Jihad - A Song Dedicated To The Memory Of Stormy The Rabbit</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/3xy3lv">the Fugs - Crystal Liason... Punk before Lenny Kaye called it punk.</a>
-<br>
-                        submitted <span class="muted">2015-12-23 09:52</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="r56gyiv0WHE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/r56gyiv0WHE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pangea - "Golden Arches"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/3yhe6z">I recently found out that one of my favorite garage punk bands had a more folky beginning, so I share with you Golden Arches by Pangea</a>
-<br>
-                        submitted <span class="muted">2015-12-28 04:33</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bg9HzY8yFvU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bg9HzY8yFvU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">We Lost Our Way</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/3yoq4c">We Lost Our Way - Skum Shine (RIP BryGuy)</a>
-<br>
-                        submitted <span class="muted">2015-12-29 19:11</span> by <a href="https://www.reddit.com/user/tocard2">/u/tocard2</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="QzLvU0H2j5M">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/QzLvU0H2j5M/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cold Beer - (Jesse Stewart cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/3yv00j">Cold Beer - Robert Dearin (Jesse Stewart Version)</a>
-<br>
-                        submitted <span class="muted">2015-12-31 02:10</span> by <a href="https://www.reddit.com/user/captainshrinks">/u/captainshrinks</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="rJPrN2tGMME">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/rJPrN2tGMME/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Wyatt Coin - My Eyes Look Tired Official Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/3yyksd">Wyatt Coin - My Eyes Look Tired</a>
-<br>
-                        submitted <span class="muted">2015-12-31 22:28</span> by <a href="https://www.reddit.com/user/R0MULUX">/u/R0MULUX</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="3BYbmckk9mU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/3BYbmckk9mU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">In The Aeroplane Over The Sea cover</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/3v5nu6">I thought this was pretty punk. (Beautiful Neutral Milk Hotel cover.)</a>
-<br>
-                        submitted <span class="muted">2015-12-02 16:14</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ehl037hmzEs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ehl037hmzEs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Folk-Punk Stubborn Love freestyle *Snippet*</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/3v6o1n">My attempt at folk punk! (snippet)</a>
-<br>
-                        submitted <span class="muted">2015-12-02 19:54</span> by <a href="https://www.reddit.com/user/stefoo2">/u/stefoo2</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="j_7eofl08ZI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/j_7eofl08ZI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Return of Chip Douglas (Demo)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/3vr1q9">Kid Cudi - The Return of Chip Douglas</a>
-<br>
-                        submitted <span class="muted">2015-12-07 04:35</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jn34uEVr5Bs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jn34uEVr5Bs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">After you've gone</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/3wfwys">Slurpy Time Jiggaboos - after you've gone</a>
-<br>
-                        submitted <span class="muted">2015-12-11 23:07</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="RxR6KpH6in8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/RxR6KpH6in8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SAINT PATIO- Sober For Christmas</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/3xf2ld">Recorded this a few days ago and would love input! "Sober For Christmas"- Saint Patio</a>
-<br>
-                        submitted <span class="muted">2015-12-19 01:57</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="JwIvn27PgsA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/JwIvn27PgsA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Panopticon - Which Side Are You On?</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/3yb1ng">Panopticon - Which Side Are You On?</a>
-<br>
-                        submitted <span class="muted">2015-12-26 18:04</span> by <a href="https://www.reddit.com/user/Paczilla">/u/Paczilla</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="p0bRmpYqvmY">
+                    <td><img src="https://i.ytimg.com/vi/p0bRmpYqvmY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Andrew Jackson Jihad - The Michael Jordan of Drunk Driving</td>
+                </tr>
+                <tr class="record" id="Vr7gRZ5A1NE">
+                    <td><img src="https://i.ytimg.com/vi/Vr7gRZ5A1NE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pat The Bunny - "Never Coming Home (Song For The Guilty)" (A Fistful Of Vinyl Sessions) on KXLU 88.9</td>
+                </tr>
+                <tr class="record" id="46mO7jx3JEw">
+                    <td><img src="https://i.ytimg.com/vi/46mO7jx3JEw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Do Re Mi - Woody Guthrie</td>
+                </tr>
+                <tr class="record" id="gepRry-K8Fg">
+                    <td><img src="https://i.ytimg.com/vi/gepRry-K8Fg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jeff Rosenstock - Beers Again, Alone</td>
+                </tr>
+                <tr class="record" id="-Po1Lg-qpfk">
+                    <td><img src="https://i.ytimg.com/vi/-Po1Lg-qpfk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ramshackle Glory - From Here to Utopia (Song for the Desperate)</td>
+                </tr>
+                <tr class="record" id="aKpgb2WrGo0">
+                    <td><img src="https://i.ytimg.com/vi/aKpgb2WrGo0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Gogol Bordello - Immigraniada (We Comin' Rougher)</td>
+                </tr>
+                <tr class="record" id="GeRrS-o7twk">
+                    <td><img src="https://i.ytimg.com/vi/GeRrS-o7twk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Johnny Hobo And The Freight Trains - I Want Cancer For Christmas</td>
+                </tr>
+                <tr class="record" id="NrAwK9juhhY">
+                    <td><img src="https://i.ytimg.com/vi/NrAwK9juhhY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Pogues and Kirsty MacColl - Fairytale of New York</td>
+                </tr>
+                <tr class="record" id="3gxGH5pKt_E">
+                    <td><img src="https://i.ytimg.com/vi/3gxGH5pKt_E/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Andrew Jackson Jihad - Lady Liberty</td>
+                </tr>
+                <tr class="record" id="-fRFMkFbH8I">
+                    <td><img src="https://i.ytimg.com/vi/-fRFMkFbH8I/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">MeWithoutYou - The Fox, The Crow And The Cookie</td>
+                </tr>
+                <tr class="record" id="ENJx3aMxZzo">
+                    <td><img src="https://i.ytimg.com/vi/ENJx3aMxZzo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Paul Baribeau - Falling in Love with your Best Friend</td>
+                </tr>
+                <tr class="record" id="jKVnur5DkdI">
+                    <td><img src="https://i.ytimg.com/vi/jKVnur5DkdI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Tear the fascist down - Woody Guthrie</td>
+                </tr>
+                <tr class="record" id="i5FTRZYdxAw">
+                    <td><img src="https://i.ytimg.com/vi/i5FTRZYdxAw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">nana grizol - will we [8/11]</td>
+                </tr>
+                <tr class="record" id="0dnBK-7BLYM">
+                    <td><img src="https://i.ytimg.com/vi/0dnBK-7BLYM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Andrew Jackson Jihad @ Revolver Records - RSD 2015</td>
+                </tr>
+                <tr class="record" id="sCgn35z91EM">
+                    <td><img src="https://i.ytimg.com/vi/sCgn35z91EM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Andrew Jackson Jihad - I Love You - Ukulele Cover</td>
+                </tr>
+                <tr class="record" id="KTowji9Mo6U">
+                    <td><img src="https://i.ytimg.com/vi/KTowji9Mo6U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Paul Baribeau - Christmas Lights</td>
+                </tr>
+                <tr class="record" id="o8VXnvbc1c0">
+                    <td><img src="https://i.ytimg.com/vi/o8VXnvbc1c0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">All By Myself (Hidden Track) Green Day</td>
+                </tr>
+                <tr class="record" id="8Fwwf1PH3-0">
+                    <td><img src="https://i.ytimg.com/vi/8Fwwf1PH3-0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mississippi John Hurt - It Ain't Nobody's Business</td>
+                </tr>
+                <tr class="record" id="NDsP8Wew3vA">
+                    <td><img src="https://i.ytimg.com/vi/NDsP8Wew3vA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">o Bardo e o Banjo - Ace of Spades (Motörhead cover bluegrass)</td>
+                </tr>
+                <tr class="record" id="z5EUSGXtwCk">
+                    <td><img src="https://i.ytimg.com/vi/z5EUSGXtwCk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">St James Infirmary - Deep in Cider (The Delousing Sessions)</td>
+                </tr>
+                <tr class="record" id="b2V8hw1tg5A">
+                    <td><img src="https://i.ytimg.com/vi/b2V8hw1tg5A/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">I love you like an alcoholic - the taxpayers cover</td>
+                </tr>
+                <tr class="record" id="7OuJQ0dg3Mc">
+                    <td><img src="https://i.ytimg.com/vi/7OuJQ0dg3Mc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ani DiFranco - Every State Line</td>
+                </tr>
+                <tr class="record" id="R_3vx3mnFtU">
+                    <td><img src="https://i.ytimg.com/vi/R_3vx3mnFtU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ghost Mice - This Heart Of Mine</td>
+                </tr>
+                <tr class="record" id="P8JE2wppSOg">
+                    <td><img src="https://i.ytimg.com/vi/P8JE2wppSOg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Defiance Ohio/Ghost Mice Split</td>
+                </tr>
+                <tr class="record" id="z6hXud0liXk">
+                    <td><img src="https://i.ytimg.com/vi/z6hXud0liXk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Beans on Toast - Robin Hood Costume</td>
+                </tr>
+                <tr class="record" id="VP8Tx_10N7A">
+                    <td><img src="https://i.ytimg.com/vi/VP8Tx_10N7A/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Daniel Johnston - Big Business Monkey</td>
+                </tr>
+                <tr class="record" id="vFAOP9CWq4s">
+                    <td><img src="https://i.ytimg.com/vi/vFAOP9CWq4s/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jeffrey Lewis & Los Bolts - Sad Screaming Old Man</td>
+                </tr>
+                <tr class="record" id="Cf7b7Leqg00">
+                    <td><img src="https://i.ytimg.com/vi/Cf7b7Leqg00/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Young Adults - Can't Stop (Red Hot Chili Peppers cover)</td>
+                </tr>
+                <tr class="record" id="eFJ2jxIe4CQ">
+                    <td><img src="https://i.ytimg.com/vi/eFJ2jxIe4CQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Barbecue - Emmet Otter's Jugband Christmas - The Jim Henson Company</td>
+                </tr>
+                <tr class="record" id="BuovwftllrQ">
+                    <td><img src="https://i.ytimg.com/vi/BuovwftllrQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Pussywarmers - My Pussy Belongs To Daddy (Voodoo Rhythm) [Full Album]</td>
+                </tr>
+                <tr class="record" id="FLPMmSWDWmk">
+                    <td><img src="https://i.ytimg.com/vi/FLPMmSWDWmk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mischief Brew - City Of Black Fridays [Official Music Video]</td>
+                </tr>
+                <tr class="record" id="m5lQPf2hkuc">
+                    <td><img src="https://i.ytimg.com/vi/m5lQPf2hkuc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Porch Cat - Man of Few Words (A Fistful Of Vinyl sessions) on KXLU 88.9 FM Los Angeles</td>
+                </tr>
+                <tr class="record" id="3nK0I9CyRyY">
+                    <td><img src="https://i.ytimg.com/vi/3nK0I9CyRyY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Days N Daze~ Little Blue Pills Pt. 2</td>
+                </tr>
+                <tr class="record" id="Q71NgNgoZm4">
+                    <td><img src="https://i.ytimg.com/vi/Q71NgNgoZm4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Wingnut Dishwashers Union - Picking Sides - 2/14/09</td>
+                </tr>
+                <tr class="record" id="sOWdXCOaWQ8">
+                    <td><img src="https://i.ytimg.com/vi/sOWdXCOaWQ8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Folk Song Army</td>
+                </tr>
+                <tr class="record" id="G0yiVvlvOdo">
+                    <td><img src="https://i.ytimg.com/vi/G0yiVvlvOdo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">the thing that only eats hippies</td>
+                </tr>
+                <tr class="record" id="j7-S4tZSlUk">
+                    <td><img src="https://i.ytimg.com/vi/j7-S4tZSlUk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Paul Baribeau @ Berea Fest 2011</td>
+                </tr>
+                <tr class="record" id="rOAwHMXx0O4">
+                    <td><img src="https://i.ytimg.com/vi/rOAwHMXx0O4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">"Weird Al" Yankovic - Take Me Down (SLO Grown LP)</td>
+                </tr>
+                <tr class="record" id="u5He4SMF7yg">
+                    <td><img src="https://i.ytimg.com/vi/u5He4SMF7yg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Leftöver Crack - 8. Last Legs</td>
+                </tr>
+                <tr class="record" id="-r7acKX0ODw">
+                    <td><img src="https://i.ytimg.com/vi/-r7acKX0ODw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">I Am Disappeared (Frank Turner Cover)</td>
+                </tr>
+                <tr class="record" id="tXiwH2MyN6Q">
+                    <td><img src="https://i.ytimg.com/vi/tXiwH2MyN6Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Reckless Demure - "The Poltergeists of 159" Live @</td>
+                </tr>
+                <tr class="record" id="h8aPNbaHXU0">
+                    <td><img src="https://i.ytimg.com/vi/h8aPNbaHXU0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Wild (Atl) in the studio for our third record</td>
+                </tr>
+                <tr class="record" id="NJ2QOwQdHL8">
+                    <td><img src="https://i.ytimg.com/vi/NJ2QOwQdHL8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Billy Bragg/ Help Save The Youth Of America.</td>
+                </tr>
+                <tr class="record" id="UYRBHpW2GBA">
+                    <td><img src="https://i.ytimg.com/vi/UYRBHpW2GBA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Phil Ochs:Power And Glory</td>
+                </tr>
+                <tr class="record" id="9Ch4ErYmCcM">
+                    <td><img src="https://i.ytimg.com/vi/9Ch4ErYmCcM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">House on the Hill (Original Song) - Empty Disco</td>
+                </tr>
+                <tr class="record" id="2ev_jaPES70">
+                    <td><img src="https://i.ytimg.com/vi/2ev_jaPES70/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">We The Heathens - We The Heathens [Full Album]</td>
+                </tr>
+                <tr class="record" id="jSA1gtUCH8c">
+                    <td><img src="https://i.ytimg.com/vi/jSA1gtUCH8c/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pat 'The Bunny' Schneeweis - Take Me By The Hand And Lead Me Through This Disaster</td>
+                </tr>
+                <tr class="record" id="502PjwscKXI">
+                    <td><img src="https://i.ytimg.com/vi/502PjwscKXI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Solo jam at the blockade of Imperial Metals</td>
+                </tr>
+                <tr class="record" id="zNBHf_3SSAc">
+                    <td><img src="https://i.ytimg.com/vi/zNBHf_3SSAc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Hi Ho Silver, Away! - Alvarado Sleepwalker</td>
+                </tr>
+                <tr class="record" id="yeCcZccLZrk">
+                    <td><img src="https://i.ytimg.com/vi/yeCcZccLZrk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Homeless Gospel Choir - With God on Our Side</td>
+                </tr>
+                <tr class="record" id="bKL4_sRiTbs">
+                    <td><img src="https://i.ytimg.com/vi/bKL4_sRiTbs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Kind Of Like Spitting - Worker Bee #7438-F87904</td>
+                </tr>
+                <tr class="record" id="ioietuQw3Po">
+                    <td><img src="https://i.ytimg.com/vi/ioietuQw3Po/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SAINT PATIO- Rock & Roll Romance (Frank Turner Cover)</td>
+                </tr>
+                <tr class="record" id="jpVYNxo2jT0">
+                    <td><img src="https://i.ytimg.com/vi/jpVYNxo2jT0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Volatile Heart</td>
+                </tr>
+                <tr class="record" id="86zPNU3hZ20">
+                    <td><img src="https://i.ytimg.com/vi/86zPNU3hZ20/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jeffrey Lewis and the Jitters - Full Concert - 02/29/08 - Bimbo's 365 (OFFICIAL)</td>
+                </tr>
+                <tr class="record" id="e5dP31gYCrw">
+                    <td><img src="https://i.ytimg.com/vi/e5dP31gYCrw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">CHAD FONTAINE - Liquor and Whores (cover) raw clip</td>
+                </tr>
+                <tr class="record" id="TpeiAA1Xqfo">
+                    <td><img src="https://i.ytimg.com/vi/TpeiAA1Xqfo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Your Heart Is A Muscle The Size Of Your Fist (Ramshackle Glory Cover)</td>
+                </tr>
+                <tr class="record" id="Y4IeQI7pemM">
+                    <td><img src="https://i.ytimg.com/vi/Y4IeQI7pemM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">True Colors by Boris Smile</td>
+                </tr>
+                <tr class="record" id="eCqMaRenTvU">
+                    <td><img src="https://i.ytimg.com/vi/eCqMaRenTvU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pint of No Return - Half n' Half</td>
+                </tr>
+                <tr class="record" id="NUTzdSLYuN0">
+                    <td><img src="https://i.ytimg.com/vi/NUTzdSLYuN0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Tinto De Verano</td>
+                </tr>
+                <tr class="record" id="IXI5aU0Nbt8">
+                    <td><img src="https://i.ytimg.com/vi/IXI5aU0Nbt8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Convulsia Darklove - "Pinch of Disaster"</td>
+                </tr>
+                <tr class="record" id="lhqW8CCB9kM">
+                    <td><img src="https://i.ytimg.com/vi/lhqW8CCB9kM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Irish Rebel Songs Battering Ram - 'Dungannon '57' Irish folk</td>
+                </tr>
+                <tr class="record" id="7MkrFUz5xFQ">
+                    <td><img src="https://i.ytimg.com/vi/7MkrFUz5xFQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">New year's eve - mal blum</td>
+                </tr>
+                <tr class="record" id="9uHNdA1cPQI">
+                    <td><img src="https://i.ytimg.com/vi/9uHNdA1cPQI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">"Paper Planes," by Amar Ahmad</td>
+                </tr>
+                <tr class="record" id="oz7oguguIZE">
+                    <td><img src="https://i.ytimg.com/vi/oz7oguguIZE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Woody Guthrie - 1913 Massacre</td>
+                </tr>
+                <tr class="record" id="bjSEesNF-p0">
+                    <td><img src="https://i.ytimg.com/vi/bjSEesNF-p0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jeffrey Lewis- End Result</td>
+                </tr>
+                <tr class="record" id="hwDNnPJALxw">
+                    <td><img src="https://i.ytimg.com/vi/hwDNnPJALxw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Dylan Sizemore - Hate Song</td>
+                </tr>
+                <tr class="record" id="j5CVyXd2fCY">
+                    <td><img src="https://i.ytimg.com/vi/j5CVyXd2fCY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Bombs and Beating Hearts - Love Is Freedom</td>
+                </tr>
+                <tr class="record" id="Tdz1RW5TtCo">
+                    <td><img src="https://i.ytimg.com/vi/Tdz1RW5TtCo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">A Poor Man's Christmas live on a moving bus, by The Sunnyside Social Club</td>
+                </tr>
+                <tr class="record" id="gvJg23UFILw">
+                    <td><img src="https://i.ytimg.com/vi/gvJg23UFILw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Stoop Dog LIVE</td>
+                </tr>
+                <tr class="record" id="Gre9Mb4gstA">
+                    <td><img src="https://i.ytimg.com/vi/Gre9Mb4gstA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jake Mckelvie and The Countertops @ Flywheel Easthampton MA 4/15/15</td>
+                </tr>
+                <tr class="record" id="trCUG7OWBt4">
+                    <td><img src="https://i.ytimg.com/vi/trCUG7OWBt4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Chodus- Flowers (Official Audio)</td>
+                </tr>
+                <tr class="record" id="2S4DDxpTHWs">
+                    <td><img src="https://i.ytimg.com/vi/2S4DDxpTHWs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">David Peel & The Lower East Side - Mother where is my father?</td>
+                </tr>
+                <tr class="record" id="FEyZIrbySSI">
+                    <td><img src="https://i.ytimg.com/vi/FEyZIrbySSI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Way We Move by Langhorne Slim & The Law</td>
+                </tr>
+                <tr class="record" id="OZaHXjMwcHs">
+                    <td><img src="https://i.ytimg.com/vi/OZaHXjMwcHs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Frank Turner - Undeveloped Film - Cosmopolitan Quartet Session Ont Sofa</td>
+                </tr>
+                <tr class="record" id="XZJi4g5pjMY">
+                    <td><img src="https://i.ytimg.com/vi/XZJi4g5pjMY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">HOBOMOUTH - The Shelter Demo(s)</td>
+                </tr>
+                <tr class="record" id="2nqv_i0x-2w">
+                    <td><img src="https://i.ytimg.com/vi/2nqv_i0x-2w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Bobby's Oar - Broken Man (acoustic)</td>
+                </tr>
+                <tr class="record" id="rsWh48acgkY">
+                    <td><img src="https://i.ytimg.com/vi/rsWh48acgkY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Davey and the Loose Screws-Blue Suede Shoes</td>
+                </tr>
+                <tr class="record" id="_u2q1a9eigY">
+                    <td><img src="https://i.ytimg.com/vi/_u2q1a9eigY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">"Punks With Clean Kitchens," - Evan Greer</td>
+                </tr>
+                <tr class="record" id="BsPqYrcsR4A">
+                    <td><img src="https://i.ytimg.com/vi/BsPqYrcsR4A/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Casual Terrorist , If You Want Peace =; -)</td>
+                </tr>
+                <tr class="record" id="MApq9K51WSI">
+                    <td><img src="https://i.ytimg.com/vi/MApq9K51WSI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cyanide breath mint - Beck cover</td>
+                </tr>
+                <tr class="record" id="TKwa3g3gRos">
+                    <td><img src="https://i.ytimg.com/vi/TKwa3g3gRos/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">GG Allin Carmelita</td>
+                </tr>
+                <tr class="record" id="H_MANS3KYvs">
+                    <td><img src="https://i.ytimg.com/vi/H_MANS3KYvs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jimmie Rodgers "Waiting for a Train" Folk Music (1929)</td>
+                </tr>
+                <tr class="record" id="udlLebHViL0">
+                    <td><img src="https://i.ytimg.com/vi/udlLebHViL0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Andrew Jackson Jihad - A Song Dedicated To The Memory Of Stormy The Rabbit</td>
+                </tr>
+                <tr class="record" id="r56gyiv0WHE">
+                    <td><img src="https://i.ytimg.com/vi/r56gyiv0WHE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pangea - "Golden Arches"</td>
+                </tr>
+                <tr class="record" id="bg9HzY8yFvU">
+                    <td><img src="https://i.ytimg.com/vi/bg9HzY8yFvU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">We Lost Our Way</td>
+                </tr>
+                <tr class="record" id="QzLvU0H2j5M">
+                    <td><img src="https://i.ytimg.com/vi/QzLvU0H2j5M/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cold Beer - (Jesse Stewart cover)</td>
+                </tr>
+                <tr class="record" id="rJPrN2tGMME">
+                    <td><img src="https://i.ytimg.com/vi/rJPrN2tGMME/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Wyatt Coin - My Eyes Look Tired Official Video</td>
+                </tr>
+                <tr class="record" id="3BYbmckk9mU">
+                    <td><img src="https://i.ytimg.com/vi/3BYbmckk9mU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">In The Aeroplane Over The Sea cover</td>
+                </tr>
+                <tr class="record" id="ehl037hmzEs">
+                    <td><img src="https://i.ytimg.com/vi/ehl037hmzEs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Folk-Punk Stubborn Love freestyle *Snippet*</td>
+                </tr>
+                <tr class="record" id="j_7eofl08ZI">
+                    <td><img src="https://i.ytimg.com/vi/j_7eofl08ZI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Return of Chip Douglas (Demo)</td>
+                </tr>
+                <tr class="record" id="jn34uEVr5Bs">
+                    <td><img src="https://i.ytimg.com/vi/jn34uEVr5Bs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">After you've gone</td>
+                </tr>
+                <tr class="record" id="RxR6KpH6in8">
+                    <td><img src="https://i.ytimg.com/vi/RxR6KpH6in8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SAINT PATIO- Sober For Christmas</td>
+                </tr>
+                <tr class="record" id="JwIvn27PgsA">
+                    <td><img src="https://i.ytimg.com/vi/JwIvn27PgsA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Panopticon - Which Side Are You On?</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/folkpunk/">Folk Punk</a> archive:
     <a href="/genre/folkpunk/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/folkpunk/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/folkpunk/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/folkpunk/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/folkpunk/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/folkpunk/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/folkpunk/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -1386,12 +456,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'folkpunk';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

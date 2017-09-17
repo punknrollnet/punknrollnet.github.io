@@ -46,442 +46,152 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="Kgy8IPFVG5g">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Kgy8IPFVG5g/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Alice in Chains 1990 - Queen of the Rodeo (master recording)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">36</span> - <a href="https://www.reddit.com/21xj42">Alice in Chains - Queen of the Rodeo (Live 1990)</a>
-<br>
-                        submitted <span class="muted">2014-04-01 15:47</span> by <a href="https://www.reddit.com/user/herb_puffer">/u/herb_puffer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="rUnUD5AtWJw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/rUnUD5AtWJw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Nirvana - Bad Moon Rising (Cover from Creedence Clearwater Revival); 1988-3-19 ᴴᴰ</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">35</span> - <a href="https://www.reddit.com/225p4b">Nirvana - Bad Moon Rising (live cover of Creedence Clearwater Revival featuring Dave Foster on drums, 3/19/88)</a>
-<br>
-                        submitted <span class="muted">2014-04-04 02:11</span> by <a href="https://www.reddit.com/user/getthetime">/u/getthetime</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Mh2giMlcqls">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Mh2giMlcqls/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Les Claypool's Duo De Twang - Man In The Box</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">35</span> - <a href="https://www.reddit.com/22p1n2">Les Claypool (uniquely) covers Alice in Chains - Man In The Box (and this isn't even the craziest song on this album)</a>
-<br>
-                        submitted <span class="muted">2014-04-10 14:34</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="fe7q8yDPJFo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/fe7q8yDPJFo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Kurt Cobain, Seattle 1993 Complete Interview</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">34</span> - <a href="https://www.reddit.com/229kk4">Absolutely Chill Interview With Kurt Cobain (Seattle, 1993)</a>
-<br>
-                        submitted <span class="muted">2014-04-05 11:49</span> by <a href="https://www.reddit.com/user/yumcrackers">/u/yumcrackers</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ODn21NOi-dQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ODn21NOi-dQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Serve The Servants (Live On "Tunnel", Rome, Italy/1994)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">28</span> - <a href="https://www.reddit.com/234uld">Serve The Servants- Live on Italian Television 1994 Nirvana</a>
-<br>
-                        submitted <span class="muted">2014-04-15 22:57</span> by <a href="https://www.reddit.com/user/jesusandhisbeard">/u/jesusandhisbeard</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="pnALjPUtrDY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/pnALjPUtrDY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Local H - Team</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">28</span> - <a href="https://www.reddit.com/237zny">Local H did a cover of Lorde's "Team" and it's fantastic.</a>
-<br>
-                        submitted <span class="muted">2014-04-16 22:49</span> by <a href="https://www.reddit.com/user/TanStoney">/u/TanStoney</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="GBReLMu9S0A">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/GBReLMu9S0A/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Nirvana - Verse Chorus Verse [Lyrics]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/22buvx">Nirvana - Verse Chorus Verse</a>
-<br>
-                        submitted <span class="muted">2014-04-06 06:33</span> by <a href="https://www.reddit.com/user/Hennepin_Crawler">/u/Hennepin_Crawler</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="InISOY3ckEU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/InISOY3ckEU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Smashing Pumpkins - Live at the Metro (1993) [FULL CONCERT]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/2477gc">Smashing Pumpkins - Full concert, Siamese Dream record release at The Metro, Chicago, 1993.</a>
-<br>
-                        submitted <span class="muted">2014-04-28 17:06</span> by <a href="https://www.reddit.com/user/EatMoreFiber">/u/EatMoreFiber</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="eAHZU0WU-Bk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/eAHZU0WU-Bk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Melvins - "Revolve" Ernie Ball Set Me Up Session</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/221pd8">Buzz (Melvins) - 'Revolve' (acoustic) + interview</a>
-<br>
-                        submitted <span class="muted">2014-04-02 21:20</span> by <a href="https://www.reddit.com/user/Teeds">/u/Teeds</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="nneYpx5bk60">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/nneYpx5bk60/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Veruca Salt - The Museum Of Broken Relationships</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/242epv">Veruca Salt's New Song- The Museum Of Broken Relationships</a>
-<br>
-                        submitted <span class="muted">2014-04-26 23:45</span> by <a href="https://www.reddit.com/user/maddoxhell">/u/maddoxhell</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="6zG3DzBsZmA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/6zG3DzBsZmA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Soundgarden - Can You See Me (Jimi Hendrix)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/22gbvx">Soundgarden - Can You See Me (Jimi Hendrix)</a>
-<br>
-                        submitted <span class="muted">2014-04-07 20:03</span> by <a href="https://www.reddit.com/user/stephenbp66">/u/stephenbp66</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="RumHTFUV7bA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/RumHTFUV7bA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Soma - Smashing Pumpkins - Siamese Dream</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/234zjz">Soma- The Smashing Pumpkins</a>
-<br>
-                        submitted <span class="muted">2014-04-15 23:50</span> by <a href="https://www.reddit.com/user/jesusandhisbeard">/u/jesusandhisbeard</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="FaT5NFmyg48">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/FaT5NFmyg48/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Stupid Club - 1994 Kurt Cobain Memorial mini-doc</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/230a4p">"Stupid Club"- footage and interviews from the Kurt Cobain memorial in 1994 Seattle</a>
-<br>
-                        submitted <span class="muted">2014-04-14 14:52</span> by <a href="https://www.reddit.com/user/jesusandhisbeard">/u/jesusandhisbeard</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="TJ9x1HJSgrU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/TJ9x1HJSgrU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Candlebox - Breathe Me In [lyric video]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/22xngf">Candlebox - Breathe Me In (8:32 minutes of heaven)</a>
-<br>
-                        submitted <span class="muted">2014-04-13 17:16</span> by <a href="https://www.reddit.com/user/Epidemiological">/u/Epidemiological</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bRT8EdX0YCA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bRT8EdX0YCA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Beat Happening - You Turn Me On</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/23p7e0">Beat Happening - "You Turn Me On" (1992, x-post from /r/lofi)</a>
-<br>
-                        submitted <span class="muted">2014-04-22 18:36</span> by <a href="https://www.reddit.com/user/EatMoreFiber">/u/EatMoreFiber</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="pDn0aUL7zaU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/pDn0aUL7zaU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Kerbdog "Dry Riser"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/242va6">Kerbdog - Dry Riser (1994)</a>
-<br>
-                        submitted <span class="muted">2014-04-27 03:25</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="lv4gBdvyoxw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/lv4gBdvyoxw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">OK - Local H [lyrics]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/245ktv">Local H - O.K.</a>
-<br>
-                        submitted <span class="muted">2014-04-28 02:31</span> by <a href="https://www.reddit.com/user/t_rainor76">/u/t_rainor76</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jEsOww93NM0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jEsOww93NM0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Nirvana - Marigold [Lyrics]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2269wa">Nirvana - Marigold (x-post /r/90sRock)</a>
-<br>
-                        submitted <span class="muted">2014-04-04 07:07</span> by <a href="https://www.reddit.com/user/atticus138">/u/atticus138</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zgopivw8YII">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zgopivw8YII/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Local H - Fine And Good (Live)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/23v28s">Local H - "Fine And Good (live)"</a>
-<br>
-                        submitted <span class="muted">2014-04-24 14:47</span> by <a href="https://www.reddit.com/user/EatMoreFiber">/u/EatMoreFiber</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="rchoa62hPOw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/rchoa62hPOw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Nirvananananana - Come As You Are - Live at Zwarte Cross_2010 (Nirvana undercoversessie)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/22i7r6">Friends of mine have a Nirvana coveband; this is them playing come as you are in NL</a>
-<br>
-                        submitted <span class="muted">2014-04-08 10:20</span> by <a href="https://www.reddit.com/user/rash1981">/u/rash1981</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="cQyy_V5AHII">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/cQyy_V5AHII/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Silverchair - 6/6/03 - Rock Am Ring - [Full Show] - [Remastered] - [Reupload]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/23oo6f">Today is Daniel Johns (former frontman of Silverchair)'s Birthday: The Door - 6/6/03 - Rock Am Ring - [+Full Show]</a>
-<br>
-                        submitted <span class="muted">2014-04-22 15:28</span> by <a href="https://www.reddit.com/user/Redgal77">/u/Redgal77</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="nci-QgUAUnM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/nci-QgUAUnM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Nirvana - Curmudgeon</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/22cu29">My favorite Nirvana B-Side Curmudgeon</a>
-<br>
-                        submitted <span class="muted">2014-04-06 17:25</span> by <a href="https://www.reddit.com/user/Doctalivingston">/u/Doctalivingston</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="GuX6D-gY5VY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/GuX6D-gY5VY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Classic Game Room - ROAD RASH Panasonic 3DO review</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/22ubrk">"This game brings the Soundgarden" Classic Game Room - ROAD RASH Panasonic 3DO review (xpost /r/3DO)</a>
-<br>
-                        submitted <span class="muted">2014-04-12 07:46</span> by <a href="https://www.reddit.com/user/ZadocPaet">/u/ZadocPaet</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="NrDzNsjSL2w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/NrDzNsjSL2w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Smells like teen spirit - Portuguese Tribute to Nirvana</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/23jks3">Smells like teen spirit - Portuguese Tribute to Nirvana on 20th anniversary or Kurt Cobain's Death</a>
-<br>
-                        submitted <span class="muted">2014-04-20 22:35</span> by <a href="https://www.reddit.com/user/Kipzy">/u/Kipzy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="TAwwooIgWWo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/TAwwooIgWWo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Local H 2014-02-21 "Misanthrope"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/23yrbj">A new Local H song. It has been retitled, "Misanthrope," since this video was released.</a>
-<br>
-                        submitted <span class="muted">2014-04-25 17:09</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="NfP57L6_9Y8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/NfP57L6_9Y8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sick</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/22aylf">Rough demo I made for my band. Tell me what you guys think - "Sick"</a>
-<br>
-                        submitted <span class="muted">2014-04-05 22:54</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bsu5-eTBYwc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bsu5-eTBYwc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">crystallized fun by acrylic acid</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/23f048">Origional - Crystallized Fun - Acrylic Acid</a>
-<br>
-                        submitted <span class="muted">2014-04-19 05:00</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="FzK26kPgRIw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/FzK26kPgRIw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">EnterTheLexicon - Do You Feel The Same (UNCENSORED)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/23624y">Grunge influenced rock from the Northeast of England.</a>
-<br>
-                        submitted <span class="muted">2014-04-16 08:57</span> by <a href="https://www.reddit.com/user/SAHartline">/u/SAHartline</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="kbrANo-1QMQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/kbrANo-1QMQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Alice In Chains - Sea Of Sorrow</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/243rym">So, you wanna know what AIC sounds like?</a>
-<br>
-                        submitted <span class="muted">2014-04-27 14:14</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="Kgy8IPFVG5g">
+                    <td><img src="https://i.ytimg.com/vi/Kgy8IPFVG5g/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Alice in Chains 1990 - Queen of the Rodeo (master recording)</td>
+                </tr>
+                <tr class="record" id="rUnUD5AtWJw">
+                    <td><img src="https://i.ytimg.com/vi/rUnUD5AtWJw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Nirvana - Bad Moon Rising (Cover from Creedence Clearwater Revival); 1988-3-19 ᴴᴰ</td>
+                </tr>
+                <tr class="record" id="Mh2giMlcqls">
+                    <td><img src="https://i.ytimg.com/vi/Mh2giMlcqls/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Les Claypool's Duo De Twang - Man In The Box</td>
+                </tr>
+                <tr class="record" id="fe7q8yDPJFo">
+                    <td><img src="https://i.ytimg.com/vi/fe7q8yDPJFo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Kurt Cobain, Seattle 1993 Complete Interview</td>
+                </tr>
+                <tr class="record" id="ODn21NOi-dQ">
+                    <td><img src="https://i.ytimg.com/vi/ODn21NOi-dQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Serve The Servants (Live On "Tunnel", Rome, Italy/1994)</td>
+                </tr>
+                <tr class="record" id="pnALjPUtrDY">
+                    <td><img src="https://i.ytimg.com/vi/pnALjPUtrDY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Local H - Team</td>
+                </tr>
+                <tr class="record" id="GBReLMu9S0A">
+                    <td><img src="https://i.ytimg.com/vi/GBReLMu9S0A/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Nirvana - Verse Chorus Verse [Lyrics]</td>
+                </tr>
+                <tr class="record" id="InISOY3ckEU">
+                    <td><img src="https://i.ytimg.com/vi/InISOY3ckEU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Smashing Pumpkins - Live at the Metro (1993) [FULL CONCERT]</td>
+                </tr>
+                <tr class="record" id="eAHZU0WU-Bk">
+                    <td><img src="https://i.ytimg.com/vi/eAHZU0WU-Bk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Melvins - "Revolve" Ernie Ball Set Me Up Session</td>
+                </tr>
+                <tr class="record" id="nneYpx5bk60">
+                    <td><img src="https://i.ytimg.com/vi/nneYpx5bk60/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Veruca Salt - The Museum Of Broken Relationships</td>
+                </tr>
+                <tr class="record" id="6zG3DzBsZmA">
+                    <td><img src="https://i.ytimg.com/vi/6zG3DzBsZmA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Soundgarden - Can You See Me (Jimi Hendrix)</td>
+                </tr>
+                <tr class="record" id="RumHTFUV7bA">
+                    <td><img src="https://i.ytimg.com/vi/RumHTFUV7bA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Soma - Smashing Pumpkins - Siamese Dream</td>
+                </tr>
+                <tr class="record" id="FaT5NFmyg48">
+                    <td><img src="https://i.ytimg.com/vi/FaT5NFmyg48/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Stupid Club - 1994 Kurt Cobain Memorial mini-doc</td>
+                </tr>
+                <tr class="record" id="TJ9x1HJSgrU">
+                    <td><img src="https://i.ytimg.com/vi/TJ9x1HJSgrU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Candlebox - Breathe Me In [lyric video]</td>
+                </tr>
+                <tr class="record" id="bRT8EdX0YCA">
+                    <td><img src="https://i.ytimg.com/vi/bRT8EdX0YCA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Beat Happening - You Turn Me On</td>
+                </tr>
+                <tr class="record" id="pDn0aUL7zaU">
+                    <td><img src="https://i.ytimg.com/vi/pDn0aUL7zaU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Kerbdog "Dry Riser"</td>
+                </tr>
+                <tr class="record" id="lv4gBdvyoxw">
+                    <td><img src="https://i.ytimg.com/vi/lv4gBdvyoxw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">OK - Local H [lyrics]</td>
+                </tr>
+                <tr class="record" id="jEsOww93NM0">
+                    <td><img src="https://i.ytimg.com/vi/jEsOww93NM0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Nirvana - Marigold [Lyrics]</td>
+                </tr>
+                <tr class="record" id="zgopivw8YII">
+                    <td><img src="https://i.ytimg.com/vi/zgopivw8YII/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Local H - Fine And Good (Live)</td>
+                </tr>
+                <tr class="record" id="rchoa62hPOw">
+                    <td><img src="https://i.ytimg.com/vi/rchoa62hPOw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Nirvananananana - Come As You Are - Live at Zwarte Cross_2010 (Nirvana undercoversessie)</td>
+                </tr>
+                <tr class="record" id="cQyy_V5AHII">
+                    <td><img src="https://i.ytimg.com/vi/cQyy_V5AHII/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Silverchair - 6/6/03 - Rock Am Ring - [Full Show] - [Remastered] - [Reupload]</td>
+                </tr>
+                <tr class="record" id="nci-QgUAUnM">
+                    <td><img src="https://i.ytimg.com/vi/nci-QgUAUnM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Nirvana - Curmudgeon</td>
+                </tr>
+                <tr class="record" id="GuX6D-gY5VY">
+                    <td><img src="https://i.ytimg.com/vi/GuX6D-gY5VY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Classic Game Room - ROAD RASH Panasonic 3DO review</td>
+                </tr>
+                <tr class="record" id="NrDzNsjSL2w">
+                    <td><img src="https://i.ytimg.com/vi/NrDzNsjSL2w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Smells like teen spirit - Portuguese Tribute to Nirvana</td>
+                </tr>
+                <tr class="record" id="TAwwooIgWWo">
+                    <td><img src="https://i.ytimg.com/vi/TAwwooIgWWo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Local H 2014-02-21 "Misanthrope"</td>
+                </tr>
+                <tr class="record" id="NfP57L6_9Y8">
+                    <td><img src="https://i.ytimg.com/vi/NfP57L6_9Y8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sick</td>
+                </tr>
+                <tr class="record" id="bsu5-eTBYwc">
+                    <td><img src="https://i.ytimg.com/vi/bsu5-eTBYwc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">crystallized fun by acrylic acid</td>
+                </tr>
+                <tr class="record" id="FzK26kPgRIw">
+                    <td><img src="https://i.ytimg.com/vi/FzK26kPgRIw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">EnterTheLexicon - Do You Feel The Same (UNCENSORED)</td>
+                </tr>
+                <tr class="record" id="kbrANo-1QMQ">
+                    <td><img src="https://i.ytimg.com/vi/kbrANo-1QMQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Alice In Chains - Sea Of Sorrow</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/grunge/">Grunge</a> archive:
     <a href="/genre/grunge/2009/">2009</a>&nbsp;•&nbsp;    <a href="/genre/grunge/2010/">2010</a>&nbsp;•&nbsp;    <a href="/genre/grunge/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/grunge/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/grunge/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/grunge/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/grunge/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/grunge/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/grunge/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -490,12 +200,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'grunge';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

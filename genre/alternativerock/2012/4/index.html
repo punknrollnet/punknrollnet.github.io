@@ -46,456 +46,156 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="9kNQeDlgBoc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/9kNQeDlgBoc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Joy Formidable - Whirring (Live on KEXP)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">29</span> - <a href="https://www.reddit.com/ssoi7">The Joy Formidable - Whirring (great live take)</a>
-<br>
-                        submitted <span class="muted">2012-04-26 00:07</span> by <a href="https://www.reddit.com/user/tric30">/u/tric30</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="VvHP8GWDPHY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/VvHP8GWDPHY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">"It's Time" by Imagine Dragons (w/ visuals)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/rorbc">Imagine Dragons: It's Time</a>
-<br>
-                        submitted <span class="muted">2012-04-02 00:30</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="BiViJkz10nw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/BiViJkz10nw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Slow Club - Two Cousins</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/rxw5k">Slow Club: Two Cousins</a>
-<br>
-                        submitted <span class="muted">2012-04-07 14:59</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Y8wqA_B9lCQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Y8wqA_B9lCQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Said The People - Dinosaur Jr.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/s5wc5">Dinosaur Jr - Said the People</a>
-<br>
-                        submitted <span class="muted">2012-04-12 08:22</span> by <a href="https://www.reddit.com/user/Metadragon">/u/Metadragon</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zxOUMbeUpZs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zxOUMbeUpZs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Collectors Club - First to Know</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/sws89">Finally got a single recorded and got our music vid out there.. check it out!</a>
-<br>
-                        submitted <span class="muted">2012-04-28 14:16</span> by <a href="https://www.reddit.com/user/credman">/u/credman</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="JW0yynlDmqQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/JW0yynlDmqQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">White Lies - Bigger Than Us</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/sz1go">White Lies - Bigger Than Us</a>
-<br>
-                        submitted <span class="muted">2012-04-30 01:45</span> by <a href="https://www.reddit.com/user/Ubidan">/u/Ubidan</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="dhcGNN9r1D4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/dhcGNN9r1D4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Royal Republic - Tommy-Gun</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/srze1">Royal Republic - Tommy-Gun</a>
-<br>
-                        submitted <span class="muted">2012-04-25 16:48</span> by <a href="https://www.reddit.com/user/smistry77">/u/smistry77</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="0B2YQqV7lpw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/0B2YQqV7lpw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ben Kweller, Today (Smashing Pumpkins Cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/s021s">Ben Kweller - Today (Smashing Pumpkins cover)</a>
-<br>
-                        submitted <span class="muted">2012-04-09 01:18</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-iCjmAzODLk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-iCjmAzODLk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Young Summers - At Dawn (Official Music Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/rtru2">Young Summers - At Dawn (music video)</a>
-<br>
-                        submitted <span class="muted">2012-04-04 23:46</span> by <a href="https://www.reddit.com/user/gayhart">/u/gayhart</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="F7vbuR4obC4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/F7vbuR4obC4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Fang Island - Always Be My Baby (Mariah Carey cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/som79">Fang Island - Always Be My Baby (Mariah Carey Cover)</a>
-<br>
-                        submitted <span class="muted">2012-04-23 19:24</span> by <a href="https://www.reddit.com/user/Raual">/u/Raual</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="uac_KQn9Q-M">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/uac_KQn9Q-M/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Replacements - Merry Go Round (Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/sysc2">The Replacements- "Merry Go Round" The Last Great 'Mats Song</a>
-<br>
-                        submitted <span class="muted">2012-04-29 22:50</span> by <a href="https://www.reddit.com/user/doireallycare">/u/doireallycare</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="xI-T2DNXxVQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/xI-T2DNXxVQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Northstar - "For Members Only"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/s4g6x">Northstar - For Members Only</a>
-<br>
-                        submitted <span class="muted">2012-04-11 15:33</span> by <a href="https://www.reddit.com/user/Gella321">/u/Gella321</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="CNrrm2BKDw0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/CNrrm2BKDw0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Red Hot Chili Peppers - Fight Like A Brave</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/sbnvw">Red Hot Chili Peppers - Fight Like A Brave</a>
-<br>
-                        submitted <span class="muted">2012-04-16 01:38</span> by <a href="https://www.reddit.com/user/TheElephantRiders">/u/TheElephantRiders</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="dFN68bcRtQQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/dFN68bcRtQQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Takeover UK - Kill Me Dead</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/ro11j">The Takeover UK - Kill Me Dead</a>
-<br>
-                        submitted <span class="muted">2012-04-01 15:43</span> by <a href="https://www.reddit.com/user/seanstantinople">/u/seanstantinople</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="vPu2ytVyNGA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/vPu2ytVyNGA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">New Album: Toys!</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/s1hvd">New Album: Toys! Promo Snippet.</a>
-<br>
-                        submitted <span class="muted">2012-04-09 22:05</span> by <a href="https://www.reddit.com/user/SgtTimBob">/u/SgtTimBob</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="kfKl4MX3eZo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/kfKl4MX3eZo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">From Indian Lakes - "We Are Sick"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/sdgsc">Piggybacking on devitod's post... From Indian Lakes - "We Are Sick",    amazing.</a>
-<br>
-                        submitted <span class="muted">2012-04-17 01:47</span> by <a href="https://www.reddit.com/user/AnkenTEM">/u/AnkenTEM</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="pATZUJiBX5Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/pATZUJiBX5Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">From Indian Lakes - We Are Invincible</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/sbjpp">From Indian Lakes - We Are Invincible ... Saw these guys recently. I was totally blown away. Check them out they deserve A LOT more fans.</a>
-<br>
-                        submitted <span class="muted">2012-04-16 00:18</span> by <a href="https://www.reddit.com/user/devitod">/u/devitod</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="xnaFpQaGFCA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/xnaFpQaGFCA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Taking Back Sunday - Cute Without The 'e' (Cut From The Team) (Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/s7fie">Classic</a>
-<br>
-                        submitted <span class="muted">2012-04-13 04:03</span> by <a href="https://www.reddit.com/user/tomsucks">/u/tomsucks</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="AvQ-3uVX63c">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/AvQ-3uVX63c/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">PORTISHEAD - Strangers</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/sbkkz">PORTISHEAD - Strangers (Live) - Such a great performance</a>
-<br>
-                        submitted <span class="muted">2012-04-16 00:36</span> by <a href="https://www.reddit.com/user/Trixxstrr">/u/Trixxstrr</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="nmwWLnlwuSo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/nmwWLnlwuSo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Faded Pearl - How Can You Wait - Official Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/se78c">My friends band just recorded their first video! Can you get them some views and share your thoughts?</a>
-<br>
-                        submitted <span class="muted">2012-04-17 14:06</span> by <a href="https://www.reddit.com/user/morriscode">/u/morriscode</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="AUA8tz-t7Jk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/AUA8tz-t7Jk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">EMA - Anteroom</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/snaqq">"EMA- Anteroom" My New Favorite Artist</a>
-<br>
-                        submitted <span class="muted">2012-04-22 23:35</span> by <a href="https://www.reddit.com/user/doireallycare">/u/doireallycare</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="3WfI8tIHe7g">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/3WfI8tIHe7g/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The drawing room - the spy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/soy53">the spy- the drawing room</a>
-<br>
-                        submitted <span class="muted">2012-04-23 22:50</span> by <a href="https://www.reddit.com/user/halebays">/u/halebays</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8S_R13jV11Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8S_R13jV11Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">V.A.S.T. - Touched Official Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/sq2lh">V.A.S.T. - "Touched"</a>
-<br>
-                        submitted <span class="muted">2012-04-24 15:33</span> by <a href="https://www.reddit.com/user/panderin95">/u/panderin95</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="erbd9cZpxps">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/erbd9cZpxps/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">70 Million by Hold Your Horses ! (OFFICIAL MUSIC VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/syhhw">Onn</a>
-<br>
-                        submitted <span class="muted">2012-04-29 19:09</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Ud2WY451o4Y">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Ud2WY451o4Y/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Something More (Rock) Music Video [HD] - Secondhand Serenade</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/rz0cc">ANY SECONDHAND SERENADE FANS?  CHECK THIS VIDEO OUT!</a>
-<br>
-                        submitted <span class="muted">2012-04-08 07:30</span> by <a href="https://www.reddit.com/user/kp_da_pk">/u/kp_da_pk</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="YAr_MeMCdiM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/YAr_MeMCdiM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Take Heart - "Standing Tall (Ft. Cody Muraro of Take The Earth Beneath Us)"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/sa7cn">Take Heart - Standing Tall (Canada)</a>
-<br>
-                        submitted <span class="muted">2012-04-15 00:50</span> by <a href="https://www.reddit.com/user/THAREALBIGGIESMALLS">/u/THAREALBIGGIESMALLS</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="pFq1eT9tMJ4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/pFq1eT9tMJ4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">3 Doors Down - When I'm Gone</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/sg4ln">3 doors down - When I'm gone</a>
-<br>
-                        submitted <span class="muted">2012-04-18 15:34</span> by <a href="https://www.reddit.com/user/JDurr001">/u/JDurr001</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8_iHPgdsq7M">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8_iHPgdsq7M/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Call me John - Time will come [VIDEO OFICIAL]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/sok8j">TIME WILL COME</a>
-<br>
-                        submitted <span class="muted">2012-04-23 18:49</span> by <a href="https://www.reddit.com/user/zoltan51">/u/zoltan51</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="aAt0l5nxoxo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/aAt0l5nxoxo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Weezer Only In Dreams Rehersal 1993</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/sr2jc">This song made me fall in love with Weezer.</a>
-<br>
-                        submitted <span class="muted">2012-04-25 02:21</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="adt8MBcPgsk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/adt8MBcPgsk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">No Light No Light (Dubstep Remix of Florence and the Machine )</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/stskp">Florence and the Machine, No Light Dubstep, F****ing COOL:)</a>
-<br>
-                        submitted <span class="muted">2012-04-26 16:56</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="9kNQeDlgBoc">
+                    <td><img src="https://i.ytimg.com/vi/9kNQeDlgBoc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Joy Formidable - Whirring (Live on KEXP)</td>
+                </tr>
+                <tr class="record" id="VvHP8GWDPHY">
+                    <td><img src="https://i.ytimg.com/vi/VvHP8GWDPHY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">"It's Time" by Imagine Dragons (w/ visuals)</td>
+                </tr>
+                <tr class="record" id="BiViJkz10nw">
+                    <td><img src="https://i.ytimg.com/vi/BiViJkz10nw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Slow Club - Two Cousins</td>
+                </tr>
+                <tr class="record" id="Y8wqA_B9lCQ">
+                    <td><img src="https://i.ytimg.com/vi/Y8wqA_B9lCQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Said The People - Dinosaur Jr.</td>
+                </tr>
+                <tr class="record" id="zxOUMbeUpZs">
+                    <td><img src="https://i.ytimg.com/vi/zxOUMbeUpZs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Collectors Club - First to Know</td>
+                </tr>
+                <tr class="record" id="JW0yynlDmqQ">
+                    <td><img src="https://i.ytimg.com/vi/JW0yynlDmqQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">White Lies - Bigger Than Us</td>
+                </tr>
+                <tr class="record" id="dhcGNN9r1D4">
+                    <td><img src="https://i.ytimg.com/vi/dhcGNN9r1D4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Royal Republic - Tommy-Gun</td>
+                </tr>
+                <tr class="record" id="0B2YQqV7lpw">
+                    <td><img src="https://i.ytimg.com/vi/0B2YQqV7lpw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ben Kweller, Today (Smashing Pumpkins Cover)</td>
+                </tr>
+                <tr class="record" id="-iCjmAzODLk">
+                    <td><img src="https://i.ytimg.com/vi/-iCjmAzODLk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Young Summers - At Dawn (Official Music Video)</td>
+                </tr>
+                <tr class="record" id="F7vbuR4obC4">
+                    <td><img src="https://i.ytimg.com/vi/F7vbuR4obC4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Fang Island - Always Be My Baby (Mariah Carey cover)</td>
+                </tr>
+                <tr class="record" id="uac_KQn9Q-M">
+                    <td><img src="https://i.ytimg.com/vi/uac_KQn9Q-M/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Replacements - Merry Go Round (Video)</td>
+                </tr>
+                <tr class="record" id="xI-T2DNXxVQ">
+                    <td><img src="https://i.ytimg.com/vi/xI-T2DNXxVQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Northstar - "For Members Only"</td>
+                </tr>
+                <tr class="record" id="CNrrm2BKDw0">
+                    <td><img src="https://i.ytimg.com/vi/CNrrm2BKDw0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Red Hot Chili Peppers - Fight Like A Brave</td>
+                </tr>
+                <tr class="record" id="dFN68bcRtQQ">
+                    <td><img src="https://i.ytimg.com/vi/dFN68bcRtQQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Takeover UK - Kill Me Dead</td>
+                </tr>
+                <tr class="record" id="vPu2ytVyNGA">
+                    <td><img src="https://i.ytimg.com/vi/vPu2ytVyNGA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">New Album: Toys!</td>
+                </tr>
+                <tr class="record" id="kfKl4MX3eZo">
+                    <td><img src="https://i.ytimg.com/vi/kfKl4MX3eZo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">From Indian Lakes - "We Are Sick"</td>
+                </tr>
+                <tr class="record" id="pATZUJiBX5Q">
+                    <td><img src="https://i.ytimg.com/vi/pATZUJiBX5Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">From Indian Lakes - We Are Invincible</td>
+                </tr>
+                <tr class="record" id="xnaFpQaGFCA">
+                    <td><img src="https://i.ytimg.com/vi/xnaFpQaGFCA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Taking Back Sunday - Cute Without The 'e' (Cut From The Team) (Video)</td>
+                </tr>
+                <tr class="record" id="AvQ-3uVX63c">
+                    <td><img src="https://i.ytimg.com/vi/AvQ-3uVX63c/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">PORTISHEAD - Strangers</td>
+                </tr>
+                <tr class="record" id="nmwWLnlwuSo">
+                    <td><img src="https://i.ytimg.com/vi/nmwWLnlwuSo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Faded Pearl - How Can You Wait - Official Video</td>
+                </tr>
+                <tr class="record" id="AUA8tz-t7Jk">
+                    <td><img src="https://i.ytimg.com/vi/AUA8tz-t7Jk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">EMA - Anteroom</td>
+                </tr>
+                <tr class="record" id="3WfI8tIHe7g">
+                    <td><img src="https://i.ytimg.com/vi/3WfI8tIHe7g/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The drawing room - the spy</td>
+                </tr>
+                <tr class="record" id="8S_R13jV11Q">
+                    <td><img src="https://i.ytimg.com/vi/8S_R13jV11Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">V.A.S.T. - Touched Official Video</td>
+                </tr>
+                <tr class="record" id="erbd9cZpxps">
+                    <td><img src="https://i.ytimg.com/vi/erbd9cZpxps/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">70 Million by Hold Your Horses ! (OFFICIAL MUSIC VIDEO)</td>
+                </tr>
+                <tr class="record" id="Ud2WY451o4Y">
+                    <td><img src="https://i.ytimg.com/vi/Ud2WY451o4Y/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Something More (Rock) Music Video [HD] - Secondhand Serenade</td>
+                </tr>
+                <tr class="record" id="YAr_MeMCdiM">
+                    <td><img src="https://i.ytimg.com/vi/YAr_MeMCdiM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Take Heart - "Standing Tall (Ft. Cody Muraro of Take The Earth Beneath Us)"</td>
+                </tr>
+                <tr class="record" id="pFq1eT9tMJ4">
+                    <td><img src="https://i.ytimg.com/vi/pFq1eT9tMJ4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">3 Doors Down - When I'm Gone</td>
+                </tr>
+                <tr class="record" id="8_iHPgdsq7M">
+                    <td><img src="https://i.ytimg.com/vi/8_iHPgdsq7M/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Call me John - Time will come [VIDEO OFICIAL]</td>
+                </tr>
+                <tr class="record" id="aAt0l5nxoxo">
+                    <td><img src="https://i.ytimg.com/vi/aAt0l5nxoxo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Weezer Only In Dreams Rehersal 1993</td>
+                </tr>
+                <tr class="record" id="adt8MBcPgsk">
+                    <td><img src="https://i.ytimg.com/vi/adt8MBcPgsk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">No Light No Light (Dubstep Remix of Florence and the Machine )</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/alternativerock/">Alternative Rock</a> archive:
     <a href="/genre/alternativerock/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/alternativerock/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/alternativerock/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/alternativerock/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/alternativerock/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/alternativerock/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/alternativerock/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -504,12 +204,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'alternativerock';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

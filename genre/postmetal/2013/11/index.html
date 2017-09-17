@@ -46,92 +46,52 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="w3_3T9TI8bw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/w3_3T9TI8bw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Ocean - Hadopelagic II: Let Them Believe</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">27</span> - <a href="https://www.reddit.com/1qaesg">The Ocean - Hadopelagic II: Let Them Believe</a>
-<br>
-                        submitted <span class="muted">2013-11-10 04:19</span> by <a href="https://www.reddit.com/user/Nimenoz">/u/Nimenoz</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bwMrm1xSEKc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bwMrm1xSEKc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Maeth - Wolves</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/1qc00p">Maeth - Wolves [6:01] Progressive/Post-Metal with kickass flute</a>
-<br>
-                        submitted <span class="muted">2013-11-10 22:13</span> by <a href="https://www.reddit.com/user/Given_to_the_rising">/u/Given_to_the_rising</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7CDVIftvoHo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7CDVIftvoHo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Horseback - Blood Fountain</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1qeeye">Horseback - Blood Fountain [Earth meets Black Metal vocals (I don't know to describe these guys [this song has mellow vocals (incredibly beautiful, regardless)])]</a>
-<br>
-                        submitted <span class="muted">2013-11-11 20:21</span> by <a href="https://www.reddit.com/user/dasFisch">/u/dasFisch</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="gdzJRfuHo_U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/gdzJRfuHo_U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Body - A Curse</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1qpxoq">The Body-A Curse. Saw these guys live last night at a house show in a tiny room, was impressed.</a>
-<br>
-                        submitted <span class="muted">2013-11-15 21:52</span> by <a href="https://www.reddit.com/user/sina27">/u/sina27</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="w3_3T9TI8bw">
+                    <td><img src="https://i.ytimg.com/vi/w3_3T9TI8bw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Ocean - Hadopelagic II: Let Them Believe</td>
+                </tr>
+                <tr class="record" id="bwMrm1xSEKc">
+                    <td><img src="https://i.ytimg.com/vi/bwMrm1xSEKc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Maeth - Wolves</td>
+                </tr>
+                <tr class="record" id="7CDVIftvoHo">
+                    <td><img src="https://i.ytimg.com/vi/7CDVIftvoHo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Horseback - Blood Fountain</td>
+                </tr>
+                <tr class="record" id="gdzJRfuHo_U">
+                    <td><img src="https://i.ytimg.com/vi/gdzJRfuHo_U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Body - A Curse</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/postmetal/">Post Metal</a> archive:
     <a href="/genre/postmetal/2010/">2010</a>&nbsp;•&nbsp;    <a href="/genre/postmetal/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/postmetal/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/postmetal/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/postmetal/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/postmetal/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/postmetal/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/postmetal/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -140,12 +100,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'postmetal';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

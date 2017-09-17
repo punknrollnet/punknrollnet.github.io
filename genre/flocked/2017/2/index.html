@@ -46,92 +46,52 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="n8VLSzAZg1o">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/n8VLSzAZg1o/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Buchanan - The Beep Test (Official video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/5v5fo1">Filmed in December 2016 during the Australian leg of Keith Urban's ripCORD World Tour with Carrie Underwood. Co-written and produced by Josh Simons, Anthony Kilhoffer (Kanye West, Watch the Throne) and Space (Digital Daggers, Seether).</a>
-<br>
-                        submitted <span class="muted">2017-02-20 16:22</span> by <a href="https://www.reddit.com/user/milkysalty">/u/milkysalty</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="hAbxO_BAz1Y">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/hAbxO_BAz1Y/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Petty Youth - Do You Wanna Be In My Gang?</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/5verd5">Petty Youth - Do You Wanna Be In My Gang? (Garage/Glam/Punk) [2017]</a>
-<br>
-                        submitted <span class="muted">2017-02-21 22:40</span> by <a href="https://www.reddit.com/user/operatorhabit">/u/operatorhabit</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="D62bHfcrR1I">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/D62bHfcrR1I/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">J Burn - Unless I</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/5ve8r8">J Burn - Unless I - [4:33] - Original</a>
-<br>
-                        submitted <span class="muted">2017-02-21 21:16</span> by <a href="https://www.reddit.com/user/jburnmusic">/u/jburnmusic</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="96kJtnp5RJs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/96kJtnp5RJs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Rentz - Wasted Youth</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/5wlycb">The Rentz - Wasted Youth (Garage Indie Rock from Mexico City)</a>
-<br>
-                        submitted <span class="muted">2017-02-28 04:35</span> by <a href="https://www.reddit.com/user/and_when_he_woke_up_">/u/and_when_he_woke_up_</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="n8VLSzAZg1o">
+                    <td><img src="https://i.ytimg.com/vi/n8VLSzAZg1o/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Buchanan - The Beep Test (Official video)</td>
+                </tr>
+                <tr class="record" id="hAbxO_BAz1Y">
+                    <td><img src="https://i.ytimg.com/vi/hAbxO_BAz1Y/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Petty Youth - Do You Wanna Be In My Gang?</td>
+                </tr>
+                <tr class="record" id="D62bHfcrR1I">
+                    <td><img src="https://i.ytimg.com/vi/D62bHfcrR1I/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">J Burn - Unless I</td>
+                </tr>
+                <tr class="record" id="96kJtnp5RJs">
+                    <td><img src="https://i.ytimg.com/vi/96kJtnp5RJs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Rentz - Wasted Youth</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/flocked/">Flocked</a> archive:
     <a href="/genre/flocked/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/flocked/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/flocked/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/flocked/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/flocked/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -140,12 +100,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'flocked';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

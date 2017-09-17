@@ -46,106 +46,56 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="ASAqOSnkhjQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ASAqOSnkhjQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Matadors - Nine Shots of Bourbon</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/5j0sv6">The Matadors - Nine Shots of Bourbon</a>
-<br>
-                        submitted <span class="muted">2016-12-18 15:59</span> by <a href="https://www.reddit.com/user/MrFromEurope">/u/MrFromEurope</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="pTNi-a-EvRA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/pTNi-a-EvRA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Bloodsucking Zombies from Outer Space | Gimme! Gimme! Gimme! (A Man After Midnight) [uncensored]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/5g6fps">Bloodsucking Zombies from Outer Space | Gimme! Gimme! Gimme! (A Man After Midnight) [uncensored]</a>
-<br>
-                        submitted <span class="muted">2016-12-02 23:07</span> by <a href="https://www.reddit.com/user/Zappenduester">/u/Zappenduester</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ih2c-r9Sn68">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ih2c-r9Sn68/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lonely Way - OFFICIAL VIDEO Jeroen Haamers & the Zorchmen</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/5hpxvz">Jeroen Haamers &amp; the Zorchmen - Lonely Way</a>
-<br>
-                        submitted <span class="muted">2016-12-11 12:54</span> by <a href="https://www.reddit.com/user/Zappenduester">/u/Zappenduester</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="qN6SLeI1uDY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/qN6SLeI1uDY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">KITTY IN A CASKET - Deep Black Underground (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/5iwb2g">Kitty In A Casket - Deep Black Underground</a>
-<br>
-                        submitted <span class="muted">2016-12-17 20:04</span> by <a href="https://www.reddit.com/user/Zappenduester">/u/Zappenduester</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="1zQZebxR11w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/1zQZebxR11w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mikey Classic & His Lonesome Spur - Climbing Up The Walls</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/5jot9d">Mikey Classic and His Lonesome Spur - Climbing Up The Walls</a>
-<br>
-                        submitted <span class="muted">2016-12-22 05:12</span> by <a href="https://www.reddit.com/user/bnuts77">/u/bnuts77</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="ASAqOSnkhjQ">
+                    <td><img src="https://i.ytimg.com/vi/ASAqOSnkhjQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Matadors - Nine Shots of Bourbon</td>
+                </tr>
+                <tr class="record" id="pTNi-a-EvRA">
+                    <td><img src="https://i.ytimg.com/vi/pTNi-a-EvRA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Bloodsucking Zombies from Outer Space | Gimme! Gimme! Gimme! (A Man After Midnight) [uncensored]</td>
+                </tr>
+                <tr class="record" id="ih2c-r9Sn68">
+                    <td><img src="https://i.ytimg.com/vi/ih2c-r9Sn68/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lonely Way - OFFICIAL VIDEO Jeroen Haamers & the Zorchmen</td>
+                </tr>
+                <tr class="record" id="qN6SLeI1uDY">
+                    <td><img src="https://i.ytimg.com/vi/qN6SLeI1uDY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">KITTY IN A CASKET - Deep Black Underground (Official Video)</td>
+                </tr>
+                <tr class="record" id="1zQZebxR11w">
+                    <td><img src="https://i.ytimg.com/vi/1zQZebxR11w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mikey Classic & His Lonesome Spur - Climbing Up The Walls</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/psychobilly/">Psychobilly</a> archive:
     <a href="/genre/psychobilly/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/psychobilly/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/psychobilly/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/psychobilly/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/psychobilly/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/psychobilly/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/psychobilly/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -154,12 +104,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'psychobilly';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -46,92 +46,52 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="Xr0StuubuaM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Xr0StuubuaM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Mummies - The Fly</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/1xbkw5">The Mummies - The Fly</a>
-<br>
-                        submitted <span class="muted">2014-02-08 01:22</span> by <a href="https://www.reddit.com/user/RVAforeverandeverand">/u/RVAforeverandeverand</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="lHTt-EeY_8I">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/lHTt-EeY_8I/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Nim Vind - "Killing Saturday Night" Beef Records</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/1ydc85">Nim Vind - Killing Saturday Night</a>
-<br>
-                        submitted <span class="muted">2014-02-19 19:52</span> by <a href="https://www.reddit.com/user/radio_berlin">/u/radio_berlin</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="aLZa9bzSfR4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/aLZa9bzSfR4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mourning Noise - Monster Madness</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/1yszph">Mourning Noise - Monster Madness</a>
-<br>
-                        submitted <span class="muted">2014-02-24 16:36</span> by <a href="https://www.reddit.com/user/Samuraicops">/u/Samuraicops</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="SOkRbwdSQLg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/SOkRbwdSQLg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Misfits - Dig Up Her Bones [Army of Darkness]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/1z5ru0">Misfits Army of Darkness</a>
-<br>
-                        submitted <span class="muted">2014-02-28 06:20</span> by <a href="https://www.reddit.com/user/themaybatatter">/u/themaybatatter</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="Xr0StuubuaM">
+                    <td><img src="https://i.ytimg.com/vi/Xr0StuubuaM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Mummies - The Fly</td>
+                </tr>
+                <tr class="record" id="lHTt-EeY_8I">
+                    <td><img src="https://i.ytimg.com/vi/lHTt-EeY_8I/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Nim Vind - "Killing Saturday Night" Beef Records</td>
+                </tr>
+                <tr class="record" id="aLZa9bzSfR4">
+                    <td><img src="https://i.ytimg.com/vi/aLZa9bzSfR4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mourning Noise - Monster Madness</td>
+                </tr>
+                <tr class="record" id="SOkRbwdSQLg">
+                    <td><img src="https://i.ytimg.com/vi/SOkRbwdSQLg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Misfits - Dig Up Her Bones [Army of Darkness]</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/horrorpunk/">Horror Punk</a> archive:
     <a href="/genre/horrorpunk/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/horrorpunk/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/horrorpunk/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/horrorpunk/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/horrorpunk/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -140,12 +100,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'horrorpunk';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

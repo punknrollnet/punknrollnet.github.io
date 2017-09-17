@@ -46,106 +46,56 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="lvBXpTUjo30">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/lvBXpTUjo30/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mansion - Mother´s Burden</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/1rg97w">Mansion - Mother´s Burden (My God this fucking rocks)</a>
-<br>
-                        submitted <span class="muted">2013-11-25 22:46</span> by <a href="https://www.reddit.com/user/will2113">/u/will2113</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="qw5Vy8fKpYI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/qw5Vy8fKpYI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sonic Youth - Death Valley 69</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/1qkmyx">Sonic Youth - Death Valley 69</a>
-<br>
-                        submitted <span class="muted">2013-11-13 23:21</span> by <a href="https://www.reddit.com/user/Mezmer1zed">/u/Mezmer1zed</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="EjEqWXa4SqI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/EjEqWXa4SqI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">MESSENGER "The Perpetual Glow Of A Setting Sun"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1q6nnl">MESSENGER "The Perpetual Glow Of A Setting Sun"</a>
-<br>
-                        submitted <span class="muted">2013-11-08 16:34</span> by <a href="https://www.reddit.com/user/majik122">/u/majik122</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="MibBIaf2tFo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/MibBIaf2tFo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Graviators - Soulstealer</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/1qc508">The Graviators - Soulstealer</a>
-<br>
-                        submitted <span class="muted">2013-11-10 23:14</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Y8ULJybi85w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Y8ULJybi85w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Wiser Fool: 'Seek It Out'</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/1q625s">Wiser Fool - Seek it Out</a>
-<br>
-                        submitted <span class="muted">2013-11-08 09:33</span> by <a href="https://www.reddit.com/user/PenetratorHammer">/u/PenetratorHammer</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="lvBXpTUjo30">
+                    <td><img src="https://i.ytimg.com/vi/lvBXpTUjo30/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mansion - Mother´s Burden</td>
+                </tr>
+                <tr class="record" id="qw5Vy8fKpYI">
+                    <td><img src="https://i.ytimg.com/vi/qw5Vy8fKpYI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sonic Youth - Death Valley 69</td>
+                </tr>
+                <tr class="record" id="EjEqWXa4SqI">
+                    <td><img src="https://i.ytimg.com/vi/EjEqWXa4SqI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">MESSENGER "The Perpetual Glow Of A Setting Sun"</td>
+                </tr>
+                <tr class="record" id="MibBIaf2tFo">
+                    <td><img src="https://i.ytimg.com/vi/MibBIaf2tFo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Graviators - Soulstealer</td>
+                </tr>
+                <tr class="record" id="Y8ULJybi85w">
+                    <td><img src="https://i.ytimg.com/vi/Y8ULJybi85w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Wiser Fool: 'Seek It Out'</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/occultrock/">Occult Rock</a> archive:
     <a href="/genre/occultrock/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/occultrock/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/occultrock/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/occultrock/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/occultrock/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/occultrock/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -154,12 +104,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'occultrock';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

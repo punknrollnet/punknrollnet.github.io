@@ -46,92 +46,52 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="mu2z4Uf9Tgc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/mu2z4Uf9Tgc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ｔａｋｅ　Ｍｙ　Ｃｈａｎｃｅ/DOLL＄BOXX</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/290ovs">They will surprise you.Ｔａｋｅ Ｍｙ Ｃｈａｎｃｅ/DOLL＄BOXX</a>
-<br>
-                        submitted <span class="muted">2014-06-25 01:27</span> by <a href="https://www.reddit.com/user/Jrocker-ame">/u/Jrocker-ame</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="FFXfk_g3ll0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/FFXfk_g3ll0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">D / 鳥籠御殿～L'Oiseau bleu～ | PV in 720p</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/277h5p">D - Oiseau Bleu A song from my favourite band that it took me a while to get used to, but now I looove it.</a>
-<br>
-                        submitted <span class="muted">2014-06-03 15:20</span> by <a href="https://www.reddit.com/user/Orestria">/u/Orestria</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="rLA_eJvNDBk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/rLA_eJvNDBk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Inoran - Get Laid (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/29hl39">Inoran - Get Laid (Official Video)[3:26]</a>
-<br>
-                        submitted <span class="muted">2014-06-30 17:25</span> by <a href="https://www.reddit.com/user/mhalkmim">/u/mhalkmim</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zXwBwpvvZfs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zXwBwpvvZfs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SMELLY SOX - Hey, Mr. Lucifer （日本語）</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/27tiaa">SMELLY SOX - Hey, Mr. Lucifer (I think 2010, video seems a bit older)</a>
-<br>
-                        submitted <span class="muted">2014-06-10 20:53</span> by <a href="https://www.reddit.com/user/Youjimbo">/u/Youjimbo</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="mu2z4Uf9Tgc">
+                    <td><img src="https://i.ytimg.com/vi/mu2z4Uf9Tgc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ｔａｋｅ　Ｍｙ　Ｃｈａｎｃｅ/DOLL＄BOXX</td>
+                </tr>
+                <tr class="record" id="FFXfk_g3ll0">
+                    <td><img src="https://i.ytimg.com/vi/FFXfk_g3ll0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">D / 鳥籠御殿～L'Oiseau bleu～ | PV in 720p</td>
+                </tr>
+                <tr class="record" id="rLA_eJvNDBk">
+                    <td><img src="https://i.ytimg.com/vi/rLA_eJvNDBk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Inoran - Get Laid (Official Video)</td>
+                </tr>
+                <tr class="record" id="zXwBwpvvZfs">
+                    <td><img src="https://i.ytimg.com/vi/zXwBwpvvZfs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SMELLY SOX - Hey, Mr. Lucifer （日本語）</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/jrock/">JRock</a> archive:
     <a href="/genre/jrock/2010/">2010</a>&nbsp;•&nbsp;    <a href="/genre/jrock/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/jrock/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/jrock/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/jrock/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/jrock/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/jrock/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/jrock/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -140,12 +100,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'jrock';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

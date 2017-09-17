@@ -46,568 +46,188 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="DGe7DfyaOqc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/DGe7DfyaOqc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Thin Lizzy - Emerald - Live 1976 - A Night On The Town TV Broadcast</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/2e2f6x">Thin Lizzy - "Emerald" (HM '76)</a>
-<br>
-                        submitted <span class="muted">2014-08-20 09:14</span> by <a href="https://www.reddit.com/user/VCR_PUKE">/u/VCR_PUKE</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ywNXjUpBY8Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ywNXjUpBY8Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Saxon - And The Bands Played On (Lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2e6l41">Saxon - And the Bands Played On (NWOBHM, '81)</a>
-<br>
-                        submitted <span class="muted">2014-08-21 14:32</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="H71VEV1c_XE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/H71VEV1c_XE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Motörhead - (We Are) The Road Crew</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2div07">Motörhead - (We Are) The Road Crew [HM, '80]</a>
-<br>
-                        submitted <span class="muted">2014-08-14 09:15</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="nTuV2CK2BAI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/nTuV2CK2BAI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jameson Raid - Seven Days Of Splendour</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2cnup9">Jameson Raid - "Seven Days of Splendour" (NWOBHM, '79)</a>
-<br>
-                        submitted <span class="muted">2014-08-05 05:20</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="gGqByG_sO4c">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/gGqByG_sO4c/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Darkified - Sleep Forever</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2cve66">Darkified - "Sleep Forever" (DM, '92)</a>
-<br>
-                        submitted <span class="muted">2014-08-07 10:08</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="EmwqX_PLTpE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/EmwqX_PLTpE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">D.I.V. -   Mein Kampf - Freddy.wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2e3em3">D.I.V. - Mein Kampf (TM '92)</a>
-<br>
-                        submitted <span class="muted">2014-08-20 16:38</span> by <a href="https://www.reddit.com/user/Stoneman20">/u/Stoneman20</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2cbGrL2NzPE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2cbGrL2NzPE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Glory Bell's Band - Sir Lionheart</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2e5mle">Glory Bell's Band - "Sir Lionheart" (HM, '82)</a>
-<br>
-                        submitted <span class="muted">2014-08-21 05:45</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="KmOzjT6HChE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/KmOzjT6HChE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Apollo Ra - Bane of the Black Sword (1989)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2cg95s">Apollo Ra - "Bane of the Black Sword" (USPM, '89)</a>
-<br>
-                        submitted <span class="muted">2014-08-02 21:06</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_Y7_lwnq4lc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_Y7_lwnq4lc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">War Machine - Dangerous</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2e5mbb">War Machine - "Dangerous" (HM, '86)</a>
-<br>
-                        submitted <span class="muted">2014-08-21 05:41</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="iz8e8N0MLVc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/iz8e8N0MLVc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Rods Let Them Eat Metal</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2et28k">The Rods - Let Them Eat Metal [HM, '84]</a>
-<br>
-                        submitted <span class="muted">2014-08-28 08:52</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="TUheGWK4Ul0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/TUheGWK4Ul0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Blacklace -  Speed of Sound</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2cveb1">Blacklace - "Speed of Sound" (HM, '85)</a>
-<br>
-                        submitted <span class="muted">2014-08-07 10:11</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Xfg5hp2cpS0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Xfg5hp2cpS0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Noisehunter - Stormbringer</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2dnlxn">Noisehunter - Stormbringer (HM '86)</a>
-<br>
-                        submitted <span class="muted">2014-08-15 18:23</span> by <a href="https://www.reddit.com/user/Stoneman20">/u/Stoneman20</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bpguId5FOnE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bpguId5FOnE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Egzekuthor - Hateful Subconsciousness (Demo 1990)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2dt8ei">Egzekuthor - Hateful Subconsciousness (TM '90)</a>
-<br>
-                        submitted <span class="muted">2014-08-17 17:16</span> by <a href="https://www.reddit.com/user/Stoneman20">/u/Stoneman20</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="tU-r-X6ll30">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/tU-r-X6ll30/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">R'lyeh - Cthulhu Dead Dream</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2dxmh6">R'lyeh - "Cthulhu Dead Dream" (DM, '92)</a>
-<br>
-                        submitted <span class="muted">2014-08-18 23:52</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ZeNM7uZTElg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ZeNM7uZTElg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Rotor - Tépj Szét Minden Láncot</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2esrkl">Rotor - "Tépj Szét Minden Láncot" (SM, '91)</a>
-<br>
-                        submitted <span class="muted">2014-08-28 05:44</span> by <a href="https://www.reddit.com/user/raoulduke25">/u/raoulduke25</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Npw7LX17XZo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Npw7LX17XZo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Overlorde SR - Knights of the Realm</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2cg91l">Overlorde - "Knights of the Realm" (USPM, '87)</a>
-<br>
-                        submitted <span class="muted">2014-08-02 21:04</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="FZyOyIRJJ_I">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/FZyOyIRJJ_I/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Dark (Cze) - Sex Shop of Doctor Fucktor</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2cgfpv">(DM) Dark - Sex Shop Of Doctor Fucktor (Cz 1992)</a>
-<br>
-                        submitted <span class="muted">2014-08-02 22:23</span> by <a href="https://www.reddit.com/user/BigD1970">/u/BigD1970</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7k6kit9GWmE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7k6kit9GWmE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">PROTECTED ILLUSION - Plain Pain</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2cou5k">Protected Illusion - Plain Pain (DM/TM '90)</a>
-<br>
-                        submitted <span class="muted">2014-08-05 14:14</span> by <a href="https://www.reddit.com/user/Stoneman20">/u/Stoneman20</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="HWU6g9e-j-g">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/HWU6g9e-j-g/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Recalcitrance - Fragmented Origins</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2cx8fj">Recalcitrance - Fragmented Origins (Prog/TM '90)</a>
-<br>
-                        submitted <span class="muted">2014-08-07 21:41</span> by <a href="https://www.reddit.com/user/Stoneman20">/u/Stoneman20</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="kcAVul5qzEg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/kcAVul5qzEg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Gilgamesj - Revolution</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2d2v0i">Gilgamesj - "Revolution" (HM, '84)</a>
-<br>
-                        submitted <span class="muted">2014-08-09 16:41</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="txAf1dhCCk4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/txAf1dhCCk4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">HIGH POWER- Rebelle</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2dbgk1">High Power - "Rebelle" (HM, '86)</a>
-<br>
-                        submitted <span class="muted">2014-08-12 08:02</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="z2t6Ba9EoO8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/z2t6Ba9EoO8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Steel Crown - Night Walk</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2dbgpf">Steel Crown - "Night Walk" (HM, '89)</a>
-<br>
-                        submitted <span class="muted">2014-08-12 08:06</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bq0G3jIqcBk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bq0G3jIqcBk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Erosion(Ger) - "False Prophets"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2dh1wx">Erosion - False Prophets (TM '88)</a>
-<br>
-                        submitted <span class="muted">2014-08-13 20:51</span> by <a href="https://www.reddit.com/user/Stoneman20">/u/Stoneman20</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="P7JXmtBQYz4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/P7JXmtBQYz4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Battleaxe - Power From The Universe</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2ditxq">Battleaxe - "Power From the Universe" (NWOBHM, '84)</a>
-<br>
-                        submitted <span class="muted">2014-08-14 08:55</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ecVGZf3_-co">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ecVGZf3_-co/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Nightfall - Mother Of All Gods, Mother Of Mine</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2diuhy">Nightfall - "Mother of All Gods, Mother of Mine" (death/doom, '94)</a>
-<br>
-                        submitted <span class="muted">2014-08-14 09:05</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="A-OHTFzVwOw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/A-OHTFzVwOw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mindless Sinner (Swe) - Live And Die (w/Lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2dt76w">Mindless Sinner - Live And Die (HM '86)</a>
-<br>
-                        submitted <span class="muted">2014-08-17 17:03</span> by <a href="https://www.reddit.com/user/Stoneman20">/u/Stoneman20</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Xrdtc2XZlDg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Xrdtc2XZlDg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Enchanter (US) - Beckoned With the Call (1988)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2ee5f7">Enchanter - "Beckoned With the Call" (USPM, '88)</a>
-<br>
-                        submitted <span class="muted">2014-08-23 20:50</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="qSj5a4HY6qI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/qSj5a4HY6qI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">MALTESE FALCON- Rebellion</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2ekw60">Maltese Falcon - "Rebellion" (HM, '84)</a>
-<br>
-                        submitted <span class="muted">2014-08-26 00:13</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="3tANyEwonRo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/3tANyEwonRo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Enchanter (US) - Progressive Entrapment</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2eyaoh">Enchanter - Progressive Entrapment (TM '89)</a>
-<br>
-                        submitted <span class="muted">2014-08-29 21:01</span> by <a href="https://www.reddit.com/user/Stoneman20">/u/Stoneman20</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="VQJG8Rxs1Ng">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/VQJG8Rxs1Ng/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Arkangel VagonDeLaMuerte</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2eyayi">Arkangel - Vagón de la Muerte (HM '81)</a>
-<br>
-                        submitted <span class="muted">2014-08-29 21:04</span> by <a href="https://www.reddit.com/user/Stoneman20">/u/Stoneman20</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="1DC1P2fRO1g">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/1DC1P2fRO1g/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Taurus - Massacre</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2cnv59">Taurus - "Massacre" (TM, '86)</a>
-<br>
-                        submitted <span class="muted">2014-08-05 05:26</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2IbPsJEUbo4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2IbPsJEUbo4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Chaos Horde - When Will It Change</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2dh3fl">Chaos Horde - When Will It Change (TM '86)</a>
-<br>
-                        submitted <span class="muted">2014-08-13 21:04</span> by <a href="https://www.reddit.com/user/Stoneman20">/u/Stoneman20</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="4kEfhj9-Ekc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/4kEfhj9-Ekc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Rex Begonia - "Rex Begonia"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2ebl3z">Rex Begonia - Rex Begonia (HM '82)</a>
-<br>
-                        submitted <span class="muted">2014-08-22 23:07</span> by <a href="https://www.reddit.com/user/Stoneman20">/u/Stoneman20</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Y2pDqWFeIQ0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Y2pDqWFeIQ0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Manticore - Mask (demo)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2ecrdb">Manticore - Mask (DM '94)</a>
-<br>
-                        submitted <span class="muted">2014-08-23 09:08</span> by <a href="https://www.reddit.com/user/Stoneman20">/u/Stoneman20</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="vYAc7P2q_fE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/vYAc7P2q_fE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Thor - Desertor</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2ee5p5">Thor (ESP) - "Desertor" (HM/PM, '87)</a>
-<br>
-                        submitted <span class="muted">2014-08-23 20:53</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_iADwryvat8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_iADwryvat8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">STYGIAN SHORE- Tidal Wave</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2ez0f6">Stygian Shore - "Tidal Wave" (HM, '84)</a>
-<br>
-                        submitted <span class="muted">2014-08-30 01:47</span> by <a href="https://www.reddit.com/user/deathofthesun">/u/deathofthesun</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="RL-4IlAmNMs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/RL-4IlAmNMs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Thunder(US)-Fight For Your Life(1988).wmv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2dh1al">Thunder - Fight For Your Life (USPM '88)</a>
-<br>
-                        submitted <span class="muted">2014-08-13 20:46</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="I_DuKw3v8So">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/I_DuKw3v8So/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Skid Row - Slave To The Grind (official video) HD</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2e2725">Skid Row - Slave To The Grind</a>
-<br>
-                        submitted <span class="muted">2014-08-20 06:43</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="DGe7DfyaOqc">
+                    <td><img src="https://i.ytimg.com/vi/DGe7DfyaOqc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Thin Lizzy - Emerald - Live 1976 - A Night On The Town TV Broadcast</td>
+                </tr>
+                <tr class="record" id="ywNXjUpBY8Q">
+                    <td><img src="https://i.ytimg.com/vi/ywNXjUpBY8Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Saxon - And The Bands Played On (Lyrics)</td>
+                </tr>
+                <tr class="record" id="H71VEV1c_XE">
+                    <td><img src="https://i.ytimg.com/vi/H71VEV1c_XE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Motörhead - (We Are) The Road Crew</td>
+                </tr>
+                <tr class="record" id="nTuV2CK2BAI">
+                    <td><img src="https://i.ytimg.com/vi/nTuV2CK2BAI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jameson Raid - Seven Days Of Splendour</td>
+                </tr>
+                <tr class="record" id="gGqByG_sO4c">
+                    <td><img src="https://i.ytimg.com/vi/gGqByG_sO4c/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Darkified - Sleep Forever</td>
+                </tr>
+                <tr class="record" id="EmwqX_PLTpE">
+                    <td><img src="https://i.ytimg.com/vi/EmwqX_PLTpE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">D.I.V. -   Mein Kampf - Freddy.wmv</td>
+                </tr>
+                <tr class="record" id="2cbGrL2NzPE">
+                    <td><img src="https://i.ytimg.com/vi/2cbGrL2NzPE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Glory Bell's Band - Sir Lionheart</td>
+                </tr>
+                <tr class="record" id="KmOzjT6HChE">
+                    <td><img src="https://i.ytimg.com/vi/KmOzjT6HChE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Apollo Ra - Bane of the Black Sword (1989)</td>
+                </tr>
+                <tr class="record" id="_Y7_lwnq4lc">
+                    <td><img src="https://i.ytimg.com/vi/_Y7_lwnq4lc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">War Machine - Dangerous</td>
+                </tr>
+                <tr class="record" id="iz8e8N0MLVc">
+                    <td><img src="https://i.ytimg.com/vi/iz8e8N0MLVc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Rods Let Them Eat Metal</td>
+                </tr>
+                <tr class="record" id="TUheGWK4Ul0">
+                    <td><img src="https://i.ytimg.com/vi/TUheGWK4Ul0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Blacklace -  Speed of Sound</td>
+                </tr>
+                <tr class="record" id="Xfg5hp2cpS0">
+                    <td><img src="https://i.ytimg.com/vi/Xfg5hp2cpS0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Noisehunter - Stormbringer</td>
+                </tr>
+                <tr class="record" id="bpguId5FOnE">
+                    <td><img src="https://i.ytimg.com/vi/bpguId5FOnE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Egzekuthor - Hateful Subconsciousness (Demo 1990)</td>
+                </tr>
+                <tr class="record" id="tU-r-X6ll30">
+                    <td><img src="https://i.ytimg.com/vi/tU-r-X6ll30/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">R'lyeh - Cthulhu Dead Dream</td>
+                </tr>
+                <tr class="record" id="ZeNM7uZTElg">
+                    <td><img src="https://i.ytimg.com/vi/ZeNM7uZTElg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Rotor - Tépj Szét Minden Láncot</td>
+                </tr>
+                <tr class="record" id="Npw7LX17XZo">
+                    <td><img src="https://i.ytimg.com/vi/Npw7LX17XZo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Overlorde SR - Knights of the Realm</td>
+                </tr>
+                <tr class="record" id="FZyOyIRJJ_I">
+                    <td><img src="https://i.ytimg.com/vi/FZyOyIRJJ_I/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Dark (Cze) - Sex Shop of Doctor Fucktor</td>
+                </tr>
+                <tr class="record" id="7k6kit9GWmE">
+                    <td><img src="https://i.ytimg.com/vi/7k6kit9GWmE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">PROTECTED ILLUSION - Plain Pain</td>
+                </tr>
+                <tr class="record" id="HWU6g9e-j-g">
+                    <td><img src="https://i.ytimg.com/vi/HWU6g9e-j-g/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Recalcitrance - Fragmented Origins</td>
+                </tr>
+                <tr class="record" id="kcAVul5qzEg">
+                    <td><img src="https://i.ytimg.com/vi/kcAVul5qzEg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Gilgamesj - Revolution</td>
+                </tr>
+                <tr class="record" id="txAf1dhCCk4">
+                    <td><img src="https://i.ytimg.com/vi/txAf1dhCCk4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">HIGH POWER- Rebelle</td>
+                </tr>
+                <tr class="record" id="z2t6Ba9EoO8">
+                    <td><img src="https://i.ytimg.com/vi/z2t6Ba9EoO8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Steel Crown - Night Walk</td>
+                </tr>
+                <tr class="record" id="bq0G3jIqcBk">
+                    <td><img src="https://i.ytimg.com/vi/bq0G3jIqcBk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Erosion(Ger) - "False Prophets"</td>
+                </tr>
+                <tr class="record" id="P7JXmtBQYz4">
+                    <td><img src="https://i.ytimg.com/vi/P7JXmtBQYz4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Battleaxe - Power From The Universe</td>
+                </tr>
+                <tr class="record" id="ecVGZf3_-co">
+                    <td><img src="https://i.ytimg.com/vi/ecVGZf3_-co/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Nightfall - Mother Of All Gods, Mother Of Mine</td>
+                </tr>
+                <tr class="record" id="A-OHTFzVwOw">
+                    <td><img src="https://i.ytimg.com/vi/A-OHTFzVwOw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mindless Sinner (Swe) - Live And Die (w/Lyrics)</td>
+                </tr>
+                <tr class="record" id="Xrdtc2XZlDg">
+                    <td><img src="https://i.ytimg.com/vi/Xrdtc2XZlDg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Enchanter (US) - Beckoned With the Call (1988)</td>
+                </tr>
+                <tr class="record" id="qSj5a4HY6qI">
+                    <td><img src="https://i.ytimg.com/vi/qSj5a4HY6qI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">MALTESE FALCON- Rebellion</td>
+                </tr>
+                <tr class="record" id="3tANyEwonRo">
+                    <td><img src="https://i.ytimg.com/vi/3tANyEwonRo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Enchanter (US) - Progressive Entrapment</td>
+                </tr>
+                <tr class="record" id="VQJG8Rxs1Ng">
+                    <td><img src="https://i.ytimg.com/vi/VQJG8Rxs1Ng/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Arkangel VagonDeLaMuerte</td>
+                </tr>
+                <tr class="record" id="1DC1P2fRO1g">
+                    <td><img src="https://i.ytimg.com/vi/1DC1P2fRO1g/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Taurus - Massacre</td>
+                </tr>
+                <tr class="record" id="2IbPsJEUbo4">
+                    <td><img src="https://i.ytimg.com/vi/2IbPsJEUbo4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Chaos Horde - When Will It Change</td>
+                </tr>
+                <tr class="record" id="4kEfhj9-Ekc">
+                    <td><img src="https://i.ytimg.com/vi/4kEfhj9-Ekc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Rex Begonia - "Rex Begonia"</td>
+                </tr>
+                <tr class="record" id="Y2pDqWFeIQ0">
+                    <td><img src="https://i.ytimg.com/vi/Y2pDqWFeIQ0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Manticore - Mask (demo)</td>
+                </tr>
+                <tr class="record" id="vYAc7P2q_fE">
+                    <td><img src="https://i.ytimg.com/vi/vYAc7P2q_fE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Thor - Desertor</td>
+                </tr>
+                <tr class="record" id="_iADwryvat8">
+                    <td><img src="https://i.ytimg.com/vi/_iADwryvat8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">STYGIAN SHORE- Tidal Wave</td>
+                </tr>
+                <tr class="record" id="RL-4IlAmNMs">
+                    <td><img src="https://i.ytimg.com/vi/RL-4IlAmNMs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Thunder(US)-Fight For Your Life(1988).wmv</td>
+                </tr>
+                <tr class="record" id="I_DuKw3v8So">
+                    <td><img src="https://i.ytimg.com/vi/I_DuKw3v8So/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Skid Row - Slave To The Grind (official video) HD</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/classicmetal/">Classic Metal</a> archive:
     <a href="/genre/classicmetal/2010/">2010</a>&nbsp;•&nbsp;    <a href="/genre/classicmetal/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/classicmetal/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/classicmetal/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/classicmetal/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/classicmetal/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/classicmetal/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/classicmetal/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -616,12 +236,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'classicmetal';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

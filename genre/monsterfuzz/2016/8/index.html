@@ -46,554 +46,184 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="8dldMqyVpQ4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8dldMqyVpQ4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Captain Beefheart - Zig Zag Wanderer</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/4xu3kt">Captain Beefheart - Zig Zag Wanderer [USA, 1967]</a>
-<br>
-                        submitted <span class="muted">2016-08-15 15:29</span> by <a href="https://www.reddit.com/user/ultimatewpierdol">/u/ultimatewpierdol</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="MHo11tW08M0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/MHo11tW08M0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Corpse - Shinki Chen</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/4we6vu">Shinki Chen - Corpse [Japan -1971]</a>
-<br>
-                        submitted <span class="muted">2016-08-06 03:25</span> by <a href="https://www.reddit.com/user/SecondHandEmotion">/u/SecondHandEmotion</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="LL-1AEYyw1k">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/LL-1AEYyw1k/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Baby Grandmothers - Somebody Keeps Calling my Name</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/4xjx6k">Baby Grandmothers - Somebody Keeps Calling My Name (Sweden - 1968)</a>
-<br>
-                        submitted <span class="muted">2016-08-13 17:01</span> by <a href="https://www.reddit.com/user/the_muppets_took_me">/u/the_muppets_took_me</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="PYjDzkTbVvw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/PYjDzkTbVvw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ezra - Pax '72 [Taurus Music Ltd.] Wicked Unknown Psych Rock Fuzz 45</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/4x2ldt">Ezra - Pax '72 [US - 1972?]</a>
-<br>
-                        submitted <span class="muted">2016-08-10 15:12</span> by <a href="https://www.reddit.com/user/musicdawn">/u/musicdawn</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-QA6V30POGM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-QA6V30POGM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Dark Star - Spectre (1977)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/4xituu">Dark Star - "Spectre" (USA - 1977)</a>
-<br>
-                        submitted <span class="muted">2016-08-13 12:13</span> by <a href="https://www.reddit.com/user/PenetratorHammer">/u/PenetratorHammer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="59FP_IdVhTc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/59FP_IdVhTc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">ZIPS(a.k.a Rip & Lord) - Evil Hearted Woman (1975)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/4zh6kh">Zips - Evil Hearted Woman [UK - 1975]</a>
-<br>
-                        submitted <span class="muted">2016-08-25 06:28</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="EgrgJgbO0sQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/EgrgJgbO0sQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pendragon(US) - Never Gonna Go Back(1969)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/506xms">Pendragon - Never Gonna Go Back [US - 1969]</a>
-<br>
-                        submitted <span class="muted">2016-08-29 19:49</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7JysxASI5Do">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7JysxASI5Do/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ave Sangria - Sob o Sol de Satã</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/4x5h61">Ave Sangria - Sob o Sol de Satã [Brazil - 1974]</a>
-<br>
-                        submitted <span class="muted">2016-08-11 01:02</span> by <a href="https://www.reddit.com/user/DancingwithCacti">/u/DancingwithCacti</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="c08bPB9cD6c">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/c08bPB9cD6c/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Euclid - She's Gone</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/4xht67">Euclid - She's Gone [USA - 1970]</a>
-<br>
-                        submitted <span class="muted">2016-08-13 05:35</span> by <a href="https://www.reddit.com/user/FuckingSWELLBACK">/u/FuckingSWELLBACK</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="HAEohot1yes">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/HAEohot1yes/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Burlington Express - Stroll on</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/4xxczs">The Burlington Express - Stroll On [US - 1967]</a>
-<br>
-                        submitted <span class="muted">2016-08-16 02:53</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="k9NkXwUfS1Y">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/k9NkXwUfS1Y/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Bloodrock - 'Wicked Truth' circa 1970</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/4yjtm3">Bloodrock - Wicked Truth [US - 1970]</a>
-<br>
-                        submitted <span class="muted">2016-08-19 16:19</span> by <a href="https://www.reddit.com/user/dsallen7">/u/dsallen7</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="qGOmnp3NC4U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/qGOmnp3NC4U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Psychotrons - Death Is a Dream</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/4vp984">Psychotrons - Death Is A Dream [US - 1969]</a>
-<br>
-                        submitted <span class="muted">2016-08-01 22:43</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ef7M4twGMAM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ef7M4twGMAM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jug Session : Runnin Down (NL 1971)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/4xkgx0">Jug Session - Runnin' Down [Netherlands - 1971]</a>
-<br>
-                        submitted <span class="muted">2016-08-13 19:02</span> by <a href="https://www.reddit.com/user/El_Dumfuco">/u/El_Dumfuco</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="lSpflfDZ9g8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/lSpflfDZ9g8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Andromeda - Return To Sanity</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/4zszfr">Andromeda - Return To Sanity [UK - 1969]</a>
-<br>
-                        submitted <span class="muted">2016-08-27 05:57</span> by <a href="https://www.reddit.com/user/FuckingSWELLBACK">/u/FuckingSWELLBACK</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="T3VpT0QKo_s">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/T3VpT0QKo_s/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jumbo-Classified Love (70's Proto-Metal)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/4zvocn">Jumbo - Classified Love [US - 197?]</a>
-<br>
-                        submitted <span class="muted">2016-08-27 19:04</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="DyCMaaChVe0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/DyCMaaChVe0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Tom Hartman - Sunshine Woman</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/509ga0">Tom Hartman - Sunshine Woman [US - 1971]</a>
-<br>
-                        submitted <span class="muted">2016-08-30 05:04</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="tXaU9xVInWQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/tXaU9xVInWQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Joys Of Life - Descent</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/50eq1d">Joys Of Life - Descent [US - 1967]</a>
-<br>
-                        submitted <span class="muted">2016-08-31 01:41</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="muEu9pZ7VXo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/muEu9pZ7VXo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Norman Haines Band - Den Of Iniquity</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/4wgw25">The Norman Haines Band - Den Of Iniquity [England - 1971]</a>
-<br>
-                        submitted <span class="muted">2016-08-06 17:45</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="m7-vSssaE-8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/m7-vSssaE-8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">WONDERLICK - Hey Joe - Heavy Psych Marijuana Unknown!!!</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/4wmimn">Wonderlick - Hey Joe [US - 1973]</a>
-<br>
-                        submitted <span class="muted">2016-08-07 20:19</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ndO-jIdjD3I">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ndO-jIdjD3I/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Nurt-Kto Ma Dzis Czas(1972)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/4wvd6c">Nurt - Kto Ma Dziś Czas [Poland - 1972]</a>
-<br>
-                        submitted <span class="muted">2016-08-09 09:39</span> by <a href="https://www.reddit.com/user/ultimatewpierdol">/u/ultimatewpierdol</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8cQgeZDQKmw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8cQgeZDQKmw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Life(US)-This Time(Our Love Will Last) --70's Obscure Hard rock --</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/4wvfnl">Life - This Time (Our Love Will Last) [US - 1972]</a>
-<br>
-                        submitted <span class="muted">2016-08-09 10:03</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="T3AthzQ_dPY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/T3AthzQ_dPY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">THE TRACERS  - She Said Yeah</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/4y7q55">The Tracers - She Said Yeah [US - 1966]</a>
-<br>
-                        submitted <span class="muted">2016-08-17 19:49</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zeUrVRpzoJA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zeUrVRpzoJA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">the aztex - i said move</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/4yhe8n">The Aztex - I Said Move [US - 1967]</a>
-<br>
-                        submitted <span class="muted">2016-08-19 06:35</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="L4JaK_mpajQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/L4JaK_mpajQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Atoll ‎-- Le Secret Du Mage (1974)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/501iah">Atoll ‎-- Le Secret Du Mage (1974)</a>
-<br>
-                        submitted <span class="muted">2016-08-28 21:25</span> by <a href="https://www.reddit.com/user/Cosmonaut_of_three">/u/Cosmonaut_of_three</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="1VJo5s-j7Q4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/1VJo5s-j7Q4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">GREEN BAG UNKNOWN UK ACID ROCK ACETATE 70'S WILD FUZZ</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/4wsjuu">Unknown UK Group - Green Bag [UK - 197?]</a>
-<br>
-                        submitted <span class="muted">2016-08-08 21:16</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="JZLzeuJoJXA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/JZLzeuJoJXA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Rocket Norton Band(Canada)-Donkey Chain(1974)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/4xbvdj">Rocket Norton Band - Donkey Chain [Canada - 1974]</a>
-<br>
-                        submitted <span class="muted">2016-08-12 04:40</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="qdrwZtHKzWU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/qdrwZtHKzWU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Marsha Hunt's 22 - Medusa</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/4xmva4">Marsha Hunt's 22 - Medusa [UK - 1973]</a>
-<br>
-                        submitted <span class="muted">2016-08-14 05:16</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="35GREe5h_BQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/35GREe5h_BQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Void Generator "Synapsex"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/4xq9cx">Void Generator - Synapsex [Italy - 2014]</a>
-<br>
-                        submitted <span class="muted">2016-08-14 21:46</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2iV3v9qZZ78">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2iV3v9qZZ78/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Fabulous Apostles - Dark Horse Blues (1968)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/4xs2x7">The Fabulous Apostles - Dark Horse Blues [US - 1968]</a>
-<br>
-                        submitted <span class="muted">2016-08-15 05:09</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="15ksH3eF3YE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/15ksH3eF3YE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Heavy Jelly - Time Out, 1969</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/4y2hxr">Heavy Jelly - Time Out [UK - 1969]</a>
-<br>
-                        submitted <span class="muted">2016-08-16 23:18</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="SeYo23BgoWI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/SeYo23BgoWI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">It's Us - Don't Want Your Lovin'</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/4y2s3t">It's Us - Don't Want Your Lovin' [US - 1966]</a>
-<br>
-                        submitted <span class="muted">2016-08-17 00:23</span> by <a href="https://www.reddit.com/user/Sadsharks">/u/Sadsharks</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="kuRYOPwnWtU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/kuRYOPwnWtU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Noblemen - Short Time</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/4y3bwm">The Noblemen - Short Time [US - 1966]</a>
-<br>
-                        submitted <span class="muted">2016-08-17 02:38</span> by <a href="https://www.reddit.com/user/Sadsharks">/u/Sadsharks</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ch0Tqv7CLhM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ch0Tqv7CLhM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">J.C. HEAVY - Do What You Like ,1971 Rare U.K Psych/ Rock</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/4z4w1t">J.C. Heavy - Do What You Like [UK -1971]</a>
-<br>
-                        submitted <span class="muted">2016-08-23 05:14</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="nzVhdc0Dz78">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/nzVhdc0Dz78/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">It's All in My Head - Twentieth Century Zoo, 1968</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/4vn1g9">Twentieth Century Zoo - It's All In My Head [US - 1969]</a>
-<br>
-                        submitted <span class="muted">2016-08-01 15:27</span> by <a href="https://www.reddit.com/user/macelad">/u/macelad</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="b-CmYf5BHIQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/b-CmYf5BHIQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Favourite Sons ----  "Walkin' walkin' walkin' "</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/4xc93j">The Favourite Sons - Walkin' Walkin' Walkin' [UK - 1966]</a>
-<br>
-                        submitted <span class="muted">2016-08-12 06:40</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="LfdQHEvcdgI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/LfdQHEvcdgI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">3's- do you see (1974)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/4zxva7">3's - Do You See [US - 1974]</a>
-<br>
-                        submitted <span class="muted">2016-08-28 04:08</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="0X4DhlqHpPE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/0X4DhlqHpPE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Inner Scene- Communication Breakdown</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/4wejk8">Inner Scene - Communication Breakdown [US - 1969]</a>
-<br>
-                        submitted <span class="muted">2016-08-06 05:12</span> by <a href="https://www.reddit.com/user/theorangeness">/u/theorangeness</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="8dldMqyVpQ4">
+                    <td><img src="https://i.ytimg.com/vi/8dldMqyVpQ4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Captain Beefheart - Zig Zag Wanderer</td>
+                </tr>
+                <tr class="record" id="MHo11tW08M0">
+                    <td><img src="https://i.ytimg.com/vi/MHo11tW08M0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Corpse - Shinki Chen</td>
+                </tr>
+                <tr class="record" id="LL-1AEYyw1k">
+                    <td><img src="https://i.ytimg.com/vi/LL-1AEYyw1k/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Baby Grandmothers - Somebody Keeps Calling my Name</td>
+                </tr>
+                <tr class="record" id="PYjDzkTbVvw">
+                    <td><img src="https://i.ytimg.com/vi/PYjDzkTbVvw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ezra - Pax '72 [Taurus Music Ltd.] Wicked Unknown Psych Rock Fuzz 45</td>
+                </tr>
+                <tr class="record" id="-QA6V30POGM">
+                    <td><img src="https://i.ytimg.com/vi/-QA6V30POGM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Dark Star - Spectre (1977)</td>
+                </tr>
+                <tr class="record" id="59FP_IdVhTc">
+                    <td><img src="https://i.ytimg.com/vi/59FP_IdVhTc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">ZIPS(a.k.a Rip & Lord) - Evil Hearted Woman (1975)</td>
+                </tr>
+                <tr class="record" id="EgrgJgbO0sQ">
+                    <td><img src="https://i.ytimg.com/vi/EgrgJgbO0sQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pendragon(US) - Never Gonna Go Back(1969)</td>
+                </tr>
+                <tr class="record" id="7JysxASI5Do">
+                    <td><img src="https://i.ytimg.com/vi/7JysxASI5Do/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ave Sangria - Sob o Sol de Satã</td>
+                </tr>
+                <tr class="record" id="c08bPB9cD6c">
+                    <td><img src="https://i.ytimg.com/vi/c08bPB9cD6c/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Euclid - She's Gone</td>
+                </tr>
+                <tr class="record" id="HAEohot1yes">
+                    <td><img src="https://i.ytimg.com/vi/HAEohot1yes/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Burlington Express - Stroll on</td>
+                </tr>
+                <tr class="record" id="k9NkXwUfS1Y">
+                    <td><img src="https://i.ytimg.com/vi/k9NkXwUfS1Y/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Bloodrock - 'Wicked Truth' circa 1970</td>
+                </tr>
+                <tr class="record" id="qGOmnp3NC4U">
+                    <td><img src="https://i.ytimg.com/vi/qGOmnp3NC4U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Psychotrons - Death Is a Dream</td>
+                </tr>
+                <tr class="record" id="ef7M4twGMAM">
+                    <td><img src="https://i.ytimg.com/vi/ef7M4twGMAM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jug Session : Runnin Down (NL 1971)</td>
+                </tr>
+                <tr class="record" id="lSpflfDZ9g8">
+                    <td><img src="https://i.ytimg.com/vi/lSpflfDZ9g8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Andromeda - Return To Sanity</td>
+                </tr>
+                <tr class="record" id="T3VpT0QKo_s">
+                    <td><img src="https://i.ytimg.com/vi/T3VpT0QKo_s/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jumbo-Classified Love (70's Proto-Metal)</td>
+                </tr>
+                <tr class="record" id="DyCMaaChVe0">
+                    <td><img src="https://i.ytimg.com/vi/DyCMaaChVe0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Tom Hartman - Sunshine Woman</td>
+                </tr>
+                <tr class="record" id="tXaU9xVInWQ">
+                    <td><img src="https://i.ytimg.com/vi/tXaU9xVInWQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Joys Of Life - Descent</td>
+                </tr>
+                <tr class="record" id="muEu9pZ7VXo">
+                    <td><img src="https://i.ytimg.com/vi/muEu9pZ7VXo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Norman Haines Band - Den Of Iniquity</td>
+                </tr>
+                <tr class="record" id="m7-vSssaE-8">
+                    <td><img src="https://i.ytimg.com/vi/m7-vSssaE-8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">WONDERLICK - Hey Joe - Heavy Psych Marijuana Unknown!!!</td>
+                </tr>
+                <tr class="record" id="ndO-jIdjD3I">
+                    <td><img src="https://i.ytimg.com/vi/ndO-jIdjD3I/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Nurt-Kto Ma Dzis Czas(1972)</td>
+                </tr>
+                <tr class="record" id="8cQgeZDQKmw">
+                    <td><img src="https://i.ytimg.com/vi/8cQgeZDQKmw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Life(US)-This Time(Our Love Will Last) --70's Obscure Hard rock --</td>
+                </tr>
+                <tr class="record" id="T3AthzQ_dPY">
+                    <td><img src="https://i.ytimg.com/vi/T3AthzQ_dPY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">THE TRACERS  - She Said Yeah</td>
+                </tr>
+                <tr class="record" id="zeUrVRpzoJA">
+                    <td><img src="https://i.ytimg.com/vi/zeUrVRpzoJA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">the aztex - i said move</td>
+                </tr>
+                <tr class="record" id="L4JaK_mpajQ">
+                    <td><img src="https://i.ytimg.com/vi/L4JaK_mpajQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Atoll ‎-- Le Secret Du Mage (1974)</td>
+                </tr>
+                <tr class="record" id="1VJo5s-j7Q4">
+                    <td><img src="https://i.ytimg.com/vi/1VJo5s-j7Q4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">GREEN BAG UNKNOWN UK ACID ROCK ACETATE 70'S WILD FUZZ</td>
+                </tr>
+                <tr class="record" id="JZLzeuJoJXA">
+                    <td><img src="https://i.ytimg.com/vi/JZLzeuJoJXA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Rocket Norton Band(Canada)-Donkey Chain(1974)</td>
+                </tr>
+                <tr class="record" id="qdrwZtHKzWU">
+                    <td><img src="https://i.ytimg.com/vi/qdrwZtHKzWU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Marsha Hunt's 22 - Medusa</td>
+                </tr>
+                <tr class="record" id="35GREe5h_BQ">
+                    <td><img src="https://i.ytimg.com/vi/35GREe5h_BQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Void Generator "Synapsex"</td>
+                </tr>
+                <tr class="record" id="2iV3v9qZZ78">
+                    <td><img src="https://i.ytimg.com/vi/2iV3v9qZZ78/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Fabulous Apostles - Dark Horse Blues (1968)</td>
+                </tr>
+                <tr class="record" id="15ksH3eF3YE">
+                    <td><img src="https://i.ytimg.com/vi/15ksH3eF3YE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Heavy Jelly - Time Out, 1969</td>
+                </tr>
+                <tr class="record" id="SeYo23BgoWI">
+                    <td><img src="https://i.ytimg.com/vi/SeYo23BgoWI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">It's Us - Don't Want Your Lovin'</td>
+                </tr>
+                <tr class="record" id="kuRYOPwnWtU">
+                    <td><img src="https://i.ytimg.com/vi/kuRYOPwnWtU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Noblemen - Short Time</td>
+                </tr>
+                <tr class="record" id="ch0Tqv7CLhM">
+                    <td><img src="https://i.ytimg.com/vi/ch0Tqv7CLhM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">J.C. HEAVY - Do What You Like ,1971 Rare U.K Psych/ Rock</td>
+                </tr>
+                <tr class="record" id="nzVhdc0Dz78">
+                    <td><img src="https://i.ytimg.com/vi/nzVhdc0Dz78/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">It's All in My Head - Twentieth Century Zoo, 1968</td>
+                </tr>
+                <tr class="record" id="b-CmYf5BHIQ">
+                    <td><img src="https://i.ytimg.com/vi/b-CmYf5BHIQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Favourite Sons ----  "Walkin' walkin' walkin' "</td>
+                </tr>
+                <tr class="record" id="LfdQHEvcdgI">
+                    <td><img src="https://i.ytimg.com/vi/LfdQHEvcdgI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">3's- do you see (1974)</td>
+                </tr>
+                <tr class="record" id="0X4DhlqHpPE">
+                    <td><img src="https://i.ytimg.com/vi/0X4DhlqHpPE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Inner Scene- Communication Breakdown</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/monsterfuzz/">Monster Fuzz</a> archive:
     <a href="/genre/monsterfuzz/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/monsterfuzz/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/monsterfuzz/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/monsterfuzz/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/monsterfuzz/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/monsterfuzz/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -602,12 +232,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'monsterfuzz';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

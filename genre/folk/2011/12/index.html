@@ -46,652 +46,212 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="OfJjamUwdaU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/OfJjamUwdaU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Acoustic Session: Happy - Peter Douglas</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">70</span> - <a href="https://www.reddit.com/nsi1m">After writing songs in my room alone for 5 years, I finally decided to let someone film me playing one. Is this even folk?</a>
-<br>
-                        submitted <span class="muted">2011-12-27 18:27</span> by <a href="https://www.reddit.com/user/LeagueOfRobots">/u/LeagueOfRobots</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="LyJVowTs7io">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/LyJVowTs7io/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Tallest Man On Earth - Burden Of Tomorrow</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">31</span> - <a href="https://www.reddit.com/nk9yu">My all time favorite folk performance: The Tallest Man On Earth (Kristian Matsson) playing "Burden of Tomorrow"</a>
-<br>
-                        submitted <span class="muted">2011-12-20 20:22</span> by <a href="https://www.reddit.com/user/commentposter">/u/commentposter</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="adBPg8Zdp2g">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/adBPg8Zdp2g/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lucy Rose - Middle of the Bed (Official Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">29</span> - <a href="https://www.reddit.com/mwrvr">Middle of the Bed- Lucy Rose. Lovely voice, melody and guitar. What more do I need to say?</a>
-<br>
-                        submitted <span class="muted">2011-12-01 23:36</span> by <a href="https://www.reddit.com/user/TomFotz">/u/TomFotz</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="mvd_tvffGbc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/mvd_tvffGbc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Laura Marling - A Creature I Don't Know</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">21</span> - <a href="https://www.reddit.com/n0iuu">Laura Marling- A Creature I Don't Know. Dark and vibrant song with striking cinematography.</a>
-<br>
-                        submitted <span class="muted">2011-12-05 02:35</span> by <a href="https://www.reddit.com/user/TomFotz">/u/TomFotz</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="r2RgYkkK7OM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/r2RgYkkK7OM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Gregory Alan Isakov - 3 am</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/n0tuq">Gregory Alan Isakov - 3am</a>
-<br>
-                        submitted <span class="muted">2011-12-05 06:39</span> by <a href="https://www.reddit.com/user/HereIsWhere">/u/HereIsWhere</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ysQykyxqtlQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ysQykyxqtlQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Fleet Foxes - A Shrine/An Argument Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">18</span> - <a href="https://www.reddit.com/nd0a4">Fleet Foxes - The Shrine/ An Argument [With Animation]</a>
-<br>
-                        submitted <span class="muted">2011-12-14 23:15</span> by <a href="https://www.reddit.com/user/TheWorstPossibleName">/u/TheWorstPossibleName</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="vTwt-Un0DSM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/vTwt-Un0DSM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Justin Townes Earle - They Killed John Henry || Baeble Music</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/mz2oc">Justin Townes Earle is one incredible dude, and I got a chance to see him at Carnegie Hall last night. (xpost from r/bluegrass)</a>
-<br>
-                        submitted <span class="muted">2011-12-03 21:44</span> by <a href="https://www.reddit.com/user/minivanhighway">/u/minivanhighway</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="iJqFX-32nDY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/iJqFX-32nDY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">All the Dogs are Lying Down - Johnny Flynn</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/notwp">Johnny Flynn - All the Dogs are Lying Down</a>
-<br>
-                        submitted <span class="muted">2011-12-24 05:18</span> by <a href="https://www.reddit.com/user/TomFotz">/u/TomFotz</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="aRKtcqq4s0k">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/aRKtcqq4s0k/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Morgan O'Kane and Zeke Healy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/mybns">Morgan O'Kane, amazing banjo player and singer</a>
-<br>
-                        submitted <span class="muted">2011-12-03 03:01</span> by <a href="https://www.reddit.com/user/S_W_O">/u/S_W_O</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="MmVX_2NIqaQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/MmVX_2NIqaQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Shoes- Chris Volpe</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/nni9m">Chris Volpe - Shoes</a>
-<br>
-                        submitted <span class="muted">2011-12-23 03:50</span> by <a href="https://www.reddit.com/user/jzeramiiiii">/u/jzeramiiiii</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="d8d1yzLWU6Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/d8d1yzLWU6Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Fireplace: AA Bondy - "Mightiest of Guns"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/nqq3k">AA Bondy - Mightiest of Guns</a>
-<br>
-                        submitted <span class="muted">2011-12-26 02:25</span> by <a href="https://www.reddit.com/user/Jef_Costello">/u/Jef_Costello</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ErDHOXgAG4U">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ErDHOXgAG4U/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sweet Baboo - How I'd Live My Life aka The Bumblebee Song</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/nnytq">Sweet Baboo - How Id Live My Life aka The Bumblebee Song</a>
-<br>
-                        submitted <span class="muted">2011-12-23 15:13</span> by <a href="https://www.reddit.com/user/Waving_from_heights">/u/Waving_from_heights</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="GRdj8MRj9Js">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/GRdj8MRj9Js/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lisa Hannigan - Little Bird (Official HD Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/nmoii">Lisa Hannigan - Little Bird</a>
-<br>
-                        submitted <span class="muted">2011-12-22 15:27</span> by <a href="https://www.reddit.com/user/doqtor">/u/doqtor</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="DPYAZUcohmw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/DPYAZUcohmw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Stan Rogers - Rolling Down To Old Maui</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/nkiat">Stan Rogers - Rolling Down To Old Maui</a>
-<br>
-                        submitted <span class="muted">2011-12-20 23:26</span> by <a href="https://www.reddit.com/user/bracomadar">/u/bracomadar</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7sjSHazjrWg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7sjSHazjrWg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cat Stevens - Peace Train (live)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/n4nib">cat stevens, peace train live. also, alfred hitchcock's chin.</a>
-<br>
-                        submitted <span class="muted">2011-12-08 09:08</span> by <a href="https://www.reddit.com/user/meeenglish">/u/meeenglish</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="FNMvoGn_Ntw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/FNMvoGn_Ntw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">15 Countries - The Abandoned Bedroom Sessions.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/nch5l">Aunt Martha - 15 Countries</a>
-<br>
-                        submitted <span class="muted">2011-12-14 15:57</span> by <a href="https://www.reddit.com/user/goldensylvan">/u/goldensylvan</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Y4s4y_vyF8k">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Y4s4y_vyF8k/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Dar Williams - Holly Tree, at WNRN</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/n45w4">Dar Williams- Holly Tree</a>
-<br>
-                        submitted <span class="muted">2011-12-08 01:47</span> by <a href="https://www.reddit.com/user/pondmoose">/u/pondmoose</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ur3aSxzSM5s">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ur3aSxzSM5s/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Justin Townes Earle - Ain't Waitin' solo at the Royale Boston</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/nahx1">A video I took of Justin Townes Earle solo in Boston last weekend. This boy can play.</a>
-<br>
-                        submitted <span class="muted">2011-12-13 03:15</span> by <a href="https://www.reddit.com/user/minivanhighway">/u/minivanhighway</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="WLTbFaoZuVQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/WLTbFaoZuVQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Peter Bradley Adams-The Longer I Run</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/nx7sm">"The Longer I Run" - Peter Bradley Adams</a>
-<br>
-                        submitted <span class="muted">2011-12-31 05:43</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="xBj5v_rlXe0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/xBj5v_rlXe0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Tyler Ramsey "long dream..."</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/n23kt">tyler ramsey - long dream</a>
-<br>
-                        submitted <span class="muted">2011-12-06 04:33</span> by <a href="https://www.reddit.com/user/chaux00">/u/chaux00</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5Mr_VkAXWZA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5Mr_VkAXWZA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sufjan Stevens - All the Trees of the Field will clap their Hands</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/nao8h">Sufjan Stevens - All the Trees of the Field will clap their Hands. Simple and sweet little banjo melody.</a>
-<br>
-                        submitted <span class="muted">2011-12-13 05:52</span> by <a href="https://www.reddit.com/user/TomFotz">/u/TomFotz</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="vO5XB8BEORs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/vO5XB8BEORs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Xavier Rudd Fortune Teller</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/nw2e0">Xavier Rudd - Fortune Teller</a>
-<br>
-                        submitted <span class="muted">2011-12-30 08:27</span> by <a href="https://www.reddit.com/user/TomFotz">/u/TomFotz</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="P6D3aexEZIs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/P6D3aexEZIs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Bombay Bicycle Club - Rinse Me Down</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/njl95">Bombay Bicycle Club - Rinse Me Down. [Happy Folk]</a>
-<br>
-                        submitted <span class="muted">2011-12-20 07:06</span> by <a href="https://www.reddit.com/user/TomFotz">/u/TomFotz</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ir10In7xv9Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ir10In7xv9Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">First Aid Kit "Waltz For Richard" Live - Sideshow Alley</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/nmetc">First Aid Kit - Walz For Richard (Insanely good song/live recording)</a>
-<br>
-                        submitted <span class="muted">2011-12-22 08:16</span> by <a href="https://www.reddit.com/user/JoeWobbly">/u/JoeWobbly</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="RDmBz3pJ8kE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/RDmBz3pJ8kE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">under the breeze - solid oak tree</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/mxeab">newer tune....check it out</a>
-<br>
-                        submitted <span class="muted">2011-12-02 10:23</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="fjXFn-QexE4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/fjXFn-QexE4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Laura Marling-Failure</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/n0taa">Laura Marling | Failure</a>
-<br>
-                        submitted <span class="muted">2011-12-05 06:24</span> by <a href="https://www.reddit.com/user/gowood08">/u/gowood08</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="tLMEbtkdqfA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/tLMEbtkdqfA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Among the Oak & Ash - The Housewife's Lament</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/nbt9d">Among the Oak &amp; Ash - The Housewife's Lament</a>
-<br>
-                        submitted <span class="muted">2011-12-14 02:00</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Ak7wN1rY0qU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Ak7wN1rY0qU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">THE CAVE SINGERS / distant sures</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/nj6hq">The Cave Singers - Distant Sures [A little embarrassed that I am only just now listening to this album]</a>
-<br>
-                        submitted <span class="muted">2011-12-20 00:44</span> by <a href="https://www.reddit.com/user/HereIsWhere">/u/HereIsWhere</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="sJY-Gqzb9Vs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/sJY-Gqzb9Vs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sean Hayes~Fucked Me Right Up</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/nvhmv">Heard this on Bored to Death, great song. Sean Hayes - Fucked Me Right Up</a>
-<br>
-                        submitted <span class="muted">2011-12-29 23:19</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="oRRbRETtcjE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/oRRbRETtcjE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">MAY & SETH - SHINE ON</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/nl7ul">May Erlewine and Seth Bernard -- Shine On</a>
-<br>
-                        submitted <span class="muted">2011-12-21 13:22</span> by <a href="https://www.reddit.com/user/ailish">/u/ailish</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="j4WF_xThqmM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/j4WF_xThqmM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">CRY MONSTER CRY | The Fallen</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/mz61r">Cry Monster Cry - The Fallen</a>
-<br>
-                        submitted <span class="muted">2011-12-03 23:26</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Nv5-NBmjhGI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Nv5-NBmjhGI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Classroom Concert / LUCY ROSE / shiver</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/n37tm">Lucy Rose with Bombay Bicycle Club - Shiver. Amazing vocals</a>
-<br>
-                        submitted <span class="muted">2011-12-07 00:34</span> by <a href="https://www.reddit.com/user/khonasham">/u/khonasham</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="9dvOIEODVps">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/9dvOIEODVps/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Bon Iver & Anaïs Mitchell - Lovin's For Fools</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/nkd2f">Bon Iver &amp; Anaïs Mitchell - Lovin's For Fools</a>
-<br>
-                        submitted <span class="muted">2011-12-20 21:25</span> by <a href="https://www.reddit.com/user/Dwayne_J_Murderden">/u/Dwayne_J_Murderden</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="QqhKziW9aD0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/QqhKziW9aD0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Railroad Earth Taos Music Festival  Lovin' You</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/nkru4">Railroad Earth live in Taos, NM</a>
-<br>
-                        submitted <span class="muted">2011-12-21 03:18</span> by <a href="https://www.reddit.com/user/funkymama1">/u/funkymama1</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_G9mV5jpeTA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_G9mV5jpeTA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">daniel a.iu. higgs & chiara giovando, live in cleveland</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/mzjbg">Daniel Higgs performing his song "Love abides"</a>
-<br>
-                        submitted <span class="muted">2011-12-04 06:48</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ez1BCioLK2Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ez1BCioLK2Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sing Sung Saing - Peggy Honeywell</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/n3lot">Peggy Honeywell-Sing Sung Saing off of Faint Humms album</a>
-<br>
-                        submitted <span class="muted">2011-12-07 06:03</span> by <a href="https://www.reddit.com/user/flibberti_gibbet">/u/flibberti_gibbet</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="4KYDUatZbjk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/4KYDUatZbjk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Audra Mae - Bandida</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/n9t9s">Audra Mae - Bandida</a>
-<br>
-                        submitted <span class="muted">2011-12-12 17:14</span> by <a href="https://www.reddit.com/user/BoxOLuv">/u/BoxOLuv</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zpGdxwJQEwc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zpGdxwJQEwc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Silent Old Mtns. At University Of Maryland</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/nxi0z">Silent Old Mountains - Ash and Bone (Acoustic Live)</a>
-<br>
-                        submitted <span class="muted">2011-12-31 13:58</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Un-eQEdSzCw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Un-eQEdSzCw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lowen & Navarro- Devil's In The Details</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/n3otb">Lowen &amp; Navarro- The Devil's In The Details</a>
-<br>
-                        submitted <span class="muted">2011-12-07 07:41</span> by <a href="https://www.reddit.com/user/wearenotscientists">/u/wearenotscientists</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="q8P4NkQSKiU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/q8P4NkQSKiU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Under The Driftwood Tree - If Only If</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/naati">Under the Driftwood Tree - Only If (BBC Introducing)</a>
-<br>
-                        submitted <span class="muted">2011-12-13 00:24</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ri9bt92rrVM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ri9bt92rrVM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Fivepenny Piece (Miss Nightingale). 1977. Enjoy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/ncq6e">Miss Nightingale by Fivepenny Piece.  1977.  One of their more serious, and quite beautiful, tracks.</a>
-<br>
-                        submitted <span class="muted">2011-12-14 19:31</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="RcACBJ1ALf4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/RcACBJ1ALf4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Young Rebel Set - If I Was</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/ndjwt">Young Rebel Set - If I Was</a>
-<br>
-                        submitted <span class="muted">2011-12-15 07:57</span> by <a href="https://www.reddit.com/user/herptologist">/u/herptologist</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="U0jWA3t4Vkw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/U0jWA3t4Vkw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Hundred Acre Woods - Pennsylvania (Music Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/nrrwz">The Hundred Acre Woods - Pennsylvania</a>
-<br>
-                        submitted <span class="muted">2011-12-27 02:30</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="IWEHeIdBkc4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/IWEHeIdBkc4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sara Watkins "Long Hot Summer Days"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/nu3i5">Sara Watkins: "Long Hot Summer Days"</a>
-<br>
-                        submitted <span class="muted">2011-12-28 22:08</span> by <a href="https://www.reddit.com/user/jk3us">/u/jk3us</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="OfJjamUwdaU">
+                    <td><img src="https://i.ytimg.com/vi/OfJjamUwdaU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Acoustic Session: Happy - Peter Douglas</td>
+                </tr>
+                <tr class="record" id="LyJVowTs7io">
+                    <td><img src="https://i.ytimg.com/vi/LyJVowTs7io/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Tallest Man On Earth - Burden Of Tomorrow</td>
+                </tr>
+                <tr class="record" id="adBPg8Zdp2g">
+                    <td><img src="https://i.ytimg.com/vi/adBPg8Zdp2g/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lucy Rose - Middle of the Bed (Official Video)</td>
+                </tr>
+                <tr class="record" id="mvd_tvffGbc">
+                    <td><img src="https://i.ytimg.com/vi/mvd_tvffGbc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Laura Marling - A Creature I Don't Know</td>
+                </tr>
+                <tr class="record" id="r2RgYkkK7OM">
+                    <td><img src="https://i.ytimg.com/vi/r2RgYkkK7OM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Gregory Alan Isakov - 3 am</td>
+                </tr>
+                <tr class="record" id="ysQykyxqtlQ">
+                    <td><img src="https://i.ytimg.com/vi/ysQykyxqtlQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Fleet Foxes - A Shrine/An Argument Video</td>
+                </tr>
+                <tr class="record" id="vTwt-Un0DSM">
+                    <td><img src="https://i.ytimg.com/vi/vTwt-Un0DSM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Justin Townes Earle - They Killed John Henry || Baeble Music</td>
+                </tr>
+                <tr class="record" id="iJqFX-32nDY">
+                    <td><img src="https://i.ytimg.com/vi/iJqFX-32nDY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">All the Dogs are Lying Down - Johnny Flynn</td>
+                </tr>
+                <tr class="record" id="aRKtcqq4s0k">
+                    <td><img src="https://i.ytimg.com/vi/aRKtcqq4s0k/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Morgan O'Kane and Zeke Healy</td>
+                </tr>
+                <tr class="record" id="MmVX_2NIqaQ">
+                    <td><img src="https://i.ytimg.com/vi/MmVX_2NIqaQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Shoes- Chris Volpe</td>
+                </tr>
+                <tr class="record" id="d8d1yzLWU6Q">
+                    <td><img src="https://i.ytimg.com/vi/d8d1yzLWU6Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Fireplace: AA Bondy - "Mightiest of Guns"</td>
+                </tr>
+                <tr class="record" id="ErDHOXgAG4U">
+                    <td><img src="https://i.ytimg.com/vi/ErDHOXgAG4U/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sweet Baboo - How I'd Live My Life aka The Bumblebee Song</td>
+                </tr>
+                <tr class="record" id="GRdj8MRj9Js">
+                    <td><img src="https://i.ytimg.com/vi/GRdj8MRj9Js/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lisa Hannigan - Little Bird (Official HD Video)</td>
+                </tr>
+                <tr class="record" id="DPYAZUcohmw">
+                    <td><img src="https://i.ytimg.com/vi/DPYAZUcohmw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Stan Rogers - Rolling Down To Old Maui</td>
+                </tr>
+                <tr class="record" id="7sjSHazjrWg">
+                    <td><img src="https://i.ytimg.com/vi/7sjSHazjrWg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cat Stevens - Peace Train (live)</td>
+                </tr>
+                <tr class="record" id="FNMvoGn_Ntw">
+                    <td><img src="https://i.ytimg.com/vi/FNMvoGn_Ntw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">15 Countries - The Abandoned Bedroom Sessions.</td>
+                </tr>
+                <tr class="record" id="Y4s4y_vyF8k">
+                    <td><img src="https://i.ytimg.com/vi/Y4s4y_vyF8k/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Dar Williams - Holly Tree, at WNRN</td>
+                </tr>
+                <tr class="record" id="ur3aSxzSM5s">
+                    <td><img src="https://i.ytimg.com/vi/ur3aSxzSM5s/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Justin Townes Earle - Ain't Waitin' solo at the Royale Boston</td>
+                </tr>
+                <tr class="record" id="WLTbFaoZuVQ">
+                    <td><img src="https://i.ytimg.com/vi/WLTbFaoZuVQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Peter Bradley Adams-The Longer I Run</td>
+                </tr>
+                <tr class="record" id="xBj5v_rlXe0">
+                    <td><img src="https://i.ytimg.com/vi/xBj5v_rlXe0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Tyler Ramsey "long dream..."</td>
+                </tr>
+                <tr class="record" id="5Mr_VkAXWZA">
+                    <td><img src="https://i.ytimg.com/vi/5Mr_VkAXWZA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sufjan Stevens - All the Trees of the Field will clap their Hands</td>
+                </tr>
+                <tr class="record" id="vO5XB8BEORs">
+                    <td><img src="https://i.ytimg.com/vi/vO5XB8BEORs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Xavier Rudd Fortune Teller</td>
+                </tr>
+                <tr class="record" id="P6D3aexEZIs">
+                    <td><img src="https://i.ytimg.com/vi/P6D3aexEZIs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Bombay Bicycle Club - Rinse Me Down</td>
+                </tr>
+                <tr class="record" id="ir10In7xv9Q">
+                    <td><img src="https://i.ytimg.com/vi/ir10In7xv9Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">First Aid Kit "Waltz For Richard" Live - Sideshow Alley</td>
+                </tr>
+                <tr class="record" id="RDmBz3pJ8kE">
+                    <td><img src="https://i.ytimg.com/vi/RDmBz3pJ8kE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">under the breeze - solid oak tree</td>
+                </tr>
+                <tr class="record" id="fjXFn-QexE4">
+                    <td><img src="https://i.ytimg.com/vi/fjXFn-QexE4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Laura Marling-Failure</td>
+                </tr>
+                <tr class="record" id="tLMEbtkdqfA">
+                    <td><img src="https://i.ytimg.com/vi/tLMEbtkdqfA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Among the Oak & Ash - The Housewife's Lament</td>
+                </tr>
+                <tr class="record" id="Ak7wN1rY0qU">
+                    <td><img src="https://i.ytimg.com/vi/Ak7wN1rY0qU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">THE CAVE SINGERS / distant sures</td>
+                </tr>
+                <tr class="record" id="sJY-Gqzb9Vs">
+                    <td><img src="https://i.ytimg.com/vi/sJY-Gqzb9Vs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sean Hayes~Fucked Me Right Up</td>
+                </tr>
+                <tr class="record" id="oRRbRETtcjE">
+                    <td><img src="https://i.ytimg.com/vi/oRRbRETtcjE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">MAY & SETH - SHINE ON</td>
+                </tr>
+                <tr class="record" id="j4WF_xThqmM">
+                    <td><img src="https://i.ytimg.com/vi/j4WF_xThqmM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">CRY MONSTER CRY | The Fallen</td>
+                </tr>
+                <tr class="record" id="Nv5-NBmjhGI">
+                    <td><img src="https://i.ytimg.com/vi/Nv5-NBmjhGI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Classroom Concert / LUCY ROSE / shiver</td>
+                </tr>
+                <tr class="record" id="9dvOIEODVps">
+                    <td><img src="https://i.ytimg.com/vi/9dvOIEODVps/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Bon Iver & Anaïs Mitchell - Lovin's For Fools</td>
+                </tr>
+                <tr class="record" id="QqhKziW9aD0">
+                    <td><img src="https://i.ytimg.com/vi/QqhKziW9aD0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Railroad Earth Taos Music Festival  Lovin' You</td>
+                </tr>
+                <tr class="record" id="_G9mV5jpeTA">
+                    <td><img src="https://i.ytimg.com/vi/_G9mV5jpeTA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">daniel a.iu. higgs & chiara giovando, live in cleveland</td>
+                </tr>
+                <tr class="record" id="ez1BCioLK2Q">
+                    <td><img src="https://i.ytimg.com/vi/ez1BCioLK2Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sing Sung Saing - Peggy Honeywell</td>
+                </tr>
+                <tr class="record" id="4KYDUatZbjk">
+                    <td><img src="https://i.ytimg.com/vi/4KYDUatZbjk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Audra Mae - Bandida</td>
+                </tr>
+                <tr class="record" id="zpGdxwJQEwc">
+                    <td><img src="https://i.ytimg.com/vi/zpGdxwJQEwc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Silent Old Mtns. At University Of Maryland</td>
+                </tr>
+                <tr class="record" id="Un-eQEdSzCw">
+                    <td><img src="https://i.ytimg.com/vi/Un-eQEdSzCw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lowen & Navarro- Devil's In The Details</td>
+                </tr>
+                <tr class="record" id="q8P4NkQSKiU">
+                    <td><img src="https://i.ytimg.com/vi/q8P4NkQSKiU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Under The Driftwood Tree - If Only If</td>
+                </tr>
+                <tr class="record" id="ri9bt92rrVM">
+                    <td><img src="https://i.ytimg.com/vi/ri9bt92rrVM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Fivepenny Piece (Miss Nightingale). 1977. Enjoy</td>
+                </tr>
+                <tr class="record" id="RcACBJ1ALf4">
+                    <td><img src="https://i.ytimg.com/vi/RcACBJ1ALf4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Young Rebel Set - If I Was</td>
+                </tr>
+                <tr class="record" id="U0jWA3t4Vkw">
+                    <td><img src="https://i.ytimg.com/vi/U0jWA3t4Vkw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Hundred Acre Woods - Pennsylvania (Music Video)</td>
+                </tr>
+                <tr class="record" id="IWEHeIdBkc4">
+                    <td><img src="https://i.ytimg.com/vi/IWEHeIdBkc4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sara Watkins "Long Hot Summer Days"</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/folk/">Folk</a> archive:
     <a href="/genre/folk/2008/">2008</a>&nbsp;•&nbsp;    <a href="/genre/folk/2009/">2009</a>&nbsp;•&nbsp;    <a href="/genre/folk/2010/">2010</a>&nbsp;•&nbsp;    <a href="/genre/folk/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/folk/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/folk/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/folk/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/folk/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/folk/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/folk/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -700,12 +260,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'folk';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

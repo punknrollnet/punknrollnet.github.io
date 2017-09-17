@@ -46,92 +46,52 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="K-G4P2fVnsQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/K-G4P2fVnsQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">AN ABSTRACT ILLUSION - Svartesmeden och Lundamyrstrollet (WINDIR COVER)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/4sn9d3">AN ABSTRACT ILLUSION - Svartesmeden och Lundamyrstrollet (WINDIR COVER)</a>
-<br>
-                        submitted <span class="muted">2016-07-13 13:54</span> by <a href="https://www.reddit.com/user/SlainedInVain">/u/SlainedInVain</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2eHVSgP2a3c">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2eHVSgP2a3c/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Bloody Terror - Diaboli Celeritate FULL ALBUM Black Metal/Symphonic Metal/Death Metal</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/4rzt8o">Bloody Terror - Diaboli Celeritate Sympho Black Metal</a>
-<br>
-                        submitted <span class="muted">2016-07-09 10:36</span> by <a href="https://www.reddit.com/user/massivesoundrec">/u/massivesoundrec</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="QGZDwCTVVx4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/QGZDwCTVVx4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Noctura - Legatum Serpentis (Official)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/4r7qgp">Noctura - Legatum Serpentis (New Song of my Band)</a>
-<br>
-                        submitted <span class="muted">2016-07-04 15:39</span> by <a href="https://www.reddit.com/user/Olinator">/u/Olinator</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ITgSyZ-2UNw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ITgSyZ-2UNw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Well of Stars Part II</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/4ri74t">Onirism - The Well of Stars [EP]</a>
-<br>
-                        submitted <span class="muted">2016-07-06 12:17</span> by <a href="https://www.reddit.com/user/Druikh">/u/Druikh</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="K-G4P2fVnsQ">
+                    <td><img src="https://i.ytimg.com/vi/K-G4P2fVnsQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">AN ABSTRACT ILLUSION - Svartesmeden och Lundamyrstrollet (WINDIR COVER)</td>
+                </tr>
+                <tr class="record" id="2eHVSgP2a3c">
+                    <td><img src="https://i.ytimg.com/vi/2eHVSgP2a3c/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Bloody Terror - Diaboli Celeritate FULL ALBUM Black Metal/Symphonic Metal/Death Metal</td>
+                </tr>
+                <tr class="record" id="QGZDwCTVVx4">
+                    <td><img src="https://i.ytimg.com/vi/QGZDwCTVVx4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Noctura - Legatum Serpentis (Official)</td>
+                </tr>
+                <tr class="record" id="ITgSyZ-2UNw">
+                    <td><img src="https://i.ytimg.com/vi/ITgSyZ-2UNw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Well of Stars Part II</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/symphonicblackmetal/">Symphonic Black Metal</a> archive:
     <a href="/genre/symphonicblackmetal/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/symphonicblackmetal/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/symphonicblackmetal/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/symphonicblackmetal/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/symphonicblackmetal/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/symphonicblackmetal/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/symphonicblackmetal/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -140,12 +100,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'symphonicblackmetal';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

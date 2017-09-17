@@ -46,387 +46,136 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="Q7thV2T2cm4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Q7thV2T2cm4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Greensky Bluegrass "Just To Lie" @ The Mint Los Angeles CA 2-26-11</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/gnq5i">The pride of Michigan Bluegrass: Greensky Bluegrass. How many fans are out there?</a>
-<br>
-                        submitted <span class="muted">2011-04-11 22:14</span> by <a href="https://www.reddit.com/user/newgrass">/u/newgrass</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="vG_F0hRBMM0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/vG_F0hRBMM0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Punch Brothers - Wolfcreek Pass (P-Bingo Night #4)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/gnghw">Punch Brothers - Wolfcreek Pass</a>
-<br>
-                        submitted <span class="muted">2011-04-11 15:43</span> by <a href="https://www.reddit.com/user/LightWolfCavalry">/u/LightWolfCavalry</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Wx_3ACRCzlc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Wx_3ACRCzlc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Punch Brothers w/ Sarah Jarosz - Cry, Cry, Darling - Backstage at Bonnaroo</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/go9a1">Sarah Jarosz and Punch Brothers - Cry, Cry, Darling</a>
-<br>
-                        submitted <span class="muted">2011-04-12 15:07</span> by <a href="https://www.reddit.com/user/LightWolfCavalry">/u/LightWolfCavalry</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="YEghQY3M_8Y">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/YEghQY3M_8Y/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Black Rock - The Infamous Stringdusters</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/gmx5j">Black Rock - The Infamous Stringdusters</a>
-<br>
-                        submitted <span class="muted">2011-04-10 21:48</span> by <a href="https://www.reddit.com/user/LightWolfCavalry">/u/LightWolfCavalry</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="eeBrrRz6U-M">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/eeBrrRz6U-M/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Secret Sisters "The One I Love is Gone" Hardly Strictly Bluegrass 2010</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/gzy1g">The Secret Sisters with Punch Brothers and Jerry Douglas - "The One That I Love Is Gone"</a>
-<br>
-                        submitted <span class="muted">2011-04-29 05:53</span> by <a href="https://www.reddit.com/user/LightWolfCavalry">/u/LightWolfCavalry</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="1omSJq06jJ8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/1omSJq06jJ8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">New Grass Revival - Love Someone Like Me</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/gxhiu">New Grass Revival - Love Someone Like Me</a>
-<br>
-                        submitted <span class="muted">2011-04-26 03:16</span> by <a href="https://www.reddit.com/user/LightWolfCavalry">/u/LightWolfCavalry</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-uJigafpuKA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-uJigafpuKA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Chatham County Line "Wildwood"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/gkibz">Chatham County Line - "Wildwood", Dave Wilson is a poet, and a damn good musician</a>
-<br>
-                        submitted <span class="muted">2011-04-07 05:14</span> by <a href="https://www.reddit.com/user/WardenclyffeTower">/u/WardenclyffeTower</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="AR2i7u0ubcM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/AR2i7u0ubcM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Bluegrass Dance 1 on the Harpeth River</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/gp5pt">Help! What is this dance style called?
-Bluegrass dance can't be the correct term.</a>
-<br>
-                        submitted <span class="muted">2011-04-13 16:22</span> by <a href="https://www.reddit.com/user/ztargazer">/u/ztargazer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="NfwdpNEEQRs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/NfwdpNEEQRs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Soundcheck: Steve Martin and the Steep Canyon Rangers Live in The Greene Space</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/gtpxh">Steve Martin and the Steep Canyon Rangers Live in The Greene Space - good clear audio and video</a>
-<br>
-                        submitted <span class="muted">2011-04-19 16:53</span> by <a href="https://www.reddit.com/user/Buckbeak">/u/Buckbeak</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="b3Tr2PliEXw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/b3Tr2PliEXw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Bela Fleck with New Grass Revival - Deviation</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/gy5b5">Bela Fleck with New Grass Revival - Deviation</a>
-<br>
-                        submitted <span class="muted">2011-04-26 22:51</span> by <a href="https://www.reddit.com/user/CheeseYogi">/u/CheeseYogi</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="B-HAnpglqkk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/B-HAnpglqkk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">03 Time - Dark Side of the Moonshine</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/gl02r">Poor Man's Whiskey - Time (Darksideofthemoonshine)</a>
-<br>
-                        submitted <span class="muted">2011-04-07 20:19</span> by <a href="https://www.reddit.com/user/311texan33">/u/311texan33</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="LoB2vx3NRXM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/LoB2vx3NRXM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">G2 | Going Back to Georgia | 2010 CBAFDF 06-18-10</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/gnx8p">Face Melting Swedish Bluegrass</a>
-<br>
-                        submitted <span class="muted">2011-04-12 03:21</span> by <a href="https://www.reddit.com/user/gpup">/u/gpup</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="tzy9qeYQYyU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/tzy9qeYQYyU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Crooked Still, I Am An Orphan Girl, Greyfox Bluegrass Festival 2009</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/ggwiv">Crooked Still — Orphan Girl, I was introduced to this group here and they're my new favorite.</a>
-<br>
-                        submitted <span class="muted">2011-04-02 04:00</span> by <a href="https://www.reddit.com/user/WardenclyffeTower">/u/WardenclyffeTower</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="kg4Y3EIQ17M">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/kg4Y3EIQ17M/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Punch Brothers "Ride the Wild Turkey"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/ghb4e">Punch Brothers play Darol Anger's "Ride the Wild Turkey"</a>
-<br>
-                        submitted <span class="muted">2011-04-02 21:48</span> by <a href="https://www.reddit.com/user/LightWolfCavalry">/u/LightWolfCavalry</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="UEkVkJax2Co">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/UEkVkJax2Co/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Norman Blake, Flatpicker</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/giqkc">Norman Blake - Randall Collins -&gt; Done Gone</a>
-<br>
-                        submitted <span class="muted">2011-04-05 00:26</span> by <a href="https://www.reddit.com/user/thedaveoflife">/u/thedaveoflife</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="3hwiRsiJxfk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/3hwiRsiJxfk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Alison Krauss,Oh Atlanta</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/giyk0">Alison kraus- Oh Atlanta</a>
-<br>
-                        submitted <span class="muted">2011-04-05 07:01</span> by <a href="https://www.reddit.com/user/TrippinFantastic">/u/TrippinFantastic</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="nE9qzb0IMxM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/nE9qzb0IMxM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Tim O'Brien Band - All I Want - Telluride Bluegrass Festival 2010</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/gpx7a">All I Want - Tim O'Brien</a>
-<br>
-                        submitted <span class="muted">2011-04-14 14:26</span> by <a href="https://www.reddit.com/user/LightWolfCavalry">/u/LightWolfCavalry</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="NhiOaSWuFjU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/NhiOaSWuFjU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Osborne Brothers - Ruby</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/ghv3z">The Osborne Brothers at Camp Springs NC - Ruby (Bobby sure can hold a note)</a>
-<br>
-                        submitted <span class="muted">2011-04-03 21:50</span> by <a href="https://www.reddit.com/user/WardenclyffeTower">/u/WardenclyffeTower</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="TQRXK2Mt5KU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/TQRXK2Mt5KU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Boxcar Bandits "Green Room Rag" live @ Dan's Silverleaf</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/gl0o4">Boxcar Bandits 'Green Room Rag' @ Dan's Silverleaf Denton, TX</a>
-<br>
-                        submitted <span class="muted">2011-04-07 20:42</span> by <a href="https://www.reddit.com/user/311texan33">/u/311texan33</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ia3xdc9aOfo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ia3xdc9aOfo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">WSMonline.com presents: The Grascals "Where Corn Don't Grow" | WSM Radio</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/gq22z">The Grascals 'Where Corn Don't Grow'</a>
-<br>
-                        submitted <span class="muted">2011-04-14 17:27</span> by <a href="https://www.reddit.com/user/IronWolve">/u/IronWolve</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Jb623L74Fag">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Jb623L74Fag/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Yonder Mountain String Band - Holdin'</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/glmhi">YMSB - Holdin'</a>
-<br>
-                        submitted <span class="muted">2011-04-08 17:55</span> by <a href="https://www.reddit.com/user/311texan33">/u/311texan33</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="NlkBwvEpVtk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/NlkBwvEpVtk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Keller & The Keels Part 10 Crater In The BackYard</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/glmvu">Big ass crater in the backyard, I hope that you stay a hole!</a>
-<br>
-                        submitted <span class="muted">2011-04-08 18:10</span> by <a href="https://www.reddit.com/user/311texan33">/u/311texan33</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="1Q8zMekYvnI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/1Q8zMekYvnI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Telluride House Band - Norman - Live at Telluride Bluegrass Festival 2010 2/16</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/ghfth">Norman - Telluride House Band</a>
-<br>
-                        submitted <span class="muted">2011-04-03 02:37</span> by <a href="https://www.reddit.com/user/LightWolfCavalry">/u/LightWolfCavalry</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zYYbK2sDaJ4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zYYbK2sDaJ4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Rory Gallagher - Going To My Hometown (1972)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/gs2jx">Rory Gallagher- Going to My Hometown.</a>
-<br>
-                        submitted <span class="muted">2011-04-17 14:49</span> by <a href="https://www.reddit.com/user/newgrass">/u/newgrass</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zVGg38_QzOI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zVGg38_QzOI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sarah Jarosz "Tell Me True"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/gokdp">Sarah Jarosa "tell me true"</a>
-<br>
-                        submitted <span class="muted">2011-04-12 22:10</span> by <a href="https://www.reddit.com/user/waitingforzombies">/u/waitingforzombies</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="Q7thV2T2cm4">
+                    <td><img src="https://i.ytimg.com/vi/Q7thV2T2cm4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Greensky Bluegrass "Just To Lie" @ The Mint Los Angeles CA 2-26-11</td>
+                </tr>
+                <tr class="record" id="vG_F0hRBMM0">
+                    <td><img src="https://i.ytimg.com/vi/vG_F0hRBMM0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Punch Brothers - Wolfcreek Pass (P-Bingo Night #4)</td>
+                </tr>
+                <tr class="record" id="Wx_3ACRCzlc">
+                    <td><img src="https://i.ytimg.com/vi/Wx_3ACRCzlc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Punch Brothers w/ Sarah Jarosz - Cry, Cry, Darling - Backstage at Bonnaroo</td>
+                </tr>
+                <tr class="record" id="YEghQY3M_8Y">
+                    <td><img src="https://i.ytimg.com/vi/YEghQY3M_8Y/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Black Rock - The Infamous Stringdusters</td>
+                </tr>
+                <tr class="record" id="eeBrrRz6U-M">
+                    <td><img src="https://i.ytimg.com/vi/eeBrrRz6U-M/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Secret Sisters "The One I Love is Gone" Hardly Strictly Bluegrass 2010</td>
+                </tr>
+                <tr class="record" id="1omSJq06jJ8">
+                    <td><img src="https://i.ytimg.com/vi/1omSJq06jJ8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">New Grass Revival - Love Someone Like Me</td>
+                </tr>
+                <tr class="record" id="-uJigafpuKA">
+                    <td><img src="https://i.ytimg.com/vi/-uJigafpuKA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Chatham County Line "Wildwood"</td>
+                </tr>
+                <tr class="record" id="AR2i7u0ubcM">
+                    <td><img src="https://i.ytimg.com/vi/AR2i7u0ubcM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Bluegrass Dance 1 on the Harpeth River</td>
+                </tr>
+                <tr class="record" id="NfwdpNEEQRs">
+                    <td><img src="https://i.ytimg.com/vi/NfwdpNEEQRs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Soundcheck: Steve Martin and the Steep Canyon Rangers Live in The Greene Space</td>
+                </tr>
+                <tr class="record" id="b3Tr2PliEXw">
+                    <td><img src="https://i.ytimg.com/vi/b3Tr2PliEXw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Bela Fleck with New Grass Revival - Deviation</td>
+                </tr>
+                <tr class="record" id="B-HAnpglqkk">
+                    <td><img src="https://i.ytimg.com/vi/B-HAnpglqkk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">03 Time - Dark Side of the Moonshine</td>
+                </tr>
+                <tr class="record" id="LoB2vx3NRXM">
+                    <td><img src="https://i.ytimg.com/vi/LoB2vx3NRXM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">G2 | Going Back to Georgia | 2010 CBAFDF 06-18-10</td>
+                </tr>
+                <tr class="record" id="tzy9qeYQYyU">
+                    <td><img src="https://i.ytimg.com/vi/tzy9qeYQYyU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Crooked Still, I Am An Orphan Girl, Greyfox Bluegrass Festival 2009</td>
+                </tr>
+                <tr class="record" id="kg4Y3EIQ17M">
+                    <td><img src="https://i.ytimg.com/vi/kg4Y3EIQ17M/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Punch Brothers "Ride the Wild Turkey"</td>
+                </tr>
+                <tr class="record" id="UEkVkJax2Co">
+                    <td><img src="https://i.ytimg.com/vi/UEkVkJax2Co/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Norman Blake, Flatpicker</td>
+                </tr>
+                <tr class="record" id="3hwiRsiJxfk">
+                    <td><img src="https://i.ytimg.com/vi/3hwiRsiJxfk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Alison Krauss,Oh Atlanta</td>
+                </tr>
+                <tr class="record" id="nE9qzb0IMxM">
+                    <td><img src="https://i.ytimg.com/vi/nE9qzb0IMxM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Tim O'Brien Band - All I Want - Telluride Bluegrass Festival 2010</td>
+                </tr>
+                <tr class="record" id="NhiOaSWuFjU">
+                    <td><img src="https://i.ytimg.com/vi/NhiOaSWuFjU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Osborne Brothers - Ruby</td>
+                </tr>
+                <tr class="record" id="TQRXK2Mt5KU">
+                    <td><img src="https://i.ytimg.com/vi/TQRXK2Mt5KU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Boxcar Bandits "Green Room Rag" live @ Dan's Silverleaf</td>
+                </tr>
+                <tr class="record" id="ia3xdc9aOfo">
+                    <td><img src="https://i.ytimg.com/vi/ia3xdc9aOfo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">WSMonline.com presents: The Grascals "Where Corn Don't Grow" | WSM Radio</td>
+                </tr>
+                <tr class="record" id="Jb623L74Fag">
+                    <td><img src="https://i.ytimg.com/vi/Jb623L74Fag/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Yonder Mountain String Band - Holdin'</td>
+                </tr>
+                <tr class="record" id="NlkBwvEpVtk">
+                    <td><img src="https://i.ytimg.com/vi/NlkBwvEpVtk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Keller & The Keels Part 10 Crater In The BackYard</td>
+                </tr>
+                <tr class="record" id="1Q8zMekYvnI">
+                    <td><img src="https://i.ytimg.com/vi/1Q8zMekYvnI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Telluride House Band - Norman - Live at Telluride Bluegrass Festival 2010 2/16</td>
+                </tr>
+                <tr class="record" id="zYYbK2sDaJ4">
+                    <td><img src="https://i.ytimg.com/vi/zYYbK2sDaJ4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Rory Gallagher - Going To My Hometown (1972)</td>
+                </tr>
+                <tr class="record" id="zVGg38_QzOI">
+                    <td><img src="https://i.ytimg.com/vi/zVGg38_QzOI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sarah Jarosz "Tell Me True"</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/bluegrass/">Bluegrass</a> archive:
     <a href="/genre/bluegrass/2008/">2008</a>&nbsp;•&nbsp;    <a href="/genre/bluegrass/2010/">2010</a>&nbsp;•&nbsp;    <a href="/genre/bluegrass/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/bluegrass/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/bluegrass/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/bluegrass/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/bluegrass/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/bluegrass/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/bluegrass/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -435,12 +184,15 @@ Bluegrass dance can't be the correct term.</a>
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'bluegrass';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

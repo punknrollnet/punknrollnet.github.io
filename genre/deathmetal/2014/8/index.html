@@ -46,1296 +46,396 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="7j8vUbMmOwM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7j8vUbMmOwM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">DEATH - "Lack Of Comprehension" (Remixed)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">35</span> - <a href="https://www.reddit.com/2ehjsl">DEATH - "Lack Of Comprehension" (Video)</a>
-<br>
-                        submitted <span class="muted">2014-08-25 00:32</span> by <a href="https://www.reddit.com/user/Chrisiztopher">/u/Chrisiztopher</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="fQ9d0G6M2EU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/fQ9d0G6M2EU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cannibal Corpse - Stripped, Raped and Strangled</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">34</span> - <a href="https://www.reddit.com/2eifc4">Cannibal Corpse- Stripped Raped and Strangled (old school death metal)</a>
-<br>
-                        submitted <span class="muted">2014-08-25 07:18</span> by <a href="https://www.reddit.com/user/Godfreeshawn">/u/Godfreeshawn</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="YepbZ90amLY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/YepbZ90amLY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Suffocation - Pierced from Within (Studio)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">30</span> - <a href="https://www.reddit.com/2ey8lr">Suffocation - Pierced from Within (Studio)</a>
-<br>
-                        submitted <span class="muted">2014-08-29 20:40</span> by <a href="https://www.reddit.com/user/deadlittlepuppy">/u/deadlittlepuppy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="PluKQiJ50iY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/PluKQiJ50iY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cryptopsy - Cold Hate, Warm Blood</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">25</span> - <a href="https://www.reddit.com/2cwe3q">Cryptopsy - Cold Hate, Warm Blood Imagine with Lord Worm on vocals...</a>
-<br>
-                        submitted <span class="muted">2014-08-07 17:11</span> by <a href="https://www.reddit.com/user/Chrisiztopher">/u/Chrisiztopher</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="iZY_tqAxsG0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/iZY_tqAxsG0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cryptopsy - Slit Your Guts (with lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/2d2v3u">Cryptopsy - Slit Your Guts (with lyrics) My introduction to Lord Worm</a>
-<br>
-                        submitted <span class="muted">2014-08-09 16:42</span> by <a href="https://www.reddit.com/user/Chrisiztopher">/u/Chrisiztopher</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ZWeMcPly6mI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ZWeMcPly6mI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Hate Eternal - The Victorious Reign</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">22</span> - <a href="https://www.reddit.com/2f1rm7">Hate Eternal - The Victorious Reign</a>
-<br>
-                        submitted <span class="muted">2014-08-31 01:01</span> by <a href="https://www.reddit.com/user/EdgeOfInsanity95">/u/EdgeOfInsanity95</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="p54FjzigGz0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/p54FjzigGz0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Dying Fetus - In The Trenches (Live at Amnesia Rockfest)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/2cepwu">Dying Fetus - In The Trenches (Live at Amnesia Rockfest)</a>
-<br>
-                        submitted <span class="muted">2014-08-02 07:25</span> by <a href="https://www.reddit.com/user/LCFlowers">/u/LCFlowers</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-LSXYtu37X0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-LSXYtu37X0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Decapitated - Babylon's Pride</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/2dq2ya">Decapitated - Babylon's Pride. Love that riff.</a>
-<br>
-                        submitted <span class="muted">2014-08-16 14:49</span> by <a href="https://www.reddit.com/user/that_introverted_guy">/u/that_introverted_guy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="dCHTe-J9h20">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/dCHTe-J9h20/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Artificial Brain - "Labyrinth Constellation" Full Album</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">19</span> - <a href="https://www.reddit.com/2ekg41">Artificial Brain - "Labyrinth Constellation" Full Album</a>
-<br>
-                        submitted <span class="muted">2014-08-25 21:34</span> by <a href="https://www.reddit.com/user/TuLive">/u/TuLive</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ALnZLkR04Oc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ALnZLkR04Oc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Putrid Pile - Necroneat-o</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/2csfiy">Putrid Pile - Necroneat-o</a>
-<br>
-                        submitted <span class="muted">2014-08-06 14:26</span> by <a href="https://www.reddit.com/user/TheUsernameUser">/u/TheUsernameUser</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="m9gxkD7ikLI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/m9gxkD7ikLI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Immolation -Bring Them Down</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">17</span> - <a href="https://www.reddit.com/2e0j95">Immolation - Bring Them Down</a>
-<br>
-                        submitted <span class="muted">2014-08-19 20:02</span> by <a href="https://www.reddit.com/user/that_introverted_guy">/u/that_introverted_guy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="mBV1D1bgW4o">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/mBV1D1bgW4o/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Quo Vadis - On The Shores Of Ithaka</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/2cidhs">Quo Vadis- On The Shores of Ithaka (melodic tech death mastery)</a>
-<br>
-                        submitted <span class="muted">2014-08-03 16:19</span> by <a href="https://www.reddit.com/user/magx01">/u/magx01</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="viPMwmLuKB4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/viPMwmLuKB4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Gorguts - Dormant Misery</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/2d0aql">Gorguts - Dormant Misery (fuck yeah)</a>
-<br>
-                        submitted <span class="muted">2014-08-08 19:26</span> by <a href="https://www.reddit.com/user/Chrisiztopher">/u/Chrisiztopher</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7-KjcNBtPow">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7-KjcNBtPow/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cytotoxin - Radiophobia (2012) [Unique Leader Records]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/2d83l6">Cytotoxin - Radiophobia. The drumming on this album is excellent.</a>
-<br>
-                        submitted <span class="muted">2014-08-11 10:58</span> by <a href="https://www.reddit.com/user/that_introverted_guy">/u/that_introverted_guy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="I1qxhFNR6vA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/I1qxhFNR6vA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Vehemence - Murdered By The Earth</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/2ds3s0">Anyone else excited about Vehemence's new album?</a>
-<br>
-                        submitted <span class="muted">2014-08-17 05:36</span> by <a href="https://www.reddit.com/user/omlet_du_fromage">/u/omlet_du_fromage</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="qHbOKnbYUVg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/qHbOKnbYUVg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Skinless - Tampon Lollipops HQ</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/2dseij">Skinless - Tampon Lollipops</a>
-<br>
-                        submitted <span class="muted">2014-08-17 09:09</span> by <a href="https://www.reddit.com/user/deadlittlepuppy">/u/deadlittlepuppy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="CCQj66YQ1rw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/CCQj66YQ1rw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Suffocation - Infecting the Crypts Live 2013 ( John Gallagher Dying Fetus on vocals )</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/2esqc9">Suffocation - Infecting the Crypts ft. John Gallagher of DYING FETUS</a>
-<br>
-                        submitted <span class="muted">2014-08-28 05:26</span> by <a href="https://www.reddit.com/user/Oborawatibanost">/u/Oborawatibanost</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="kW-8DupDuPQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/kW-8DupDuPQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">ABYSMAL DAWN - "Inanimate" Official Track</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">15</span> - <a href="https://www.reddit.com/2eudny">Abysmal Dawn - Inanimate (2014)</a>
-<br>
-                        submitted <span class="muted">2014-08-28 18:13</span> by <a href="https://www.reddit.com/user/SmallHandsInTrouble">/u/SmallHandsInTrouble</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_I0cQMbPPvw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_I0cQMbPPvw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Neuraxis - Oracle</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/2cig4h">Neuraxis - Oracle</a>
-<br>
-                        submitted <span class="muted">2014-08-03 16:51</span> by <a href="https://www.reddit.com/user/that_introverted_guy">/u/that_introverted_guy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="tvxvRpEfvgs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/tvxvRpEfvgs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">MISERY INDEX- 7th Cavalry</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/2d5coy">MISERY INDEX- 7th Cavalry</a>
-<br>
-                        submitted <span class="muted">2014-08-10 14:27</span> by <a href="https://www.reddit.com/user/Chrisiztopher">/u/Chrisiztopher</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="FIXtyOvHcMU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/FIXtyOvHcMU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Katalepsy - Taedium Vitae</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/2dpd0k">Katalepsy - Taedium Vitae</a>
-<br>
-                        submitted <span class="muted">2014-08-16 06:25</span> by <a href="https://www.reddit.com/user/Oborawatibanost">/u/Oborawatibanost</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="BSFpPNRBwAE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/BSFpPNRBwAE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ejaculation of the wicked - Torture Division</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">14</span> - <a href="https://www.reddit.com/2emvji">Torture Division - Ejaculation of the wicked</a>
-<br>
-                        submitted <span class="muted">2014-08-26 15:40</span> by <a href="https://www.reddit.com/user/jules94">/u/jules94</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="vrfC1ifAOGg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/vrfC1ifAOGg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lvcifyre - Liber Lilith</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/2d9cqk">Lvcifyre - Liber Lilith (For fans of Hate Eternal and Morbid Angel)</a>
-<br>
-                        submitted <span class="muted">2014-08-11 18:57</span> by <a href="https://www.reddit.com/user/Taintmash">/u/Taintmash</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="clQ_cc9HWpE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/clQ_cc9HWpE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jungle Rot - Ruthless Omnipotence</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">13</span> - <a href="https://www.reddit.com/2dpu40">Jungle Rot - Ruthless Omnipotence</a>
-<br>
-                        submitted <span class="muted">2014-08-16 12:29</span> by <a href="https://www.reddit.com/user/BigNickTX">/u/BigNickTX</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jN79KreFSC8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jN79KreFSC8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">God Dethroned - Hating Life</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/2cd4uf">God Dethroned - Hating Life</a>
-<br>
-                        submitted <span class="muted">2014-08-01 19:56</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="snDfSqcPHWk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/snDfSqcPHWk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">OBSCURA - "Septuagint"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/2clx41">Obscura - Septuagint. Incredible band.</a>
-<br>
-                        submitted <span class="muted">2014-08-04 18:06</span> by <a href="https://www.reddit.com/user/that_introverted_guy">/u/that_introverted_guy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="aL2B4nuth84">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/aL2B4nuth84/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Immolation - Unholy Cult</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/2czrsa">Immolation - Unholy Cult (Song)</a>
-<br>
-                        submitted <span class="muted">2014-08-08 16:48</span> by <a href="https://www.reddit.com/user/Chrisiztopher">/u/Chrisiztopher</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="IJ2MITXDYkk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/IJ2MITXDYkk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Nailgun Massacre - Cadaverous Lay</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/2danm0">Nailgun Massacre - Cadaverous Lay (incredibly underrated old school death, from the Netherlands)</a>
-<br>
-                        submitted <span class="muted">2014-08-12 01:56</span> by <a href="https://www.reddit.com/user/FancyTea">/u/FancyTea</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="roVBNQc0Sew">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/roVBNQc0Sew/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Defeated Sanity - The Purging</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/2dn8y3">Defeated Sanity - The Purging</a>
-<br>
-                        submitted <span class="muted">2014-08-15 16:27</span> by <a href="https://www.reddit.com/user/Oborawatibanost">/u/Oborawatibanost</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="v9w_DvG4HrY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/v9w_DvG4HrY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Gorgasm-Dirty Cunt Beatdown</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2cag9r">Gorgasm - Dirty Cunt Beatdown</a>
-<br>
-                        submitted <span class="muted">2014-08-01 00:08</span> by <a href="https://www.reddit.com/user/InfantGrinder">/u/InfantGrinder</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="gPpzDkswvJQ">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/gPpzDkswvJQ/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Immolation - Reluctant Messiah</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2de0uo">Immolation - Reluctant Messiah</a>
-<br>
-                        submitted <span class="muted">2014-08-13 00:30</span> by <a href="https://www.reddit.com/user/Chrisiztopher">/u/Chrisiztopher</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="xdY3ZnETzAU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/xdY3ZnETzAU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Lykathea Aflame - "Land Where Sympathy is Air" remastered</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2elgq7">Lykathea Aflame - Land Where Sympathy is Air</a>
-<br>
-                        submitted <span class="muted">2014-08-26 03:45</span> by <a href="https://www.reddit.com/user/YouSmellLikeBurning">/u/YouSmellLikeBurning</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bb_cBf_7UMs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bb_cBf_7UMs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Eucharist - Dissolving</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">11</span> - <a href="https://www.reddit.com/2ept5s">Eucharist - Dissolving [4:04]</a>
-<br>
-                        submitted <span class="muted">2014-08-27 11:34</span> by <a href="https://www.reddit.com/user/secondary_walrus">/u/secondary_walrus</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8w7dXhAGel4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8w7dXhAGel4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Faceless - Ten Billion Years</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2chn2i">The Faceless - Ten Billion Years</a>
-<br>
-                        submitted <span class="muted">2014-08-03 08:40</span> by <a href="https://www.reddit.com/user/that_introverted_guy">/u/that_introverted_guy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="S0EZ_1leSYU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/S0EZ_1leSYU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">DISKORD - 'Horrid Engine'</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2dnsju">Diskord [NOR]- "Horrid Engine" (FFO: Atheist, Demilich, Gorguts, Autopsy, Disharmonic Orchestra)</a>
-<br>
-                        submitted <span class="muted">2014-08-15 19:24</span> by <a href="https://www.reddit.com/user/grammarcore">/u/grammarcore</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="X8K-vk7I0sg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/X8K-vk7I0sg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Prayed and Betrayed - World Surreal</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/2ed4v8">Prayed and Betrayed - World Surreal (Modern Finnish Death Metal)</a>
-<br>
-                        submitted <span class="muted">2014-08-23 13:44</span> by <a href="https://www.reddit.com/user/Nddi">/u/Nddi</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Xw7x5MDbiHM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Xw7x5MDbiHM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pungent Stench - For God Your Soul... For Me Your Flesh (Full Album) 1990</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2d5fp3">Pungent Stench - For God Your Soul... For Me Your Flesh (Full Album) 1990</a>
-<br>
-                        submitted <span class="muted">2014-08-10 15:07</span> by <a href="https://www.reddit.com/user/Rotting_Intestines">/u/Rotting_Intestines</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="wruV45fgFcw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/wruV45fgFcw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">ICHOR - The beasts approach // NEW SONG 2014 | www.pitcam.tv</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/2du594">Ichor - The Beasts Approach (NEW SONG 2014)</a>
-<br>
-                        submitted <span class="muted">2014-08-17 23:10</span> by <a href="https://www.reddit.com/user/Soulsweeper23">/u/Soulsweeper23</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Ah8wtUVCLBo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Ah8wtUVCLBo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Carcass - Lavaging Expectorate Of Lysergide Composition</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2di8b0">Carcass - Lavaging Expectorate Of Lysergide Composition</a>
-<br>
-                        submitted <span class="muted">2014-08-14 03:47</span> by <a href="https://www.reddit.com/user/Chrisiztopher">/u/Chrisiztopher</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="0FaqwGiHnIw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/0FaqwGiHnIw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Anata - Dance to the Song of Apathy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">8</span> - <a href="https://www.reddit.com/2elhg2">Anata - Dance to the Song of Apathy</a>
-<br>
-                        submitted <span class="muted">2014-08-26 03:52</span> by <a href="https://www.reddit.com/user/YouSmellLikeBurning">/u/YouSmellLikeBurning</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="PVvxf-A1Ejo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/PVvxf-A1Ejo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Proclamation - Messiah Of Darkness And Impurity</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2cg3er">Proclamation - Messiah Of Darkness And Impurity</a>
-<br>
-                        submitted <span class="muted">2014-08-02 19:58</span> by <a href="https://www.reddit.com/user/ctr613">/u/ctr613</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="AM-98tNGS6M">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/AM-98tNGS6M/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pungent Stench - Tony</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2d44y3">Pungent Stench - Tony (Lyrics and clips about Scarface)</a>
-<br>
-                        submitted <span class="muted">2014-08-10 01:50</span> by <a href="https://www.reddit.com/user/Chrisiztopher">/u/Chrisiztopher</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="f9yb88fa4MA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/f9yb88fa4MA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Obituary - Don't Care (official Music Video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2d4lhw">Obituary - Don't Care</a>
-<br>
-                        submitted <span class="muted">2014-08-10 05:34</span> by <a href="https://www.reddit.com/user/that_introverted_guy">/u/that_introverted_guy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="EIY-39Jo0TI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/EIY-39Jo0TI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">INNSMOUTH - The Shadow Over Innsmouth (2014) //Official promotion track// Crime Records</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2e0i8w">INNSMOUTH - The Shadow Over Innsmouth</a>
-<br>
-                        submitted <span class="muted">2014-08-19 19:53</span> by <a href="https://www.reddit.com/user/Choodie">/u/Choodie</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="uzcOWknFytI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/uzcOWknFytI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Condemn the Infected "Deny Existence" [Full Album] 2014</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/2eqssg">Condemn the Infected "Deny Existence" [Full Album] 2014 (x-post from TechnicalDeathMetal)</a>
-<br>
-                        submitted <span class="muted">2014-08-27 17:47</span> by <a href="https://www.reddit.com/user/fleshmcfilth123">/u/fleshmcfilth123</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="mN30-oltvT0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/mN30-oltvT0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Condemn the Infected - The Hosting</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2cduwn">Condemn the Infected - "The Hosting" (x-post from TechnicalDeathMetal)</a>
-<br>
-                        submitted <span class="muted">2014-08-02 00:24</span> by <a href="https://www.reddit.com/user/fleshmcfilth123">/u/fleshmcfilth123</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="hOlcp560tE8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/hOlcp560tE8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Runemagick - Doomed (Studio Version)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2cj86z">Runemagick - Doomed (Studio Version)</a>
-<br>
-                        submitted <span class="muted">2014-08-03 21:57</span> by <a href="https://www.reddit.com/user/pervyinthepark">/u/pervyinthepark</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="pQGdXsxCpuM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/pQGdXsxCpuM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">A Band Of Orcs - StormBringer</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2cm9gk">A Band of Orcs - Stormbringer (They do dress up as orcs live)</a>
-<br>
-                        submitted <span class="muted">2014-08-04 19:52</span> by <a href="https://www.reddit.com/user/fwinzor">/u/fwinzor</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="M2xaZZROhp8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/M2xaZZROhp8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Skinless - Foreshadowing Our Demise HQ</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2dbs98">Skinless - Foreshadowing Our Demise (Song)</a>
-<br>
-                        submitted <span class="muted">2014-08-12 11:44</span> by <a href="https://www.reddit.com/user/Chrisiztopher">/u/Chrisiztopher</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="o5rRjBIOUIc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/o5rRjBIOUIc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Revocation "Deathless" (OFFICIAL)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2di15d">Revocations upcoming release.</a>
-<br>
-                        submitted <span class="muted">2014-08-14 02:29</span> by <a href="https://www.reddit.com/user/rawheadrex420">/u/rawheadrex420</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Yg9N4kvLL2s">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Yg9N4kvLL2s/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ageless Oblivion - Wolf's Head (Penthos 2014)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2ds1th">Ageless Oblivion- Wolf's Head</a>
-<br>
-                        submitted <span class="muted">2014-08-17 05:06</span> by <a href="https://www.reddit.com/user/TOUCHER_OF_SHEEP">/u/TOUCHER_OF_SHEEP</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="RN7HMG4tVI0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/RN7HMG4tVI0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">THE HAUNTED - Cutting Teeth (OFFICIAL VIDEO)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/2ejama">NEW MUSIC VIDEO - THE HAUNTED - Cutting Teeth</a>
-<br>
-                        submitted <span class="muted">2014-08-25 15:17</span> by <a href="https://www.reddit.com/user/EdgeOfInsanity95">/u/EdgeOfInsanity95</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="xqLImQTYma8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/xqLImQTYma8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Membraneous - Undying Inc</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2cfgp4">Undying Inc. - Membraneous. Band from india.</a>
-<br>
-                        submitted <span class="muted">2014-08-02 15:37</span> by <a href="https://www.reddit.com/user/that_introverted_guy">/u/that_introverted_guy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="GH4OfemisSg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/GH4OfemisSg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Avulsed - Blessed By Gore</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2chn8p">Avulsed - Blessed By Gore</a>
-<br>
-                        submitted <span class="muted">2014-08-03 08:45</span> by <a href="https://www.reddit.com/user/deadlittlepuppy">/u/deadlittlepuppy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7okPiWet0dE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7okPiWet0dE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">THOSE WHO BRING THE TORTURE - Under Twin Suns</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2dcd3f">Those Who Bring The Torture - Under Twin Suns (2014)</a>
-<br>
-                        submitted <span class="muted">2014-08-12 15:41</span> by <a href="https://www.reddit.com/user/SmallHandsInTrouble">/u/SmallHandsInTrouble</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="gYNOHRi-b0M">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/gYNOHRi-b0M/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pungent Stench - Splatterday Night Fever</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2dmt52">Pungent Stench - Splatterday Night Fever</a>
-<br>
-                        submitted <span class="muted">2014-08-15 13:52</span> by <a href="https://www.reddit.com/user/Chrisiztopher">/u/Chrisiztopher</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ooPAG9z-AEc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ooPAG9z-AEc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Monolith Deathcult - Drugs, Thugs and Machetes</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2dzk9r">The Monolith Deathcult-Drugs,Thugs and Machetes</a>
-<br>
-                        submitted <span class="muted">2014-08-19 15:01</span> by <a href="https://www.reddit.com/user/the_7_maskims">/u/the_7_maskims</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8C-VxIGi9JI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8C-VxIGi9JI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Chasm - Architects of Melancholic Apocalypse</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2eb474">The Chasm - Architects of Melancholic Apocalypse</a>
-<br>
-                        submitted <span class="muted">2014-08-22 20:14</span> by <a href="https://www.reddit.com/user/AxeheaveR">/u/AxeheaveR</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="JY9o_NqxzyM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/JY9o_NqxzyM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Dark Millennium - Below the Holy Fatherlands</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2ee2f3">Dark Millennium - Below the Holy Fatherlands</a>
-<br>
-                        submitted <span class="muted">2014-08-23 20:17</span> by <a href="https://www.reddit.com/user/EricsonWillians">/u/EricsonWillians</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="OMudBiQnXu8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/OMudBiQnXu8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Gojira - Space Time</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/2epa67">Gojira - Space Time</a>
-<br>
-                        submitted <span class="muted">2014-08-27 05:53</span> by <a href="https://www.reddit.com/user/TerraInc0gnita">/u/TerraInc0gnita</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="JU7FiyrOPBA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/JU7FiyrOPBA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">KILLITOROUS // FECAL FELLATIO // OFFICIAL MUSIC VIDEO</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2drwaa">Killitorous // fecal fellatio</a>
-<br>
-                        submitted <span class="muted">2014-08-17 03:52</span> by <a href="https://www.reddit.com/user/matthewkramer2016">/u/matthewkramer2016</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Xv0MaU-o8II">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Xv0MaU-o8II/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">SPEARHEAD-when the pillars fall</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2du2j6">Spearhead - When The Pillars Fall [Black/Thrash]</a>
-<br>
-                        submitted <span class="muted">2014-08-17 22:41</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="k-SvOE_pyks">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/k-SvOE_pyks/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cianide-Gates Of Slumber</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/2elyee">Cianide--Gates Of Slumber</a>
-<br>
-                        submitted <span class="muted">2014-08-26 08:03</span> by <a href="https://www.reddit.com/user/aXehanD_ler">/u/aXehanD_ler</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="6CSB07XPbCw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/6CSB07XPbCw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">TYRANTS OF HELL - Play Fast Or Die Slow</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2csgvg">Tyrants of Hell - Play Fast or Die Slow</a>
-<br>
-                        submitted <span class="muted">2014-08-06 14:40</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="tXKHwJVXxnA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/tXKHwJVXxnA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Carcass - Burnt To a Crisp (Lyrics)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2czu5z">Carcass - Burnt To a Crisp (W/Lyrics) My favorite off Reek</a>
-<br>
-                        submitted <span class="muted">2014-08-08 17:09</span> by <a href="https://www.reddit.com/user/Chrisiztopher">/u/Chrisiztopher</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jdLuqyv7nRE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jdLuqyv7nRE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">MALEVOLENT CREATION - Joe Black (OFFICIAL LIVE)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2d4gsq">MALEVOLENT CREATION - Joe Black (live video)</a>
-<br>
-                        submitted <span class="muted">2014-08-10 04:23</span> by <a href="https://www.reddit.com/user/Chrisiztopher">/u/Chrisiztopher</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-JiaqjC_G2E">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-JiaqjC_G2E/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">TROGLODYTE - Nowhere to Hide</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2d89sc">Troglodyte - Nowhere to Hide (Bigfoot themed USDM)</a>
-<br>
-                        submitted <span class="muted">2014-08-11 12:36</span> by <a href="https://www.reddit.com/user/FancyTea">/u/FancyTea</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="w0JX4SRKy5c">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/w0JX4SRKy5c/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Iniquity  - Inhale the Ghost</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2dmwca">Iniquity - Inhale the Ghost</a>
-<br>
-                        submitted <span class="muted">2014-08-15 14:26</span> by <a href="https://www.reddit.com/user/Turtley">/u/Turtley</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="FaiXklUnmNM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/FaiXklUnmNM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Avulsed - Ace of Spades (Motorhead cover)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2dswdv">Avulsed - Ace of Spades (Motorhead cover)</a>
-<br>
-                        submitted <span class="muted">2014-08-17 14:55</span> by <a href="https://www.reddit.com/user/deadlittlepuppy">/u/deadlittlepuppy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="JxLccFvIP3Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/JxLccFvIP3Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Sabbat - Evoke (1992) [Full Album]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2e9a9i">Sabbat - Evoke (1992) [Full Album]</a>
-<br>
-                        submitted <span class="muted">2014-08-22 07:01</span> by <a href="https://www.reddit.com/user/Rotting_Intestines">/u/Rotting_Intestines</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="O3a58OYfUKM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/O3a58OYfUKM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cryptophobism - People That No-One Will Miss</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2ektg3">Cryptophobism - People That No-One Will Miss</a>
-<br>
-                        submitted <span class="muted">2014-08-25 23:45</span> by <a href="https://www.reddit.com/user/AxeheaveR">/u/AxeheaveR</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="STvJeB0GA9M">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/STvJeB0GA9M/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Unmoored - Spit forth from Failure [Lyrics] HD</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2elikq">Unmoored - Spit Forth From Failure</a>
-<br>
-                        submitted <span class="muted">2014-08-26 04:05</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="y4Nd9wFsp4o">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/y4Nd9wFsp4o/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Domains  - Towards Pleroma</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2ely2g">Domains--Towards Pleroma</a>
-<br>
-                        submitted <span class="muted">2014-08-26 07:57</span> by <a href="https://www.reddit.com/user/aXehanD_ler">/u/aXehanD_ler</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="WZpFGnt2rxk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/WZpFGnt2rxk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">BEFALLEN 'Carnal Adherence' Drum Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2emlz0">Befallen - Carnal Adherence</a>
-<br>
-                        submitted <span class="muted">2014-08-26 14:10</span> by <a href="https://www.reddit.com/user/OffalAutopsy">/u/OffalAutopsy</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5_6R7kRFx6o">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5_6R7kRFx6o/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Embedded - Stench Of Burning Flesh</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/2et613">Embedded (GER) - Stench Of Burning Flesh</a>
-<br>
-                        submitted <span class="muted">2014-08-28 10:05</span> by <a href="https://www.reddit.com/user/IntoTheGrave">/u/IntoTheGrave</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="9zfjmYlYPUo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/9zfjmYlYPUo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mutala - In My Temple</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2cmb2d">Mutala - In My Temple (Instrumental)</a>
-<br>
-                        submitted <span class="muted">2014-08-04 20:06</span> by <a href="https://www.reddit.com/user/Chrisiztopher">/u/Chrisiztopher</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="AEP8L1_f7A4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/AEP8L1_f7A4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">MAGNA MORTALIS "Radiative Benediction"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2d95h5">Magna Mortalis - Radiative Benediction</a>
-<br>
-                        submitted <span class="muted">2014-08-11 17:55</span> by <a href="https://www.reddit.com/user/nyctalus">/u/nyctalus</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="q_zxNFq5pyw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/q_zxNFq5pyw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mortal Decay - Soaking In Entrails</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2dh1fh">Mortal Decay - Soaking In Entrails (guest vocals by Mike and Jason of Dying Fetus c.1998)</a>
-<br>
-                        submitted <span class="muted">2014-08-13 20:47</span> by <a href="https://www.reddit.com/user/Chrisiztopher">/u/Chrisiztopher</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="chLnltNUjDk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/chLnltNUjDk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Goat the Head - Fetus Stuffed With Feces</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2ej10v">Goat the Head - Fetus Stuffed With Feces</a>
-<br>
-                        submitted <span class="muted">2014-08-25 13:34</span> by <a href="https://www.reddit.com/user/jules94">/u/jules94</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="UhPLA1qvDVM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/UhPLA1qvDVM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Disastrous Murmur - Extra-Uterine Pregnancy [1989]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/2etd6q">Disastrous Murmur - Extra-Uterine Pregnancy [1989]</a>
-<br>
-                        submitted <span class="muted">2014-08-28 12:03</span> by <a href="https://www.reddit.com/user/IntoTheGrave">/u/IntoTheGrave</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="tbgFBh1_meo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/tbgFBh1_meo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Zenith Passage pre-production song "Simulated Reality"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2cgzro">The Zenith Passage - "Simulated Reality"</a>
-<br>
-                        submitted <span class="muted">2014-08-03 02:33</span> by <a href="https://www.reddit.com/user/bouvre">/u/bouvre</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="nCjnFWvjXLI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/nCjnFWvjXLI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pangaea - "Contagion"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2chqae">New song by my melodic death metal band! Please tell me what you think!</a>
-<br>
-                        submitted <span class="muted">2014-08-03 09:57</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="q9QadZ89ERk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/q9QadZ89ERk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Brutality - Cries of the Forsaken</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2czsrb">Brutality - Cries of the Forsaken. This song is better at death metal than you are</a>
-<br>
-                        submitted <span class="muted">2014-08-08 16:56</span> by <a href="https://www.reddit.com/user/Chrisiztopher">/u/Chrisiztopher</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="5CL2AlOv-Us">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/5CL2AlOv-Us/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Splatterhouse- Night of the creeps</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2d2918">Splatterhouse - Night of the Creeps</a>
-<br>
-                        submitted <span class="muted">2014-08-09 11:11</span> by <a href="https://www.reddit.com/user/Tinkle_Drinker">/u/Tinkle_Drinker</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ru-5I-c7Kxc">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ru-5I-c7Kxc/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Unmoored - Morndraper [Lyrics] HD</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2elic2">Unmoored - Morndraper</a>
-<br>
-                        submitted <span class="muted">2014-08-26 04:02</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="mHPh_aUfGD8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/mHPh_aUfGD8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">MORTALS - "View From A Tower" Official Music Video</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/2eyi6n">MORTALS - View From A Tower</a>
-<br>
-                        submitted <span class="muted">2014-08-29 22:18</span> by <a href="https://www.reddit.com/user/EdgeOfInsanity95">/u/EdgeOfInsanity95</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="zKaHTVMiN-w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/zKaHTVMiN-w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Rings Of Saturn - Corpses Thrown Across The Sky</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/2cedom">Any love for tech-death? Rings of Saturn-Corpses Thrown Across The Sky</a>
-<br>
-                        submitted <span class="muted">2014-08-02 04:11</span> by <a href="https://www.reddit.com/user/SweetnSaltyPanda">/u/SweetnSaltyPanda</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="GCD2s1qJlis">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/GCD2s1qJlis/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Waking The Cadaver - Boss Status</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/2cponh">Waking The Cadaver - Boss Status</a>
-<br>
-                        submitted <span class="muted">2014-08-05 18:49</span> by <a href="https://www.reddit.com/user/[deleted]">/u/[deleted]</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="vvFxSj4CQNs">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/vvFxSj4CQNs/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Evocation 招魂 - Abracadabra (FULL ALBUM)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/2cyxun">Evocation 招魂 - Abracadabra (Album) (Blackened Melodic Death Metal)</a>
-<br>
-                        submitted <span class="muted">2014-08-08 11:02</span> by <a href="https://www.reddit.com/user/I_Cum_Blood_666">/u/I_Cum_Blood_666</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_rsZdjGzOpA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_rsZdjGzOpA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Opeth - Live @ Rock am Ring 2014 (Full Show, Pro Shot) [HD]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/2e09kq">What happened to Opeth?</a>
-<br>
-                        submitted <span class="muted">2014-08-19 18:38</span> by <a href="https://www.reddit.com/user/drchucknorris">/u/drchucknorris</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="7j8vUbMmOwM">
+                    <td><img src="https://i.ytimg.com/vi/7j8vUbMmOwM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">DEATH - "Lack Of Comprehension" (Remixed)</td>
+                </tr>
+                <tr class="record" id="fQ9d0G6M2EU">
+                    <td><img src="https://i.ytimg.com/vi/fQ9d0G6M2EU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cannibal Corpse - Stripped, Raped and Strangled</td>
+                </tr>
+                <tr class="record" id="YepbZ90amLY">
+                    <td><img src="https://i.ytimg.com/vi/YepbZ90amLY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Suffocation - Pierced from Within (Studio)</td>
+                </tr>
+                <tr class="record" id="PluKQiJ50iY">
+                    <td><img src="https://i.ytimg.com/vi/PluKQiJ50iY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cryptopsy - Cold Hate, Warm Blood</td>
+                </tr>
+                <tr class="record" id="iZY_tqAxsG0">
+                    <td><img src="https://i.ytimg.com/vi/iZY_tqAxsG0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cryptopsy - Slit Your Guts (with lyrics)</td>
+                </tr>
+                <tr class="record" id="ZWeMcPly6mI">
+                    <td><img src="https://i.ytimg.com/vi/ZWeMcPly6mI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Hate Eternal - The Victorious Reign</td>
+                </tr>
+                <tr class="record" id="p54FjzigGz0">
+                    <td><img src="https://i.ytimg.com/vi/p54FjzigGz0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Dying Fetus - In The Trenches (Live at Amnesia Rockfest)</td>
+                </tr>
+                <tr class="record" id="-LSXYtu37X0">
+                    <td><img src="https://i.ytimg.com/vi/-LSXYtu37X0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Decapitated - Babylon's Pride</td>
+                </tr>
+                <tr class="record" id="dCHTe-J9h20">
+                    <td><img src="https://i.ytimg.com/vi/dCHTe-J9h20/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Artificial Brain - "Labyrinth Constellation" Full Album</td>
+                </tr>
+                <tr class="record" id="ALnZLkR04Oc">
+                    <td><img src="https://i.ytimg.com/vi/ALnZLkR04Oc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Putrid Pile - Necroneat-o</td>
+                </tr>
+                <tr class="record" id="m9gxkD7ikLI">
+                    <td><img src="https://i.ytimg.com/vi/m9gxkD7ikLI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Immolation -Bring Them Down</td>
+                </tr>
+                <tr class="record" id="mBV1D1bgW4o">
+                    <td><img src="https://i.ytimg.com/vi/mBV1D1bgW4o/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Quo Vadis - On The Shores Of Ithaka</td>
+                </tr>
+                <tr class="record" id="viPMwmLuKB4">
+                    <td><img src="https://i.ytimg.com/vi/viPMwmLuKB4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Gorguts - Dormant Misery</td>
+                </tr>
+                <tr class="record" id="7-KjcNBtPow">
+                    <td><img src="https://i.ytimg.com/vi/7-KjcNBtPow/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cytotoxin - Radiophobia (2012) [Unique Leader Records]</td>
+                </tr>
+                <tr class="record" id="I1qxhFNR6vA">
+                    <td><img src="https://i.ytimg.com/vi/I1qxhFNR6vA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Vehemence - Murdered By The Earth</td>
+                </tr>
+                <tr class="record" id="qHbOKnbYUVg">
+                    <td><img src="https://i.ytimg.com/vi/qHbOKnbYUVg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Skinless - Tampon Lollipops HQ</td>
+                </tr>
+                <tr class="record" id="CCQj66YQ1rw">
+                    <td><img src="https://i.ytimg.com/vi/CCQj66YQ1rw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Suffocation - Infecting the Crypts Live 2013 ( John Gallagher Dying Fetus on vocals )</td>
+                </tr>
+                <tr class="record" id="kW-8DupDuPQ">
+                    <td><img src="https://i.ytimg.com/vi/kW-8DupDuPQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">ABYSMAL DAWN - "Inanimate" Official Track</td>
+                </tr>
+                <tr class="record" id="_I0cQMbPPvw">
+                    <td><img src="https://i.ytimg.com/vi/_I0cQMbPPvw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Neuraxis - Oracle</td>
+                </tr>
+                <tr class="record" id="tvxvRpEfvgs">
+                    <td><img src="https://i.ytimg.com/vi/tvxvRpEfvgs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">MISERY INDEX- 7th Cavalry</td>
+                </tr>
+                <tr class="record" id="FIXtyOvHcMU">
+                    <td><img src="https://i.ytimg.com/vi/FIXtyOvHcMU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Katalepsy - Taedium Vitae</td>
+                </tr>
+                <tr class="record" id="BSFpPNRBwAE">
+                    <td><img src="https://i.ytimg.com/vi/BSFpPNRBwAE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ejaculation of the wicked - Torture Division</td>
+                </tr>
+                <tr class="record" id="vrfC1ifAOGg">
+                    <td><img src="https://i.ytimg.com/vi/vrfC1ifAOGg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lvcifyre - Liber Lilith</td>
+                </tr>
+                <tr class="record" id="clQ_cc9HWpE">
+                    <td><img src="https://i.ytimg.com/vi/clQ_cc9HWpE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jungle Rot - Ruthless Omnipotence</td>
+                </tr>
+                <tr class="record" id="jN79KreFSC8">
+                    <td><img src="https://i.ytimg.com/vi/jN79KreFSC8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">God Dethroned - Hating Life</td>
+                </tr>
+                <tr class="record" id="snDfSqcPHWk">
+                    <td><img src="https://i.ytimg.com/vi/snDfSqcPHWk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">OBSCURA - "Septuagint"</td>
+                </tr>
+                <tr class="record" id="aL2B4nuth84">
+                    <td><img src="https://i.ytimg.com/vi/aL2B4nuth84/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Immolation - Unholy Cult</td>
+                </tr>
+                <tr class="record" id="IJ2MITXDYkk">
+                    <td><img src="https://i.ytimg.com/vi/IJ2MITXDYkk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Nailgun Massacre - Cadaverous Lay</td>
+                </tr>
+                <tr class="record" id="roVBNQc0Sew">
+                    <td><img src="https://i.ytimg.com/vi/roVBNQc0Sew/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Defeated Sanity - The Purging</td>
+                </tr>
+                <tr class="record" id="v9w_DvG4HrY">
+                    <td><img src="https://i.ytimg.com/vi/v9w_DvG4HrY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Gorgasm-Dirty Cunt Beatdown</td>
+                </tr>
+                <tr class="record" id="gPpzDkswvJQ">
+                    <td><img src="https://i.ytimg.com/vi/gPpzDkswvJQ/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Immolation - Reluctant Messiah</td>
+                </tr>
+                <tr class="record" id="xdY3ZnETzAU">
+                    <td><img src="https://i.ytimg.com/vi/xdY3ZnETzAU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Lykathea Aflame - "Land Where Sympathy is Air" remastered</td>
+                </tr>
+                <tr class="record" id="bb_cBf_7UMs">
+                    <td><img src="https://i.ytimg.com/vi/bb_cBf_7UMs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Eucharist - Dissolving</td>
+                </tr>
+                <tr class="record" id="8w7dXhAGel4">
+                    <td><img src="https://i.ytimg.com/vi/8w7dXhAGel4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Faceless - Ten Billion Years</td>
+                </tr>
+                <tr class="record" id="S0EZ_1leSYU">
+                    <td><img src="https://i.ytimg.com/vi/S0EZ_1leSYU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">DISKORD - 'Horrid Engine'</td>
+                </tr>
+                <tr class="record" id="X8K-vk7I0sg">
+                    <td><img src="https://i.ytimg.com/vi/X8K-vk7I0sg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Prayed and Betrayed - World Surreal</td>
+                </tr>
+                <tr class="record" id="Xw7x5MDbiHM">
+                    <td><img src="https://i.ytimg.com/vi/Xw7x5MDbiHM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pungent Stench - For God Your Soul... For Me Your Flesh (Full Album) 1990</td>
+                </tr>
+                <tr class="record" id="wruV45fgFcw">
+                    <td><img src="https://i.ytimg.com/vi/wruV45fgFcw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">ICHOR - The beasts approach // NEW SONG 2014 | www.pitcam.tv</td>
+                </tr>
+                <tr class="record" id="Ah8wtUVCLBo">
+                    <td><img src="https://i.ytimg.com/vi/Ah8wtUVCLBo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Carcass - Lavaging Expectorate Of Lysergide Composition</td>
+                </tr>
+                <tr class="record" id="0FaqwGiHnIw">
+                    <td><img src="https://i.ytimg.com/vi/0FaqwGiHnIw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Anata - Dance to the Song of Apathy</td>
+                </tr>
+                <tr class="record" id="PVvxf-A1Ejo">
+                    <td><img src="https://i.ytimg.com/vi/PVvxf-A1Ejo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Proclamation - Messiah Of Darkness And Impurity</td>
+                </tr>
+                <tr class="record" id="AM-98tNGS6M">
+                    <td><img src="https://i.ytimg.com/vi/AM-98tNGS6M/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pungent Stench - Tony</td>
+                </tr>
+                <tr class="record" id="f9yb88fa4MA">
+                    <td><img src="https://i.ytimg.com/vi/f9yb88fa4MA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Obituary - Don't Care (official Music Video)</td>
+                </tr>
+                <tr class="record" id="EIY-39Jo0TI">
+                    <td><img src="https://i.ytimg.com/vi/EIY-39Jo0TI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">INNSMOUTH - The Shadow Over Innsmouth (2014) //Official promotion track// Crime Records</td>
+                </tr>
+                <tr class="record" id="uzcOWknFytI">
+                    <td><img src="https://i.ytimg.com/vi/uzcOWknFytI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Condemn the Infected "Deny Existence" [Full Album] 2014</td>
+                </tr>
+                <tr class="record" id="mN30-oltvT0">
+                    <td><img src="https://i.ytimg.com/vi/mN30-oltvT0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Condemn the Infected - The Hosting</td>
+                </tr>
+                <tr class="record" id="hOlcp560tE8">
+                    <td><img src="https://i.ytimg.com/vi/hOlcp560tE8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Runemagick - Doomed (Studio Version)</td>
+                </tr>
+                <tr class="record" id="pQGdXsxCpuM">
+                    <td><img src="https://i.ytimg.com/vi/pQGdXsxCpuM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">A Band Of Orcs - StormBringer</td>
+                </tr>
+                <tr class="record" id="M2xaZZROhp8">
+                    <td><img src="https://i.ytimg.com/vi/M2xaZZROhp8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Skinless - Foreshadowing Our Demise HQ</td>
+                </tr>
+                <tr class="record" id="o5rRjBIOUIc">
+                    <td><img src="https://i.ytimg.com/vi/o5rRjBIOUIc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Revocation "Deathless" (OFFICIAL)</td>
+                </tr>
+                <tr class="record" id="Yg9N4kvLL2s">
+                    <td><img src="https://i.ytimg.com/vi/Yg9N4kvLL2s/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ageless Oblivion - Wolf's Head (Penthos 2014)</td>
+                </tr>
+                <tr class="record" id="RN7HMG4tVI0">
+                    <td><img src="https://i.ytimg.com/vi/RN7HMG4tVI0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">THE HAUNTED - Cutting Teeth (OFFICIAL VIDEO)</td>
+                </tr>
+                <tr class="record" id="xqLImQTYma8">
+                    <td><img src="https://i.ytimg.com/vi/xqLImQTYma8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Membraneous - Undying Inc</td>
+                </tr>
+                <tr class="record" id="GH4OfemisSg">
+                    <td><img src="https://i.ytimg.com/vi/GH4OfemisSg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Avulsed - Blessed By Gore</td>
+                </tr>
+                <tr class="record" id="7okPiWet0dE">
+                    <td><img src="https://i.ytimg.com/vi/7okPiWet0dE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">THOSE WHO BRING THE TORTURE - Under Twin Suns</td>
+                </tr>
+                <tr class="record" id="gYNOHRi-b0M">
+                    <td><img src="https://i.ytimg.com/vi/gYNOHRi-b0M/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pungent Stench - Splatterday Night Fever</td>
+                </tr>
+                <tr class="record" id="ooPAG9z-AEc">
+                    <td><img src="https://i.ytimg.com/vi/ooPAG9z-AEc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Monolith Deathcult - Drugs, Thugs and Machetes</td>
+                </tr>
+                <tr class="record" id="8C-VxIGi9JI">
+                    <td><img src="https://i.ytimg.com/vi/8C-VxIGi9JI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Chasm - Architects of Melancholic Apocalypse</td>
+                </tr>
+                <tr class="record" id="JY9o_NqxzyM">
+                    <td><img src="https://i.ytimg.com/vi/JY9o_NqxzyM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Dark Millennium - Below the Holy Fatherlands</td>
+                </tr>
+                <tr class="record" id="OMudBiQnXu8">
+                    <td><img src="https://i.ytimg.com/vi/OMudBiQnXu8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Gojira - Space Time</td>
+                </tr>
+                <tr class="record" id="JU7FiyrOPBA">
+                    <td><img src="https://i.ytimg.com/vi/JU7FiyrOPBA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">KILLITOROUS // FECAL FELLATIO // OFFICIAL MUSIC VIDEO</td>
+                </tr>
+                <tr class="record" id="Xv0MaU-o8II">
+                    <td><img src="https://i.ytimg.com/vi/Xv0MaU-o8II/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">SPEARHEAD-when the pillars fall</td>
+                </tr>
+                <tr class="record" id="k-SvOE_pyks">
+                    <td><img src="https://i.ytimg.com/vi/k-SvOE_pyks/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cianide-Gates Of Slumber</td>
+                </tr>
+                <tr class="record" id="6CSB07XPbCw">
+                    <td><img src="https://i.ytimg.com/vi/6CSB07XPbCw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">TYRANTS OF HELL - Play Fast Or Die Slow</td>
+                </tr>
+                <tr class="record" id="tXKHwJVXxnA">
+                    <td><img src="https://i.ytimg.com/vi/tXKHwJVXxnA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Carcass - Burnt To a Crisp (Lyrics)</td>
+                </tr>
+                <tr class="record" id="jdLuqyv7nRE">
+                    <td><img src="https://i.ytimg.com/vi/jdLuqyv7nRE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">MALEVOLENT CREATION - Joe Black (OFFICIAL LIVE)</td>
+                </tr>
+                <tr class="record" id="-JiaqjC_G2E">
+                    <td><img src="https://i.ytimg.com/vi/-JiaqjC_G2E/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">TROGLODYTE - Nowhere to Hide</td>
+                </tr>
+                <tr class="record" id="w0JX4SRKy5c">
+                    <td><img src="https://i.ytimg.com/vi/w0JX4SRKy5c/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Iniquity  - Inhale the Ghost</td>
+                </tr>
+                <tr class="record" id="FaiXklUnmNM">
+                    <td><img src="https://i.ytimg.com/vi/FaiXklUnmNM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Avulsed - Ace of Spades (Motorhead cover)</td>
+                </tr>
+                <tr class="record" id="JxLccFvIP3Q">
+                    <td><img src="https://i.ytimg.com/vi/JxLccFvIP3Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Sabbat - Evoke (1992) [Full Album]</td>
+                </tr>
+                <tr class="record" id="O3a58OYfUKM">
+                    <td><img src="https://i.ytimg.com/vi/O3a58OYfUKM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cryptophobism - People That No-One Will Miss</td>
+                </tr>
+                <tr class="record" id="STvJeB0GA9M">
+                    <td><img src="https://i.ytimg.com/vi/STvJeB0GA9M/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Unmoored - Spit forth from Failure [Lyrics] HD</td>
+                </tr>
+                <tr class="record" id="y4Nd9wFsp4o">
+                    <td><img src="https://i.ytimg.com/vi/y4Nd9wFsp4o/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Domains  - Towards Pleroma</td>
+                </tr>
+                <tr class="record" id="WZpFGnt2rxk">
+                    <td><img src="https://i.ytimg.com/vi/WZpFGnt2rxk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">BEFALLEN 'Carnal Adherence' Drum Video</td>
+                </tr>
+                <tr class="record" id="5_6R7kRFx6o">
+                    <td><img src="https://i.ytimg.com/vi/5_6R7kRFx6o/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Embedded - Stench Of Burning Flesh</td>
+                </tr>
+                <tr class="record" id="9zfjmYlYPUo">
+                    <td><img src="https://i.ytimg.com/vi/9zfjmYlYPUo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mutala - In My Temple</td>
+                </tr>
+                <tr class="record" id="AEP8L1_f7A4">
+                    <td><img src="https://i.ytimg.com/vi/AEP8L1_f7A4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">MAGNA MORTALIS "Radiative Benediction"</td>
+                </tr>
+                <tr class="record" id="q_zxNFq5pyw">
+                    <td><img src="https://i.ytimg.com/vi/q_zxNFq5pyw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mortal Decay - Soaking In Entrails</td>
+                </tr>
+                <tr class="record" id="chLnltNUjDk">
+                    <td><img src="https://i.ytimg.com/vi/chLnltNUjDk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Goat the Head - Fetus Stuffed With Feces</td>
+                </tr>
+                <tr class="record" id="UhPLA1qvDVM">
+                    <td><img src="https://i.ytimg.com/vi/UhPLA1qvDVM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Disastrous Murmur - Extra-Uterine Pregnancy [1989]</td>
+                </tr>
+                <tr class="record" id="tbgFBh1_meo">
+                    <td><img src="https://i.ytimg.com/vi/tbgFBh1_meo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Zenith Passage pre-production song "Simulated Reality"</td>
+                </tr>
+                <tr class="record" id="nCjnFWvjXLI">
+                    <td><img src="https://i.ytimg.com/vi/nCjnFWvjXLI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pangaea - "Contagion"</td>
+                </tr>
+                <tr class="record" id="q9QadZ89ERk">
+                    <td><img src="https://i.ytimg.com/vi/q9QadZ89ERk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Brutality - Cries of the Forsaken</td>
+                </tr>
+                <tr class="record" id="5CL2AlOv-Us">
+                    <td><img src="https://i.ytimg.com/vi/5CL2AlOv-Us/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Splatterhouse- Night of the creeps</td>
+                </tr>
+                <tr class="record" id="ru-5I-c7Kxc">
+                    <td><img src="https://i.ytimg.com/vi/ru-5I-c7Kxc/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Unmoored - Morndraper [Lyrics] HD</td>
+                </tr>
+                <tr class="record" id="mHPh_aUfGD8">
+                    <td><img src="https://i.ytimg.com/vi/mHPh_aUfGD8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">MORTALS - "View From A Tower" Official Music Video</td>
+                </tr>
+                <tr class="record" id="zKaHTVMiN-w">
+                    <td><img src="https://i.ytimg.com/vi/zKaHTVMiN-w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Rings Of Saturn - Corpses Thrown Across The Sky</td>
+                </tr>
+                <tr class="record" id="GCD2s1qJlis">
+                    <td><img src="https://i.ytimg.com/vi/GCD2s1qJlis/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Waking The Cadaver - Boss Status</td>
+                </tr>
+                <tr class="record" id="vvFxSj4CQNs">
+                    <td><img src="https://i.ytimg.com/vi/vvFxSj4CQNs/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Evocation 招魂 - Abracadabra (FULL ALBUM)</td>
+                </tr>
+                <tr class="record" id="_rsZdjGzOpA">
+                    <td><img src="https://i.ytimg.com/vi/_rsZdjGzOpA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Opeth - Live @ Rock am Ring 2014 (Full Show, Pro Shot) [HD]</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/deathmetal/">Death Metal</a> archive:
     <a href="/genre/deathmetal/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/deathmetal/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/deathmetal/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/deathmetal/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/deathmetal/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/deathmetal/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/deathmetal/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -1344,12 +444,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'deathmetal';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -46,78 +46,48 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="d8Gk2kaaFxY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/d8Gk2kaaFxY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">God is an Astronaut - Coda</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">12</span> - <a href="https://www.reddit.com/95w5u">This is God Is An Astronaut. Give these guys some Reddit love. They deserve it.</a>
-<br>
-                        submitted <span class="muted">2009-07-30 06:32</span> by <a href="https://www.reddit.com/user/Gella321">/u/Gella321</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="JzIK5FaC38w">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/JzIK5FaC38w/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Explosions In The Sky- Your Hand In Mine</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/8zimy">Here you go: Explosions In The Sky to brighten your day or add emotion to it.</a>
-<br>
-                        submitted <span class="muted">2009-07-09 03:57</span> by <a href="https://www.reddit.com/user/connerfer">/u/connerfer</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="ZO-uFp82wOA">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/ZO-uFp82wOA/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Talk Talk - Another Word (new music video)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">0</span> - <a href="https://www.reddit.com/92juy">Talk Talk +++ the 80s are back +++ Music Video</a>
-<br>
-                        submitted <span class="muted">2009-07-19 11:54</span> by <a href="https://www.reddit.com/user/minbekker">/u/minbekker</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="d8Gk2kaaFxY">
+                    <td><img src="https://i.ytimg.com/vi/d8Gk2kaaFxY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">God is an Astronaut - Coda</td>
+                </tr>
+                <tr class="record" id="JzIK5FaC38w">
+                    <td><img src="https://i.ytimg.com/vi/JzIK5FaC38w/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Explosions In The Sky- Your Hand In Mine</td>
+                </tr>
+                <tr class="record" id="ZO-uFp82wOA">
+                    <td><img src="https://i.ytimg.com/vi/ZO-uFp82wOA/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Talk Talk - Another Word (new music video)</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/postrock/">Post Rock</a> archive:
     <a href="/genre/postrock/2009/">2009</a>&nbsp;•&nbsp;    <a href="/genre/postrock/2010/">2010</a>&nbsp;•&nbsp;    <a href="/genre/postrock/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/postrock/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/postrock/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/postrock/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/postrock/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/postrock/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/postrock/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -126,12 +96,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'postrock';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -46,442 +46,152 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="4DraYq3RnBU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/4DraYq3RnBU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Hi-Strung Ramblers - Pure Misery</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">24</span> - <a href="https://www.reddit.com/3mmx8j">Rockabilly lost a great man two days ago to a motorcycle accident. Carlos Gomez, the lead singer of the Hi-Strung Ramblers. He made amazing music and leaves behind his family in California. RIP.</a>
-<br>
-                        submitted <span class="muted">2015-09-27 23:57</span> by <a href="https://www.reddit.com/user/ajhimmler">/u/ajhimmler</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="1JMchlIWRXY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/1JMchlIWRXY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jerry Lee Lewis - Whole Lotta Shakin' Goin' On (Ready Steady Go - Nov 20, 1964)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">20</span> - <a href="https://www.reddit.com/3muenq">Happy birthday, Jerry Lee Lewis!</a>
-<br>
-                        submitted <span class="muted">2015-09-29 15:34</span> by <a href="https://www.reddit.com/user/digitaldevil">/u/digitaldevil</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="EbLK1BXsZSI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/EbLK1BXsZSI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jerry Lee Lewis - I Don't Love Nobody</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/3j9095">Jerry Lee Lewis - I Don't Love Nobody</a>
-<br>
-                        submitted <span class="muted">2015-09-01 18:21</span> by <a href="https://www.reddit.com/user/SauerkrautandBeans">/u/SauerkrautandBeans</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="F6zk3_JI8Lw">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/F6zk3_JI8Lw/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Chop Tops - Let 'er Go</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">16</span> - <a href="https://www.reddit.com/3k63x5">The Chop Tops - Let 'er Go</a>
-<br>
-                        submitted <span class="muted">2015-09-09 00:55</span> by <a href="https://www.reddit.com/user/SauerkrautandBeans">/u/SauerkrautandBeans</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="UgAdvLBosoo">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/UgAdvLBosoo/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Rockin' Bones - Ronnie Dawson</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">10</span> - <a href="https://www.reddit.com/3jovjj">Rockin' Bones - Ronnie Dawson</a>
-<br>
-                        submitted <span class="muted">2015-09-05 01:04</span> by <a href="https://www.reddit.com/user/whateverdipshit">/u/whateverdipshit</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="XdcE-a2qX-M">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/XdcE-a2qX-M/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Rip Carson- TOXIC!!!.</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3kfx9b">Rip Carson- TOXIC!!!.</a>
-<br>
-                        submitted <span class="muted">2015-09-10 19:10</span> by <a href="https://www.reddit.com/user/HoneyVortex">/u/HoneyVortex</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="hug-4DP5S1Q">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/hug-4DP5S1Q/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Marty Wilde and his Wildcats - Endless sleep - 1958</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3kzfj4">Marty Wilde and his Wildcats - Endless sleep - 1958</a>
-<br>
-                        submitted <span class="muted">2015-09-15 00:59</span> by <a href="https://www.reddit.com/user/sbroue">/u/sbroue</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="CcEf5pfiNh8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/CcEf5pfiNh8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Guy Mitchell - Rock-A-Billy</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3l62j7">Guy Mitchell - Rock-A-Billy</a>
-<br>
-                        submitted <span class="muted">2015-09-16 13:18</span> by <a href="https://www.reddit.com/user/sbroue">/u/sbroue</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jj_NNfDPv_A">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jj_NNfDPv_A/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Panther City Ramblers My Gal Is Red Hot</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3m2ogl">Panther City Ramblers - Awesome DFW rockabilly at Mother Truckers Saturday!</a>
-<br>
-                        submitted <span class="muted">2015-09-23 15:08</span> by <a href="https://www.reddit.com/user/straigh">/u/straigh</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="_SH0VYhwCC0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/_SH0VYhwCC0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Big Sandy & His Fly Rite Boys Live,Late Night With Conan O'Brien</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">9</span> - <a href="https://www.reddit.com/3mf0po">Big Sandy &amp; His Fly Rite Boys Live,Late Night With Conan O'Brien</a>
-<br>
-                        submitted <span class="muted">2015-09-26 02:27</span> by <a href="https://www.reddit.com/user/SauerkrautandBeans">/u/SauerkrautandBeans</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="uuPo2_WXDek">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/uuPo2_WXDek/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Restless - Baby please don't go</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">7</span> - <a href="https://www.reddit.com/3ljjqt">Restless - Baby please don't go</a>
-<br>
-                        submitted <span class="muted">2015-09-19 10:19</span> by <a href="https://www.reddit.com/user/PhotographsWithFilm">/u/PhotographsWithFilm</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="JZhg8TCErRY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/JZhg8TCErRY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Elroy Dietzel - Rock-N-Bones</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3jfrol">Elroy Dietzel - Rock-N-Bones</a>
-<br>
-                        submitted <span class="muted">2015-09-03 01:55</span> by <a href="https://www.reddit.com/user/sbroue">/u/sbroue</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Kc3oNjqCN7M">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Kc3oNjqCN7M/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Dirty Little Devil</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3kghpw">Dirty Little Devil - Hellbound Hayride</a>
-<br>
-                        submitted <span class="muted">2015-09-10 21:08</span> by <a href="https://www.reddit.com/user/SauerkrautandBeans">/u/SauerkrautandBeans</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="bLba5Ld4VhE">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/bLba5Ld4VhE/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Cliff Richard and The Drifters - Move it - 1958</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3ldo0u">Cliff Richard and The Drifters - Move it - 1958</a>
-<br>
-                        submitted <span class="muted">2015-09-18 01:50</span> by <a href="https://www.reddit.com/user/DARKAR300">/u/DARKAR300</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="sYhucAe6mvI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/sYhucAe6mvI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Big Sandy and His Fly Right Boys - My Sinful Days Are Over [2-27-96]</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/3mf0nt">Big Sandy and His Fly Right Boys - My Sinful Days Are Over [2-27-96]</a>
-<br>
-                        submitted <span class="muted">2015-09-26 02:26</span> by <a href="https://www.reddit.com/user/SauerkrautandBeans">/u/SauerkrautandBeans</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="Wy0Vjh0lhDY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/Wy0Vjh0lhDY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Hey Lowdown!</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3jow1m">Big sandy - Hey lowdown!</a>
-<br>
-                        submitted <span class="muted">2015-09-05 01:09</span> by <a href="https://www.reddit.com/user/whateverdipshit">/u/whateverdipshit</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="oOk-Cw9InCI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/oOk-Cw9InCI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Ronnie Dawson - Hazel</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3kgefx">Ronnie Dawson - Hazel (1957?)</a>
-<br>
-                        submitted <span class="muted">2015-09-10 20:48</span> by <a href="https://www.reddit.com/user/GapulDeeJay">/u/GapulDeeJay</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="PK3hnnb4p54">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/PK3hnnb4p54/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Elvis & The Stray Cats - Baby Let's Play House - Remix</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3ks3hz">Elvis &amp; The Stray Cats - Baby Let's Play House - Remix</a>
-<br>
-                        submitted <span class="muted">2015-09-13 13:18</span> by <a href="https://www.reddit.com/user/FeiHung">/u/FeiHung</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="gUtUTvb5Qtk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/gUtUTvb5Qtk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Walk a Mile - Holly Golightly</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3lvl9n">Walk a Mile - Holly Golightly</a>
-<br>
-                        submitted <span class="muted">2015-09-22 00:42</span> by <a href="https://www.reddit.com/user/HoneyVortex">/u/HoneyVortex</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="QzTU9zsTFH8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/QzTU9zsTFH8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Big Sandy and his Fly-Rite boys - Power of the 45</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/3md93k">One of my favorite Big Sandy tunes, Power of the 45</a>
-<br>
-                        submitted <span class="muted">2015-09-25 18:35</span> by <a href="https://www.reddit.com/user/digitaldevil">/u/digitaldevil</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="7KbjWK6kTQg">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/7KbjWK6kTQg/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Mystery Train - Junior Parker</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3lsazr">Junior Parker - Mystery Train</a>
-<br>
-                        submitted <span class="muted">2015-09-21 09:39</span> by <a href="https://www.reddit.com/user/sixteen_weasels">/u/sixteen_weasels</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="LCAZtcrpHSI">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/LCAZtcrpHSI/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">BOBBY LEE TRAMMELL  You Mostest Girl (alt)</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3m7z5f">Bobby Lee Trammell - You Mostest Girl (Great love song!)</a>
-<br>
-                        submitted <span class="muted">2015-09-24 17:09</span> by <a href="https://www.reddit.com/user/straigh">/u/straigh</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="rCaE-C3_kC4">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/rCaE-C3_kC4/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Restless   Long Black Shiny Car</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/3menw6">Restless - Long Black Shiny Car (1982)</a>
-<br>
-                        submitted <span class="muted">2015-09-26 00:41</span> by <a href="https://www.reddit.com/user/Creeper_madness">/u/Creeper_madness</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="-YyU9tyKYj0">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-YyU9tyKYj0/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Jimmy James - Baby Sitter Rock</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3lip1f">Jimmy James Baby Sitter Rock</a>
-<br>
-                        submitted <span class="muted">2015-09-19 04:02</span> by <a href="https://www.reddit.com/user/DARKAR300">/u/DARKAR300</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="MjRlEzXgLOY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/MjRlEzXgLOY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">The Dazzlers - Something Baby</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">3</span> - <a href="https://www.reddit.com/3lwdss">The Dazzlers Something Baby</a>
-<br>
-                        submitted <span class="muted">2015-09-22 04:38</span> by <a href="https://www.reddit.com/user/DARKAR300">/u/DARKAR300</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="jwVQRe9ucUY">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/jwVQRe9ucUY/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">RIP CARSON I'm Gonna Drink ROLLIN ROCK...1999</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3ki346">Rip Carson - I'm Gonna Drink - 1999</a>
-<br>
-                        submitted <span class="muted">2015-09-11 04:27</span> by <a href="https://www.reddit.com/user/SauerkrautandBeans">/u/SauerkrautandBeans</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="8ri_qvRZ2t8">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/8ri_qvRZ2t8/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Restless-Rockabilly Rat</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">2</span> - <a href="https://www.reddit.com/3lhrip">Restless-Rockabilly Rat</a>
-<br>
-                        submitted <span class="muted">2015-09-18 23:04</span> by <a href="https://www.reddit.com/user/PhotographsWithFilm">/u/PhotographsWithFilm</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="2OWe1ANJCOU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/2OWe1ANJCOU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Hank C. Burnette - "Spinning Rock Boogie"</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/3mc9id">Hank C. Burnette - "Spinning Rock Boogie"</a>
-<br>
-                        submitted <span class="muted">2015-09-25 14:39</span> by <a href="https://www.reddit.com/user/nevada48">/u/nevada48</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="tOKDgTm_V-Y">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/tOKDgTm_V-Y/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Big Sandy & The Flyright Boys ~ My sinful ways are over</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">1</span> - <a href="https://www.reddit.com/3mf0bh">Big Sandy &amp; The Flyright Boys ~ My sinful ways are over</a>
-<br>
-                        submitted <span class="muted">2015-09-26 02:24</span> by <a href="https://www.reddit.com/user/SauerkrautandBeans">/u/SauerkrautandBeans</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="4DraYq3RnBU">
+                    <td><img src="https://i.ytimg.com/vi/4DraYq3RnBU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Hi-Strung Ramblers - Pure Misery</td>
+                </tr>
+                <tr class="record" id="1JMchlIWRXY">
+                    <td><img src="https://i.ytimg.com/vi/1JMchlIWRXY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jerry Lee Lewis - Whole Lotta Shakin' Goin' On (Ready Steady Go - Nov 20, 1964)</td>
+                </tr>
+                <tr class="record" id="EbLK1BXsZSI">
+                    <td><img src="https://i.ytimg.com/vi/EbLK1BXsZSI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jerry Lee Lewis - I Don't Love Nobody</td>
+                </tr>
+                <tr class="record" id="F6zk3_JI8Lw">
+                    <td><img src="https://i.ytimg.com/vi/F6zk3_JI8Lw/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Chop Tops - Let 'er Go</td>
+                </tr>
+                <tr class="record" id="UgAdvLBosoo">
+                    <td><img src="https://i.ytimg.com/vi/UgAdvLBosoo/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Rockin' Bones - Ronnie Dawson</td>
+                </tr>
+                <tr class="record" id="XdcE-a2qX-M">
+                    <td><img src="https://i.ytimg.com/vi/XdcE-a2qX-M/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Rip Carson- TOXIC!!!.</td>
+                </tr>
+                <tr class="record" id="hug-4DP5S1Q">
+                    <td><img src="https://i.ytimg.com/vi/hug-4DP5S1Q/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Marty Wilde and his Wildcats - Endless sleep - 1958</td>
+                </tr>
+                <tr class="record" id="CcEf5pfiNh8">
+                    <td><img src="https://i.ytimg.com/vi/CcEf5pfiNh8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Guy Mitchell - Rock-A-Billy</td>
+                </tr>
+                <tr class="record" id="jj_NNfDPv_A">
+                    <td><img src="https://i.ytimg.com/vi/jj_NNfDPv_A/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Panther City Ramblers My Gal Is Red Hot</td>
+                </tr>
+                <tr class="record" id="_SH0VYhwCC0">
+                    <td><img src="https://i.ytimg.com/vi/_SH0VYhwCC0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Big Sandy & His Fly Rite Boys Live,Late Night With Conan O'Brien</td>
+                </tr>
+                <tr class="record" id="uuPo2_WXDek">
+                    <td><img src="https://i.ytimg.com/vi/uuPo2_WXDek/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Restless - Baby please don't go</td>
+                </tr>
+                <tr class="record" id="JZhg8TCErRY">
+                    <td><img src="https://i.ytimg.com/vi/JZhg8TCErRY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Elroy Dietzel - Rock-N-Bones</td>
+                </tr>
+                <tr class="record" id="Kc3oNjqCN7M">
+                    <td><img src="https://i.ytimg.com/vi/Kc3oNjqCN7M/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Dirty Little Devil</td>
+                </tr>
+                <tr class="record" id="bLba5Ld4VhE">
+                    <td><img src="https://i.ytimg.com/vi/bLba5Ld4VhE/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Cliff Richard and The Drifters - Move it - 1958</td>
+                </tr>
+                <tr class="record" id="sYhucAe6mvI">
+                    <td><img src="https://i.ytimg.com/vi/sYhucAe6mvI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Big Sandy and His Fly Right Boys - My Sinful Days Are Over [2-27-96]</td>
+                </tr>
+                <tr class="record" id="Wy0Vjh0lhDY">
+                    <td><img src="https://i.ytimg.com/vi/Wy0Vjh0lhDY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Hey Lowdown!</td>
+                </tr>
+                <tr class="record" id="oOk-Cw9InCI">
+                    <td><img src="https://i.ytimg.com/vi/oOk-Cw9InCI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Ronnie Dawson - Hazel</td>
+                </tr>
+                <tr class="record" id="PK3hnnb4p54">
+                    <td><img src="https://i.ytimg.com/vi/PK3hnnb4p54/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Elvis & The Stray Cats - Baby Let's Play House - Remix</td>
+                </tr>
+                <tr class="record" id="gUtUTvb5Qtk">
+                    <td><img src="https://i.ytimg.com/vi/gUtUTvb5Qtk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Walk a Mile - Holly Golightly</td>
+                </tr>
+                <tr class="record" id="QzTU9zsTFH8">
+                    <td><img src="https://i.ytimg.com/vi/QzTU9zsTFH8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Big Sandy and his Fly-Rite boys - Power of the 45</td>
+                </tr>
+                <tr class="record" id="7KbjWK6kTQg">
+                    <td><img src="https://i.ytimg.com/vi/7KbjWK6kTQg/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Mystery Train - Junior Parker</td>
+                </tr>
+                <tr class="record" id="LCAZtcrpHSI">
+                    <td><img src="https://i.ytimg.com/vi/LCAZtcrpHSI/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">BOBBY LEE TRAMMELL  You Mostest Girl (alt)</td>
+                </tr>
+                <tr class="record" id="rCaE-C3_kC4">
+                    <td><img src="https://i.ytimg.com/vi/rCaE-C3_kC4/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Restless   Long Black Shiny Car</td>
+                </tr>
+                <tr class="record" id="-YyU9tyKYj0">
+                    <td><img src="https://i.ytimg.com/vi/-YyU9tyKYj0/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Jimmy James - Baby Sitter Rock</td>
+                </tr>
+                <tr class="record" id="MjRlEzXgLOY">
+                    <td><img src="https://i.ytimg.com/vi/MjRlEzXgLOY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">The Dazzlers - Something Baby</td>
+                </tr>
+                <tr class="record" id="jwVQRe9ucUY">
+                    <td><img src="https://i.ytimg.com/vi/jwVQRe9ucUY/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">RIP CARSON I'm Gonna Drink ROLLIN ROCK...1999</td>
+                </tr>
+                <tr class="record" id="8ri_qvRZ2t8">
+                    <td><img src="https://i.ytimg.com/vi/8ri_qvRZ2t8/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Restless-Rockabilly Rat</td>
+                </tr>
+                <tr class="record" id="2OWe1ANJCOU">
+                    <td><img src="https://i.ytimg.com/vi/2OWe1ANJCOU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Hank C. Burnette - "Spinning Rock Boogie"</td>
+                </tr>
+                <tr class="record" id="tOKDgTm_V-Y">
+                    <td><img src="https://i.ytimg.com/vi/tOKDgTm_V-Y/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Big Sandy & The Flyright Boys ~ My sinful ways are over</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/rockabilly/">Rockabilly</a> archive:
     <a href="/genre/rockabilly/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/rockabilly/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/rockabilly/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/rockabilly/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/rockabilly/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/rockabilly/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/rockabilly/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -490,12 +200,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'rockabilly';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

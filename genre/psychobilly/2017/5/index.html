@@ -46,92 +46,52 @@
         <a class="button" @click="youtube.previousVideo()"><i class="fa fa-step-backward"></i></a>
         <a class="button" @click="youtube.playVideo()"><i class="fa fa-play"></i></a>
         <a class="button" @click="youtube.pauseVideo()"><i class="fa fa-pause"></i></a>
-        <a class="button" @click="stop"><i class="fa fa-stop"></i></a>
+        <a class="button" @click="youtube.stopVideo()"><i class="fa fa-stop"></i></a>
         <a class="button" @click="youtube.nextVideo()"><i class="fa fa-step-forward"></i></a>
-        <span v-if="genre">
-            <a v-if="sort_order == 'new'" class="button" @click="reload('hot')" title="Load hot submissions"><i class="fa fa-fire"></i></a>
-            <a v-if="sort_order == 'hot'" class="button" @click="reload('new')" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
+        <span v-if="genre && !is_local">
+            <a v-if="sort_order == 'new'" class="button" @click="reload('hot', genre)" title="Load hot submissions"><i class="fa fa-fire"></i></a>
+            <a v-if="sort_order == 'hot'" class="button" @click="reload('new', genre)" title="Load new submissions"><i class="fa fa-clock-o"></i></a>
         </span>
     </div>
 
     <div v-if="current" class="current voffset">
-        <div class="row">
-            <div class="column column-10">
-                <img src="https://i.ytimg.com/vi/{{ current.youtube.id }}/default.jpg" alt="Video preview">
-            </div>
-            <div class="column">
-                <h2 class="yt-title">{{ current.youtube.title }}</h2>
-                <p><strong>Score:</strong> {{ current.score }} - <a href="https://www.reddit.com{{ current.permalink }}">{{ current.title }}</a><br>
-                    submitted <span class="muted">{{ current.date }}</span> by <a href="https://www.reddit.com/user/{{ current.author }}">/u/{{ current.author }}</a>.</p>
-            </div>
-        </div>
+        <playlist-item v-bind:record="current"></playlist-item>
     </div>
 </div>
 
 <div id="playlist" class="container searchable">
-        <div class="record" id="-mqNzBGUd60">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/-mqNzBGUd60/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Running From Daylight - Coffin for Two</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">6</span> - <a href="https://www.reddit.com/69veg5">Running from Daylight - Coffin For Two</a>
-<br>
-                        submitted <span class="muted">2017-05-08 02:19</span> by <a href="https://www.reddit.com/user/DigitalAndrew">/u/DigitalAndrew</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="0UVIgwwnoqM">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/0UVIgwwnoqM/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Pain by Tiger Army cover by Short Trip</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/6dqveh">Pain by Tiger Army covered by Short Trip</a>
-<br>
-                        submitted <span class="muted">2017-05-28 00:00</span> by <a href="https://www.reddit.com/user/jordanguitar10">/u/jordanguitar10</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="mKo12mT_feU">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/mKo12mT_feU/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">MESSER CHUPS - Jason Bond 0013 + New adventures..</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">5</span> - <a href="https://www.reddit.com/6ecb3j">MESSER CHUPS - Jason Bond 0013 + New adventures</a>
-<br>
-                        submitted <span class="muted">2017-05-31 03:15</span> by <a href="https://www.reddit.com/user/AndToThinkIThought">/u/AndToThinkIThought</a>
-.</p>
-                </div>
-            </div>
-        </div>
-        <div class="record" id="y28vWmjAOJk">
-            <div class="row">
-                    <div class="column column-10">
-                        <img src="https://i.ytimg.com/vi/y28vWmjAOJk/default.jpg" alt="Video preview">
-                    </div>
-                <div class="column">
-                    <h2 class="yt-title">Toxaemia - You and I</h2>
-                    <p><strong>Score:</strong> <span class="rd-score">4</span> - <a href="https://www.reddit.com/6dwkvs">Toxaemia - You and I</a>
-<br>
-                        submitted <span class="muted">2017-05-28 22:24</span> by <a href="https://www.reddit.com/user/Sinnytrojan">/u/Sinnytrojan</a>
-.</p>
-                </div>
-            </div>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="record" id="-mqNzBGUd60">
+                    <td><img src="https://i.ytimg.com/vi/-mqNzBGUd60/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Running From Daylight - Coffin for Two</td>
+                </tr>
+                <tr class="record" id="0UVIgwwnoqM">
+                    <td><img src="https://i.ytimg.com/vi/0UVIgwwnoqM/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Pain by Tiger Army cover by Short Trip</td>
+                </tr>
+                <tr class="record" id="mKo12mT_feU">
+                    <td><img src="https://i.ytimg.com/vi/mKo12mT_feU/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">MESSER CHUPS - Jason Bond 0013 + New adventures..</td>
+                </tr>
+                <tr class="record" id="y28vWmjAOJk">
+                    <td><img src="https://i.ytimg.com/vi/y28vWmjAOJk/default.jpg" alt="Video preview"></td>
+                    <td class="yt-title">Toxaemia - You and I</td>
+                </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
 <a href="/genre/psychobilly/">Psychobilly</a> archive:
     <a href="/genre/psychobilly/2011/">2011</a>&nbsp;•&nbsp;    <a href="/genre/psychobilly/2012/">2012</a>&nbsp;•&nbsp;    <a href="/genre/psychobilly/2013/">2013</a>&nbsp;•&nbsp;    <a href="/genre/psychobilly/2014/">2014</a>&nbsp;•&nbsp;    <a href="/genre/psychobilly/2015/">2015</a>&nbsp;•&nbsp;    <a href="/genre/psychobilly/2016/">2016</a>&nbsp;•&nbsp;    <a href="/genre/psychobilly/2017/">2017</a>
 </div>
-
 
 <div id="footer" class="container">
     <hr>
@@ -140,12 +100,15 @@
 </div>
 
 
-<script src="//cdn.jsdelivr.net/vue/1.0.28/vue.min.js"></script>
-<script src="//cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+<script src="//unpkg.com/vue@2.4.4/dist/vue.min.js"></script>
+<script src="//unpkg.com/vue-resource@1.3.4/dist/vue-resource.min.js"></script>
 <script>
 var genre = 'psychobilly';
+var is_local = true;
 </script>
 <script src="/compiled/player.js"></script>
+<script src="/compiled/app.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
